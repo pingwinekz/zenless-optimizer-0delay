@@ -23,7 +23,7 @@ export default async function genSheetGenerator(
       if (!isIn(allWengineKeys, sheet))
         return console.error(`W-Engine with key ${sheet} does not exist.`)
       break
-    case 'Disc':
+    case 'disc':
       if (!isIn(allDiscSetKeys, sheet))
         return console.error(`Drive Disc with key ${sheet} does not exist.`)
       break

@@ -1,11 +1,10 @@
-import {
-  dumpPrettyFile,
-  fetchJsonFromUrl,
-} from '@genshin-optimizer/common/pipeline'
+import { dumpPrettyFile } from '@genshin-optimizer/common/pipeline'
 import { objKeyValMap, objMap } from '@genshin-optimizer/common/util'
+import * as fs from 'fs/promises'
+import * as path from 'path'
 import { PROJROOT_PATH } from '../../consts'
 import { DEBUG } from './debug'
-const URL_BASE = 'https://static.nanoka.cc/zzz/'
+const HAKUSHIN_LOCAL_PATH = path.join(PROJROOT_PATH, 'HakushinData')
 const VERSION = '2.7'
 
 async function dumpHakushinData(filename: string, obj: object) {
@@ -79,17 +78,15 @@ export async function getDataFromHakushin() {
   )
 }
 async function getAndDumpCategoryData(category: Category) {
-  const indexData = (await fetchJsonFromUrl(
-    URL_BASE + VERSION + `/${category}.json`,
-    DEBUG
-  )) as Record<string, unknown>
+  const indexData = JSON.parse(
+    await fs.readFile(path.join(HAKUSHIN_LOCAL_PATH, `${category}.json`), 'utf-8')
+  ) as Record<string, unknown>
   await dumpHakushinIndex(`${category}.json`, indexData)
   await Promise.all(
     Object.keys(indexData).map(async (id) => {
-      // NOTE: hakushin also has data in en, ko, chs, ja
-      const itemData = (await fetchJsonFromUrl(
-        URL_BASE + VERSION + `/en/${category}/${id}.json`
-      )) as object
+      const itemData = JSON.parse(
+        await fs.readFile(path.join(HAKUSHIN_LOCAL_PATH, category, `${id}.json`), 'utf-8')
+      ) as object
       await dumpHakushinData(`${category}/${id}.json`, itemData)
     })
   )
