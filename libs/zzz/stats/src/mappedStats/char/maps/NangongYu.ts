@@ -41,8 +41,8 @@ const dm = {
   },
   core: {
     anomalyProf: data_gen.coreParams[0], // 60 - Anomaly Prof +60
-    masteryThresh: data_gen.coreParams[1], // 110 - Anomaly Mastery threshold
-    impactPerMastery: data_gen.coreParams[2] ?? 1, // 1 - Impact per mastery above threshold
+    masteryThresh: data_gen.coreParams[1][0], // 110 - Anomaly Mastery threshold
+    impactPerMastery: data_gen.coreParams[2]?.[0] ?? 1, // 1 - Impact per mastery above threshold
     vibratoGain: data_gen.coreParams[3] ?? 1, // 1 - 1 stack of Vibrato
     maxVibrato: data_gen.coreParams[4], // 4 - Max Vibrato 4
     etherAbloom: data_gen.coreParams[5], // 7.2 - 720% Ether Abloom

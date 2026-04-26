@@ -33,7 +33,7 @@ const sheet: UISheet<'2' | '4'> = {
       {
         type: 'conditional',
         conditional: {
-          label: ch('cond'),
+          label: ch('condAbloom'),
           metadata: cond.abloom,
           fields: [
             tagToTagField(buff.set4_abloom_anomProf.tag),
@@ -43,7 +43,7 @@ const sheet: UISheet<'2' | '4'> = {
       {
         type: 'conditional',
         conditional: {
-          label: ch('cond'),
+          label: ch('condFreeze'),
           metadata: cond.freeze_shatter,
           fields: [
             tagToTagField(buff.set4_freeze_anomDmg.tag),

@@ -35,7 +35,7 @@ const sheet: UISheetElement = {
     {
       type: 'conditional',
       conditional: {
-        label: ch('cond'),
+        label: ch('cond_stacks'),
         metadata: cond.stacks,
         fields: [
           tagToTagField(buff.maxStacks_anomalyProf.tag),

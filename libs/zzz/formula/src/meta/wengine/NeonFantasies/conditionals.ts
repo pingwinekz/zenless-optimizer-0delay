@@ -6,6 +6,6 @@ export const conditionals = {
     type: 'num',
     int_only: true,
     min: 0,
-    max: -1,
+    max: 2,
   },
 } as const

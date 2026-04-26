@@ -1,13 +1,11 @@
-import { cmpGE } from '@genshin-optimizer/pando/engine'
+import { cmpGE, max, prod, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
   allBoolConditionals,
-  allListConditionals,
-  allNumConditionals,
-  enemyDebuff,
   own,
   ownBuff,
+  percent,
   register,
   registerBuff,
   teamBuff,
@@ -20,30 +18,48 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-// TODO: Add conditionals
-const { boolConditional } = allBoolConditionals(key)
-const { listConditional } = allListConditionals(key, ['val1', 'val2'])
-const { numConditional } = allNumConditionals(key, true, 0, 2)
+const { inRhythm } = allBoolConditionals(key)
+
+const impactFromMastery = max(0, sum(own.initial.anomMas, -dm.core.masteryThresh))
 
 const sheet = register(
   key,
-  // Handles base stats, core stats and Mindscapes 3 + 5
   entriesForChar(data_gen),
 
-  // Formulas
   ...registerAllDmgDazeAndAnom(key, dm),
 
-  // Buffs
   registerBuff(
-    'm6_dmg_',
-    ownBuff.combat.common_dmg_.add(
-      cmpGE(char.mindscape, 6, boolConditional.ifOn(1))
+    'core_anomProf',
+    ownBuff.combat.anomProf.add(subscript(char.core, dm.core.anomalyProf))
+  ),
+
+  registerBuff(
+    'core_impact',
+    ownBuff.combat.impact.add(impactFromMastery)
+  ),
+
+  registerBuff(
+    'core_daze_',
+    ownBuff.combat.dazeInc_.add(inRhythm.ifOn(percent(subscript(char.core, dm.core.daze))))
+  ),
+
+  registerBuff(
+    'core_squad_dmg_',
+    teamBuff.combat.common_dmg_.add(inRhythm.ifOn(percent(subscript(char.core, dm.core.squadDmg))))
+  ),
+
+  registerBuff(
+    'm1_resIgn_',
+    ownBuff.combat.resIgn_.add(
+      cmpGE(char.mindscape, 1, percent(dm.m1.resDecrease))
     )
   ),
+
   registerBuff(
-    'team_dmg_',
-    teamBuff.combat.common_dmg_.add(listConditional.map({ val1: 1, val2: 2 }))
-  ),
-registerBuff('enemy_defRed_', enemyDebuff.common.defRed_.add(numConditional)),
+    'm4_anomProf',
+    ownBuff.combat.anomProf.add(
+      cmpGE(char.mindscape, 4, dm.m4.anomalyProf)
+    )
+  )
 )
 export default sheet
