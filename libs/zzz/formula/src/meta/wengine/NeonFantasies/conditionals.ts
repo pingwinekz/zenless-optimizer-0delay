@@ -1,2 +1,11 @@
 // WARNING: Generated file, do not modify
-export const conditionals = {} as const
+export const conditionals = {
+  stacks: {
+    sheet: 'NeonFantasies',
+    name: 'stacks',
+    type: 'num',
+    int_only: true,
+    min: 0,
+    max: -1,
+  },
+} as const

@@ -1,7 +1,7 @@
 import { cmpGE, subscript } from '@genshin-optimizer/pando/engine'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { mappedStats } from '@genshin-optimizer/zzz/stats'
-import { allBoolConditionals, own, ownBuff, registerBuff } from '../../util'
+import { allBoolConditionals, own, ownBuff, percent, registerBuff } from '../../util'
 import {
   cmpSpecialtyAndEquipped,
   entriesForWengine,
@@ -17,10 +17,9 @@ const { energyConsumed20 } = allBoolConditionals(key)
 
 const sheet = registerWengine(
   key,
-  // Handles base stats and passive buffs
   entriesForWengine(key),
 
-  // Base CRIT Rate
+  // Base CRIT Rate from wengine
   registerBuff(
     'critRate_',
     ownBuff.combat.crit_.add(
@@ -28,13 +27,13 @@ const sheet = registerWengine(
     ),
     showSpecialtyAndEquipped(key)
   ),
-  // DEF ignore when consuming 20+ energy
+  // DEF ignore toggle when consuming 20+ energy, for Electric DMG
   registerBuff(
-    'defIgnore_',
-    ownBuff.dmg.anom_mv_mult_.electric.add(
+    'electric_defIgn_',
+    ownBuff.combat.defIgn_.electric.add(
       cmpSpecialtyAndEquipped(
         key,
-        energyConsumed20.ifOn(subscript(phase, dm.defIgnore))
+        energyConsumed20.ifOn(percent(subscript(phase, dm.defIgnore)))
       )
     ),
     showSpecialtyAndEquipped(key)

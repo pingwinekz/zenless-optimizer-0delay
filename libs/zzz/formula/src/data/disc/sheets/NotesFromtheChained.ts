@@ -29,7 +29,8 @@ const sheet = registerDisc(
   ),
   registerBuff(
     'set4_freeze_anomDmg',
-    ownBuff.formula.anomalyDmg.add(
+    ownBuff.combat.buff_.addWithDmgType(
+      'anomaly',
       cmpGE(discCount, 4, freeze_shatter.ifOn(percent(0.16)))
     ),
     showCond4Set

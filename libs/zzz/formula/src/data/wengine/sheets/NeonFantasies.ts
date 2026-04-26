@@ -1,15 +1,54 @@
+import { cmpGE, prod, subscript } from '@genshin-optimizer/pando/engine'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
-import { entriesForWengine, registerWengine } from '../util'
+import { mappedStats } from '@genshin-optimizer/zzz/stats'
+import { allNumConditionals, own, ownBuff, percent, registerBuff, teamBuff } from '../../util'
+import {
+  cmpSpecialtyAndEquipped,
+  entriesForWengine,
+  registerWengine,
+  showSpecialtyAndEquipped,
+} from '../util'
 
 const key: WengineKey = 'NeonFantasies'
+const dm = mappedStats.wengine[key]
+const { phase } = own.wengine
+
+const { stacks } = allNumConditionals(key, true, 0, dm.maxStacks[0])
 
 const sheet = registerWengine(
   key,
-  // Handles base stats and passive buffs
-  entriesForWengine(key)
-  // TODO: Implement full buff formulas using subscript(phase, index)
-  // phase[0] = Anomaly Prof (90, 103, 117, 130, 145)
-  // phase[1] = squad DMG (0.15, 0.17, 0.195, 0.21, 0.24)
-  // phase[5] = Additional Anomaly Prof at max stacks (60, 69, 78, 87, 96)
+  entriesForWengine(key),
+
+  // Squad DMG: 15% per stack (scales with stacks)
+  registerBuff(
+    'squadDmg_',
+    teamBuff.combat.common_dmg_.add(
+      cmpSpecialtyAndEquipped(
+        key,
+        prod(stacks, percent(subscript(phase, dm.squadDmg)))
+      )
+    ),
+    showSpecialtyAndEquipped(key)
+  ),
+  // Base Anomaly Prof: always active
+  registerBuff(
+    'anomalyProf',
+    ownBuff.combat.anomProf.add(
+      cmpSpecialtyAndEquipped(key, subscript(phase, dm.anomalyProf))
+    ),
+    showSpecialtyAndEquipped(key)
+  ),
+  // Additional Anomaly Prof: only at 2 stacks
+  registerBuff(
+    'maxStacks_anomalyProf',
+    ownBuff.combat.anomProf.add(
+      cmpSpecialtyAndEquipped(
+        key,
+        cmpGE(stacks, 2, subscript(phase, dm.addlAnomalyProf))
+      )
+    ),
+    showSpecialtyAndEquipped(key)
+  )
 )
+
 export default sheet

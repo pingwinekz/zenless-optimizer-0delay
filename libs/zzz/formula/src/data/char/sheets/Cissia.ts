@@ -1,21 +1,163 @@
-import { cmpGE } from '@genshin-optimizer/pando/engine'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import {
+  cmpGE,
+  constant,
+  max,
+  prod,
+  subscript,
+  sum,
+} from '@genshin-optimizer/pando/engine'
+import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
-import { register, registerBuff, teamBuff } from '../../util'
-import { entriesForChar, getBaseTag, registerAllDmgDazeAndAnom } from '../util'
+import {
+  allBoolConditionals,
+  allNumConditionals,
+  own,
+  ownBuff,
+  percent,
+  register,
+  registerBuff,
+  team,
+  teamBuff,
+} from '../../util'
+import {
+  dmgDazeAndAnomOverride,
+  entriesForChar,
+  getBaseTag,
+  registerAllDmgDazeAndAnom,
+} from '../util'
 
 const key: CharacterKey = 'Cissia'
 const data_gen = allStats.char[key]
 const dm = mappedStats.char[key]
 const baseTag = getBaseTag(data_gen)
 
+const { char } = own
+
+const { clarity } = allBoolConditionals(key)
+const { corrodeBone_crit_stacks } = allNumConditionals(key, true, 0, 3)
+
+const energyAboveThreshold = max(0, sum(own.initial.enerRegen, -dm.core.enerThresh))
+const additionalDefIgnore = percent(prod(energyAboveThreshold, dm.core.defIgnorePerStep))
+
+const coreDefIgnore = sum(
+  subscript(char.core, dm.core.defIgnore),
+  additionalDefIgnore
+)
+
+const corrodeBoneDmg = percent(subscript(char.core, dm.core.corrodeBoneDmg))
+
+const electricInSquad = team.common.count.electric
+
+const corrodeBoneDaze = sum(
+  prod(cmpGE(electricInSquad, 1, 1), subscript(char.core, dm.core.corrodeBoneDaze1Elec)),
+  prod(cmpGE(electricInSquad, 2, 1), subscript(char.core, dm.core.corrodeBoneDaze2Elec))
+)
+
+const m1_defIgnoreMult = cmpGE(char.mindscape, 1, dm.m1.defIgnoreMult, 1)
+
+const m2_serpentsKiss_dmg_ = ownBuff.combat.common_dmg_.add(cmpGE(char.mindscape, 2, percent(dm.m2.basicSerpentsKissDmg_)))
+
 const sheet = register(
   key,
   entriesForChar(data_gen),
 
-  ...registerAllDmgDazeAndAnom(key, dm),
+  ...registerAllDmgDazeAndAnom(
+    key,
+    dm,
+    dmgDazeAndAnomOverride(
+      dm,
+      'basic',
+      'CorrodeBone',
+      0,
+      { ...baseTag, damageType1: 'special' },
+      'atk'
+    ),
+    dmgDazeAndAnomOverride(
+      dm,
+      'basic',
+      'BasicAttackSerpentsKiss',
+      0,
+      { ...baseTag, attribute: 'electric' },
+      'atk',
+      undefined,
+      m2_serpentsKiss_dmg_
+    )
+  ),
 
-  registerBuff('team_crit_dmg_', teamBuff.combat.crit_dmg_.add(dm.ability.squadCritDmg_)),
-  registerBuff('self_crit_dmg_', teamBuff.combat.crit_dmg_.add(dm.ability.selfCritDmg_))
+  registerBuff('ability_squad_crit_dmg_', 
+    teamBuff.combat.crit_dmg_.add(
+      cmpGE(
+        sum(
+          team.common.count.withSpecialty('stun'),
+          team.common.count.electric
+        ),
+        2,
+        percent(dm.ability.squadCritDmg_)
+      )
+    )
+  ),
+  registerBuff('ability_self_crit_dmg_', 
+    teamBuff.combat.crit_dmg_.add(
+      cmpGE(
+        sum(
+          team.common.count.withSpecialty('stun'),
+          team.common.count.electric
+        ),
+        2,
+        percent(dm.ability.selfCritDmg_)
+      )
+    )
+  ),
+
+  registerBuff(
+    'core_defIgn_',
+    ownBuff.combat.defIgn_.add(
+      prod(coreDefIgnore, m1_defIgnoreMult)
+    ),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'core_corrodeBone_dmg_',
+    ownBuff.combat.dmg_.addWithDmgType('special', corrodeBoneDmg),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'core_corrodeBone_daze_',
+    ownBuff.combat.dazeInc_.add(corrodeBoneDaze),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'core_corrodeBone_crit_',
+    ownBuff.combat.crit_.add(
+      prod(corrodeBone_crit_stacks, percent(0.06))
+    ),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'm1_electric_resIgn_',
+    teamBuff.combat.resIgn_.electric.add(
+      cmpGE(char.mindscape, 1, percent(dm.m1.electricResIgnore))
+    ),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'm1_corrodeBone_electric_resIgn_',
+    ownBuff.combat.resIgn_.electric.addWithDmgType(
+      'special',
+      cmpGE(char.mindscape, 1, percent(dm.m1.corrodeBoneResIgnore))
+    ),
+    undefined,
+    true
+  )
 )
 export default sheet

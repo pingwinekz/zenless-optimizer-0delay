@@ -43,7 +43,7 @@ const dm = {
     venomConsumeInterval: data_gen.coreParams[2] ?? 1, // Consume every 1 (x5s = 5s)
     venomConsume: data_gen.coreParams[3] ?? 5, // 5 - Venom consumed per trigger
     defIgnore: data_gen.coreParams[4], // 0.03-0.06 - Base DEF ignore
-    enerThresh: data_gen.coreParams[5], // 1.4 - Energy regen threshold
+    enerThresh: data_gen.coreParams[5][0], // 1.4 - Energy regen threshold
     enerStep: data_gen.coreParams[6] ?? 0.12, // 0.12 - Energy step for additional DEF ignore
     defIgnorePerEner: data_gen.coreParams[7], // 0.0052-0.01 - Additional DEF ignore per energy step
     maxDefIgnore: data_gen.coreParams[8], // 0.1288-0.25 - Max DEF ignore
@@ -51,6 +51,7 @@ const dm = {
     corrodeBoneDmg: data_gen.coreParams[10], // 2.27-3.35 - Corrode Bone ATK%
     corrodeBoneDaze1Elec: data_gen.coreParams[13] ?? 0.4, // 0.4 - Daze boost with 1 Electric
     corrodeBoneDaze2Elec: data_gen.coreParams[14] ?? 0.6, // 0.6 - Daze boost with 2 Electric
+    defIgnorePerStep: Number(data_gen.coreParams[7]?.[0] ?? 0.0052) / Number(data_gen.coreParams[6]?.[0] ?? 0.12), // 0.0433-0.0833 - DEF ignore per 0.12 energy step
   },
   ability: {
     squadCritDmg_: data_gen.abilityParams[0], // 0.4 - 40% squad CRIT DMG
