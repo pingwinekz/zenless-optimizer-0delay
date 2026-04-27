@@ -11,7 +11,6 @@ import {
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
-  allBoolConditionals,
   allNumConditionals,
   own,
   ownBuff,
@@ -35,7 +34,6 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { clarity } = allBoolConditionals(key)
 const { corrodeBone_crit_stacks } = allNumConditionals(key, true, 0, 3)
 
 const energyAboveThreshold = max(0, sum(own.initial.enerRegen, -dm.core.enerThresh))

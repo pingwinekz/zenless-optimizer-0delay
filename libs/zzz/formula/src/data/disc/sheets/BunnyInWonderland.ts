@@ -3,7 +3,6 @@ import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import {
   allNumConditionals,
   own,
-  ownBuff,
   percent,
   registerBuff,
   teamBuff,

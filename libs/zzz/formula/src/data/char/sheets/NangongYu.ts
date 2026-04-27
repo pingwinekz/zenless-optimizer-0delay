@@ -1,4 +1,4 @@
-import { cmpGE, max, prod, subscript, sum } from '@genshin-optimizer/pando/engine'
+import { cmpGE, max, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
