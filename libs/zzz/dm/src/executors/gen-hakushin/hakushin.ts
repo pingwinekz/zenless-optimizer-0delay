@@ -1,10 +1,11 @@
-import { dumpPrettyFile } from '@genshin-optimizer/common/pipeline'
+import {
+  dumpPrettyFile,
+  fetchJsonFromUrl,
+} from '@genshin-optimizer/common/pipeline'
 import { objKeyValMap, objMap } from '@genshin-optimizer/common/util'
-import * as fs from 'fs/promises'
-import * as path from 'path'
 import { PROJROOT_PATH } from '../../consts'
 import { DEBUG } from './debug'
-const HAKUSHIN_LOCAL_PATH = path.join(PROJROOT_PATH, 'HakushinData')
+const URL_BASE = 'https://static.nanoka.cc/zzz/'
 const VERSION = '2.7'
 
 async function dumpHakushinData(filename: string, obj: object) {
@@ -14,16 +15,16 @@ async function dumpHakushinData(filename: string, obj: object) {
 async function dumpHakushinIndex(filename: string, obj: object) {
   // Convert 2-layer nested objects, except language object for equipment
   obj = objMap(obj, (v) =>
-    objMap(v as object, (v, k) =>
-      ['en', 'ko', 'ja', 'zh'].includes(k) ? v : convertSnakeToPascal(v)
-    )
+  objMap(v as object, (v, k) =>
+  ['en', 'ko', 'ja', 'zh'].includes(k) ? v : convertSnakeToPascal(v)
+  )
   )
   // Convert language keys for 1-layer nested objects
   obj = objMap(obj, (nestedObj: object) =>
-    objKeyValMap(Object.entries<string, unknown>(nestedObj), ([k, v]) => [
-      snakeKeyToPascal(k, false),
-      v,
-    ])
+  objKeyValMap(Object.entries<string, unknown>(nestedObj), ([k, v]) => [
+    snakeKeyToPascal(k, false),
+               v,
+  ])
   )
   // Index only requires nested objects and the language keys
   return await dumpPrettyFile(`${PROJROOT_PATH}/HakushinData/${filename}`, obj)
@@ -31,14 +32,14 @@ async function dumpHakushinIndex(filename: string, obj: object) {
 // Convert snake_case to PascalCase to avoid converting all the types
 function convertSnakeToPascal(objOrVal: unknown): unknown {
   if (typeof objOrVal !== 'object' || objOrVal == null) return objOrVal
-  if (Array.isArray(objOrVal)) {
-    return objOrVal.map((v) => convertSnakeToPascal(v))
-  }
-  return objKeyValMap(
-    Object.entries<string, unknown>(objOrVal),
-    ([k, v]) =>
-      [snakeKeyToPascal(k), convertSnakeToPascal(v)] as [string, unknown]
-  )
+    if (Array.isArray(objOrVal)) {
+      return objOrVal.map((v) => convertSnakeToPascal(v))
+    }
+    return objKeyValMap(
+      Object.entries<string, unknown>(objOrVal),
+                        ([k, v]) =>
+                        [snakeKeyToPascal(k), convertSnakeToPascal(v)] as [string, unknown]
+    )
 }
 function snakeKeyToPascal(key: string, convertEveryString = true) {
   switch (key) {
@@ -55,10 +56,10 @@ function snakeKeyToPascal(key: string, convertEveryString = true) {
         return (
           key[0].toUpperCase() +
           key
-            .slice(1)
-            .replace(/_([a-z])/g, (_match: string, char: string) =>
-              char.toUpperCase()
-            )
+          .slice(1)
+          .replace(/_([a-z])/g, (_match: string, char: string) =>
+          char.toUpperCase()
+          )
         )
       } else return key
   }
@@ -66,10 +67,10 @@ function snakeKeyToPascal(key: string, convertEveryString = true) {
 
 const categories = [
   'character',
-  'weapon',
-  'bangboo',
-  'equipment', // discs
-  'monster', // enemies
+'weapon',
+'bangboo',
+'equipment', // discs
+'monster', // enemies
 ] as const
 type Category = (typeof categories)[number]
 export async function getDataFromHakushin() {
@@ -78,15 +79,17 @@ export async function getDataFromHakushin() {
   )
 }
 async function getAndDumpCategoryData(category: Category) {
-  const indexData = JSON.parse(
-    await fs.readFile(path.join(HAKUSHIN_LOCAL_PATH, `${category}.json`), 'utf-8')
-  ) as Record<string, unknown>
+  const indexData = (await fetchJsonFromUrl(
+    URL_BASE + VERSION + `/${category}.json`,
+    DEBUG
+  )) as Record<string, unknown>
   await dumpHakushinIndex(`${category}.json`, indexData)
   await Promise.all(
     Object.keys(indexData).map(async (id) => {
-      const itemData = JSON.parse(
-        await fs.readFile(path.join(HAKUSHIN_LOCAL_PATH, category, `${id}.json`), 'utf-8')
-      ) as object
+      // NOTE: hakushin also has data in en, ko, chs, ja
+      const itemData = (await fetchJsonFromUrl(
+        URL_BASE + VERSION + `/en/${category}/${id}.json`
+      )) as object
       await dumpHakushinData(`${category}/${id}.json`, itemData)
     })
   )
