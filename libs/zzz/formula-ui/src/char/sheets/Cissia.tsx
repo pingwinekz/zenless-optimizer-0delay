@@ -37,8 +37,14 @@ const sheet = createBaseSheet(key, {
       type: 'fields',
       fields: [
         fieldForBuff(buff.core_defIgn_),
-        fieldForBuff(buff.core_corrodeBone_dmg_),
-        fieldForBuff(buff.core_corrodeBone_daze_),
+        {
+          title: ch('core_corrodeBone_dmg_'),
+          fieldRef: buff.core_corrodeBone_dmg_.tag,
+        },
+        {
+          title: ch('core_corrodeBone_daze_'),
+          fieldRef: buff.core_corrodeBone_daze_.tag,
+        },
       ],
     },
   ],

@@ -1,5 +1,7 @@
 {
   "corrodeBone_crit_stacks": "Corrode Bone CRIT Rate Stacks",
   "m1_electric_resIgn": "<ct color=#2EB6FF>Electric RES Ignore</ct> ",
-  "m1_corrodeBone_electric_resIgn": "<ct color=#2EB6FF>Corrode Bone Electric RES Ignore</ct>"
+  "m1_corrodeBone_electric_resIgn": "<ct color=#2EB6FF>Corrode Bone Electric RES Ignore</ct>",
+  "core_corrodeBone_daze_": "Corrode Bone Daze",
+  "core_corrodeBone_dmg_": "Corrode Bone Electric DMG"
 }

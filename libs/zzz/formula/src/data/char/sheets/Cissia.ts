@@ -1,5 +1,7 @@
 import {
+  cmpGT,
   cmpGE,
+  cmpLT,
   constant,
   max,
   prod,
@@ -49,8 +51,15 @@ const corrodeBoneDmg = percent(subscript(char.core, dm.core.corrodeBoneDmg))
 const electricInSquad = team.common.count.electric
 
 const corrodeBoneDaze = sum(
-  prod(cmpGE(electricInSquad, 1, 1), subscript(char.core, dm.core.corrodeBoneDaze1Elec)),
-  prod(cmpGE(electricInSquad, 2, 1), subscript(char.core, dm.core.corrodeBoneDaze2Elec))
+  prod(
+    cmpGE(electricInSquad, 1, constant(1)),
+    cmpLT(electricInSquad, 2, constant(1)),
+    subscript(char.core, dm.core.corrodeBoneDaze1Elec)
+  ),
+  prod(
+    cmpGT(electricInSquad, 1, constant(1)),
+    subscript(char.core, dm.core.corrodeBoneDaze2Elec)
+  )
 )
 
 const m1_defIgnoreMult = cmpGE(char.mindscape, 1, dm.m1.defIgnoreMult, 1)
