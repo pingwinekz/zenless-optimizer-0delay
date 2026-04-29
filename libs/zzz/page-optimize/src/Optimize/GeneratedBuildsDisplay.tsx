@@ -12,7 +12,8 @@ import {
   CharCalcProvider,
   CharStatsDisplay,
 } from '@genshin-optimizer/zzz/formula-ui'
-import { EquipGrid } from '@genshin-optimizer/zzz/ui'
+import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
+import { CompactDiscCard, CompactWengineCard, DiscSetCardCompact } from '@genshin-optimizer/zzz/ui'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import {
   Box,
@@ -92,6 +93,7 @@ function GeneratedBuildDisplay({
 }) {
   const character = useCharacterContext()!
   const charOpt = useCharOpt(character.key)!
+  const discs = useDiscs(build.discIds)
   return (
     <CharCalcProvider
       character={character}
@@ -114,19 +116,39 @@ function GeneratedBuildDisplay({
               </Typography>
               <EquipBtn build={build} />
             </Box>
-            <Box>
-              <Grid container spacing={1}>
-                <Grid item xs={6} md={4} lg={3} xl={3}>
-                  <CharStatsDisplay />
-                </Grid>
-                <Grid item xs={6} md={8} lg={9} xl={9}>
-                  <EquipGrid
-                    discIds={build.discIds}
-                    wengineId={build.wengineId}
-                  />
-                </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={3}>
+                <CharStatsDisplay />
               </Grid>
-            </Box>
+              <Grid item xs={3}>
+                <Stack spacing={1}>
+                  {(['1', '2', '3'] as const).map((slotKey) => (
+                    <CompactDiscCard
+                      key={slotKey}
+                      disc={discs?.[slotKey]}
+                      slotKey={slotKey}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
+              <Grid item xs={3}>
+                <Stack spacing={1}>
+                  <CompactWengineCard wengineId={build.wengineId} />
+                  <DiscSetCardCompact discs={discs} />
+                </Stack>
+              </Grid>
+              <Grid item xs={3}>
+                <Stack spacing={1}>
+                  {(['6', '5', '4'] as const).map((slotKey) => (
+                    <CompactDiscCard
+                      key={slotKey}
+                      disc={discs?.[slotKey]}
+                      slotKey={slotKey}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
+            </Grid>
           </Stack>
         </CardContent>
       </CardThemed>
