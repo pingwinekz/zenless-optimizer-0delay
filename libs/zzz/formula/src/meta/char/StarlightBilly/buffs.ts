@@ -30,18 +30,8 @@ export const buffs = {
       qt: 'combat',
       q: 'resIgn_',
       sheet: 'StarlightBilly',
+      attribute: 'physical',
       name: 'm1_physResIgn',
-    },
-  },
-  m2_dmg_: {
-    sheet: 'StarlightBilly',
-    name: 'm2_dmg_',
-    tag: {
-      et: 'display',
-      qt: 'combat',
-      q: 'common_dmg_',
-      sheet: 'StarlightBilly',
-      name: 'm2_dmg_',
     },
   },
   m4_critDmg: {
@@ -55,15 +45,26 @@ export const buffs = {
       name: 'm4_critDmg',
     },
   },
-  m6_sheerDmg: {
+  m2_dmg_: {
     sheet: 'StarlightBilly',
-    name: 'm6_sheerDmg',
+    name: 'm2_dmg_',
     tag: {
       et: 'display',
       qt: 'combat',
       q: 'common_dmg_',
       sheet: 'StarlightBilly',
-      name: 'm6_sheerDmg',
+      name: 'm2_dmg_',
+    },
+  },
+  m6_sheerDmg_: {
+    sheet: 'StarlightBilly',
+    name: 'm6_sheerDmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'common_dmg_',
+      sheet: 'StarlightBilly',
+      name: 'm6_sheerDmg_',
     },
   },
 } as const

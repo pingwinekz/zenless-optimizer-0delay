@@ -70,7 +70,15 @@ function createSkillsSheets(
   addlDocumentsPerSkillAbility?: AddlDocumentsPerSkillAbility
 ) {
   const dm = mappedStats.char[charKey]
+  if (!dm) {
+    console.error('mappedStats.char[' + charKey + '] is undefined')
+    return {} as any
+  }
   const form = formulas[charKey]
+  if (!form) {
+    console.error('formulas[' + charKey + '] is undefined')
+    return {} as any
+  }
   const [chg, _ch] = trans('char', charKey)
   return objKeyMap(
     allSkillKeys,

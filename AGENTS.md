@@ -56,6 +56,38 @@ git submodule update --init
 # or use: yarn reload-dm
 ```
 
+## Adding New Characters, Wengines, or Discs
+
+### 1. Update dm (data source)
+- **File**: `libs/zzz/dm/src/dm/character/consts.ts`
+- Add new character ID mappings (e.g., `'1541': 'Promeia'`)
+- Run `yarn nx run zzz-dm:get-hakushin` to fetch new data from hakushin
+
+### 2. Update consts (type definitions)
+- **File**: `libs/zzz/consts/src/character.ts`
+- Add new character keys to `allCharacterKeys`
+- **File**: `libs/zzz/consts/src/wengine.ts`
+- Add new wengine keys to `allWengineKeys`
+
+### 3. Generate stats data
+- Run `yarn nx run zzz-stats:gen-file`
+
+### 4. Generate character/wengine maps
+- Run `yarn nx generate @genshin-optimizer/zzz/stats:gen-all-maps`
+- This creates TypeScript mapping files in `libs/zzz/stats/src/mappedStats/`
+
+### 5. Add asset images
+- **Characters**: Create folder `libs/zzz/assets/src/gen/chars/[Name]/`
+  - Download images: icon, circle, select, full, trap (use interknot as fallback)
+  - Create `index.ts` with imports
+- **Wengines**: Create folder `libs/zzz/assets/src/gen/wengines/[Name]/`
+  - Download icon and big images
+  - Create `index.ts` with imports
+- Run `yarn nx run zzz-assets:gen-file`
+
+### 6. Final generation
+- Run `yarn run nx run-many -t gen-file` to regenerate all data
+
 ## CI Order
 
 CI runs in this order: `lint -> test -> format -> typecheck -> gen-file`

@@ -1,0 +1,14 @@
+{
+  "name": "Starlight Rider Faceplate",
+  "desc": "...",
+  "desc2": "Equip to increase Rupture Agents' combat capabilities",
+  "desc3": "...",
+  "phase": "Knight's Morale",
+  "phaseDescs": [
+    "CRIT Rate increases by <ct color=#2BAD00>20%</ct>. When the equipper launches a <ct color=#FFFFFF>Special Attack</ct>, their <ct color=#F0D12B>Physical Sheer DMG</ct> increases by <ct color=#2BAD00>10%</ct>, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration.",
+    "CRIT Rate increases by <ct color=#2BAD00>23%</ct>. When the equipper launches a <ct color=#FFFFFF>Special Attack</ct>, their <ct color=#F0D12B>Physical Sheer DMG</ct> increases by <ct color=#2BAD00>11.5%</ct>, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration.",
+    "CRIT Rate increases by <ct color=#2BAD00>26%</ct>. When the equipper launches a <ct color=#FFFFFF>Special Attack</ct>, their <ct color=#F0D12B>Physical Sheer DMG</ct> increases by <ct color=#2BAD00>13%</ct>, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration.",
+    "CRIT Rate increases by <ct color=#2BAD00>29%</ct>. When the equipper launches a <ct color=#FFFFFF>Special Attack</ct>, their <ct color=#F0D12B>Physical Sheer DMG</ct> increases by <ct color=#2BAD00>14.5%</ct>, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration.",
+    "CRIT Rate increases by <ct color=#2BAD00>32%</ct>. When the equipper launches a <ct color=#FFFFFF>Special Attack</ct>, their <ct color=#F0D12B>Physical Sheer DMG</ct> increases by <ct color=#2BAD00>16%</ct>, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration."
+  ]
+}
