@@ -1,7 +1,7 @@
-import { DBLocalStorage } from '@genshin-optimizer/common/database'
+import { createTestDBStorage } from '@genshin-optimizer/common/database'
 import { ZzzDatabase } from './Database'
 
-const dbStorage = new DBLocalStorage(localStorage, 'zzz')
+const dbStorage = createTestDBStorage('zzz')
 const dbIndex = 1
 let database = new ZzzDatabase(dbIndex, dbStorage)
 

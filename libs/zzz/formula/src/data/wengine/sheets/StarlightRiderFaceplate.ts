@@ -1,4 +1,4 @@
-import { cmpGE, prod, subscript } from '@genshin-optimizer/pando/engine'
+import { prod, subscript } from '@genshin-optimizer/pando/engine'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { mappedStats } from '@genshin-optimizer/zzz/stats'
 import {

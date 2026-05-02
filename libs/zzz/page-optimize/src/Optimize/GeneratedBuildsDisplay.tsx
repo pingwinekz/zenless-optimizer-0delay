@@ -13,7 +13,11 @@ import {
   CharStatsDisplay,
 } from '@genshin-optimizer/zzz/formula-ui'
 import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
-import { CompactDiscCard, CompactWengineCard, DiscSetCardCompact } from '@genshin-optimizer/zzz/ui'
+import {
+  CompactDiscCard,
+  CompactWengineCard,
+  DiscSetCardCompact,
+} from '@genshin-optimizer/zzz/ui'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import {
   Box,

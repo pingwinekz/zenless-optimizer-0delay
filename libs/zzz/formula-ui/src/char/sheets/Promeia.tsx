@@ -23,9 +23,7 @@ const sheet = createBaseSheet(key, {
   ability: [
     {
       type: 'fields',
-      fields: [
-        fieldForBuff(buff.ability_iceAnomBuildup),
-      ],
+      fields: [fieldForBuff(buff.ability_iceAnomBuildup)],
     },
   ],
   m1: [

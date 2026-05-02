@@ -19,7 +19,10 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const excessAnomMas = max(0, sum(own.initial.anomMas, -dm.core.anomMasThresh[0]))
+const excessAnomMas = max(
+  0,
+  sum(own.initial.anomMas, -dm.core.anomMasThresh[0])
+)
 
 const ability_check_no_self = (node: NumNode | number) =>
   cmpGE(
@@ -67,9 +70,7 @@ const sheet = register(
   // M2: Anomaly Prof
   registerBuff(
     'm2_anomProf',
-    ownBuff.combat.anomProf.add(
-      cmpGE(char.mindscape, 2, dm.m2.anomProf)
-    )
+    ownBuff.combat.anomProf.add(cmpGE(char.mindscape, 2, dm.m2.anomProf))
   ),
 
   // M4: Corrosive Chill restore (handled in formula via conditional)

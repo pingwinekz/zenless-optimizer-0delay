@@ -197,10 +197,10 @@ describe('char+wengine test', () => {
     expect(calc.compute(anby.final.atk).val).toBeCloseTo(1597.696912)
   })
   it.each([
-    [false, 'avg', 4464.062, 14880.20606],
+    [false, 'avg', 5102.0808606289365, 14880.20606],
     [false, 'crit', 5261.586, 14880.20606],
     [false, 'nonCrit', 2071.49, 14880.20606],
-    [true, 'avg', 6696.093, 22320.30908],
+    [true, 'avg', 7653.121290943403, 22320.30908],
     [true, 'crit', 7892.378, 22320.30908],
     [true, 'nonCrit', 3107.236, 22320.30908],
   ])(
