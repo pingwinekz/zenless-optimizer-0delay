@@ -18,6 +18,6 @@
 	branch = master
 [submodule "libs/zzz/dm/HakushinData"]
 	path = libs/zzz/dm/HakushinData
-	url = https://github.com/genshin-optimizer/zzz-hakushin-data
+	url = https://github.com/pingwinekZ/zzz-hakushin-data-0delay.git
 	shallow = true
 	branch = master
