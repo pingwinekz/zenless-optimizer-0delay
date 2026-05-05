@@ -1,6 +1,6 @@
 import {
-  cmpGT,
   cmpGE,
+  cmpGT,
   cmpLT,
   constant,
   max,

@@ -8,11 +8,11 @@ import {
   useCharacterContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
+import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import {
   CharCalcProvider,
   CharStatsDisplay,
 } from '@genshin-optimizer/zzz/formula-ui'
-import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import {
   CompactDiscCard,
   CompactWengineCard,
