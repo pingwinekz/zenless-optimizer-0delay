@@ -22,7 +22,6 @@ import ElectroLipGloss from './ElectroLipGloss'
 import ElegantVanity from './ElegantVanity'
 import FlamemakerShaker from './FlamemakerShaker'
 import FlightOfFancy from './FlightOfFancy'
-import FrostfallSickle from './FrostfallSickle'
 import FusionCompiler from './FusionCompiler'
 import GildedBlossom from './GildedBlossom'
 import GrillOWisp from './GrillOWisp'
@@ -70,7 +69,6 @@ import SpectralGaze from './SpectralGaze'
 import SpringEmbrace from './SpringEmbrace'
 import StarlightEngine from './StarlightEngine'
 import StarlightEngineReplica from './StarlightEngineReplica'
-import StarlightRiderFaceplate from './StarlightRiderFaceplate'
 import SteamOven from './SteamOven'
 import SteelCushion from './SteelCushion'
 import StreetSuperstar from './StreetSuperstar'
@@ -116,7 +114,6 @@ export const wengineUiSheets: Record<WengineKey, UISheetElement> = {
   ElegantVanity,
   FlamemakerShaker,
   FlightOfFancy,
-  FrostfallSickle,
   FusionCompiler,
   GildedBlossom,
   GrillOWisp,
@@ -162,7 +159,6 @@ export const wengineUiSheets: Record<WengineKey, UISheetElement> = {
   SpringEmbrace,
   StarlightEngine,
   StarlightEngineReplica,
-  StarlightRiderFaceplate,
   SteamOven,
   SteelCushion,
   StreetSuperstar,
