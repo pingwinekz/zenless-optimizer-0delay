@@ -9,7 +9,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import pkg from './package.json' assert { type: 'json' }
 
 export default defineConfig(() => ({
-  base: '',
+  base: '/zenless-optimizer-0delay/',
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/zzz-frontend',
 
