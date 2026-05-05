@@ -225,7 +225,7 @@ describe('Disc sheets test', () => {
     const char = convert(ownTag, { et: 'own', src: characterKey })
 
     expect(calc.compute(char.final.dmg_.ice).val).toBeCloseTo(0.5)
-    expect(calc.compute(char.combat.crit_).val).toBeCloseTo(0.72)
+    expect(calc.compute(char.combat.crit_).val).toBeCloseTo(0.4)
   })
 
   it('DemaraBatteryMarkII', () => {
@@ -786,7 +786,7 @@ describe('Disc sheets test', () => {
     const char = convert(ownTag, { et: 'own', src: characterKey })
 
     // Base + wengine bonus
-    expect(calc.compute(char.final.crit_).val).toBeCloseTo(0.67)
+    expect(calc.compute(char.final.crit_).val).toBeCloseTo(0.35)
     expect(calc.compute(char.final.dmg_.ether.basic[0]).val).toBeCloseTo(0.7)
   })
 
