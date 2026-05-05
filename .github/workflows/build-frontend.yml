@@ -1,15 +1,11 @@
 name: Build Frontend
-run-name: Build frontend of ${{ inputs.frontend_name }} for ${{ inputs.deployment_name }} - ${{ github.event.pull_request.merge_commit_sha }}
+run-name: Build frontend for ${{ inputs.deployment_name }} - ${{ github.event.pull_request.merge_commit_sha }}
 
 on:
   workflow_call:
     inputs:
-      frontend_name:
-        description: 'Frontend type to build. Can be `frontend`, `sr-frontend`, or `zzz-frontend`.'
-        type: string
-        required: true
       deployment_name:
-        description: 'Name for the deployment. This will determine the URL. If you choose a name that is already deployed, it will overwrite that deployment.'
+        description: 'Name for the deployment. This will determine the URL.'
         type: string
         default: 'master'
       repo_var_name:
@@ -20,14 +16,6 @@ on:
         description: 'Name of the secret on the repo that contains the deploy key for the deploy repo'
         type: string
         required: true
-      show_dev_components:
-        description: 'Flag to show components typically only shown in development mode, for experimental or in-progress features.'
-        type: boolean
-        default: false
-      nested_deployments:
-        description: 'When true, the deployment will be nested in a sub-folder corresponding to the frontend_name. When false, the deployment will sit in the repo root folder, which means you can only have 1 deployment active at a time'
-        type: boolean
-        default: true
 
 jobs:
   build:
@@ -45,24 +33,17 @@ jobs:
           yarn install --immutable --immutable-cache
       - name: Setup .env
         run: |
-          printf '%s' "$ENVFILE" > apps/frontend/.env.local
           printf '%s' "$ZO_ENVFILE" > apps/zzz-frontend/.env.local
         env:
-          ENVFILE: ${{ vars.ENVFILE }}
           ZO_ENVFILE: ${{ vars.ZO_ENVFILE }}
       - name: Build frontend
         run: |
-          echo $NX_SHOW_DEV_COMPONENTS
-          yarn run nx run ${{inputs.frontend_name}}:build:production
-        env:
-          NX_URL_GITHUB_GO_CURRENT_VERSION: "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-          NX_DAEMON: false
-          NX_SHOW_DEV_COMPONENTS: ${{inputs.show_dev_components}}
+          yarn run nx run zzz-frontend:build:production
       - name: echos
         run: |
-          echo ${{inputs.frontend_name}} > frontend_name
+          echo zzz-frontend > frontend_name
           echo ${{inputs.deployment_name}} > deployment_name
-          echo ${{inputs.nested_deployments}} > nested_deployments
+          echo true > nested_deployments
           echo ${{inputs.repo_var_name}} > repo_var_name
           echo ${{inputs.repo_deploy_secret_name}} > repo_deploy_secret_name
           echo $(git rev-parse HEAD) > ref
@@ -71,7 +52,7 @@ jobs:
         with:
           name: frontend_build
           path: |
-            dist/apps/${{inputs.frontend_name}}
+            dist/apps/zzz-frontend
             frontend_name
             deployment_name
             nested_deployments

@@ -82,7 +82,7 @@ jobs:
             git push origin gh-pages
       - name: Export url
         id: export-url
-        # First line splits the full repo name (frzyc/genshin-optimizer) into $account (frzyc) and $repo (genshin-optimizer)
+        # First line splits the full repo name (account/repo) into $account and $repo
         run: |
           IFS=/ read -r account repo <<< ${{ vars[steps.vars.outputs.repo_var_name] }}
           echo "url=Deployed ${{ steps.vars.outputs.ref }} to https://$account.github.io/$repo/${{ steps.vars.outputs.deployment_name }}/${{ steps.vars.outputs.frontend_name }} (Takes 3-5 minutes after this completes to be available)" >> $GITHUB_OUTPUT

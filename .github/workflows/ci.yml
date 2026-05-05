@@ -117,8 +117,8 @@ jobs:
           submodules: true
       - name: Sparse Checkout
         run: |
-          $(cd libs/gi/dm/GenshinData  && git sparse-checkout set TextMap ExcelBinOutput)
-          $(cd libs/sr/dm/StarRailData && git sparse-checkout set TextMap ExcelOutput)
+          $(cd libs/zzz/dm/HakushinData && git sparse-checkout set TextMap)
+          $(cd libs/zzz/dm/ZenlessData && git sparse-checkout set TextMap)
       - uses: actions/setup-node@v6
         with:
           node-version: 24
