@@ -24,7 +24,11 @@ const sheet = registerDisc(
   registerBuff(
     'set4_dmg_',
     teamBuff.combat.common_dmg_.add(
-      cmpGE(discCount, 4, cmpEq(own.char.specialty, 'defense', prod(stacks, percent(0.06))))
+      cmpGE(
+        discCount,
+        4,
+        cmpEq(own.char.specialty, 'defense', prod(stacks, percent(0.06)))
+      )
     ),
     showCond4Set
   )

@@ -35,9 +35,7 @@ const sheet: UISheet<'2' | '4'> = {
         conditional: {
           label: ch('condAbloom'),
           metadata: cond.abloom,
-          fields: [
-            tagToTagField(buff.set4_abloom_anomProf.tag),
-          ],
+          fields: [tagToTagField(buff.set4_abloom_anomProf.tag)],
         },
       },
       {

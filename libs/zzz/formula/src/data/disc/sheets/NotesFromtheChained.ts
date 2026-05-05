@@ -22,9 +22,7 @@ const sheet = registerDisc(
 
   registerBuff(
     'set4_abloom_anomProf',
-    ownBuff.combat.anomProf.add(
-      cmpGE(discCount, 4, abloom.ifOn(48))
-    ),
+    ownBuff.combat.anomProf.add(cmpGE(discCount, 4, abloom.ifOn(48))),
     showCond4Set
   ),
   registerBuff(

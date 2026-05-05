@@ -32,9 +32,7 @@ const sheet: UISheetElement = {
       conditional: {
         label: ch('cond'),
         metadata: cond.energyConsumed20,
-        fields: [
-          tagToTagField(buff.electric_defIgn_.tag),
-        ],
+        fields: [tagToTagField(buff.electric_defIgn_.tag)],
       },
     },
   ],

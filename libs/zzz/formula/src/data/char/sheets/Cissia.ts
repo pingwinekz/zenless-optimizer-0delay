@@ -36,8 +36,13 @@ const { char } = own
 
 const { corrodeBone_crit_stacks } = allNumConditionals(key, true, 0, 3)
 
-const energyAboveThreshold = max(0, sum(own.initial.enerRegen, -dm.core.enerThresh))
-const additionalDefIgnore = percent(prod(energyAboveThreshold, dm.core.defIgnorePerStep))
+const energyAboveThreshold = max(
+  0,
+  sum(own.initial.enerRegen, -dm.core.enerThresh)
+)
+const additionalDefIgnore = percent(
+  prod(energyAboveThreshold, dm.core.defIgnorePerStep)
+)
 
 const coreDefIgnore = sum(
   subscript(char.core, dm.core.defIgnore),
@@ -62,7 +67,9 @@ const corrodeBoneDaze = sum(
 
 const m1_defIgnoreMult = cmpGE(char.mindscape, 1, dm.m1.defIgnoreMult, 1)
 
-const m2_serpentsKiss_dmg_ = ownBuff.combat.common_dmg_.add(cmpGE(char.mindscape, 2, percent(dm.m2.basicSerpentsKissDmg_)))
+const m2_serpentsKiss_dmg_ = ownBuff.combat.common_dmg_.add(
+  cmpGE(char.mindscape, 2, percent(dm.m2.basicSerpentsKissDmg_))
+)
 
 const sheet = register(
   key,
@@ -91,7 +98,8 @@ const sheet = register(
     )
   ),
 
-  registerBuff('ability_squad_crit_dmg_', 
+  registerBuff(
+    'ability_squad_crit_dmg_',
     teamBuff.combat.crit_dmg_.add(
       cmpGE(
         sum(
@@ -103,7 +111,8 @@ const sheet = register(
       )
     )
   ),
-  registerBuff('ability_self_crit_dmg_', 
+  registerBuff(
+    'ability_self_crit_dmg_',
     teamBuff.combat.crit_dmg_.add(
       cmpGE(
         sum(
@@ -118,9 +127,7 @@ const sheet = register(
 
   registerBuff(
     'core_defIgn_',
-    ownBuff.combat.defIgn_.add(
-      prod(coreDefIgnore, m1_defIgnoreMult)
-    ),
+    ownBuff.combat.defIgn_.add(prod(coreDefIgnore, m1_defIgnoreMult)),
     undefined,
     true
   ),
@@ -141,9 +148,7 @@ const sheet = register(
 
   registerBuff(
     'core_corrodeBone_crit_',
-    ownBuff.combat.crit_.add(
-      prod(corrodeBone_crit_stacks, percent(0.06))
-    ),
+    ownBuff.combat.crit_.add(prod(corrodeBone_crit_stacks, percent(0.06))),
     undefined,
     true
   ),

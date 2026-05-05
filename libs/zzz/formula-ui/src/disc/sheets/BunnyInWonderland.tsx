@@ -35,9 +35,7 @@ const sheet: UISheet<'2' | '4'> = {
         conditional: {
           label: ch('cond'),
           metadata: cond.stacks,
-          fields: [
-            tagToTagField(buff.set4_dmg_.tag),
-          ],
+          fields: [tagToTagField(buff.set4_dmg_.tag)],
         },
       },
     ],

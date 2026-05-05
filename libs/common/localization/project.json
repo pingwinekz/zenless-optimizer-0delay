@@ -11,9 +11,7 @@
         "{projectRoot}/assets/locales",
         "{projectRoot}/main_gen.json"
       ],
-      "inputs": [
-        "default"
-      ]
+      "inputs": ["default"]
     }
   },
   "tags": []

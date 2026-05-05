@@ -51,7 +51,9 @@ const dm = {
     corrodeBoneDmg: data_gen.coreParams[10], // 2.27-3.35 - Corrode Bone ATK%
     corrodeBoneDaze1Elec: data_gen.coreParams[13] ?? 0.4, // 0.4 - Daze boost with 1 Electric
     corrodeBoneDaze2Elec: data_gen.coreParams[14] ?? 0.6, // 0.6 - Daze boost with 2 Electric
-    defIgnorePerStep: Number(data_gen.coreParams[7]?.[0] ?? 0.0052) / Number(data_gen.coreParams[6]?.[0] ?? 0.12), // 0.0433-0.0833 - DEF ignore per 0.12 energy step
+    defIgnorePerStep:
+      Number(data_gen.coreParams[7]?.[0] ?? 0.0052) /
+      Number(data_gen.coreParams[6]?.[0] ?? 0.12), // 0.0433-0.0833 - DEF ignore per 0.12 energy step
   },
   ability: {
     squadCritDmg_: data_gen.abilityParams[0], // 0.4 - 40% squad CRIT DMG

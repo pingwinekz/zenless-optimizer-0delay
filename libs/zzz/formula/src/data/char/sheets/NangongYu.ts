@@ -20,7 +20,10 @@ const { char } = own
 
 const { inRhythm } = allBoolConditionals(key)
 
-const impactFromMastery = max(0, sum(own.initial.anomMas, -dm.core.masteryThresh))
+const impactFromMastery = max(
+  0,
+  sum(own.initial.anomMas, -dm.core.masteryThresh)
+)
 
 const sheet = register(
   key,
@@ -33,19 +36,20 @@ const sheet = register(
     ownBuff.combat.anomProf.add(subscript(char.core, dm.core.anomalyProf))
   ),
 
-  registerBuff(
-    'core_impact',
-    ownBuff.combat.impact.add(impactFromMastery)
-  ),
+  registerBuff('core_impact', ownBuff.combat.impact.add(impactFromMastery)),
 
   registerBuff(
     'core_daze_',
-    ownBuff.combat.dazeInc_.add(inRhythm.ifOn(percent(subscript(char.core, dm.core.daze))))
+    ownBuff.combat.dazeInc_.add(
+      inRhythm.ifOn(percent(subscript(char.core, dm.core.daze)))
+    )
   ),
 
   registerBuff(
     'core_squad_dmg_',
-    teamBuff.combat.common_dmg_.add(inRhythm.ifOn(percent(subscript(char.core, dm.core.squadDmg))))
+    teamBuff.combat.common_dmg_.add(
+      inRhythm.ifOn(percent(subscript(char.core, dm.core.squadDmg)))
+    )
   ),
 
   registerBuff(
@@ -57,9 +61,7 @@ const sheet = register(
 
   registerBuff(
     'm4_anomProf',
-    ownBuff.combat.anomProf.add(
-      cmpGE(char.mindscape, 4, dm.m4.anomalyProf)
-    )
+    ownBuff.combat.anomProf.add(cmpGE(char.mindscape, 4, dm.m4.anomalyProf))
   )
 )
 export default sheet
