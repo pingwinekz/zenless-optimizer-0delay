@@ -34,6 +34,7 @@ import Nicole from './Nicole'
 import OrphieMagus from './OrphieMagus'
 import PanYinhu from './PanYinhu'
 import Piper from './Piper'
+import Promeia from './Promeia'
 import Pulchra from './Pulchra'
 import Qingyi from './Qingyi'
 import Rina from './Rina'
@@ -42,6 +43,7 @@ import Seth from './Seth'
 import Soldier0Anby from './Soldier0Anby'
 import Soldier11 from './Soldier11'
 import Soukaku from './Soukaku'
+import StarlightBilly from './StarlightBilly'
 import Sunna from './Sunna'
 import Trigger from './Trigger'
 import Vivian from './Vivian'
@@ -88,7 +90,9 @@ export const charSheets: Record<CharacterKey, CharUISheet> = {
   PanYinhu,
   Piper,
   Pulchra,
+  Promeia,
   Qingyi,
+  StarlightBilly,
   Rina,
   Seed,
   Seth,

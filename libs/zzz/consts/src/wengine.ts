@@ -89,6 +89,8 @@ export const allWengineKeys = [
   'WrathfulVajra',
   'YesterdayCalls',
   'ZanshinHerbCase',
+  'FrostfallSickle',
+  'StarlightRiderFaceplate',
 ] as const
 
 export type WengineKey = (typeof allWengineKeys)[number]
