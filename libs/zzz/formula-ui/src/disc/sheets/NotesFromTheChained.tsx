@@ -1,15 +1,15 @@
 import type { UISheet } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
-import { NotesFromtheChained } from '@genshin-optimizer/zzz/formula'
+import { NotesFromTheChained } from '@genshin-optimizer/zzz/formula'
 import { tagToTagField, trans } from '../../util'
 import { Set2Display, Set4Display } from '../components'
 
-const key: DiscSetKey = 'NotesFromtheChained'
+const key: DiscSetKey = 'NotesFromTheChained'
 const [chg, ch] = trans('disc', key)
 const icon = discDefIcon(key)
-const cond = NotesFromtheChained.conditionals
-const buff = NotesFromtheChained.buffs
+const cond = NotesFromTheChained.conditionals
+const buff = NotesFromTheChained.buffs
 
 const sheet: UISheet<'2' | '4'> = {
   2: {

@@ -9,7 +9,7 @@ import {
 } from '../../util'
 import { entriesForDisc, registerDisc } from '../util'
 
-const key: DiscSetKey = 'NotesFromtheChained'
+const key: DiscSetKey = 'NotesFromTheChained'
 
 const discCount = own.common.count.sheet(key)
 const showCond4Set = cmpGE(discCount, 4, 'infer', '')

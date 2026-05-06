@@ -11,7 +11,7 @@ import HormonePunk from './HormonePunk'
 import InfernoMetal from './InfernoMetal'
 import KingOfTheSummit from './KingOfTheSummit'
 import MoonlightLullaby from './MoonlightLullaby'
-import NotesFromtheChained from './NotesFromtheChained'
+import NotesFromTheChained from './NotesFromTheChained'
 import PhaethonsMelody from './PhaethonsMelody'
 import PolarMetal from './PolarMetal'
 import ProtoPunk from './ProtoPunk'
@@ -39,7 +39,7 @@ const data = {
   InfernoMetal,
   KingOfTheSummit,
   MoonlightLullaby,
-  NotesFromtheChained,
+  NotesFromTheChained,
   PhaethonsMelody,
   PolarMetal,
   ProtoPunk,

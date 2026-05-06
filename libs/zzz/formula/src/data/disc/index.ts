@@ -12,7 +12,7 @@ import HormonePunk from './sheets/HormonePunk'
 import InfernoMetal from './sheets/InfernoMetal'
 import KingOfTheSummit from './sheets/KingOfTheSummit'
 import MoonlightLullaby from './sheets/MoonlightLullaby'
-import NotesFromtheChained from './sheets/NotesFromtheChained'
+import NotesFromTheChained from './sheets/NotesFromTheChained'
 import PhaethonsMelody from './sheets/PhaethonsMelody'
 import PolarMetal from './sheets/PolarMetal'
 import ProtoPunk from './sheets/ProtoPunk'
@@ -46,7 +46,7 @@ const data: TagMapNodeEntries[] = [
   ShadowHarmony,
   ShiningAria,
   BunnyInWonderland,
-  NotesFromtheChained,
+  NotesFromTheChained,
   ShockstarDisco,
   SoulRock,
   SwingJazz,

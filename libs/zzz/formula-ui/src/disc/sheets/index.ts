@@ -13,7 +13,7 @@ import HormonePunk from './HormonePunk'
 import InfernoMetal from './InfernoMetal'
 import KingOfTheSummit from './KingOfTheSummit'
 import MoonlightLullaby from './MoonlightLullaby'
-import NotesFromtheChained from './NotesFromtheChained'
+import NotesFromTheChained from './NotesFromTheChained'
 import PhaethonsMelody from './PhaethonsMelody'
 import PolarMetal from './PolarMetal'
 import ProtoPunk from './ProtoPunk'
@@ -47,7 +47,7 @@ export const discUiSheets: Record<DiscSetKey, UISheet<'2' | '4'>> = {
   ShadowHarmony,
   ShiningAria,
   BunnyInWonderland,
-  NotesFromtheChained,
+  NotesFromTheChained,
   ShockstarDisco,
   SoulRock,
   SwingJazz,
