@@ -56,4 +56,15 @@ export const buffs = {
       name: 'm2_dmg_',
     },
   },
+  m6_sheer_: {
+    sheet: 'StarlightBilly',
+    name: 'm6_sheer_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'sheer_dmg_',
+      sheet: 'StarlightBilly',
+      name: 'm6_sheer_',
+    },
+  },
 } as const

@@ -75,10 +75,13 @@ const sheet = register(
 
   // M4: Corrosive Chill restore (handled in formula via conditional)
 
-  // M6: RES ignore (Ice only)
+  // M6: All-Attribute RES ignore for Anomaly/Disorder DMG
+  // Note: No 'disorder' damage type exists, so applying to anomaly covers ice anomaly
+  // Disorder is ice+other so it won't get the RES reduction - this is a limitation
   registerBuff(
-    'm6_resIgn_ice',
-    ownBuff.combat.resIgn_.ice.add(
+    'm6_resIgn_',
+    ownBuff.combat.resIgn_.addWithDmgType(
+      'anomaly',
       cmpGE(char.mindscape, 6, percent(dm.m6.resIgnore_))
     )
   )

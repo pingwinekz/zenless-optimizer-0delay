@@ -45,16 +45,16 @@ export const buffs = {
       name: 'm2_anomProf',
     },
   },
-  m6_resIgn_ice: {
+  m6_resIgn_: {
     sheet: 'Promeia',
-    name: 'm6_resIgn_ice',
+    name: 'm6_resIgn_',
     tag: {
       et: 'display',
       qt: 'combat',
       q: 'resIgn_',
       sheet: 'Promeia',
-      attribute: 'ice',
-      name: 'm6_resIgn_ice',
+      damageType1: 'anomaly',
+      name: 'm6_resIgn_',
     },
   },
 } as const

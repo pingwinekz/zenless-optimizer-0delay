@@ -1,8 +1,12 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { ColorText } from '@genshin-optimizer/common/ui'
 import { StarlightBilly } from '@genshin-optimizer/zzz/formula'
+import { trans } from '../../util'
 import { createBaseSheet, fieldForBuff } from '../sheetUtil'
+import { getVariant } from '../util'
 
 const key: CharacterKey = 'StarlightBilly'
+const [, ch] = trans('char', key)
 const buff = StarlightBilly.buffs
 
 const sheet = createBaseSheet(key, {
@@ -34,6 +38,21 @@ const sheet = createBaseSheet(key, {
     {
       type: 'fields',
       fields: [fieldForBuff(buff.m4_critDmg)],
+    },
+  ],
+  m6: [
+    {
+      type: 'fields',
+      fields: [
+        {
+          title: (
+            <ColorText color={getVariant(buff.m6_sheer_.tag)}>
+              {ch('m6_sheer_')}
+            </ColorText>
+          ),
+          fieldRef: buff.m6_sheer_.tag,
+        },
+      ],
     },
   ],
 })

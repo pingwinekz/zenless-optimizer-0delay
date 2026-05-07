@@ -136,6 +136,7 @@ const sheet = register(
     undefined,
     undefined,
     false
-  )
+  ),
+  registerBuff('m6_sheer_', m6_sheer, undefined, undefined, false)
 )
 export default sheet

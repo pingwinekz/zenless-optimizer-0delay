@@ -41,7 +41,7 @@ const sheet = createBaseSheet(key, {
   m6: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.m6_resIgn_ice)],
+      fields: [fieldForBuff(buff.m6_resIgn_)],
     },
   ],
 })
