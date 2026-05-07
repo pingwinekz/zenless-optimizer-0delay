@@ -11,6 +11,17 @@ export const buffs = {
       name: 'core_critDmg',
     },
   },
+  core_hpSheerForce: {
+    sheet: 'StarlightBilly',
+    name: 'core_hpSheerForce',
+    tag: {
+      et: 'display',
+      qt: 'initial',
+      q: 'sheerForce',
+      sheet: 'StarlightBilly',
+      name: 'core_hpSheerForce',
+    },
+  },
   ability_dmg_: {
     sheet: 'StarlightBilly',
     name: 'ability_dmg_',
