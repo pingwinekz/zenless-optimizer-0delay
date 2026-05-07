@@ -148,7 +148,7 @@ const sheet = register(
 
   registerBuff(
     'core_corrodeBone_daze_',
-    ownBuff.combat.dazeInc_.add(corrodeBoneDaze),
+    ownBuff.combat.dazeInc_.electric.add(corrodeBoneDaze),
     undefined,
     undefined,
     false

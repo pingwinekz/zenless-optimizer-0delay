@@ -1,5 +1,5 @@
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { ColorText } from '@genshin-optimizer/common/ui'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { StarlightBilly } from '@genshin-optimizer/zzz/formula'
 import { trans } from '../../util'
 import { createBaseSheet, fieldForBuff } from '../sheetUtil'
@@ -19,7 +19,16 @@ const sheet = createBaseSheet(key, {
   ability: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.ability_dmg_)],
+      fields: [
+        {
+          title: (
+            <ColorText color={getVariant(buff.ability_dmg_.tag)}>
+              {ch('ability_dmg_')}
+            </ColorText>
+          ),
+          fieldRef: buff.ability_dmg_.tag,
+        },
+      ],
     },
   ],
   m1: [
@@ -31,7 +40,16 @@ const sheet = createBaseSheet(key, {
   m2: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.m2_dmg_)],
+      fields: [
+        {
+          title: (
+            <ColorText color={getVariant(buff.m2_dmg_.tag)}>
+              {ch('m2_dmg_')}
+            </ColorText>
+          ),
+          fieldRef: buff.m2_dmg_.tag,
+        },
+      ],
     },
   ],
   m4: [

@@ -41,7 +41,7 @@ const m2_plus_ability = ownBuff.combat.common_dmg_.add(
   sum(ability_dmg, cmpGE(char.mindscape, 2, dm.m2.dmg_))
 )
 
-const ability_dmg_node = ownBuff.combat.common_dmg_.add(ability_dmg)
+const ability_dmg_node = ownBuff.combat.common_dmg_.physical.add(ability_dmg)
 
 const sheet = register(
   key,
@@ -132,11 +132,21 @@ const sheet = register(
   ),
   registerBuff(
     'm2_dmg_',
-    ownBuff.combat.common_dmg_.add(cmpGE(char.mindscape, 2, dm.m2.dmg_)),
+    ownBuff.combat.common_dmg_.physical.add(
+      cmpGE(char.mindscape, 2, dm.m2.dmg_)
+    ),
     undefined,
     undefined,
     false
   ),
-  registerBuff('m6_sheer_', m6_sheer, undefined, undefined, false)
+  registerBuff(
+    'm6_sheer_',
+    ownBuff.combat.sheer_dmg_.physical.add(
+      cmpGE(char.mindscape, 6, dm.m6.sheerDmg_)
+    ),
+    undefined,
+    undefined,
+    false
+  )
 )
 export default sheet

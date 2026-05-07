@@ -1,5 +1,5 @@
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { ColorText } from '@genshin-optimizer/common/ui'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { NangongYu } from '@genshin-optimizer/zzz/formula'
 import { trans } from '../../util'
 import { createBaseSheet, fieldForBuff } from '../sheetUtil'

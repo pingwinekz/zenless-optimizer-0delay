@@ -53,6 +53,7 @@ export const buffs = {
       qt: 'combat',
       q: 'dazeInc_',
       sheet: 'Cissia',
+      attribute: 'electric',
       name: 'core_corrodeBone_daze_',
     },
   },

@@ -1,7 +1,14 @@
 import { cmpGE, max, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
-import { own, ownBuff, percent, register, registerBuff } from '../../util'
+import {
+  own,
+  ownBuff,
+  percent,
+  register,
+  registerBuff,
+  teamBuff,
+} from '../../util'
 import {
   dmgDazeAndAnomOverride,
   entriesForChar,
@@ -27,7 +34,7 @@ const core_anomBuildup_ = ownBuff.combat.anomBuildup_.ether.add(
 const core_daze_ = ownBuff.combat.dazeInc_.add(
   percent(subscript(char.core, dm.core.daze))
 )
-const core_squad_dmg_ = ownBuff.combat.common_dmg_.add(
+const core_squad_dmg_ = teamBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.squadDmg))
 )
 
@@ -236,7 +243,7 @@ const sheet = register(
     false
   ),
   registerBuff('core_daze_', core_daze_, undefined, undefined, false),
-  registerBuff('core_squad_dmg_', core_squad_dmg_, undefined, true, false),
+  registerBuff('core_squad_dmg_', core_squad_dmg_, undefined, true),
 
   registerBuff(
     'm1_resIgn_',
