@@ -56,6 +56,17 @@ export const buffs = {
       name: 'core_squad_dmg_',
     },
   },
+  core_etherVeil_atk: {
+    sheet: 'NangongYu',
+    name: 'core_etherVeil_atk',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'atk',
+      sheet: 'NangongYu',
+      name: 'core_etherVeil_atk',
+    },
+  },
   m1_resIgn_: {
     sheet: 'NangongYu',
     name: 'm1_resIgn_',

@@ -2,6 +2,7 @@ import { cmpGE, max, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
+  allBoolConditionals,
   own,
   ownBuff,
   percent,
@@ -22,6 +23,8 @@ const dm = mappedStats.char[key]
 const baseTag = getBaseTag(data_gen)
 
 const { char } = own
+
+const { etherVeil } = allBoolConditionals(key)
 
 const impactFromMastery = max(
   0,
@@ -244,6 +247,12 @@ const sheet = register(
   ),
   registerBuff('core_daze_', core_daze_, undefined, undefined, false),
   registerBuff('core_squad_dmg_', core_squad_dmg_, undefined, true),
+  registerBuff(
+    'core_etherVeil_atk',
+    teamBuff.combat.atk.add(etherVeil.ifOn(50)),
+    undefined,
+    true
+  ),
 
   registerBuff(
     'm1_resIgn_',

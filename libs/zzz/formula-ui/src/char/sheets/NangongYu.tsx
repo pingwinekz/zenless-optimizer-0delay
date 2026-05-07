@@ -7,9 +7,24 @@ import { getVariant } from '../util'
 
 const key: CharacterKey = 'NangongYu'
 const [, ch] = trans('char', key)
+const cond = NangongYu.conditionals
 const buff = NangongYu.buffs
 
 const sheet = createBaseSheet(key, {
+  perSkillAbility: {
+    chain: {
+      UltimateMeteorShower: [
+        {
+          type: 'conditional',
+          conditional: {
+            label: ch('etherVeil'),
+            metadata: cond.etherVeil,
+            fields: [fieldForBuff(buff.core_etherVeil_atk)],
+          },
+        },
+      ],
+    },
+  },
   core: [
     {
       type: 'fields',

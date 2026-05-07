@@ -135,7 +135,7 @@ const sheet = register(
 
   registerBuff(
     'core_defIgn_',
-    ownBuff.combat.defIgn_.add(prod(coreDefIgnore, m1_defIgnoreMult)),
+    ownBuff.combat.defIgn_.electric.add(prod(coreDefIgnore, m1_defIgnoreMult)),
     undefined,
     true
   ),

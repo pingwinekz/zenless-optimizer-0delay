@@ -30,6 +30,7 @@ export const buffs = {
       qt: 'combat',
       q: 'defIgn_',
       sheet: 'Cissia',
+      attribute: 'electric',
       name: 'core_defIgn_',
     },
   },

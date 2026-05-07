@@ -50,7 +50,14 @@ const sheet = createBaseSheet(key, {
     {
       type: 'fields',
       fields: [
-        fieldForBuff(buff.core_defIgn_),
+        {
+          title: (
+            <ColorText color={getVariant(buff.core_defIgn_.tag)}>
+              {ch('core_defIgn_')}
+            </ColorText>
+          ),
+          fieldRef: buff.core_defIgn_.tag,
+        },
         {
           title: (
             <ColorText color={getVariant(buff.core_corrodeBone_dmg_.tag)}>
