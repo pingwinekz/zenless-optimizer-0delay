@@ -11,6 +11,7 @@ import {
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
+  allBoolConditionals,
   allNumConditionals,
   own,
   ownBuff,
@@ -35,6 +36,7 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { corrodeBone_crit_stacks } = allNumConditionals(key, true, 0, 3)
+const { etherVeil } = allBoolConditionals(key)
 
 const energyAboveThreshold = max(
   0,
@@ -167,6 +169,13 @@ const sheet = register(
   registerBuff(
     'core_corrodeBone_crit_',
     ownBuff.combat.crit_.add(prod(corrodeBone_crit_stacks, percent(0.06))),
+    undefined,
+    true
+  ),
+
+  registerBuff(
+    'core_etherVeil_crit_dmg_',
+    teamBuff.combat.crit_dmg_.add(etherVeil.ifOn(percent(0.05))),
     undefined,
     true
   ),

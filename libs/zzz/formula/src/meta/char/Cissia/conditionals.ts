@@ -8,4 +8,5 @@ export const conditionals = {
     min: 0,
     max: 3,
   },
+  etherVeil: { sheet: 'Cissia', name: 'etherVeil', type: 'bool' },
 } as const

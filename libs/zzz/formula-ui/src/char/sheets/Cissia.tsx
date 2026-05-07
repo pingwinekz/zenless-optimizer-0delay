@@ -12,6 +12,18 @@ const buff = Cissia.buffs
 
 const sheet = createBaseSheet(key, {
   perSkillAbility: {
+    chain: {
+      UltimateOphidiophobia: [
+        {
+          type: 'conditional',
+          conditional: {
+            label: ch('etherVeil'),
+            metadata: cond.etherVeil,
+            fields: [fieldForBuff(buff.core_etherVeil_crit_dmg_)],
+          },
+        },
+      ],
+    },
     basic: {
       CorrodeBone: [
         {

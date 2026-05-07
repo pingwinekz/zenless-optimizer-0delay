@@ -80,6 +80,17 @@ export const buffs = {
       name: 'core_corrodeBone_crit_',
     },
   },
+  core_etherVeil_crit_dmg_: {
+    sheet: 'Cissia',
+    name: 'core_etherVeil_crit_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'crit_dmg_',
+      sheet: 'Cissia',
+      name: 'core_etherVeil_crit_dmg_',
+    },
+  },
   m1_electric_resIgn_: {
     sheet: 'Cissia',
     name: 'm1_electric_resIgn_',
