@@ -67,7 +67,7 @@ const corrodeBoneDaze = sum(
 
 const m1_defIgnoreMult = cmpGE(char.mindscape, 1, dm.m1.defIgnoreMult, 1)
 
-const m2_serpentsKiss_dmg_ = ownBuff.combat.common_dmg_.add(
+const m2_serpentsKiss_dmg_ = ownBuff.combat.dmg_.electric.add(
   cmpGE(char.mindscape, 2, percent(dm.m2.basicSerpentsKissDmg_))
 )
 
@@ -84,7 +84,13 @@ const sheet = register(
       'CorrodeBone',
       0,
       { ...baseTag, damageType1: 'special' },
-      'atk'
+      'atk',
+      undefined,
+      ownBuff.combat.dazeInc_.add(corrodeBoneDaze),
+      ownBuff.combat.common_dmg_.add(corrodeBoneDmg),
+      ownBuff.combat.resIgn_.electric.add(
+        cmpGE(char.mindscape, 1, percent(dm.m1.corrodeBoneResIgnore))
+      )
     ),
     dmgDazeAndAnomOverride(
       dm,
@@ -134,16 +140,28 @@ const sheet = register(
 
   registerBuff(
     'core_corrodeBone_dmg_',
-    ownBuff.combat.dmg_.addWithDmgType('special', corrodeBoneDmg),
+    ownBuff.combat.dmg_.electric.add(corrodeBoneDmg),
     undefined,
-    true
+    undefined,
+    false
   ),
 
   registerBuff(
     'core_corrodeBone_daze_',
     ownBuff.combat.dazeInc_.add(corrodeBoneDaze),
     undefined,
-    true
+    undefined,
+    false
+  ),
+
+  registerBuff(
+    'm1_corrodeBone_resIgn_',
+    ownBuff.combat.resIgn_.electric.add(
+      cmpGE(char.mindscape, 1, percent(dm.m1.corrodeBoneResIgnore))
+    ),
+    undefined,
+    undefined,
+    false
   ),
 
   registerBuff(
@@ -163,13 +181,11 @@ const sheet = register(
   ),
 
   registerBuff(
-    'm1_corrodeBone_electric_resIgn_',
-    ownBuff.combat.resIgn_.electric.addWithDmgType(
-      'special',
-      cmpGE(char.mindscape, 1, percent(dm.m1.corrodeBoneResIgnore))
-    ),
+    'm2_serpentsKiss_dmg_',
+    m2_serpentsKiss_dmg_,
     undefined,
-    true
+    undefined,
+    false
   )
 )
 export default sheet

@@ -10,7 +10,7 @@ const dm = {
   anomalyProf: data_gen[o++], // 90 - Base Anomaly Prof
   squadDmg: data_gen[o++], // 0.15 - 15% squad DMG
   duration: data_gen[o++], // 40 - 40s duration
-  maxStacks: data_gen[o++], // 2 - max stacks
+  stacks: data_gen[o++][1], // 2 - max stacks
   stackThreshold: data_gen[o++], // 2 - stacks needed for bonus
   addlAnomalyProf: data_gen[o++], // 60 - additional Anomaly Prof at 2 stacks
 } as const

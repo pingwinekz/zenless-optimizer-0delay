@@ -1,7 +1,9 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { ColorText } from '@genshin-optimizer/common/ui'
 import { Cissia } from '@genshin-optimizer/zzz/formula'
 import { trans } from '../../util'
 import { createBaseSheet, fieldForBuff } from '../sheetUtil'
+import { getVariant } from '../util'
 
 const key: CharacterKey = 'Cissia'
 const [, ch] = trans('char', key)
@@ -38,11 +40,19 @@ const sheet = createBaseSheet(key, {
       fields: [
         fieldForBuff(buff.core_defIgn_),
         {
-          title: ch('core_corrodeBone_dmg_'),
+          title: (
+            <ColorText color={getVariant(buff.core_corrodeBone_dmg_.tag)}>
+              {ch('core_corrodeBone_dmg_')}
+            </ColorText>
+          ),
           fieldRef: buff.core_corrodeBone_dmg_.tag,
         },
         {
-          title: ch('core_corrodeBone_daze_'),
+          title: (
+            <ColorText color={getVariant(buff.core_corrodeBone_daze_.tag)}>
+              {ch('core_corrodeBone_daze_')}
+            </ColorText>
+          ),
           fieldRef: buff.core_corrodeBone_daze_.tag,
         },
       ],
@@ -53,12 +63,35 @@ const sheet = createBaseSheet(key, {
       type: 'fields',
       fields: [
         {
-          title: ch('m1_electric_resIgn'),
+          title: (
+            <ColorText color={getVariant(buff.m1_electric_resIgn_.tag)}>
+              {ch('m1_electric_resIgn')}
+            </ColorText>
+          ),
           fieldRef: buff.m1_electric_resIgn_.tag,
         },
         {
-          title: ch('m1_corrodeBone_electric_resIgn'),
-          fieldRef: buff.m1_corrodeBone_electric_resIgn_.tag,
+          title: (
+            <ColorText color={getVariant(buff.m1_corrodeBone_resIgn_.tag)}>
+              {ch('m1_corrodeBone_resIgn_')}
+            </ColorText>
+          ),
+          fieldRef: buff.m1_corrodeBone_resIgn_.tag,
+        },
+      ],
+    },
+  ],
+  m2: [
+    {
+      type: 'fields',
+      fields: [
+        {
+          title: (
+            <ColorText color={getVariant(buff.m2_serpentsKiss_dmg_.tag)}>
+              {ch('m2_serpentsKiss_dmg_')}
+            </ColorText>
+          ),
+          fieldRef: buff.m2_serpentsKiss_dmg_.tag,
         },
       ],
     },

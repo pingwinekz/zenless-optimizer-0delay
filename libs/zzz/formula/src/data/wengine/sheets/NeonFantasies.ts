@@ -20,7 +20,7 @@ const key: WengineKey = 'NeonFantasies'
 const dm = mappedStats.wengine[key]
 const { phase } = own.wengine
 
-const { stacks } = allNumConditionals(key, true, 0, dm.maxStacks[0])
+const { stacks } = allNumConditionals(key, true, 0, dm.stacks)
 
 const sheet = registerWengine(
   key,

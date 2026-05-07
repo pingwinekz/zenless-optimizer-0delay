@@ -41,7 +41,7 @@ export const buffs = {
       qt: 'combat',
       q: 'dmg_',
       sheet: 'Cissia',
-      damageType1: 'special',
+      attribute: 'electric',
       name: 'core_corrodeBone_dmg_',
     },
   },
@@ -54,6 +54,18 @@ export const buffs = {
       q: 'dazeInc_',
       sheet: 'Cissia',
       name: 'core_corrodeBone_daze_',
+    },
+  },
+  m1_corrodeBone_resIgn_: {
+    sheet: 'Cissia',
+    name: 'm1_corrodeBone_resIgn_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'resIgn_',
+      sheet: 'Cissia',
+      attribute: 'electric',
+      name: 'm1_corrodeBone_resIgn_',
     },
   },
   core_corrodeBone_crit_: {
@@ -79,17 +91,16 @@ export const buffs = {
       name: 'm1_electric_resIgn_',
     },
   },
-  m1_corrodeBone_electric_resIgn_: {
+  m2_serpentsKiss_dmg_: {
     sheet: 'Cissia',
-    name: 'm1_corrodeBone_electric_resIgn_',
+    name: 'm2_serpentsKiss_dmg_',
     tag: {
       et: 'display',
       qt: 'combat',
-      q: 'resIgn_',
+      q: 'dmg_',
       sheet: 'Cissia',
       attribute: 'electric',
-      damageType1: 'special',
-      name: 'm1_corrodeBone_electric_resIgn_',
+      name: 'm2_serpentsKiss_dmg_',
     },
   },
 } as const
