@@ -29,7 +29,8 @@ const dm = {
       data_gen.skillParams['special']['EXSpecialAttackInstantlyHooked'],
   },
   chain: {
-    ChainAttackDreamCollab: data_gen.skillParams['chain']['ChainAttackDreamCollab'],
+    ChainAttackDreamCollab:
+      data_gen.skillParams['chain']['ChainAttackDreamCollab'],
     Ultimate100Energy: data_gen.skillParams['chain']['Ultimate100Energy'],
   },
   assist: {

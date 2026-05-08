@@ -1,4 +1,4 @@
-import { cmpGE } from '@genshin-optimizer/pando/engine'
+import { cmpGE, subscript } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
@@ -8,6 +8,7 @@ import {
   enemyDebuff,
   own,
   ownBuff,
+  percent,
   register,
   registerBuff,
   teamBuff,
@@ -20,20 +21,28 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-// TODO: Add conditionals
-const { boolConditional } = allBoolConditionals(key)
+const { boolConditional, unity } = allBoolConditionals(key)
 const { listConditional } = allListConditionals(key, ['val1', 'val2'])
 const { numConditional } = allNumConditionals(key, true, 0, 2)
 
 const sheet = register(
   key,
-  // Handles base stats, core stats and Mindscapes 3 + 5
   entriesForChar(data_gen),
-
-  // Formulas
   ...registerAllDmgDazeAndAnom(key, dm),
 
-  // Buffs
+  // Core: Unity — CRIT Rate and DMG
+  registerBuff(
+    'core_crit_',
+    ownBuff.combat.crit_.add(
+      unity.ifOn(percent(subscript(char.core, dm.core.crit_)))
+    )
+  ),
+  registerBuff(
+    'core_dmg_',
+    ownBuff.combat.common_dmg_.add(
+      unity.ifOn(percent(subscript(char.core, dm.core.dmg_)))
+    )
+  ),
   registerBuff(
     'm6_dmg_',
     ownBuff.combat.common_dmg_.add(

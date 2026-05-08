@@ -1,5 +1,27 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
+  core_crit_: {
+    sheet: 'YeShunguang',
+    name: 'core_crit_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'crit_',
+      sheet: 'YeShunguang',
+      name: 'core_crit_',
+    },
+  },
+  core_dmg_: {
+    sheet: 'YeShunguang',
+    name: 'core_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'common_dmg_',
+      sheet: 'YeShunguang',
+      name: 'core_dmg_',
+    },
+  },
   m6_dmg_: {
     sheet: 'YeShunguang',
     name: 'm6_dmg_',

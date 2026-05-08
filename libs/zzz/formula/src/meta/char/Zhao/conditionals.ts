@@ -1,6 +1,7 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
   boolConditional: { sheet: 'Zhao', name: 'boolConditional', type: 'bool' },
+  etherVeil: { sheet: 'Zhao', name: 'etherVeil', type: 'bool' },
   listConditional: {
     sheet: 'Zhao',
     name: 'listConditional',

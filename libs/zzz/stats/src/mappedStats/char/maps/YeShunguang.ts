@@ -79,6 +79,44 @@ const dm = {
         'AssistFollowUpEnlightenedMindUnification'
       ],
   },
+  core: {
+    qingmingForce: data_gen.coreParams[0],
+    bearerConversion: data_gen.coreParams[1],
+    bearerStacks: data_gen.coreParams[3],
+    crit_: data_gen.coreParams[4],
+    dmg_: data_gen.coreParams[5],
+    etherVeilDuration: data_gen.coreParams[6],
+    veilVulnerabilityCap: data_gen.coreParams[7],
+  },
+  ability: {
+    qingmingForceOnEtherVeil: data_gen.abilityParams[0],
+    bearerIfEnlightened: data_gen.abilityParams[1],
+  },
+  m1: {
+    qingmingForce: data_gen.mindscapeParams[0][0],
+    cooldown: data_gen.mindscapeParams[0][1],
+    dmg_: data_gen.mindscapeParams[0][2],
+    defIgn_: data_gen.mindscapeParams[0][3],
+  },
+  m2: {
+    bearerStacks: data_gen.mindscapeParams[1][0],
+    culminationStacks: data_gen.mindscapeParams[1][1],
+    qingmingToCulmination: data_gen.mindscapeParams[1][2],
+    defIgn_: data_gen.mindscapeParams[1][3],
+  },
+  m4: {
+    decibels: data_gen.mindscapeParams[3][0],
+    cooldown: data_gen.mindscapeParams[3][1],
+    veilVulnerabilityCap: data_gen.mindscapeParams[3][2],
+  },
+  m6: {
+    initialLanternWish: data_gen.mindscapeParams[5][0],
+    lanternWishOnEnlightened: data_gen.mindscapeParams[5][1],
+    maxLanternWish: data_gen.mindscapeParams[5][2],
+    lanternWishForUltimate: data_gen.mindscapeParams[5][3],
+    lanternWishConsumed: data_gen.mindscapeParams[5][4],
+    physicalDmg_: data_gen.mindscapeParams[5][5],
+  },
 } as const
 
 export default dm

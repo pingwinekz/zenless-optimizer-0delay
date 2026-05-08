@@ -33,9 +33,11 @@ const { char } = own
 const { boolConditional } = allBoolConditionals(key)
 
 const m6_perfectPitch_dmg_ = ownBuff.combat.dmg_.ether.add(
-  cmpGE(char.mindscape, 6, boolConditional.ifOn(percent(dm.m6.enhancedDmg))))
+  cmpGE(char.mindscape, 6, boolConditional.ifOn(percent(dm.m6.enhancedDmg)))
+)
 const m6_ult_dmg_ = ownBuff.combat.dmg_.ether.add(
-  cmpGE(char.mindscape, 6, boolConditional.ifOn(percent(dm.m6.enhancedDmg))))
+  cmpGE(char.mindscape, 6, boolConditional.ifOn(percent(dm.m6.enhancedDmg)))
+)
 
 const sheet = register(
   key,
@@ -71,10 +73,13 @@ const sheet = register(
   registerBuff(
     'm1_abloom',
     ownBuff.combat.crit_.add(
-      cmpGE(char.mindscape, 1,
+      cmpGE(
+        char.mindscape,
+        1,
         sum(
           constant(dm.m1.abloomCrit),
-          max(0,
+          max(
+            0,
             prod(
               max(0, sum(own.initial.anomMas, -dm.m1.anomMasteryThreshold)),
               percent(dm.m1.critPerExcessMastery)

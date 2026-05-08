@@ -19,4 +19,5 @@ export const conditionals = {
     min: 0,
     max: 2,
   },
+  unity: { sheet: 'YeShunguang', name: 'unity', type: 'bool' },
 } as const

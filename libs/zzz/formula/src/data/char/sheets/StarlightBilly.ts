@@ -33,7 +33,10 @@ const ability_dmg = cmpGE(
 )
 
 const core_critDmg = subscript(char.core, dm.core.critDmgPerUse)
-const core_hpSheerForce = prod(own.final.hp, constant(dm.core.sheerForcePerHp[0]))
+const core_hpSheerForce = prod(
+  own.final.hp,
+  constant(dm.core.sheerForcePerHp[0])
+)
 
 // M2 + Ability + M6 (as sheer_dmg_) combined for Full-Throttle Starlight and Ultimate
 const m2_ability_m6 = ownBuff.combat.common_dmg_.add(
