@@ -1,11 +1,14 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
-import { cmpGE, constant, min, prod, subscript, sum } from '@genshin-optimizer/pando/engine'
+import {
+  cmpGE,
+  constant,
+  min,
+  prod,
+  subscript,
+} from '@genshin-optimizer/pando/engine'
 import {
   allBoolConditionals,
-  allListConditionals,
-  allNumConditionals,
-  customDmg,
   enemyDebuff,
   own,
   ownBuff,
@@ -22,10 +25,29 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-// TODO: Add conditionals
-const { boolConditional } = allBoolConditionals(key)
-const { listConditional } = allListConditionals(key, ['val1', 'val2'])
-const { numConditional } = allNumConditionals(key, true, 0, 2)
+const {
+  boolConditional,
+  delusionReprise,
+  etherVeil,
+  focusedCreation,
+  ult_used,
+} = allBoolConditionals(key)
+
+const m6_crit_ = ownBuff.combat.crit_.add(
+  cmpGE(char.mindscape, 6, focusedCreation.ifOn(1))
+)
+const m6_crit_dmg_ = ownBuff.combat.crit_dmg_.add(
+  cmpGE(
+    char.mindscape,
+    6,
+    focusedCreation.ifOn(
+      min(
+        percent(dm.m6.maxCritEx),
+        prod(own.initial.atk, percent(dm.m6.critexPerAtk))
+      )
+    )
+  )
+)
 
 const sheet = register(
   key,
@@ -34,19 +56,6 @@ const sheet = register(
 
   // Formulas
   ...registerAllDmgDazeAndAnom(key, dm),
-
-  // Custom damage - Cat's Gaze (Note: uses Sunna's stats as placeholder.
-  // Real implementation would need triggering agent's stats but system doesn't support this)
-  ...customDmg(
-    'cats_gaze_attack',
-    { attribute: 'physical', damageType1: 'basic' },
-    prod(own.final.atk, percent(subscript(char.core, dm.core.catsGazeAttackDmg)))
-  ),
-  ...customDmg(
-    'cats_gaze_anomaly',
-    { attribute: 'physical', damageType1: 'basic' },
-    prod(own.final.atk, percent(subscript(char.core, dm.core.catsGazeAnomalyDmg)))
-  ),
 
   // Buffs
   registerBuff(
@@ -63,15 +72,32 @@ const sheet = register(
     true
   ),
   registerBuff(
-    'm6_dmg_',
-    ownBuff.combat.common_dmg_.add(
-      cmpGE(char.mindscape, 6, boolConditional.ifOn(1))
-    )
+    'ability_stun_',
+    enemyDebuff.common.stun_.add(delusionReprise.ifOn(constant(0.3))),
+    undefined,
+    true
   ),
   registerBuff(
-    'team_dmg_',
-    teamBuff.combat.common_dmg_.add(listConditional.map({ val1: 1, val2: 2 }))
+    'm2_etherVeil_atk',
+    teamBuff.combat.atk.add(
+      cmpGE(
+        char.mindscape,
+        2,
+        etherVeil.ifOn(prod(own.initial.atk, percent(dm.m2.etherVeilAtk)))
+      )
+    ),
+    undefined,
+    true
   ),
-  registerBuff('enemy_defRed_', enemyDebuff.common.defRed_.add(numConditional))
+  registerBuff(
+    'm4_dmg_',
+    teamBuff.combat.common_dmg_.add(
+      cmpGE(char.mindscape, 4, ult_used.ifOn(percent(dm.m4.squadDmg_)))
+    ),
+    undefined,
+    true
+  ),
+  registerBuff('m6_crit_', m6_crit_, undefined, true),
+  registerBuff('m6_crit_dmg_', m6_crit_dmg_, undefined, true)
 )
 export default sheet

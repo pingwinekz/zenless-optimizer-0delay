@@ -1,36 +1,59 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
-  m6_dmg_: {
+  core_anomProf: {
     sheet: 'Aria',
-    name: 'm6_dmg_',
+    name: 'core_anomProf',
     tag: {
       et: 'display',
       qt: 'combat',
-      q: 'common_dmg_',
+      q: 'anomProf',
       sheet: 'Aria',
-      name: 'm6_dmg_',
+      name: 'core_anomProf',
     },
   },
-  team_dmg_: {
+  m1_abloom: {
     sheet: 'Aria',
-    name: 'team_dmg_',
+    name: 'm1_abloom',
     tag: {
       et: 'display',
       qt: 'combat',
-      q: 'common_dmg_',
+      q: 'crit_',
       sheet: 'Aria',
-      name: 'team_dmg_',
+      name: 'm1_abloom',
     },
   },
-  enemy_defRed_: {
+  m1_abloom_crit_dmg: {
     sheet: 'Aria',
-    name: 'enemy_defRed_',
+    name: 'm1_abloom_crit_dmg',
     tag: {
       et: 'display',
-      qt: 'common',
-      q: 'defRed_',
+      qt: 'combat',
+      q: 'crit_dmg_',
       sheet: 'Aria',
-      name: 'enemy_defRed_',
+      name: 'm1_abloom_crit_dmg',
+    },
+  },
+  m2_defIgn: {
+    sheet: 'Aria',
+    name: 'm2_defIgn',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'defIgn_',
+      sheet: 'Aria',
+      name: 'm2_defIgn',
+    },
+  },
+  m6_enhanced_dmg: {
+    sheet: 'Aria',
+    name: 'm6_enhanced_dmg',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'dmg_',
+      sheet: 'Aria',
+      attribute: 'ether',
+      name: 'm6_enhanced_dmg',
     },
   },
 } as const

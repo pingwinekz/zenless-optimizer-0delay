@@ -1,36 +1,69 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
-  m6_dmg_: {
+  core_atk: {
     sheet: 'Sunna',
-    name: 'm6_dmg_',
+    name: 'core_atk',
     tag: {
       et: 'display',
       qt: 'combat',
-      q: 'common_dmg_',
+      q: 'atk',
       sheet: 'Sunna',
-      name: 'm6_dmg_',
+      name: 'core_atk',
     },
   },
-  team_dmg_: {
+  ability_stun_: {
     sheet: 'Sunna',
-    name: 'team_dmg_',
-    tag: {
-      et: 'display',
-      qt: 'combat',
-      q: 'common_dmg_',
-      sheet: 'Sunna',
-      name: 'team_dmg_',
-    },
-  },
-  enemy_defRed_: {
-    sheet: 'Sunna',
-    name: 'enemy_defRed_',
+    name: 'ability_stun_',
     tag: {
       et: 'display',
       qt: 'common',
-      q: 'defRed_',
+      q: 'stun_',
       sheet: 'Sunna',
-      name: 'enemy_defRed_',
+      name: 'ability_stun_',
+    },
+  },
+  m2_etherVeil_atk: {
+    sheet: 'Sunna',
+    name: 'm2_etherVeil_atk',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'atk',
+      sheet: 'Sunna',
+      name: 'm2_etherVeil_atk',
+    },
+  },
+  m4_dmg_: {
+    sheet: 'Sunna',
+    name: 'm4_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'common_dmg_',
+      sheet: 'Sunna',
+      name: 'm4_dmg_',
+    },
+  },
+  m6_crit_: {
+    sheet: 'Sunna',
+    name: 'm6_crit_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'crit_',
+      sheet: 'Sunna',
+      name: 'm6_crit_',
+    },
+  },
+  m6_crit_dmg_: {
+    sheet: 'Sunna',
+    name: 'm6_crit_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'crit_dmg_',
+      sheet: 'Sunna',
+      name: 'm6_crit_dmg_',
     },
   },
 } as const

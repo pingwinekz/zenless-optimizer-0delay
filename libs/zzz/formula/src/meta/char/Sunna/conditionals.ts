@@ -1,18 +1,8 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
   boolConditional: { sheet: 'Sunna', name: 'boolConditional', type: 'bool' },
-  listConditional: {
-    sheet: 'Sunna',
-    name: 'listConditional',
-    type: 'list',
-    list: ['val1', 'val2'],
-  },
-  numConditional: {
-    sheet: 'Sunna',
-    name: 'numConditional',
-    type: 'num',
-    int_only: true,
-    min: 0,
-    max: 2,
-  },
+  delusionReprise: { sheet: 'Sunna', name: 'delusionReprise', type: 'bool' },
+  etherVeil: { sheet: 'Sunna', name: 'etherVeil', type: 'bool' },
+  focusedCreation: { sheet: 'Sunna', name: 'focusedCreation', type: 'bool' },
+  ult_used: { sheet: 'Sunna', name: 'ult_used', type: 'bool' },
 } as const
