@@ -57,7 +57,8 @@ i18n
 
     backend: {
       // Path to load localization data from.
-      loadPath: './assets/locales/{{lng}}/{{ns}}.json',
+      // Uses Vite's BASE_URL to correctly resolve paths on GitHub Pages.
+      loadPath: `${import.meta.env.BASE_URL}assets/locales/{{lng}}/{{ns}}.json`,
     },
     interpolation: {
       escapeValue: false, // react does interlopation already
