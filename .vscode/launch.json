@@ -23,7 +23,10 @@
   "compounds": [
     {
       "name": "ZZZ: Dev + Debug",
-      "configurations": ["Start ZZZ dev server", "Launch Chrome against localhost (Requires dev server to be running)"]
+      "configurations": [
+        "Start ZZZ dev server",
+        "Launch Chrome against localhost (Requires dev server to be running)"
+      ]
     }
   ]
 }
