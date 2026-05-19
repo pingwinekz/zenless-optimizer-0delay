@@ -9,33 +9,21 @@
       "request": "launch",
       "name": "Launch Chrome against localhost (Requires dev server to be running)",
       "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "/usr/bin/helium-browser"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Start GO dev server and launch Chrome against localhost",
+      "name": "Start ZZZ dev server",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["run", "nx", "serve", "frontend"],
-      "serverReadyAction": {
-        "action": "debugWithChrome",
-        "pattern": "http://localhost:.*1m([0-9]+)",
-        "uriFormat": "http://localhost:%s",
-        "webRoot": "${workspaceFolder}"
-      }
-    },
+      "runtimeArgs": ["run", "nx", "serve", "zzz-frontend"]
+    }
+  ],
+  "compounds": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Start SRO dev server and launch Chrome against localhost",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["run", "nx", "serve", "sr-frontend"],
-      "serverReadyAction": {
-        "action": "debugWithChrome",
-        "pattern": "http://localhost:.*1m([0-9]+)",
-        "uriFormat": "http://localhost:%s",
-        "webRoot": "${workspaceFolder}"
-      }
+      "name": "ZZZ: Dev + Debug",
+      "configurations": ["Start ZZZ dev server", "Launch Chrome against localhost (Requires dev server to be running)"]
     }
   ]
 }

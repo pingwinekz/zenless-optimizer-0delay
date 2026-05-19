@@ -89,9 +89,7 @@
       }
     }
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "defaultBase": "master",
   "plugins": [
     {
       "plugin": "@nx/eslint/plugin",
