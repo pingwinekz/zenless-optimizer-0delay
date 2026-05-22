@@ -4,9 +4,9 @@ import { valueString } from '@genshin-optimizer/common/util'
 import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
 import {
   OptConfigContext,
-  useCharOpt,
   useCharacterContext,
   useDatabaseContext,
+  useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import {
@@ -96,12 +96,12 @@ function GeneratedBuildDisplay({
   index: number
 }) {
   const character = useCharacterContext()!
-  const charOpt = useCharOpt(character.key)!
+  const team = useTeam(character.key)!
   const discs = useDiscs(build.discIds)
   return (
     <CharCalcProvider
       character={character}
-      charOpt={charOpt}
+      team={team}
       discIds={build.discIds}
       wengineId={build.wengineId}
     >
