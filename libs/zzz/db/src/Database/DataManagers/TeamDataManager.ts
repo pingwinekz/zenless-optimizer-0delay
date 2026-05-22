@@ -456,7 +456,12 @@ export class TeamDataManager extends DataManager<
             | undefined
 
         if (q !== 'dmg_' && q !== 'crit_dmg_') damageType2 = undefined
-        if (damageType2 && damageType2 !== 'aftershock' && damageType2 !== 'abloom') damageType2 = undefined
+        if (
+          damageType2 &&
+          damageType2 !== 'aftershock' &&
+          damageType2 !== 'abloom'
+        )
+          damageType2 = undefined
 
         return {
           tag: removeUndefinedFields({
