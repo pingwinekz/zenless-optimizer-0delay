@@ -4,7 +4,6 @@ import {
 } from '@genshin-optimizer/common/pipeline'
 import { objKeyValMap, objMap } from '@genshin-optimizer/common/util'
 import { PROJROOT_PATH } from '../../consts'
-import { DEBUG } from './debug'
 const URL_BASE = 'https://static.nanoka.cc/zzz/'
 const VERSION = '2.8'
 
@@ -71,6 +70,8 @@ const categories = [
   'bangboo',
   'equipment', // discs
   'monster', // enemies
+  'boss',
+  'shiyu',
 ] as const
 type Category = (typeof categories)[number]
 export async function getDataFromHakushin() {
@@ -80,12 +81,15 @@ export async function getDataFromHakushin() {
 }
 async function getAndDumpCategoryData(category: Category) {
   const indexData = (await fetchJsonFromUrl(
-    URL_BASE + VERSION + `/${category}.json`,
-    DEBUG
+    URL_BASE + VERSION + `/${category}.json`
   )) as Record<string, unknown>
   await dumpHakushinIndex(`${category}.json`, indexData)
   await Promise.all(
     Object.keys(indexData).map(async (id) => {
+      if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+        console.warn(`Skipping invalid ID: ${id} for category ${category}`)
+        return
+      }
       // NOTE: hakushin also has data in en, ko, chs, ja
       const itemData = (await fetchJsonFromUrl(
         URL_BASE + VERSION + `/en/${category}/${id}.json`

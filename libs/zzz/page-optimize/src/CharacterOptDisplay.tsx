@@ -42,6 +42,7 @@ import { useTranslation } from 'react-i18next'
 import { AnomalySection } from './Anomaly'
 import { BonusStatsSection } from './BonusStats'
 import { CharSheetSection } from './CharSheetsDisplay'
+import { DeadlyAssaultBuffs } from './DeadlyAssaultBuffs'
 import { EnemyStatsSection } from './EnemyStats'
 import Optimize from './Optimize'
 import { EquippedGrid } from './Optimize/EquippedGrid'
@@ -145,6 +146,7 @@ function CharacterSection() {
         ['eq', <EquippedGrid key={'eq'} onClick={onClick} />],
         ['Conditionals', <EquippedConditionals key={'conditionals'} />],
         ['bonusStats', <BonusStatsSection key={'bonusStats'} />],
+        ['daBuffs', <DeadlyAssaultBuffs key={'daBuffs'} />],
         ...(shouldShowDevComponents
           ? [
               ['teammates', <TeammatesSection key={'teammates'} />] as [

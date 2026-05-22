@@ -4,6 +4,13 @@
   "sourceRoot": "libs/zzz/page-optimize/src",
   "projectType": "library",
   "tags": [],
-  "// targets": "to see all targets run: nx show project zzz-page-optimizes --web",
-  "targets": {}
+  "targets": {
+    "gen-file": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node libs/zzz/page-optimize/scripts/gen-da-seasons.mjs"
+      },
+      "outputs": ["{projectRoot}/src/daSeasons_gen.json"]
+    }
+  }
 }

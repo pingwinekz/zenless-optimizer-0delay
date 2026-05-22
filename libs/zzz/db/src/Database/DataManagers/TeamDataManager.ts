@@ -101,6 +101,7 @@ export const bonusStatDmgTypeIncStats = [
   'dmg_',
   'crit_',
   'crit_dmg_',
+  'resIgn_',
 ] as const
 
 export const enemyStatKeys: Array<keyof typeof enemy.common> = [
