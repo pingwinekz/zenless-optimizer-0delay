@@ -1,4 +1,10 @@
-import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import {
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+  existsSync,
+  mkdirSync,
+} from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -13,8 +19,10 @@ if (!existsSync(bossDir)) {
   process.exit(1)
 }
 
-const files = readdirSync(bossDir).filter(f => f.endsWith('.json')).sort()
-const seasons = files.map(f => {
+const files = readdirSync(bossDir)
+  .filter((f) => f.endsWith('.json'))
+  .sort()
+const seasons = files.map((f) => {
   const raw = JSON.parse(readFileSync(join(bossDir, f), 'utf-8'))
 
   const zones = Object.entries(raw.Zone).map(([zoneId, zone]) => {

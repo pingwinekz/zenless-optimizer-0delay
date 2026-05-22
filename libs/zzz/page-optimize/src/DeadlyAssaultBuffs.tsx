@@ -169,7 +169,8 @@ export function DeadlyAssaultBuffs() {
                       alt={zone.monsterName ?? zone.name}
                       sx={{ width: 96, height: 96, objectFit: 'contain' }}
                       onError={(e) => {
-                        ;(e.target as HTMLImageElement).style.display = 'none'
+                        const el = e.target as HTMLImageElement
+                        el.style.display = 'none'
                       }}
                     />
                     <Typography variant="caption" textAlign="center">
