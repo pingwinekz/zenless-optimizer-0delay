@@ -7,10 +7,10 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch Chrome against localhost (Requires dev server to be running)",
-      "url": "http://localhost:4200",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:4200/zenless-optimizer-0delay/",
       "webRoot": "${workspaceFolder}",
-      "runtimeExecutable": "/usr/bin/helium-browser"
+      "runtimeExecutable": "/home/endmin/.local/bin/google-chrome"
     },
     {
       "type": "node",
@@ -25,7 +25,7 @@
       "name": "ZZZ: Dev + Debug",
       "configurations": [
         "Start ZZZ dev server",
-        "Launch Chrome against localhost (Requires dev server to be running)"
+        "Launch Chrome against localhost"
       ]
     }
   ]
