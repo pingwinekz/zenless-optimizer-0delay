@@ -11,16 +11,16 @@ export const buffs = {
       name: 'passive_crit_',
     },
   },
-  physical_sheer_dmg_: {
+  cond_physical_sheer_dmg_: {
     sheet: 'StarlightRiderFaceplate',
-    name: 'physical_sheer_dmg_',
+    name: 'cond_physical_sheer_dmg_',
     tag: {
       et: 'display',
       qt: 'combat',
       q: 'sheer_dmg_',
       sheet: 'StarlightRiderFaceplate',
       attribute: 'physical',
-      name: 'physical_sheer_dmg_',
+      name: 'cond_physical_sheer_dmg_',
     },
   },
 } as const

@@ -1,4 +1,4 @@
-import { prod, subscript } from '@genshin-optimizer/pando/engine'
+import { cmpEq, cmpGE, prod, subscript } from '@genshin-optimizer/pando/engine'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
@@ -19,18 +19,43 @@ const key: WengineKey = 'FrostfallSickle'
 const dm = mappedStats.wengine[key]
 const { phase } = own.wengine
 
-const { stacks } = allNumConditionals(key, true, 0, dm.maxStacks)
+const { specialUsed } = allNumConditionals(key, true, 0, dm.stacks)
 
 const sheet = registerWengine(
   key,
+  // Handles base stats and passive buffs
   entriesForWengine(key),
 
+  // Conditional buffs
   registerBuff(
-    'cond_dmg_',
-    ownBuff.combat.dmg_.ice.add(
+    'cond_ice_dmg_',
+    ownBuff.combat.common_dmg_.ice.add(
       cmpSpecialtyAndEquipped(
         key,
-        prod(stacks, percent(subscript(phase, dm.cond_dmg_)))
+        cmpEq(
+          own.char.attribute,
+          'ice',
+          prod(specialUsed, percent(subscript(phase, dm.ice_dmg_)))
+        )
+      )
+    ),
+    showSpecialtyAndEquipped(key)
+  ),
+  registerBuff(
+    'cond_abloom_dmg_',
+    ownBuff.combat.common_dmg_.addWithDmgType(
+      'abloom',
+      cmpSpecialtyAndEquipped(
+        key,
+        cmpEq(
+          own.char.attribute,
+          'ice',
+          cmpGE(
+            specialUsed,
+            dm.stack_threshold,
+            percent(subscript(phase, dm.abloom_dmg_))
+          )
+        )
       )
     ),
     showSpecialtyAndEquipped(key)

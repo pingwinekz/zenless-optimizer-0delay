@@ -7,9 +7,9 @@ const data_gen = getWengineParams(key)
 let o = 0
 
 const dm = {
-  passive_crit_: data_gen[o++],
+  crit_: data_gen[o++],
   physical_sheer_dmg_: data_gen[o++],
-  maxStacks: data_gen[o++][1],
+  stacks: data_gen[o++][1],
   duration: data_gen[o++][1],
 } as const
 

@@ -1,8 +1,8 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  stacks: {
+  specialUsed: {
     sheet: 'FrostfallSickle',
-    name: 'stacks',
+    name: 'specialUsed',
     type: 'num',
     int_only: true,
     min: 0,

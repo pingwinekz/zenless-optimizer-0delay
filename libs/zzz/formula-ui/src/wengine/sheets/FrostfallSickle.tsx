@@ -27,8 +27,11 @@ const sheet: UISheetElement = {
       type: 'conditional',
       conditional: {
         label: ch('cond'),
-        metadata: cond.stacks,
-        fields: [tagToTagField(buff.cond_dmg_.tag)],
+        metadata: cond.specialUsed,
+        fields: [
+          tagToTagField(buff.cond_ice_dmg_.tag),
+          tagToTagField(buff.cond_abloom_dmg_.tag),
+        ],
       },
     },
   ],

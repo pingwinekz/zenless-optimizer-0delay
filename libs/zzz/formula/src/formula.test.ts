@@ -74,6 +74,7 @@ describe('character test', () => {
             assist: 0,
             chain: 0,
             core,
+            potential: 0,
           })
         ),
       ]
@@ -115,6 +116,7 @@ describe('wengine test', () => {
             assist: 0,
             chain: 0,
             core: 0,
+            potential: 0,
           }),
           ...wengineTagMapNodeEntries({
             key: wengKey,
@@ -225,6 +227,7 @@ describe('char+wengine test', () => {
             assist: 0,
             chain: 0,
             core: 6,
+            potential: 0,
           }),
           ...wengineTagMapNodeEntries({
             key: 'VortexRevolver',

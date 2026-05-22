@@ -31,8 +31,8 @@ const sheet: UISheetElement = {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.exSpecial)' }),
-        metadata: cond.exSpecialLaunched,
-        fields: [tagToTagField(buff.physical_sheer_dmg_.tag)],
+        metadata: cond.specialUsed,
+        fields: [tagToTagField(buff.cond_physical_sheer_dmg_.tag)],
       },
     },
   ],

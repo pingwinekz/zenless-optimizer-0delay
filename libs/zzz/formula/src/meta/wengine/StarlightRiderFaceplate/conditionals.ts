@@ -1,8 +1,8 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  exSpecialLaunched: {
+  specialUsed: {
     sheet: 'StarlightRiderFaceplate',
-    name: 'exSpecialLaunched',
+    name: 'specialUsed',
     type: 'num',
     int_only: true,
     min: 0,
