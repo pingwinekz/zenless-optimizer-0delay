@@ -1,5 +1,5 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
-import type { SpecialityKey } from '@genshin-optimizer/zzz/consts'
+import type { AttributeKey, SpecialityKey } from '@genshin-optimizer/zzz/consts'
 import type {
   BonusStatTag,
   EnemyStatsTag,
@@ -57,7 +57,12 @@ const buffConfigs: Record<string, BuffConfig> = {
         specialty: 'rupture',
       },
       {
-        tag: { q: 'resIgn_', qt: 'combat' },
+        tag: { q: 'resIgn_', qt: 'combat', damageType1: 'special' },
+        value: 30,
+        specialty: 'rupture',
+      },
+      {
+        tag: { q: 'resIgn_', qt: 'combat', damageType1: 'chain' },
         value: 30,
         specialty: 'rupture',
       },
@@ -118,15 +123,34 @@ export function DeadlyAssaultBuffs() {
         tag,
         value,
       }))
-    database.teams.setFrame0(characterKey, {
-      bonusStats: newBonusStats,
-      enemyStats: newEnemyStats,
+    database.teams.setFrame0(characterKey, (frame) => {
+      const bossResists = frame.enemyStats.filter((s) => s.tag.q === 'res_')
+      return {
+        bonusStats: newBonusStats,
+        enemyStats: [...bossResists, ...newEnemyStats],
+      }
     })
   }
 
   const selectBoss = (zone: SeasonZone) => {
+    const bossStats: TeamEnemyStat[] = []
+    if (zone.enemyResists)
+      Object.entries(zone.enemyResists).forEach(([attr, val]) =>
+        bossStats.push({
+          tag: { q: 'res_', attribute: attr as AttributeKey },
+          value: val,
+        })
+      )
+    if (zone.enemyWeak)
+      Object.entries(zone.enemyWeak).forEach(([attr, val]) =>
+        bossStats.push({
+          tag: { q: 'res_', attribute: attr as AttributeKey },
+          value: -val,
+        })
+      )
     database.teams.setFrame0(characterKey, {
       description: `da_boss:${zone.name}`,
+      enemyStats: bossStats,
     })
     database.teams.set(characterKey, {
       enemyLvl: zone.monsterLevel,
@@ -199,12 +223,20 @@ export function DeadlyAssaultBuffs() {
                       <Typography variant="subtitle1" fontWeight="bold">
                         {buff.title}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {buff.desc
-                          .replace(/<[^>]+>/g, '')
-                          .replace(/\n/g, ' ')
-                          .trim()}
-                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        dangerouslySetInnerHTML={{
+                          __html: buff.desc
+                            .replace(/\n/g, ' ')
+                            .replace(
+                              /<color=(#[A-Fa-f0-9]{6})>/g,
+                              '<span style="color:$1">'
+                            )
+                            .replace(/<\/color>/g, '</span>')
+                            .trim(),
+                        }}
+                      />
                       {!hasConfig && (
                         <Typography
                           variant="caption"

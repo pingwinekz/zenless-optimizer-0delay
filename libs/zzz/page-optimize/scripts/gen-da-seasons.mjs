@@ -29,6 +29,14 @@ const seasons = files.map((f) => {
     const room = Object.values(zone.LayerRoom)[0]
     const monsterList = room ? Object.values(room.MonsterList) : []
     const monster = monsterList[0] ?? {}
+    const element = monster.Element ?? {}
+    const enemyResists = {}
+    const enemyWeak = {}
+    for (const [elem, val] of Object.entries(element)) {
+      const key = elem.toLowerCase()
+      if (val === -1) enemyResists[key] = 40
+      else if (val === 1) enemyWeak[key] = 20
+    }
 
     const iconPath = room?.MonsterIcon ?? ''
     const iconFile = iconPath.split('/').pop() ?? ''
@@ -42,6 +50,8 @@ const seasons = files.map((f) => {
       monsterName: monster.Name,
       monsterDef: monster.Stats?.Defence,
       monsterImage,
+      enemyResists: Object.keys(enemyResists).length ? enemyResists : undefined,
+      enemyWeak: Object.keys(enemyWeak).length ? enemyWeak : undefined,
       buffs: Object.entries(zone.SelectableBuff ?? {}).map(([id, b]) => ({
         id,
         title: b.Title,

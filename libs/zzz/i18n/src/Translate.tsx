@@ -15,6 +15,7 @@ const textComponents = {
   frost: <ColorText color="frost" />,
   physical: <ColorText color="physical" />,
   ether: <ColorText color="ether" />,
+  wind: <ColorText color="wind" />,
   ct: <ColorText />,
   IconNormal: <ImgIcon src={commonDefIcon('basicFlat')} size={1.5} />,
   IconEvade: <ImgIcon src={commonDefIcon('dodgeFlat')} size={1.5} />,
@@ -38,6 +39,7 @@ const badgeComponents = {
   frost: <SqBadge color="frost" />,
   physical: <SqBadge color="physical" />,
   ether: <SqBadge color="ether" />,
+  wind: <SqBadge color="wind" />,
   ct: <ColorText />,
 }
 

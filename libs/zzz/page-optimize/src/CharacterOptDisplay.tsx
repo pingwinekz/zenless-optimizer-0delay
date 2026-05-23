@@ -47,6 +47,7 @@ import { EnemyStatsSection } from './EnemyStats'
 import Optimize from './Optimize'
 import { EquippedGrid } from './Optimize/EquippedGrid'
 import GeneratedBuildsDisplay from './Optimize/GeneratedBuildsDisplay'
+import { ShiyuDefenseBuffs } from './ShiyuDefenseBuffs'
 import { TeammatesSection } from './Teammates'
 import { TeamHeaderHeightContext } from './context/TeamHeaderHeightContext'
 
@@ -147,6 +148,7 @@ function CharacterSection() {
         ['Conditionals', <EquippedConditionals key={'conditionals'} />],
         ['bonusStats', <BonusStatsSection key={'bonusStats'} />],
         ['daBuffs', <DeadlyAssaultBuffs key={'daBuffs'} />],
+        ['sdBuffs', <ShiyuDefenseBuffs key={'sdBuffs'} />],
         ...(shouldShowDevComponents
           ? [
               ['teammates', <TeammatesSection key={'teammates'} />] as [

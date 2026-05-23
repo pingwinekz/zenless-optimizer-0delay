@@ -1,0 +1,1471 @@
+[
+  {
+    "id": 61001,
+    "name": "Stable Node",
+    "rooms": []
+  },
+  {
+    "id": 61002,
+    "name": "Disputed Node",
+    "rooms": []
+  },
+  {
+    "id": 61003,
+    "name": "Ambush Node",
+    "beginTime": "2024-08-24 04:00:00",
+    "endTime": "2024-11-06 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62001,
+    "name": "Critical Node",
+    "beginTime": "2024-07-04 04:00:00",
+    "endTime": "2024-08-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62002,
+    "name": "Critical Node",
+    "beginTime": "2024-08-01 04:00:00",
+    "endTime": "2024-08-16 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62003,
+    "name": "Critical Node",
+    "beginTime": "2024-08-16 04:00:00",
+    "endTime": "2024-09-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62004,
+    "name": "Critical Node",
+    "beginTime": "2024-09-01 04:00:00",
+    "endTime": "2024-09-16 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62005,
+    "name": "Critical Node",
+    "beginTime": "2024-09-16 04:00:00",
+    "endTime": "2024-10-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62006,
+    "name": "Critical Node",
+    "beginTime": "2024-10-01 04:00:00",
+    "endTime": "2024-10-16 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62007,
+    "name": "Critical Node",
+    "beginTime": "2024-10-16 04:00:00",
+    "endTime": "2024-11-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62008,
+    "name": "Critical Node",
+    "beginTime": "2024-11-01 04:00:00",
+    "endTime": "2024-11-16 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62009,
+    "name": "Critical Node",
+    "beginTime": "2024-11-16 04:00:00",
+    "endTime": "2024-12-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62010,
+    "name": "Critical Node",
+    "beginTime": "2024-12-01 04:00:00",
+    "endTime": "2024-12-17 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62011,
+    "name": "Critical Node",
+    "beginTime": "2024-12-17 04:00:00",
+    "endTime": "2025-01-03 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62012,
+    "name": "Critical Node",
+    "beginTime": "2025-01-03 04:00:00",
+    "endTime": "2025-01-17 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62013,
+    "name": "Critical Node",
+    "beginTime": "2025-01-17 04:00:00",
+    "endTime": "2025-01-31 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62014,
+    "name": "Critical Node",
+    "beginTime": "2025-01-31 04:00:00",
+    "endTime": "2025-02-14 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62015,
+    "name": "Critical Node",
+    "beginTime": "2025-02-14 04:00:00",
+    "endTime": "2025-02-28 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62016,
+    "name": "Critical Node",
+    "beginTime": "2025-02-28 04:00:00",
+    "endTime": "2025-03-14 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62017,
+    "name": "Critical Node",
+    "beginTime": "2025-03-14 04:00:00",
+    "endTime": "2025-03-28 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62018,
+    "name": "Critical Node",
+    "beginTime": "2025-03-28 04:00:00",
+    "endTime": "2025-04-11 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62019,
+    "name": "Critical Node",
+    "beginTime": "2025-04-11 04:00:00",
+    "endTime": "2025-04-25 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62020,
+    "name": "Critical Node",
+    "beginTime": "2025-04-25 04:00:00",
+    "endTime": "2025-05-09 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62021,
+    "name": "Critical Node",
+    "beginTime": "2025-05-09 04:00:00",
+    "endTime": "2025-05-23 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62022,
+    "name": "Critical Node",
+    "beginTime": "2025-05-23 04:00:00",
+    "endTime": "2025-06-06 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62023,
+    "name": "Critical Node",
+    "beginTime": "2025-06-06 04:00:00",
+    "endTime": "2025-06-20 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62024,
+    "name": "Critical Node",
+    "beginTime": "2025-06-20 04:00:00",
+    "endTime": "2025-07-04 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62025,
+    "name": "Critical Node",
+    "beginTime": "2025-07-04 04:00:00",
+    "endTime": "2025-07-18 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62026,
+    "name": "Critical Node",
+    "beginTime": "2025-07-18 04:00:00",
+    "endTime": "2025-08-01 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62027,
+    "name": "Critical Node",
+    "beginTime": "2025-08-01 04:00:00",
+    "endTime": "2025-08-15 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62028,
+    "name": "Critical Node",
+    "beginTime": "2025-08-15 04:00:00",
+    "endTime": "2025-08-29 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62029,
+    "name": "Critical Node",
+    "beginTime": "2025-08-29 04:00:00",
+    "endTime": "2025-09-12 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62030,
+    "name": "Critical Node",
+    "beginTime": "2025-09-12 04:00:00",
+    "endTime": "2025-09-26 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62031,
+    "name": "Critical Node",
+    "beginTime": "2025-09-26 04:00:00",
+    "endTime": "2025-10-10 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62032,
+    "name": "Critical Node",
+    "beginTime": "2025-10-10 04:00:00",
+    "endTime": "2025-10-24 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62033,
+    "name": "Critical Node",
+    "beginTime": "2025-10-24 04:00:00",
+    "endTime": "2025-11-07 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62034,
+    "name": "Critical Node",
+    "beginTime": "2025-11-07 04:00:00",
+    "endTime": "2025-11-21 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62035,
+    "name": "Critical Node",
+    "beginTime": "2025-11-21 04:00:00",
+    "endTime": "2025-12-05 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62036,
+    "name": "Critical Node",
+    "beginTime": "2025-12-05 04:00:00",
+    "endTime": "2025-12-19 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62037,
+    "name": "Critical Node",
+    "beginTime": "2025-12-19 04:00:00",
+    "endTime": "2025-12-29 14:59:59",
+    "rooms": []
+  },
+  {
+    "id": 62038,
+    "name": "Critical Node",
+    "beginTime": "2025-12-29 15:00:00",
+    "endTime": "2026-01-09 03:59:59",
+    "rooms": [
+      {
+        "id": "62038051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30044",
+          "name": "Sacrifice - Covenant Guardian",
+          "image": "CovenantGuardian",
+          "stats": {
+            "Hp": 28429054.380000003,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 17585.05
+          }
+        },
+        "buff": {
+          "id": "62001381",
+          "title": "Dawn's Guiding Light",
+          "desc": "· Agent ATK increases by 30%, CRIT DMG increases by 15%.\n· Enemy Stun DMG Multiplier increases by 20%."
+        }
+      },
+      {
+        "id": "62038052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30035",
+          "name": "Sacrifice - Heretic Jester",
+          "image": "HereticHunter",
+          "stats": {
+            "Hp": 25701505.2,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001383",
+          "title": "Piercing Thunder Strike",
+          "desc": "· Agent <color=#2EB6FF>Electric DMG</color> increases by 20%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>EX Special Attack</color> deal 40% increased DMG and ignore 15% of enemy DEF."
+        }
+      },
+      {
+        "id": "62038053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 23990947.74,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001382",
+          "title": "Accumulating Frost",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> increases by 20%, <color=#FFFFFF>Basic Attack</color> DMG increases by 40%.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, the Agent's <color=#98EFF0>Ice DMG</color> additionally increases by 20% for 15s, repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62039,
+    "name": "Critical Node",
+    "beginTime": "2026-01-09 04:00:00",
+    "endTime": "2026-01-23 03:59:59",
+    "rooms": [
+      {
+        "id": "62039051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30013",
+          "name": "Miasma Walker - Scorpse",
+          "image": "Chelonethid",
+          "stats": {
+            "Hp": 32607408.599999998,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001391",
+          "title": "Frost-Bitten Iron",
+          "desc": "· Agent CRIT DMG increases by 15%. While in <color=#FFFFFF>Ether Veil</color>, Agent ATK increases by 25%, and attacks ignore 10% of enemy's DEF."
+        }
+      },
+      {
+        "id": "62039052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "electric": 20
+        },
+        "bigMonster": {
+          "id": "30036",
+          "name": "Miasmic - Terror Raptor",
+          "image": "MiasmaTerrorBird",
+          "stats": {
+            "Hp": 23131354.68,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001392",
+          "title": "Rush of Lightning and Fire",
+          "desc": "· Agent <color=#2EB6FF>Electric DMG</color> and <color=#FF5521>Fire DMG</color> increase by 30%, Anomaly Proficiency increases by 60.\n· Agents start with 40 additional Energy, Attribute Anomaly DMG increases by 20%."
+        }
+      },
+      {
+        "id": "62039053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930178",
+          "name": "Miasmic - Thracian",
+          "image": "MiasmaThracian",
+          "stats": {
+            "Hp": 26059148.28,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001393",
+          "title": "Blazing Stream",
+          "desc": "· Agent Sheer DMG increases by 10%, CRIT DMG increases by 25%.\n· When an Agent's <color=#FFFFFF>Ultimate</color> hits enemies, ignores 10% of their All-DMG RES."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62040,
+    "name": "Critical Node",
+    "beginTime": "2026-01-23 04:00:00",
+    "endTime": "2026-02-06 03:59:59",
+    "rooms": [
+      {
+        "id": "62040051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300372",
+          "name": "Miasmic - Doppelganger - The Defector",
+          "image": "MiasmaIsoldeSlime",
+          "stats": {
+            "Hp": 23131354.68,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001401",
+          "title": "Fleeting Glory",
+          "desc": "· While in <color=#FFFFFF>Ether Veil</color>, Agent ATK increases by 25% and CRIT DMG increases by 20%.\n· When Agents hit enemies, they ignore 10% of enemy <color=#F0D12B>Physical RES</color>."
+        }
+      },
+      {
+        "id": "62040052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930175",
+          "name": "Miasmic - Jane",
+          "image": "MiasmaJaneSlime",
+          "stats": {
+            "Hp": 27829213.74,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001402",
+          "title": "Piercing Blade Abyss",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> and <color=#F0D12B>Physical DMG</color> increase by 15%.\n· When Agents inflict an Attribute Anomaly on enemies, their DEF is reduced by 10%, and they take 20% more Attribute Anomaly DMG for 10s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62040053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300301",
+          "name": "Doppelganger - Abyssal Enforcer",
+          "image": "HugoVlad_Boss",
+          "stats": {
+            "Hp": 22214336.4,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001403",
+          "title": "Cleanse the Heart with Fire",
+          "desc": "· Agent <color=#FF5521>Fire DMG</color> increases by 20%.\n· Agent <color=#FFFFFF>Basic Attack</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 40%, and CRIT DMG increases by 30%."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62041,
+    "name": "Critical Node",
+    "beginTime": "2026-02-06 04:00:00",
+    "endTime": "2026-02-20 03:59:59",
+    "rooms": [
+      {
+        "id": "62041051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30035",
+          "name": "Sacrifice - Heretic Jester",
+          "image": "HereticHunter",
+          "stats": {
+            "Hp": 26986580.46,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001411",
+          "title": "Thunderclap Shimmer",
+          "desc": "· Agent CRIT DMG increases by 20%.\n· While in <color=#FFFFFF>Ether Veil</color>, Agent <color=#F0D12B>Physical DMG</color> increases by 15%, and attacks ignore 10% of enemy's DEF."
+        }
+      },
+      {
+        "id": "62041052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "electric": 20
+        },
+        "bigMonster": {
+          "id": "30004",
+          "name": "Greta",
+          "image": "BoringMachine",
+          "stats": {
+            "Hp": 20279185.83,
+            "Attack": 2934.545454545455,
+            "Defence": 952.8000000000001,
+            "Stun": 16894.15
+          }
+        },
+        "buff": {
+          "id": "62001412",
+          "title": "Chaotic Blitz",
+          "desc": "· Agent <color=#2EB6FF>Electric DMG</color> increases by 15%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>EX Special Attack</color>, and <color=#FFFFFF>Ultimate</color> deal 20% increased DMG and ignore 10% of enemy All-DMG RES on hit."
+        }
+      },
+      {
+        "id": "62041053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "ether": 20
+        },
+        "bigMonster": {
+          "id": "930169",
+          "name": "Miasma Ravager - Avarus",
+          "image": "Avarus",
+          "stats": {
+            "Hp": 31199003.009999998,
+            "Attack": 3179.0909090909095,
+            "Defence": 952.8000000000001,
+            "Stun": 15486.5
+          }
+        },
+        "buff": {
+          "id": "62001413",
+          "title": "Everlasting Night Flame",
+          "desc": "· Agent <color=#FF5521>Fire DMG</color> increases by 20% and Agent ATK increases by 10%.\n· The Agent gains an additional 40 initial Energy and deals 40% bonus CRIT DMG."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62042,
+    "name": "Critical Node",
+    "beginTime": "2026-02-20 04:00:00",
+    "endTime": "2026-03-06 03:59:59",
+    "rooms": [
+      {
+        "id": "62042051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30044",
+          "name": "Sacrifice - Covenant Guardian",
+          "image": "CovenantGuardian",
+          "stats": {
+            "Hp": 33167230.110000003,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 17585.05
+          }
+        },
+        "buff": {
+          "id": "62001401",
+          "title": "Fleeting Glory",
+          "desc": "· While in <color=#FFFFFF>Ether Veil</color>, Agent ATK increases by 25% and CRIT DMG increases by 20%.\n· When Agents hit enemies, they ignore 10% of enemy <color=#F0D12B>Physical RES</color>."
+        }
+      },
+      {
+        "id": "62042052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 27989439.03,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001382",
+          "title": "Accumulating Frost",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> increases by 20%, <color=#FFFFFF>Basic Attack</color> DMG increases by 40%.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, the Agent's <color=#98EFF0>Ice DMG</color> additionally increases by 20% for 15s, repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62042053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30013",
+          "name": "Miasma Walker - Scorpse",
+          "image": "Chelonethid",
+          "stats": {
+            "Hp": 30977038.169999998,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001423",
+          "title": "Frostbite Variant",
+          "desc": "· Agent Max HP increases by 15%, <color=#FE437E>Ether DMG</color> and <color=#98EFF0>Ice DMG</color> increase by 20%.\n· When an Agent activates <color=#FFFFFF>Ultimate</color>, their Sheer DMG increases by 15% for 20s. Repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62043,
+    "name": "Critical Node",
+    "beginTime": "2026-03-06 04:00:00",
+    "endTime": "2026-03-20 03:59:59",
+    "rooms": [
+      {
+        "id": "62043051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30003",
+          "name": "Lockspring",
+          "image": "BlackMazingerGoldenBomb",
+          "stats": {
+            "Hp": 30618601.649999995,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001431",
+          "title": "Thunder Crimson Blaze",
+          "desc": "· Agent <color=#F0D12B>Physical DMG</color> and <color=#2EB6FF>Electric DMG</color> increase by 15%, while their CRIT DMG increases by 20%.\n· When an Agent with Attack specialty hits an enemy and crits, enemy DEF drops by 10% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62043052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30044",
+          "name": "Sacrifice - Covenant Guardian",
+          "image": "CovenantGuardian",
+          "stats": {
+            "Hp": 33167230.110000003,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 17585.05
+          }
+        },
+        "buff": {
+          "id": "62001432",
+          "title": "Flameheart Lithic Core",
+          "desc": "· Agent Sheer DMG increases by 10%.\n· While in <color=#FFFFFF>Ether Veil</color>, Agent Sheer DMG further increases by 15%, and attacks ignore 15% of enemy All-DMG RES on hit."
+        }
+      },
+      {
+        "id": "62043053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 40435066.125,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001433",
+          "title": "Mecha Wings",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 20%. \n· While in <color=#FFFFFF>Ether Veil</color>, Agent ATK increases by 30%, and attacks ignore 10% of enemy <color=#FE437E>Ether RES</color>."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62044,
+    "name": "Critical Node",
+    "beginTime": "2026-03-20 04:00:00",
+    "endTime": "2026-04-03 03:59:59",
+    "rooms": [
+      {
+        "id": "62044051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930175",
+          "name": "Miasmic - Jane",
+          "image": "MiasmaJaneSlime",
+          "stats": {
+            "Hp": 35559550.88999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001381",
+          "title": "Dawn's Guiding Light",
+          "desc": "· Agent ATK increases by 30%, CRIT DMG increases by 15%.\n· Enemy Stun DMG Multiplier increases by 20%."
+        }
+      },
+      {
+        "id": "62044052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930178",
+          "name": "Miasmic - Thracian",
+          "image": "MiasmaThracian",
+          "stats": {
+            "Hp": 26783013.509999998,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001442",
+          "title": "Dazzling Beat",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 20%.\n· After inflicting Attribute Anomaly on an enemy, the Agent restores 20 Energy and all squad members' ATK increases by 35% for 15s. Repeated triggers reset the duration. Energy boost CD: 20s."
+        }
+      },
+      {
+        "id": "62044053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
+        "bigMonster": {
+          "id": "30039",
+          "name": "Haytor",
+          "image": "Hayyot",
+          "stats": {
+            "Hp": 31449978,
+            "Attack": 3521.454545454546,
+            "Defence": 1588,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001341",
+          "title": "Frosty Fire",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> and <color=#FE437E>Ether DMG</color> increase by 15%.\n· While Agents are in an <color=#FFFFFF>Ether Veil</color>, CRIT DMG increases by 40% and Sheer DMG increases by 20%. These buffs are removed when exiting <color=#FFFFFF>Ether Veil</color>."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62045,
+    "name": "Critical Node",
+    "beginTime": "2026-04-03 04:00:00",
+    "endTime": "2026-04-17 03:59:59",
+    "rooms": [
+      {
+        "id": "62045051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30003",
+          "name": "Lockspring",
+          "image": "BlackMazingerGoldenBomb",
+          "stats": {
+            "Hp": 31949845.2,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001431",
+          "title": "Thunder Crimson Blaze",
+          "desc": "· Agent <color=#F0D12B>Physical DMG</color> and <color=#2EB6FF>Electric DMG</color> increase by 15%, while their CRIT DMG increases by 20%.\n· When an Agent with Attack specialty hits an enemy and crits, enemy DEF drops by 10% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62045052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 46992103.875,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001451",
+          "title": "Enigmatic Spectrum",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 20%.\n· Stunned enemies recover from Stun 20% slower, and Attribute Anomaly DMG taken increases by 20%."
+        }
+      },
+      {
+        "id": "62045053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 31987930.319999997,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001382",
+          "title": "Accumulating Frost",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> increases by 20%, <color=#FFFFFF>Basic Attack</color> DMG increases by 40%.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, the Agent's <color=#98EFF0>Ice DMG</color> additionally increases by 20% for 15s, repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62046,
+    "name": "Critical Node",
+    "beginTime": "2026-04-17 04:00:00",
+    "endTime": "2026-05-01 03:59:59",
+    "rooms": [
+      {
+        "id": "62046051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930178",
+          "name": "Miasmic - Thracian",
+          "image": "MiasmaThracian",
+          "stats": {
+            "Hp": 31126204.889999997,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001433",
+          "title": "Mecha Wings",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 20%. \n· While in <color=#FFFFFF>Ether Veil</color>, Agent ATK increases by 30%, and attacks ignore 10% of enemy <color=#FE437E>Ether RES</color>."
+        }
+      },
+      {
+        "id": "62046052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30035",
+          "name": "Sacrifice - Heretic Jester",
+          "image": "HereticHunter",
+          "stats": {
+            "Hp": 32126881.5,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001383",
+          "title": "Piercing Thunder Strike",
+          "desc": "· Agent <color=#2EB6FF>Electric DMG</color> increases by 20%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>EX Special Attack</color> deal 40% increased DMG and ignore 15% of enemy DEF."
+        }
+      },
+      {
+        "id": "62046053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
+        "bigMonster": {
+          "id": "30039",
+          "name": "Haytor",
+          "image": "Hayyot",
+          "stats": {
+            "Hp": 32198787,
+            "Attack": 3521.454545454546,
+            "Defence": 1588,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001463",
+          "title": "Frostbound Radiance",
+          "desc": "· Agent Max HP increases by 15%, <color=#FE437E>Ether DMG</color> and <color=#98EFF0>Ice DMG</color> increase by 20%.\n· When an Agent activates an EX Special Attack, their Sheer DMG increases by 15% for 15s. Repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62047,
+    "name": "Critical Node",
+    "beginTime": "2026-05-01 04:00:00",
+    "endTime": "2026-05-15 03:59:59",
+    "rooms": [
+      {
+        "id": "62047051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30013",
+          "name": "Miasma Walker - Scorpse",
+          "image": "Chelonethid",
+          "stats": {
+            "Hp": 39128890.32,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001473",
+          "title": "Glacial Whirlwind",
+          "desc": "· Agents' Daze dealt increases by 10%, <color=#FFFFFF>Ultimate</color> DMG increases by 20%.\n· When enemies are Stunned, the whole squad's CRIT DMG increases by 30% for 30s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62047052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "electric": 20
+        },
+        "bigMonster": {
+          "id": "30036",
+          "name": "Miasmic - Terror Raptor",
+          "image": "MiasmaTerrorBird",
+          "stats": {
+            "Hp": 30841806.24,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001471",
+          "title": "Chaotic Weave",
+          "desc": "· When there are 1/2 Agents with <color=#FFFFFF>Attack</color> specialty in the squad, Agents ignore 5%/15% of All-DMG RES when hitting enemies.\n· After an Agent triggers a critical hit, their <color=#2EB6FF>Electric DMG</color> increases by 35% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62047053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 54641981.25,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001472",
+          "title": "Cardinal Forge",
+          "desc": "· Agent <color=#FE437E>Ether Anomaly Buildup Rate</color> and <color=#98EFF0>Ice Anomaly Buildup Rate</color> increase by 25%.\n· When Agents inflict an Attribute Anomaly on enemies, their DEF is reduced by 10%, and they take 20% more Attribute Anomaly DMG for 10s. Repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62048,
+    "name": "Critical Node",
+    "beginTime": "2026-05-15 04:00:00",
+    "endTime": "2026-05-29 03:59:59",
+    "rooms": [
+      {
+        "id": "62048051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 37985667.254999995,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001481",
+          "title": "Perpetual Frigidity",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> increases by 10%, and Anomaly Proficiency increases by 40.\n· When an enemy is inflicted with an Attribute Anomaly, the whole squad's <color=#FFFFFF>Abloom</color> DMG increases by 30%, and <color=#FFFFFF>Abloom</color> DMG ignores 20% of enemy <color=#98EFF0>Ice RES</color> for 10s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62048052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30003",
+          "name": "Lockspring",
+          "image": "BlackMazingerGoldenBomb",
+          "stats": {
+            "Hp": 35277954.074999996,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001482",
+          "title": "Thundering Strike",
+          "desc": "· Agent <color=#F0D12B>Physical DMG</color> and <color=#2EB6FF>Electric DMG</color> increase by 20%, while their CRIT DMG increases by 30%.\n· When an Agent hits an enemy and crits, enemy DEF drops by 10% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62048053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930178",
+          "name": "Miasmic - Thracian",
+          "image": "MiasmaThracian",
+          "stats": {
+            "Hp": 38364857.19,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001451",
+          "title": "Enigmatic Spectrum",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 20%.\n· Stunned enemies recover from Stun 20% slower, and Attribute Anomaly DMG taken increases by 20%."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62049,
+    "name": "Critical Node",
+    "beginTime": "2026-05-29 04:00:00",
+    "endTime": "2026-06-12 03:59:59",
+    "rooms": [
+      {
+        "id": "62049051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300372",
+          "name": "Miasmic - Doppelganger - The Defector",
+          "image": "MiasmaIsoldeSlime",
+          "stats": {
+            "Hp": 34054494.38999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001491",
+          "title": "Overwhelming Force",
+          "desc": "· Agent Sheer DMG increases by 35%, and their <color=#F0D12B>Physical DMG</color> increases by 10%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>EX Special Attack</color>, and <color=#FFFFFF>Ultimate</color> ignore 10% of enemy <color=#F0D12B>Physical RES</color> on hit."
+        }
+      },
+      {
+        "id": "62049052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 27989439.03,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001481",
+          "title": "Perpetual Frigidity",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> increases by 10%, and Anomaly Proficiency increases by 40.\n· When an enemy is inflicted with an Attribute Anomaly, the whole squad's <color=#FFFFFF>Abloom</color> DMG increases by 30%, and <color=#FFFFFF>Abloom</color> DMG ignores 20% of enemy <color=#98EFF0>Ice RES</color> for 10s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62049053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30035",
+          "name": "Sacrifice - Heretic Jester",
+          "image": "HereticHunter",
+          "stats": {
+            "Hp": 34054494.38999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001383",
+          "title": "Piercing Thunder Strike",
+          "desc": "· Agent <color=#2EB6FF>Electric DMG</color> increases by 20%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>EX Special Attack</color> deal 40% increased DMG and ignore 15% of enemy DEF."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62050,
+    "name": "Critical Node",
+    "beginTime": "2026-06-12 04:00:00",
+    "endTime": "2026-06-26 03:59:59",
+    "rooms": [
+      {
+        "id": "62050051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 35320006.395,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001501",
+          "title": "Flowing Frost",
+          "desc": "· Agent Anomaly Proficiency increases by 30 pts, and <color=#FFFFFF>Abloom</color> deals 20% bonus DMG.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, the Agent's <color=#98EFF0>Ice DMG</color> additionally increases by 20% for 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62050052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ice": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30044",
+          "name": "Sacrifice - Covenant Guardian",
+          "image": "CovenantGuardian",
+          "stats": {
+            "Hp": 45012669.435,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 17585.05
+          }
+        },
+        "buff": {
+          "id": "62001491",
+          "title": "Overwhelming Force",
+          "desc": "· Agent Sheer DMG increases by 35%, and their <color=#F0D12B>Physical DMG</color> increases by 10%.\n· Agent <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>EX Special Attack</color>, and <color=#FFFFFF>Ultimate</color> ignore 10% of enemy <color=#F0D12B>Physical RES</color> on hit."
+        }
+      },
+      {
+        "id": "62050053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300372",
+          "name": "Miasmic - Doppelganger - The Defector",
+          "image": "MiasmaIsoldeSlime",
+          "stats": {
+            "Hp": 34054494.38999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001502",
+          "title": "Unstoppable",
+          "desc": "· Agent ATK increases by 10%. <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>EX Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> deal 20% increased DMG.\n· Agents gain an additional 40 initial Energy and deals 30% bonus CRIT DMG."
+        }
+      }
+    ]
+  }
+]

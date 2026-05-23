@@ -345,6 +345,7 @@ const anomalyMultipliers: Record<AttributeKey, number> = {
   ether: 0.625,
   ice: 5,
   physical: 7.13,
+  wind: 0,
 }
 const disorderTimeMultipliers: Record<AttributeKey | 'frost', number> = {
   fire: 1, // 2 * 0.5
@@ -353,6 +354,7 @@ const disorderTimeMultipliers: Record<AttributeKey | 'frost', number> = {
   ice: 0.075,
   physical: 0.075,
   frost: 0.75,
+  wind: 0,
 }
 
 /**

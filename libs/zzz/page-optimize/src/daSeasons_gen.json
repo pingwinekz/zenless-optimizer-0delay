@@ -10,6 +10,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010101",
@@ -34,6 +40,12 @@
         "monsterName": "Corrupted Overlord - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyrantPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010101",
@@ -58,6 +70,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010101",
@@ -89,6 +105,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -113,6 +135,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -137,6 +166,10 @@
         "monsterName": "Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "CottusGrey",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -168,6 +201,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -192,6 +229,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -216,6 +257,12 @@
         "monsterName": "Corrupted Overlord - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyrantPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -247,6 +294,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -271,6 +322,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -295,6 +353,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -326,6 +388,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010401",
@@ -350,6 +418,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010401",
@@ -374,6 +448,10 @@
         "monsterName": "Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "CottusGrey",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010401",
@@ -405,6 +483,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -429,6 +511,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -453,6 +541,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -484,6 +578,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -508,6 +606,12 @@
         "monsterName": "Corrupted Overlord - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyrantPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -532,6 +636,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -563,6 +674,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010701",
@@ -587,6 +702,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010701",
@@ -611,6 +733,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010701",
@@ -642,6 +770,10 @@
         "monsterName": "Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "CottusGrey",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010502",
@@ -666,6 +798,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010502",
@@ -690,6 +828,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010502",
@@ -721,6 +863,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -745,6 +893,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -769,6 +921,12 @@
         "monsterName": "Corrupted Overlord - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyrantPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -800,6 +958,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -824,6 +986,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -848,6 +1014,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -879,6 +1052,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -903,6 +1080,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -927,6 +1110,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -958,6 +1147,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -982,6 +1177,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -1006,6 +1205,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -1037,6 +1242,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -1061,6 +1272,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -1085,6 +1300,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -1116,6 +1337,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -1140,6 +1367,12 @@
         "monsterName": "Corrupted Overlord - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyrantPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -1164,6 +1397,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010303",
@@ -1195,6 +1432,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010801",
@@ -1219,6 +1462,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69010801",
@@ -1243,6 +1493,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010801",
@@ -1274,6 +1530,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011101",
@@ -1298,6 +1561,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011101",
@@ -1322,6 +1589,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011101",
@@ -1353,6 +1624,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -1377,6 +1652,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -1401,6 +1682,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -1432,6 +1720,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011601",
@@ -1456,6 +1751,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011601",
@@ -1480,6 +1782,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011601",
@@ -1511,6 +1819,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1535,6 +1850,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1559,6 +1878,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1590,6 +1915,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1614,6 +1946,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1638,6 +1974,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1669,6 +2011,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1693,6 +2041,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1717,6 +2072,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1748,6 +2107,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1772,6 +2138,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1796,6 +2169,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012201",
@@ -1827,6 +2207,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -1851,6 +2238,13 @@
         "monsterName": "Autonomous Assault Unit - Typhon Destroyer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "TyphonDestroyer",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -1875,6 +2269,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010103",
@@ -1906,6 +2306,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1930,6 +2334,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1954,6 +2366,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69010301",
@@ -1985,6 +2404,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -2009,6 +2435,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -2033,6 +2467,12 @@
         "monsterName": "Sacrifice - Bringer",
         "monsterDef": 952.8000000000001,
         "monsterImage": "SacrificeBringer",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
         "buffs": [
           {
             "id": "69010201",
@@ -2064,6 +2504,13 @@
         "monsterName": "Primordial Nightmare - \"The Creator\"",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vessel",
+        "enemyResists": {
+          "ice": 40,
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -2088,6 +2535,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -2112,6 +2566,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69011202",
@@ -2143,6 +2604,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2167,6 +2635,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2191,6 +2663,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2222,6 +2700,13 @@
         "monsterName": "Primordial Nightmare - \"The Creator\"",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vessel",
+        "enemyResists": {
+          "ice": 40,
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012901",
@@ -2246,6 +2731,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69012901",
@@ -2270,6 +2759,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69012901",
@@ -2301,6 +2797,13 @@
         "monsterName": "Primordial Nightmare - \"The Creator\"",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vessel",
+        "enemyResists": {
+          "ice": 40,
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012801",
@@ -2325,6 +2828,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69012801",
@@ -2349,6 +2858,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69012801",
@@ -2380,6 +2893,14 @@
         "monsterName": "Discordant Solo - Vesper",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vesper",
+        "enemyResists": {
+          "ice": 40,
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69012101",
@@ -2404,6 +2925,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012101",
@@ -2428,6 +2956,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69012101",
@@ -2459,6 +2994,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2483,6 +3025,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2507,6 +3057,12 @@
         "monsterName": "Notorious - Pompey",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousPompey",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69011904",
@@ -2538,6 +3094,14 @@
         "monsterName": "Sanguine Sweeper",
         "monsterDef": 476.40000000000003,
         "monsterImage": "GraymaneCenturion",
+        "enemyResists": {
+          "fire": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69013301",
@@ -2562,6 +3126,12 @@
         "monsterName": "Miasma Priest",
         "monsterDef": 952.8000000000001,
         "monsterImage": "MentorMevorakh",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69013301",
@@ -2586,6 +3156,10 @@
         "monsterName": "Notorious - Marionette",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousMarionette",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69013301",
@@ -2617,6 +3191,14 @@
         "monsterName": "Discordant Solo - Vesper",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vesper",
+        "enemyResists": {
+          "ice": 40,
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69011201",
@@ -2641,6 +3223,10 @@
         "monsterName": "Unknown Corruption Complex",
         "monsterDef": 952.8000000000001,
         "monsterImage": "ComplexCorrupted",
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69011201",
@@ -2665,6 +3251,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69011201",
@@ -2696,6 +3290,14 @@
         "monsterName": "Sanguine Sweeper",
         "monsterDef": 476.40000000000003,
         "monsterImage": "GraymaneCenturion",
+        "enemyResists": {
+          "fire": 40,
+          "wind": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69013201",
@@ -2720,6 +3322,13 @@
         "monsterName": "Primordial Nightmare - \"The Creator\"",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vessel",
+        "enemyResists": {
+          "ice": 40,
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69013201",
@@ -2744,6 +3353,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69013201",
@@ -2775,6 +3391,13 @@
         "monsterName": "Phaethon of the Scorched Horizon",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Mutant",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69012403",
@@ -2799,6 +3422,13 @@
         "monsterName": "Wandering Hunter",
         "monsterDef": 1588,
         "monsterImage": "WanderingHunter",
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "fire": 20
+        },
         "buffs": [
           {
             "id": "69012403",
@@ -2823,6 +3453,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69012403",
@@ -2854,6 +3491,10 @@
         "monsterName": "Notorious - Dead End Butcher",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NotoriousDeadEndButcher",
+        "enemyWeak": {
+          "ice": 20,
+          "ether": 20
+        },
         "buffs": [
           {
             "id": "69013603",
@@ -2878,6 +3519,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69013603",
@@ -2902,6 +3551,14 @@
         "monsterName": "Discordant Solo - Vesper",
         "monsterDef": 476.40000000000003,
         "monsterImage": "Vesper",
+        "enemyResists": {
+          "ice": 40,
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69013603",
@@ -2933,6 +3590,13 @@
         "monsterName": "Miasmic Fiend - Unfathomable",
         "monsterDef": 952.8000000000001,
         "monsterImage": "NamelessOne",
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69013201",
@@ -2957,6 +3621,14 @@
         "monsterName": "Ye Shiyuan the Thrall",
         "monsterDef": 952.8000000000001,
         "monsterImage": "Awakener",
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ice": 20,
+          "physical": 20,
+          "wind": 20
+        },
         "buffs": [
           {
             "id": "69013201",
@@ -2981,6 +3653,13 @@
         "monsterName": "The Defiler",
         "monsterDef": 952.8000000000001,
         "monsterImage": "IsoldetheDefiler",
+        "enemyResists": {
+          "ice": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
         "buffs": [
           {
             "id": "69013201",

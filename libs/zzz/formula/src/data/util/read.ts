@@ -103,6 +103,9 @@ export class Read extends BaseRead<Tag> {
   get ether(): Read {
     return super.with('attribute', 'ether')
   }
+  get wind(): Read {
+    return super.with('attribute', 'wind')
+  }
 
   // Skill type
   get basicSkill(): Read {

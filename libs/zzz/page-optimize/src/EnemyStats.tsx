@@ -29,6 +29,7 @@ import { AttributeName } from '@genshin-optimizer/zzz/ui'
 import { DeleteForever } from '@mui/icons-material'
 import {
   Box,
+  Button,
   CardContent,
   IconButton,
   InputAdornment,
@@ -93,6 +94,125 @@ export function EnemyStatsSection() {
         />
       </Box>
       <DocumentDisplay document={enemyDoc} />
+      <CardThemed bgt="light">
+        <CardContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+          }}
+        >
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+            Elemental Resistances & Weaknesses
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{ minWidth: '4em', color: 'error.main' }}
+            >
+              Resists
+            </Typography>
+            {allAttributeKeys.map((attr) => (
+              <Button
+                key={attr}
+                size="small"
+                variant={
+                  enemyStats.some(
+                    (s) =>
+                      s.tag.q === 'res_' &&
+                      s.tag.attribute === attr &&
+                      s.value > 0
+                  )
+                    ? 'contained'
+                    : 'outlined'
+                }
+                color={
+                  enemyStats.some(
+                    (s) =>
+                      s.tag.q === 'res_' &&
+                      s.tag.attribute === attr &&
+                      s.value > 0
+                  )
+                    ? 'error'
+                    : 'secondary'
+                }
+                onClick={() => {
+                  const existing = enemyStats.findIndex(
+                    (s) => s.tag.q === 'res_' && s.tag.attribute === attr
+                  )
+                  if (existing !== -1 && enemyStats[existing].value > 0)
+                    setStat({ q: 'res_', attribute: attr }, null, existing)
+                  else setStat({ q: 'res_', attribute: attr }, 40)
+                }}
+              >
+                <ColorText color={attr}>
+                  <AttributeName attribute={attr} />
+                </ColorText>
+              </Button>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{ minWidth: '4em', color: 'success.main' }}
+            >
+              Weak
+            </Typography>
+            {allAttributeKeys.map((attr) => (
+              <Button
+                key={attr}
+                size="small"
+                variant={
+                  enemyStats.some(
+                    (s) =>
+                      s.tag.q === 'res_' &&
+                      s.tag.attribute === attr &&
+                      s.value < 0
+                  )
+                    ? 'contained'
+                    : 'outlined'
+                }
+                color={
+                  enemyStats.some(
+                    (s) =>
+                      s.tag.q === 'res_' &&
+                      s.tag.attribute === attr &&
+                      s.value < 0
+                  )
+                    ? 'success'
+                    : 'secondary'
+                }
+                onClick={() => {
+                  const existing = enemyStats.findIndex(
+                    (s) => s.tag.q === 'res_' && s.tag.attribute === attr
+                  )
+                  if (existing !== -1 && enemyStats[existing].value < 0)
+                    setStat({ q: 'res_', attribute: attr }, null, existing)
+                  else setStat({ q: 'res_', attribute: attr }, -20)
+                }}
+              >
+                <ColorText color={attr}>
+                  <AttributeName attribute={attr} />
+                </ColorText>
+              </Button>
+            ))}
+          </Box>
+        </CardContent>
+      </CardThemed>
       {enemyStats.map(({ tag, value }, i) => (
         <EnemyStatDisplay
           key={JSON.stringify(tag) + i}
