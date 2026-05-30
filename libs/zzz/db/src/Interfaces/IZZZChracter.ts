@@ -7,5 +7,4 @@ export interface ICharMeta {
 
 export interface ICachedCharacter extends ICharacter {
   equippedDiscs: Record<DiscSlotKey, string | undefined>
-  equippedWengine?: string
 }

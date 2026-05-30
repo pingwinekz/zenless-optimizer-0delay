@@ -26,17 +26,16 @@ import {
 } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName } from '@genshin-optimizer/zzz/ui'
-import { DeleteForever } from '@mui/icons-material'
+import { IconTrash } from '@tabler/icons-react'
 import {
+  ActionIcon,
   Box,
   Button,
-  CardContent,
-  IconButton,
-  InputAdornment,
+  CardSection,
   MenuItem,
   Stack,
-  Typography,
-} from '@mui/material'
+  Text,
+} from '@mantine/core'
 import { useCallback } from 'react'
 
 export function EnemyStatsSection() {
@@ -67,62 +66,56 @@ export function EnemyStatsSection() {
     )
 
   return (
-    <Stack spacing={1}>
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+    <Stack gap={1}>
+      <Box style={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         <NumberInputLazy
           label="Enemy Lvl"
           value={enemyLvl}
-          inputProps={{ min: 0, sx: { width: '4em' } }}
           onChange={(v) => database.teams.set(characterKey, { enemyLvl: v })}
         />
         <NumberInputLazy
           label="Enemy DEF"
           value={enemyDef}
-          inputProps={{ min: 0, sx: { width: '4em' } }}
           onChange={(v) => database.teams.set(characterKey, { enemyDef: v })}
         />
         <NumberInputLazy
           label="Enemy Stun Multiplier"
           value={enemyStunMultiplier}
-          inputProps={{ min: 0, sx: { width: '8em' } }}
           onChange={(v) =>
             database.teams.set(characterKey, { enemyStunMultiplier: v })
           }
-          InputProps={{
-            endAdornment: <InputAdornment position="end">%</InputAdornment>,
-          }}
         />
       </Box>
       <DocumentDisplay document={enemyDoc} />
       <CardThemed bgt="light">
-        <CardContent
-          sx={{
+        <CardSection
+          style={{
             display: 'flex',
             flexDirection: 'column',
             gap: 1,
           }}
         >
-          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+          <Text size="sm" fw={700}>
             Elemental Resistances & Weaknesses
-          </Typography>
+          </Text>
           <Box
-            sx={{
+            style={{
               display: 'flex',
               gap: 1,
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
           >
-            <Typography
-              variant="caption"
-              sx={{ minWidth: '4em', color: 'error.main' }}
+            <Text
+              size="xs"
+              style={{ minWidth: '4em', color: 'var(--mantine-color-red-6)' }}
             >
               Resists
-            </Typography>
+            </Text>
             {allAttributeKeys.map((attr) => (
               <Button
                 key={attr}
-                size="small"
+                size="compact-sm"
                 variant={
                   enemyStats.some(
                     (s) =>
@@ -130,8 +123,8 @@ export function EnemyStatsSection() {
                       s.tag.attribute === attr &&
                       s.value > 0
                   )
-                    ? 'contained'
-                    : 'outlined'
+                    ? 'filled'
+                    : 'outline'
                 }
                 color={
                   enemyStats.some(
@@ -140,8 +133,8 @@ export function EnemyStatsSection() {
                       s.tag.attribute === attr &&
                       s.value > 0
                   )
-                    ? 'error'
-                    : 'secondary'
+                    ? 'red'
+                    : 'gray'
                 }
                 onClick={() => {
                   const existing = enemyStats.findIndex(
@@ -159,23 +152,23 @@ export function EnemyStatsSection() {
             ))}
           </Box>
           <Box
-            sx={{
+            style={{
               display: 'flex',
               gap: 1,
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
           >
-            <Typography
-              variant="caption"
-              sx={{ minWidth: '4em', color: 'success.main' }}
+            <Text
+              size="xs"
+              style={{ minWidth: '4em', color: 'var(--mantine-color-teal-6)' }}
             >
               Weak
-            </Typography>
+            </Text>
             {allAttributeKeys.map((attr) => (
               <Button
                 key={attr}
-                size="small"
+                size="compact-sm"
                 variant={
                   enemyStats.some(
                     (s) =>
@@ -183,8 +176,8 @@ export function EnemyStatsSection() {
                       s.tag.attribute === attr &&
                       s.value < 0
                   )
-                    ? 'contained'
-                    : 'outlined'
+                    ? 'filled'
+                    : 'outline'
                 }
                 color={
                   enemyStats.some(
@@ -193,8 +186,8 @@ export function EnemyStatsSection() {
                       s.tag.attribute === attr &&
                       s.value < 0
                   )
-                    ? 'success'
-                    : 'secondary'
+                    ? 'teal'
+                    : 'gray'
                 }
                 onClick={() => {
                   const existing = enemyStats.findIndex(
@@ -211,7 +204,7 @@ export function EnemyStatsSection() {
               </Button>
             ))}
           </Box>
-        </CardContent>
+        </CardSection>
       </CardThemed>
       {enemyStats.map(({ tag, value }, i) => (
         <EnemyStatDisplay
@@ -271,11 +264,10 @@ function EnemyStatDisplay({
   setValue: (value: number) => void
   onDelete: () => void
 }) {
-  const isPercent = tag.q?.endsWith('_')
   return (
     <CardThemed bgt="light">
-      <CardContent
-        sx={{
+      <CardSection
+        style={{
           display: 'flex',
           gap: 1,
           justifyContent: 'space-around',
@@ -283,9 +275,9 @@ function EnemyStatDisplay({
           flexWrap: 'wrap',
         }}
       >
-        <Typography>
+        <Text>
           <TagDisplay tag={tag} />
-        </Typography>
+        </Text>
         {isIn(['res_', 'resRed_'] as const, tag.q) && (
           <AttributeDropdown
             tag={tag}
@@ -298,27 +290,15 @@ function EnemyStatDisplay({
         <NumberInputLazy
           float
           value={value}
-          sx={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
+          style={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
           onChange={setValue}
           placeholder="Stat Value"
           size="small"
-          inputProps={{ sx: { textAlign: 'right' } }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end" sx={{ ml: 0 }}>
-                {isPercent ? '%' : undefined}{' '}
-                <IconButton
-                  aria-label="Delete Enemy Stat"
-                  onClick={onDelete}
-                  edge="end"
-                >
-                  <DeleteForever fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
-      </CardContent>
+        <ActionIcon aria-label="Delete Enemy Stat" onClick={onDelete}>
+          <IconTrash size={16} />
+        </ActionIcon>
+      </CardSection>
     </CardThemed>
   )
 }

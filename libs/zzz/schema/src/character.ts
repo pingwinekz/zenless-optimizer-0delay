@@ -2,7 +2,9 @@ import { zodBoundedNumber, zodEnum } from '@genshin-optimizer/common/database'
 import { clamp } from '@genshin-optimizer/common/util'
 import {
   type MilestoneKey,
+  type WengineKey,
   allCharacterKeys,
+  allWengineKeys,
   coreByLevel,
   skillByLevel,
   validateLevelMilestone,
@@ -22,6 +24,8 @@ export const characterSchema = z
     special: z.number().catch(1),
     assist: z.number().catch(1),
     potential: zodBoundedNumber(0, 6, 0),
+    wengineKey: zodEnum(allWengineKeys).or(z.literal('')).catch('' as WengineKey),
+    wenginePhase: zodBoundedNumber(1, 5, 1),
   })
   .transform((data) => {
     const { sanitizedLevel: level, milestone: promotion } =

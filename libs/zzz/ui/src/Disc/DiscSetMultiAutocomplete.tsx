@@ -3,8 +3,7 @@ import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscRarityKey, DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscRarityKeys } from '@genshin-optimizer/zzz/consts'
 import { setKeysByRarities } from '@genshin-optimizer/zzz/util'
-import type { AutocompleteRenderGroupParams } from '@mui/material'
-import { Box, Chip, List, ListSubheader } from '@mui/material'
+import { Badge, Box, Text } from '@mantine/core'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -31,7 +30,7 @@ export function DiscSetMultiAutocomplete({
     [totals]
   )
   const toExItemLabel = useCallback(
-    (key: DiscSetKey) => <Chip size="small" label={totals[key]} />,
+    (key: DiscSetKey) => <Badge size="sm">{totals[key]}</Badge>,
     [totals]
   )
 
@@ -60,15 +59,23 @@ export function DiscSetMultiAutocomplete({
       toExItemLabel={toExItemLabel}
       onChange={setDiscSetKeys}
       groupBy={(option) => option.grouper?.toString() ?? ''}
-      renderGroup={(params: AutocompleteRenderGroupParams) =>
-        params.group && (
-          <List key={params.group} component={Box}>
-            <ListSubheader key={`${params.group}Header`} sx={{ top: '-1em' }}>
+      renderGroup={(params: { group: string; children: React.ReactNode }) =>
+        params.group ? (
+          <Box key={params.group}>
+            <Text
+              style={{
+                position: 'sticky',
+                top: '-1em',
+                fontWeight: 700,
+                padding: '4px 8px',
+                fontSize: '0.75rem',
+              }}
+            >
               {params.group}
-            </ListSubheader>
+            </Text>
             {params.children}
-          </List>
-        )
+          </Box>
+        ) : null
       }
     />
   )

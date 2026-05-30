@@ -1,6 +1,6 @@
 import { DropdownButton } from '@genshin-optimizer/common/ui'
 import { type PhaseKey, allPhaseKeys } from '@genshin-optimizer/zzz/consts'
-import { MenuItem } from '@mui/material'
+import { Menu } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 
 export function PhaseDropdown({
@@ -16,14 +16,9 @@ export function PhaseDropdown({
   return (
     <DropdownButton title={t('phase', { value: phase })} disabled={disabled}>
       {allPhaseKeys.map((r) => (
-        <MenuItem
-          key={r}
-          onClick={() => setPhase(r)}
-          selected={phase === r}
-          disabled={phase === r}
-        >
+        <Menu.Item key={r} onClick={() => setPhase(r)} disabled={phase === r}>
           {t('phase', { value: r })}
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )

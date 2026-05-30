@@ -33,11 +33,6 @@ export class CharacterDataManager extends DataManager<
                 (a) => a?.location === id && a.slotKey === sk
               )?.id ?? ''
           ),
-      equippedWengine: oldChar
-        ? oldChar.equippedWengine
-        : (Object.values(this.database.wengines?.data ?? {}).find(
-            (w) => w?.location === id
-          )?.id ?? ''),
       ...storageObj,
     }
   }
@@ -126,28 +121,7 @@ export class CharacterDataManager extends DataManager<
       if (discKey && disc && disc.location === key)
         this.database.discs.setCached(discKey, { ...disc, location: '' })
     }
-    const wengine = this.database.wengines.get(char.equippedWengine)
-    if (char.equippedWengine && wengine && wengine.location === key)
-      this.database.wengines.setCached(char.equippedWengine, {
-        ...wengine,
-        location: '',
-      })
-
     return super.remove(key)
-  }
-
-  /**
-   * **Caution**:
-   * This does not update the `location` on wengine
-   * This function should be use internally for database to maintain cache on ICharacter.
-   */
-  setEquippedWengine(
-    key: CharacterKey,
-    equippedWengine: ICachedCharacter['equippedWengine']
-  ) {
-    const char = super.get(key)
-    if (!char) return
-    super.setCached(key, { ...char, equippedWengine })
   }
 
   /**
@@ -177,7 +151,8 @@ export function initialCharacterData(key: CharacterKey): ICachedCharacter {
     chain: 1,
     special: 1,
     assist: 1,
+    wengineKey: '',
+    wenginePhase: 1,
     equippedDiscs: objKeyMap(allDiscSlotKeys, () => ''),
-    equippedWengine: '',
   }
 }

@@ -3,8 +3,7 @@ import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSlotKey } from '@genshin-optimizer/zzz/consts'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { useDiscSets } from '@genshin-optimizer/zzz/db-ui'
-import { Typography } from '@mui/material'
-import { Stack } from '@mui/system'
+import { Stack, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { ZCard } from '../Components'
 import { COMPACT_CARD_HEIGHT_PX, EmptyCompactCard } from '../util'
@@ -21,35 +20,28 @@ export function DiscSetCardCompact({
   return sets && Object.keys(sets).length ? (
     <ZCard
       bgt="dark"
-      sx={{
+      style={{
         width: '100%',
       }}
     >
-      <Stack
-        component="div"
-        sx={{ p: 0.5, height: `${COMPACT_CARD_HEIGHT_PX}px` }}
-        spacing={0.5}
-      >
+      <Stack gap={4} p={4} style={{ height: `${COMPACT_CARD_HEIGHT_PX}px` }}>
         {Object.entries(sets).map(([key, count]) => (
           <CardThemed
             key={key}
             bgt="light"
-            sx={(theme) => ({
-              height: `${
-                (COMPACT_CARD_HEIGHT_PX - parseFloat(theme.spacing(0.5 * 4))) /
-                3
-              }px`,
+            style={{
+              height: `${(COMPACT_CARD_HEIGHT_PX - 16) / 3}px`,
               display: 'flex',
-              px: 0.5,
+              padding: '0 4px',
               borderRadius: '12px',
               alignItems: 'center',
-              gap: 1,
-            })}
+              gap: 4,
+            }}
           >
             <ImgIcon size={2.4} src={discDefIcon(key)} />
-            <Typography
+            <Text
               key={key}
-              sx={{
+              style={{
                 fontWeight: '900',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -58,13 +50,12 @@ export function DiscSetCardCompact({
               }}
             >
               <DiscSetName setKey={key} />
-            </Typography>
+            </Text>
             <SqBadge
-              color="success"
-              sx={{
+              color="primary"
+              style={{
                 borderRadius: '12px',
-                px: '10px',
-                py: '5px',
+                padding: '5px 10px',
                 fontWeight: '900',
               }}
             >

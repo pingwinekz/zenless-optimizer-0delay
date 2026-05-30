@@ -10,7 +10,7 @@ import { wengineAsset } from '@genshin-optimizer/zzz/assets'
 import { getWengineStat, getWengineStats } from '@genshin-optimizer/zzz/stats'
 import { StatDisplay, WengineName, ZCard } from '@genshin-optimizer/zzz/ui'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import { Box, CardContent, CardHeader, Stack, Typography } from '@mui/material'
+import { Box, Group, Stack, Text, Title } from '@mantine/core'
 import { wengineUiSheets } from '../sheets'
 
 export function WengineSheetDisplay({
@@ -29,14 +29,14 @@ export function WengineSheetDisplay({
   const substatKey = getWengineStat(wengineKey)['second_statkey']
   if (!wengineSheet) return null
   return (
-    <ZCard bgt="light" sx={{ height: '100%' }}>
-      <CardHeader
-        title={<WengineName wKey={wengineKey} />}
-        avatar={<ImgIcon src={wengineAsset(wengineKey, 'icon')} size={2} />}
-        action={headerAction}
-      />
-      <CardContent sx={{ py: 0 }}>
-        <Typography sx={{ display: 'flex', justifyContent: 'space-between' }}>
+    <ZCard bgt="light" style={{ height: '100%' }}>
+      <Group gap="sm" p="md" wrap="nowrap">
+        <ImgIcon src={wengineAsset(wengineKey, 'icon')} size={2} />
+        <WengineName wKey={wengineKey} />
+        {headerAction}
+      </Group>
+      <Box px="md" pb="xs">
+        <Text style={{ display: 'flex', justifyContent: 'space-between' }}>
           <StatDisplay statKey={'atk'} />
           <span>
             {toPercent(wengineStats[mainStatKey], mainStatKey).toFixed(
@@ -44,8 +44,8 @@ export function WengineSheetDisplay({
             )}
             {getUnitStr(mainStatKey)}
           </span>
-        </Typography>
-        <Typography sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        </Text>
+        <Text style={{ display: 'flex', justifyContent: 'space-between' }}>
           <StatDisplay statKey={substatKey} />
           <span>
             {toPercent(wengineStats[substatKey], substatKey).toFixed(
@@ -53,9 +53,9 @@ export function WengineSheetDisplay({
             )}
             {getUnitStr(substatKey)}
           </span>
-        </Typography>
-      </CardContent>
-      <Box sx={{ opacity: fade ? 0.5 : 1 }}>
+        </Text>
+      </Box>
+      <Box style={{ opacity: fade ? 0.5 : 1 }}>
         <WengineUiSheetElement uiSheetElement={wengineSheet} />
       </Box>
     </ZCard>
@@ -69,9 +69,9 @@ function WengineUiSheetElement({
 }) {
   const { documents, title } = uiSheetElement
   return (
-    <CardContent>
-      <Typography variant="subtitle1">{title}</Typography>
-      <Stack spacing={1}>
+    <Box p="md">
+      <Title order={5}>{title}</Title>
+      <Stack gap={4}>
         {documents.map((doc, i) => (
           <DocumentDisplay
             key={i}
@@ -81,6 +81,6 @@ function WengineUiSheetElement({
           />
         ))}
       </Stack>
-    </CardContent>
+    </Box>
   )
 }

@@ -11,7 +11,7 @@ import {
   milestoneMaxLevel,
   milestoneMaxLevelLow,
 } from '@genshin-optimizer/zzz/consts'
-import { Box, Button, InputAdornment, MenuItem } from '@mui/material'
+import { Button, Group, Menu } from '@mantine/core'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -51,67 +51,54 @@ export function LevelSelect({
     else setBoth({ level, milestone: lowerAscension })
   }, [setBoth, milestoneMaxLevels, milestone, level])
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: '4px' }}>
+    <Group gap="xs" wrap="wrap">
       <NumberInputLazy
-        variant="filled"
         value={level}
         disabled={disabled}
         onChange={(e) => {
           setLevel(e || 1)
         }}
-        type="number"
-        InputProps={{
-          inputProps: {
-            min: 0,
-            max: 60,
-            sx: { width: '4em' },
-          },
-          endAdornment: (
-            <InputAdornment position="end" sx={{ width: '100%' }}>
-              <Button
-                sx={{ ml: 'auto' }}
-                disabled={
-                  !(useLow ? ambiguousLevelLow : ambiguousLevel)(level) ||
-                  disabled
-                }
-                onClick={setAscension}
-                color={warning ? 'warning' : undefined}
-              >
-                <strong>/ {milestoneMaxLevel[milestone]}</strong>
-              </Button>
-            </InputAdornment>
-          ),
-        }}
-        color={warning ? 'warning' : undefined}
-        focused={warning ? true : undefined}
-        sx={{ height: '100%', mr: '4px', flexGrow: 1 }}
+        min={0}
+        max={60}
+        style={{ width: '4em', flexGrow: 1 }}
+        rightSection={
+          <Button
+            variant="subtle"
+            disabled={
+              !(useLow ? ambiguousLevelLow : ambiguousLevel)(level) || disabled
+            }
+            onClick={setAscension}
+            color={warning ? 'orange' : undefined}
+            p={0}
+          >
+            <strong>/ {milestoneMaxLevel[milestone]}</strong>
+          </Button>
+        }
         label="Level"
       />
       <DropdownButton
         title={t('selectlevel')}
-        sx={{ borderRadius: '4px', width: '100px', flexGrow: 1 }}
         disabled={disabled}
-        color={warning ? 'warning' : undefined}
+        color={warning ? 'orange' : undefined}
       >
         {[...(useLow ? milestoneLevelsLow : milestoneLevels)].map(
           ([lv, as]) => {
             const selected = lv === level && as === milestone
 
             return (
-              <MenuItem
+              <Menu.Item
                 key={`${lv}/${as}`}
-                selected={selected}
                 disabled={selected}
                 onClick={() => setBoth({ level: lv, milestone: as })}
               >
                 {lv === milestoneMaxLevels[as]
                   ? `Lv. ${lv}`
                   : `Lv. ${lv}/${milestoneMaxLevels[as]}`}
-              </MenuItem>
+              </Menu.Item>
             )
           }
         )}
       </DropdownButton>
-    </Box>
+    </Group>
   )
 }

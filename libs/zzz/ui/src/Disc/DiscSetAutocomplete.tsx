@@ -1,9 +1,7 @@
-import type { GeneralAutocompleteOption } from '@genshin-optimizer/common/ui'
 import { GeneralAutocomplete, ImgIcon } from '@genshin-optimizer/common/ui'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSetKeys } from '@genshin-optimizer/zzz/consts'
-import type { AutocompleteProps } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,12 +18,7 @@ export function DiscSetAutocomplete({
   ...props
 }: DiscSetAutocompleteProps &
   Omit<
-    AutocompleteProps<
-      GeneralAutocompleteOption<DiscSetKey | ''>,
-      false,
-      boolean,
-      false
-    >,
+    React.ComponentProps<typeof GeneralAutocomplete>,
     'options' | 'valueKey' | 'onChange' | 'toImg' | 'renderInput'
   >) {
   const { t } = useTranslation(['disc', 'discNames_gen'])

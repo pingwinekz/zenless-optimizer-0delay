@@ -5,17 +5,13 @@ import {
   allLocationKeys,
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import { Box, Chip, Skeleton } from '@mui/material'
+import { Badge, Skeleton } from '@mantine/core'
 import { Suspense, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CharIconCircle } from './CharIconCircleElement'
 
 const toImg = (key: LocationKey) =>
-  key ? (
-    <Box>
-      <CharIconCircle characterKey={key} />
-    </Box>
-  ) : undefined
+  key ? <CharIconCircle characterKey={key} /> : undefined
 
 export function LocationFilterMultiAutocomplete({
   locations,
@@ -36,25 +32,9 @@ export function LocationFilterMultiAutocomplete({
     [totals]
   )
   const toExItemLabel = useCallback(
-    (key: LocationKey) => <Chip size="small" label={totals[key]} />,
+    (key: LocationKey) => <Badge size="sm">{totals[key]}</Badge>,
     [totals]
   )
-
-  /* const isFavorite = useCallback(
-    (key: LocationKey) =>
-      key === 'Traveler'
-        ? allTravelerKeys.some((key) => database.charMeta.get(key).favorite)
-        : key
-        ? database.charMeta.get(key).favorite
-        : false,
-    [database]
-  ) needs favorite system */
-
-  /* const toVariant = useCallback(
-    (key: LocationKey) =>
-      getCharEle(database.chars.locationToCharacterKey(key)),
-    [database]
-  ) */
 
   const values = useMemo(
     () =>
@@ -77,7 +57,7 @@ export function LocationFilterMultiAutocomplete({
   )
 
   return (
-    <Suspense fallback={<Skeleton variant="text" width={100} />}>
+    <Suspense fallback={<Skeleton width={100} height={20} />}>
       <GeneralAutocompleteMulti
         disabled={disabled}
         options={values}
@@ -87,7 +67,6 @@ export function LocationFilterMultiAutocomplete({
         toExLabel={toExLabel}
         toExItemLabel={toExItemLabel}
         label={t('disc:filterLocation.location')}
-        chipProps={{ variant: 'outlined' }}
       />
     </Suspense>
   )

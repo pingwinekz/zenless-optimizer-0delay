@@ -1,24 +1,10 @@
-import type { ContainerProps, ModalProps } from '@mui/material'
-import { Container, Modal, styled } from '@mui/material'
-
-const ModalContainer = styled(Container)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  minHeight: '100vh',
-  ':focus': {
-    outline: 'None',
-  },
-  // Allow clicking on the Container to exit modal
-  pointerEvents: 'none',
-  '& > *': {
-    pointerEvents: 'auto',
-  },
-}))
+import { Modal, Box } from '@mantine/core'
+import type { ModalProps } from '@mantine/core'
 
 type ModalWrapperProps = ModalProps & {
-  containerProps?: ContainerProps
+  containerProps?: Record<string, any>
 }
+
 export function ModalWrapper({
   children,
   containerProps,
@@ -26,14 +12,25 @@ export function ModalWrapper({
 }: ModalWrapperProps) {
   return (
     <Modal
-      sx={{
-        overflow: 'auto',
+      styles={{
+        body: { overflow: 'auto' },
       }}
       {...props}
     >
-      <ModalContainer sx={{ p: { xs: 1 } }} {...containerProps}>
+      <Box
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          minHeight: '100vh',
+        }}
+        p={{ base: 'xs' } as any}
+        {...containerProps}
+      >
         {children}
-      </ModalContainer>
+      </Box>
     </Modal>
   )
 }
+
+export type { ModalWrapperProps }

@@ -28,19 +28,8 @@ import {
 import type { Attribute, Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay, qtMap } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName, StatDisplay } from '@genshin-optimizer/zzz/ui'
-import {
-  CheckBox,
-  CheckBoxOutlineBlank,
-  DeleteForever,
-} from '@mui/icons-material'
-import {
-  CardContent,
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
+import { ActionIcon, CardSection, MenuItem, Stack, Text } from '@mantine/core'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AfterShockToggleButton } from './AfterShockToggleButton'
@@ -89,7 +78,7 @@ export function BonusStatsSection() {
   )
 
   return (
-    <Stack spacing={1}>
+    <Stack gap={1}>
       {bonusStats.map(({ tag, value, disabled }, i) => (
         <BonusStatDisplay
           key={JSON.stringify(tag) + i}
@@ -108,9 +97,6 @@ export function BonusStatsSection() {
         value={charMetaDesc}
         disabled={!characterKey}
         onChange={(value) => setDescription(value)}
-        multiline
-        minRows={3}
-        fullWidth
       />
     </Stack>
   )
@@ -153,11 +139,10 @@ function BonusStatDisplay({
   onDelete: () => void
   toggleDisabled: () => void
 }) {
-  const isPercent = tag.q?.endsWith('_')
   return (
-    <CardThemed bgt="light" sx={{ opacity: disabled ? 0.4 : undefined }}>
-      <CardContent
-        sx={{
+    <CardThemed bgt="light" style={{ opacity: disabled ? 0.4 : undefined }}>
+      <CardSection
+        style={{
           display: 'flex',
           gap: 1,
           justifyContent: 'space-around',
@@ -165,12 +150,12 @@ function BonusStatDisplay({
           flexWrap: 'wrap',
         }}
       >
-        <IconButton onClick={toggleDisabled}>
-          {disabled ? <CheckBoxOutlineBlank /> : <CheckBox />}
-        </IconButton>
-        <Typography>
+        <ActionIcon onClick={toggleDisabled}>
+          {disabled ? <IconSquare size={16} /> : <IconCheckbox size={16} />}
+        </ActionIcon>
+        <Text>
           <TagDisplay tag={tag} />
-        </Typography>
+        </Text>
         <QtDropdown qt={tag.qt} setQt={(qt) => setTag({ ...tag, qt })} />
         {['dmg_', 'sheer_dmg_', 'resIgn_'].includes(tag.q) && (
           <AttributeDropdown
@@ -193,7 +178,6 @@ function BonusStatDisplay({
             }}
           />
         )}
-        {/* in-game there is only buffs that increase aftershock dmg_ and crit_dmg_ */}
         {(['dmg_', 'crit_dmg_'] as const).includes(
           tag.q as 'dmg_' | 'crit_dmg_'
         ) && (
@@ -208,27 +192,15 @@ function BonusStatDisplay({
         <NumberInputLazy
           float
           value={value}
-          sx={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
+          style={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
           onChange={setValue}
           placeholder="Stat Value"
           size="small"
-          inputProps={{ sx: { textAlign: 'right' } }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end" sx={{ ml: 0 }}>
-                {isPercent ? '%' : undefined}{' '}
-                <IconButton
-                  aria-label="Delete Bonus Stat"
-                  onClick={onDelete}
-                  edge="end"
-                >
-                  <DeleteForever fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
-      </CardContent>
+        <ActionIcon aria-label="Delete Bonus Stat" onClick={onDelete}>
+          <IconTrash size={16} />
+        </ActionIcon>
+      </CardSection>
     </CardThemed>
   )
 }
@@ -276,7 +248,11 @@ function QtDropdown({
         <MenuItem
           key={q}
           onClick={() => setQt(q)}
-          selected={qt === q}
+          style={
+            qt === q
+              ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+              : undefined
+          }
           disabled={qt === q}
         >
           {qtMap[q]}

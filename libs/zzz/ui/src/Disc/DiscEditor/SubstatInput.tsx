@@ -13,20 +13,13 @@ import {
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
 import type { ISubstat } from '@genshin-optimizer/zzz/zood'
-import type { SliderProps } from '@mui/material'
-import {
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Slider,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Menu } from '@mantine/core'
+import { Slider } from '@mantine/core'
+import { Group, Text } from '@mantine/core'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatDisplay } from '../../Character'
 
-// TODO: validation, roll validation across the disc, display text, icons, ...
 export default function SubstatInput({
   rarity,
   index,
@@ -52,9 +45,8 @@ export default function SubstatInput({
     [rarity]
   )
   return (
-    <Stack direction="row" sx={{ alignItems: 'center' }} gap={1}>
+    <Group gap={8} align="center">
       <DropdownButton
-        // startIcon={key ? <StatIcon statKey={key} /> : undefined}
         title={
           key ? (
             <StatDisplay statKey={key} showPercent disableIcon />
@@ -64,35 +56,30 @@ export default function SubstatInput({
         }
         disabled={!disc?.mainStatKey || !isEnabled}
         color={key ? 'success' : 'primary'}
-        sx={{ whiteSpace: 'nowrap', width: '13em' }}
+        style={{ whiteSpace: 'nowrap', width: '13em' }}
       >
         {key && (
-          <MenuItem onClick={() => setSubstat(index)}>
+          <Menu.Item onClick={() => setSubstat(index)}>
             {t('editor.substat.noSubstat')}
-          </MenuItem>
+          </Menu.Item>
         )}
         {allDiscSubStatKeys
           .filter((key) => mainStatKey !== key)
           .map((k) => (
-            <MenuItem
+            <Menu.Item
               key={k}
-              selected={key === k}
-              disabled={key === k}
               onClick={() => setSubstat(index, { key: k, upgrades: 1 })}
             >
-              <ListItemIcon>
+              <Group gap={8}>
                 <StatIcon statKey={k} />
-              </ListItemIcon>
-              <ListItemText>
                 <StatDisplay statKey={k} showPercent disableIcon />
-              </ListItemText>
-            </MenuItem>
+              </Group>
+            </Menu.Item>
           ))}
       </DropdownButton>
       <CardThemed
         bgt="light"
-        sx={{
-          // px: 2,
+        style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -108,9 +95,9 @@ export default function SubstatInput({
         )}
       </CardThemed>
       <CardThemed
-        sx={{
+        style={{
           flexGrow: 1,
-          px: 2,
+          padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
           overflow: 'visible',
@@ -138,8 +125,8 @@ export default function SubstatInput({
       </CardThemed>
       <CardThemed
         bgt="light"
-        sx={{
-          px: 2,
+        style={{
+          padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -148,15 +135,15 @@ export default function SubstatInput({
           width: '4em',
         }}
       >
-        <Typography>
+        <Text>
           {key &&
             valueString(
               (upgrades || 1) * getDiscSubStatBaseVal(key, rarity),
               getUnitStr(key)
             )}
-        </Typography>
+        </Text>
       </CardThemed>
-    </Stack>
+    </Group>
   )
 }
 function SliderWrapper({
@@ -166,26 +153,25 @@ function SliderWrapper({
   disabled = false,
   valueLabelFormat,
 }: {
-  key: number // remount when value changes
+  key: number
   value: number
   setValue: (v: number) => void
   marks: Array<{ value: number }>
   disabled: boolean
-  valueLabelFormat: SliderProps['valueLabelFormat']
+  valueLabelFormat?: (v: number) => string
 }) {
   const [innerValue, setinnerValue] = useState(value)
   return (
     <Slider
       value={innerValue}
-      step={null}
       disabled={disabled}
       marks={marks}
       min={marks[0]?.value ?? 0}
       max={marks[marks.length - 1]?.value ?? 0}
-      onChange={(_e, v) => setinnerValue(v as number)}
-      onChangeCommitted={(_e, v) => setValue(v as number)}
-      valueLabelDisplay="auto"
-      valueLabelFormat={valueLabelFormat}
+      onChange={(v) => setinnerValue(v as number)}
+      onChangeEnd={(v) => setValue(v as number)}
+      label={valueLabelFormat}
+      style={{ flex: 1 }}
     />
   )
 }

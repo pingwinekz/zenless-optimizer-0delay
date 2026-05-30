@@ -1,13 +1,7 @@
 import { DiscordIcon } from '@genshin-optimizer/common/svgicons'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import { GitHub, InsertLink } from '@mui/icons-material'
-import {
-  Button,
-  CardContent,
-  CardHeader,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { IconGitFork, IconLink } from '@tabler/icons-react'
+import { Button, CardSection, Group, Stack, Title } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 
 const links = [
@@ -18,7 +12,7 @@ const links = [
   },
   {
     title: () => 'Github',
-    icon: <GitHub />,
+    icon: <IconGitFork />,
     url: process.env['NX_URL_GITHUB_GO'],
   },
 ] as const
@@ -27,20 +21,20 @@ export default function QuickLinksCard() {
   const { t } = useTranslation(['page_home', 'ui'])
   return (
     <ZCard>
-      <CardHeader
-        title={
-          <Typography variant="h5">{t('quickLinksCard.title')}</Typography>
-        }
-        avatar={<InsertLink fontSize="large" />}
-      />
-      <CardContent>
-        <Stack spacing={1}>
+      <CardSection>
+        <Group>
+          <IconLink />
+          <Title order={5}>{t('quickLinksCard.title')}</Title>
+        </Group>
+      </CardSection>
+      <CardSection>
+        <Stack gap={1}>
           {links.map(({ title, icon, url }) => (
             <Button
               key={url}
-              color="primary"
+              color="blue"
               fullWidth
-              startIcon={icon}
+              leftSection={icon}
               component="a"
               href={url}
               target="_blank"
@@ -50,7 +44,7 @@ export default function QuickLinksCard() {
             </Button>
           ))}
         </Stack>
-      </CardContent>
+      </CardSection>
     </ZCard>
   )
 }

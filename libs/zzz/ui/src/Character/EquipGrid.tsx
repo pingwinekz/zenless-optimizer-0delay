@@ -1,54 +1,66 @@
-import { objKeyMap, objMap } from '@genshin-optimizer/common/util'
 import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
 import { type DiscIds } from '@genshin-optimizer/zzz/db'
-import { useDiscs, useWengine } from '@genshin-optimizer/zzz/db-ui'
-import { Grid } from '@mui/material'
-import { Stack } from '@mui/system'
+import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
+import { useWengine } from '@genshin-optimizer/zzz/db-ui'
+import { SimpleGrid, Stack } from '@mantine/core'
 import { useMemo } from 'react'
 import { CompactDiscCard, DiscSetCardCompact } from '../Disc'
 import { CompactWengineCard } from '../Wengine'
-const emptyDiscs = objKeyMap(allDiscSlotKeys, () => undefined)
-const DEFAULT_COLUMNS = { xs: 1, sm: 1, md: 2, lg: 3, xl: 4 } as const
+const emptyDiscs = Object.fromEntries(
+  allDiscSlotKeys.map((k) => [k, undefined])
+) as Record<string, undefined>
+const DEFAULT_COLS = { base: 1, sm: 1, md: 2, lg: 3, xl: 4 } as const
 export function EquipGrid({
-  discIds = emptyDiscs,
-  wengineId,
+  discIds = emptyDiscs as any,
+  wengineKey,
   onClick,
-  columns = DEFAULT_COLUMNS,
+  columns = DEFAULT_COLS,
 }: {
   discIds?: DiscIds
-  wengineId?: string
+  wengineKey?: string
   onClick?: () => void
-  columns?: Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', number>>
+  columns?: {
+    base?: number
+    sm?: number
+    md?: number
+    lg?: number
+    xl?: number
+  }
 }) {
   const discs = useDiscs(discIds)
-  const wengine = useWengine(wengineId)
-  const discColumns = useMemo(
-    () => objMap(columns, (c) => Math.max(c - 1, 1)),
+  const wengine = useWengine(wengineKey)
+  const discCols = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(columns).map(([k, v]) => [
+          k,
+          Math.max((v as number) - 1, 1),
+        ])
+      ) as typeof columns,
     [columns]
   )
   return (
-    <Grid container spacing={1} columns={columns}>
-      <Grid item xs={1} key={wengine?.id}>
-        <Stack spacing={1}>
-          <CompactWengineCard wengineId={wengine?.id} onClick={onClick} />
+    <SimpleGrid cols={columns} spacing="xs">
+      <div key={wengine?.id}>
+        <Stack>
+          <CompactWengineCard wengineId={wengine?.id ?? wengineKey} onClick={onClick} />
           <DiscSetCardCompact discs={discs} />
         </Stack>
-      </Grid>
-
-      <Grid item {...discColumns}>
-        <Grid container spacing={1} columns={discColumns}>
+      </div>
+      <div>
+        <SimpleGrid cols={discCols} spacing="xs">
           {!!discs &&
             Object.entries(discs).map(([slotKey, disc]) => (
-              <Grid item xs={1} key={disc?.id || slotKey}>
+              <div key={disc?.id || slotKey}>
                 <CompactDiscCard
                   disc={disc}
                   slotKey={slotKey}
                   onClick={onClick}
                 />
-              </Grid>
+              </div>
             ))}
-        </Grid>
-      </Grid>
-    </Grid>
+        </SimpleGrid>
+      </div>
+    </SimpleGrid>
   )
 }

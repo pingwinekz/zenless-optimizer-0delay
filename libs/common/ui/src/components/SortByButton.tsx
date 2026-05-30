@@ -1,10 +1,7 @@
-import SortIcon from '@mui/icons-material/Sort'
-import type { ButtonGroupProps } from '@mui/material'
-import { Box, Button, ButtonGroup, MenuItem } from '@mui/material'
+import { Button, Group, Menu } from '@mantine/core'
 import { Trans, useTranslation } from 'react-i18next'
 import { DropdownButton } from './DropdownButton'
 
-// Assumes that all the sortKeys has corresponding translations in ui.json sortMap
 export function SortByButton<Key extends string>({
   sortKeys,
   value,
@@ -12,7 +9,7 @@ export function SortByButton<Key extends string>({
   ascending,
   onChangeAsc,
   ...props
-}: Omit<ButtonGroupProps, 'onChange'> & {
+}: {
   sortKeys: Key[]
   value: Key
   onChange: (value: Key) => void
@@ -21,11 +18,11 @@ export function SortByButton<Key extends string>({
 }) {
   const { t } = useTranslation('ui')
   return (
-    <Box display="flex" alignItems="center" gap={1}>
+    <Group gap="xs" align="center">
       <Trans t={t} i18nKey="sortBy">
         Sort by:{' '}
       </Trans>
-      <ButtonGroup {...props}>
+      <Button.Group {...(props as any)}>
         <DropdownButton
           title={
             <Trans t={t} i18nKey={`sortMap.${value}`}>
@@ -34,22 +31,27 @@ export function SortByButton<Key extends string>({
           }
         >
           {sortKeys.map((key) => (
-            <MenuItem
+            <Menu.Item
               key={key}
-              selected={value === key}
               disabled={value === key}
               onClick={() => onChange(key)}
             >
               {t(`sortMap.${key}`)}
-            </MenuItem>
+            </Menu.Item>
           ))}
         </DropdownButton>
         <Button
           onClick={() => onChangeAsc(!ascending)}
-          startIcon={
-            <SortIcon
-              sx={{ transform: ascending ? 'scale(1, -1)' : 'scale(1)' }}
-            />
+          leftSection={
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              style={{ transform: ascending ? 'scale(1, -1)' : 'scale(1)' }}
+            >
+              <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z" />
+            </svg>
           }
         >
           {ascending ? (
@@ -62,7 +64,7 @@ export function SortByButton<Key extends string>({
             </Trans>
           )}
         </Button>
-      </ButtonGroup>
-    </Box>
+      </Button.Group>
+    </Group>
   )
 }

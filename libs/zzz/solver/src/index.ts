@@ -15,6 +15,8 @@ import type {
   DiscSetKey,
   DiscSlotKey,
   DiscSubStatKey,
+  PhaseKey,
+  WengineKey,
 } from '@genshin-optimizer/zzz/consts'
 import {
   allDiscSetKeys,
@@ -25,7 +27,6 @@ import {
 import type { StatFilter } from '@genshin-optimizer/zzz/db'
 import {
   type ICachedDisc,
-  type ICachedWengine,
   StatFilterTagToTag,
 } from '@genshin-optimizer/zzz/db'
 import { type Calculator, Read, type Tag } from '@genshin-optimizer/zzz/formula'
@@ -41,14 +42,15 @@ export function createSolverConfig(
   statFilters: Array<Omit<StatFilter, 'disabled'>>,
   setFilter2: DiscSetKey[],
   setFilter4: DiscSetKey[],
-  wengines: ICachedWengine[],
+  wengineKeys: WengineKey[],
+  wenginePhase: PhaseKey,
   discsBySlot: Record<DiscSlotKey, ICachedDisc[]>,
   numWorkers: number,
   numOfBuilds: number,
   setProgress: (progress: Progress) => void
 ) {
   const discSetKeys = new Set(allDiscSetKeys)
-  const wengineKeys = new Set(allWengineKeys)
+  const allWengineKeySet = new Set(allWengineKeys)
   const undetachedNodes = [
     // optimization target
     sum(
@@ -106,11 +108,12 @@ export function createSolverConfig(
       return { q: tag['q']! }
 
     // wengine counter
-    if (tag['q'] === 'count' && wengineKeys.has(tag['sheet'] as any))
+    if (tag['q'] === 'count' && allWengineKeySet.has(tag['sheet'] as any))
       return { q: tag['sheet']! }
 
     return undefined
   })
+
   nodes.push(
     // filter2: if not empty, at least one >= 2
     setFilter2.length
@@ -126,7 +129,7 @@ export function createSolverConfig(
   return {
     nodes,
     candidates: [
-      wengines.map(wengineCandidate),
+      wengineKeys.map((key) => wengineCandidate(key, wenginePhase)),
       discsBySlot['1'].map(discCandidate),
       discsBySlot['2'].map(discCandidate),
       discsBySlot['3'].map(discCandidate),
@@ -170,12 +173,11 @@ function discCandidate(disc: ICachedDisc): Candidate<string> {
   }
 }
 
-function wengineCandidate(wengine: ICachedWengine): Candidate<string> {
-  const { id, key, level: lvl, modification, phase } = wengine
+function wengineCandidate(key: WengineKey, phase: PhaseKey): Candidate<string> {
   return {
-    id: id as any,
-    lvl,
-    modification,
+    id: key as any,
+    lvl: 60,
+    modification: 5,
     phase,
     [key]: 1,
   }

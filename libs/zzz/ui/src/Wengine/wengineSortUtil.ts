@@ -12,13 +12,7 @@ export function wengineSortConfigs(): SortConfigs<WengineSortKey, IWengine> {
   }
 }
 export function wengineFilterConfigs(): FilterConfigs<
-  | 'rarity'
-  | 'speciality'
-  | 'name'
-  | 'locked'
-  | 'showInventory'
-  | 'showEquipped'
-  | 'locations',
+  'rarity' | 'speciality' | 'name',
   IWengine
 > {
   return {
@@ -26,17 +20,6 @@ export function wengineFilterConfigs(): FilterConfigs<
     speciality: (we, filter) => filter.includes(getWengineStat(we.key).type),
     name: (we, filter) =>
       i18n.t(`${we.key}`).toLowerCase().includes(filter.toLowerCase()),
-    locked: (we, filter) => {
-      if (filter.includes('locked') && we.lock) return true
-      if (filter.includes('unlocked') && !we.lock) return true
-      return false
-    },
-    showEquipped: () => true, // Per character filtering is applied in `locations`
-    showInventory: (we, filter) => (!we.location ? filter : true),
-    locations: (we, filter, filters) =>
-      we.location && !filters['showEquipped']
-        ? filter.includes(we.location)
-        : true,
   }
 }
 

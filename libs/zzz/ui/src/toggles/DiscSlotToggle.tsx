@@ -1,9 +1,8 @@
 import type { SolidToggleButtonGroupProps } from '@genshin-optimizer/common/ui'
-import { SolidToggleButtonGroup } from '@genshin-optimizer/common/ui'
 import { handleMultiSelect } from '@genshin-optimizer/common/util'
 import type { DiscSlotKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
-import { Chip, ToggleButton } from '@mui/material'
+import { Badge, Button, Group } from '@mantine/core'
 import type { ReactNode } from 'react'
 
 type DiscSlotToggleProps = Omit<
@@ -24,19 +23,20 @@ export function DiscSlotToggle({
   ...props
 }: DiscSlotToggleProps) {
   return (
-    <SolidToggleButtonGroup fullWidth value={value} size="small" {...props}>
+    <Group {...(props as any)} gap="xs">
       {allDiscSlotKeys.map((slotKey) => (
-        <ToggleButton
+        <Button
           key={slotKey}
-          sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}
-          value={slotKey}
+          variant={value.includes(slotKey) ? 'filled' : 'outline'}
+          size="compact-sm"
           onClick={() => onChange(slotHandler(value, slotKey))}
         >
-          {/* <SlotIcon slotKey={slotKey} /> */}
           {slotKey}
-          <Chip label={totals[slotKey]} size="small" />
-        </ToggleButton>
+          <Badge size="sm" ml={4}>
+            {totals[slotKey]}
+          </Badge>
+        </Button>
       ))}
-    </SolidToggleButtonGroup>
+    </Group>
   )
 }

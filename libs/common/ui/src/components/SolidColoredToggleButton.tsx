@@ -1,40 +1,35 @@
-import type { Palette, PaletteColor, ToggleButtonProps } from '@mui/material'
-import { ToggleButton, styled } from '@mui/material'
+import { Button } from '@mantine/core'
 
 type SolidColoredToggleButtonPartial = {
-  baseColor?: keyof Palette
-  selectedColor?: keyof Palette
+  baseColor?: string
+  selectedColor?: string
+  style?: React.CSSProperties
 }
-export type SolidColoredToggleButtonProps = SolidColoredToggleButtonPartial &
-  ToggleButtonProps
 
-export const SolidColoredToggleButton = styled(ToggleButton, {
-  shouldForwardProp: (prop) => prop !== 'baseColor' && prop !== 'selectedColor',
-})<SolidColoredToggleButtonPartial>(
-  ({ theme, baseColor = 'secondary', selectedColor = 'success' }) => {
-    const basePalette = theme.palette[baseColor] as PaletteColor
-    const selectedPalette = theme.palette[selectedColor] as PaletteColor
-    return {
-      '&': {
-        backgroundColor: basePalette.main,
-        color: basePalette.contrastText,
-      },
-      '&:hover': {
-        backgroundColor: basePalette.dark,
-      },
-      '&.Mui-selected': {
-        backgroundColor: selectedPalette.main,
-        color: selectedPalette.contrastText,
-      },
-      '&.Mui-selected:hover': {
-        backgroundColor: selectedPalette.dark,
-      },
-      '&.Mui-disabled': {
-        backgroundColor: basePalette.dark,
-      },
-      '&.Mui-selected.Mui-disabled': {
-        backgroundColor: selectedPalette.dark,
-      },
-    }
-  }
-)
+export type SolidColoredToggleButtonProps = SolidColoredToggleButtonPartial & {
+  selected?: boolean
+  value?: string
+  onClick?: () => void
+  disabled?: boolean
+  children?: React.ReactNode
+}
+
+export function SolidColoredToggleButton({
+  baseColor = 'secondary',
+  selectedColor = 'success',
+  selected = false,
+  children,
+  ...props
+}: SolidColoredToggleButtonProps) {
+  const color = selected ? selectedColor : baseColor
+  return (
+    <Button
+      variant="filled"
+      color={color}
+      {...(props as any)}
+      data-selected={selected || undefined}
+    >
+      {children}
+    </Button>
+  )
+}

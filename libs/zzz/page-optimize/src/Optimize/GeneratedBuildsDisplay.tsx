@@ -18,41 +18,55 @@ import {
   CompactWengineCard,
   DiscSetCardCompact,
 } from '@genshin-optimizer/zzz/ui'
-import CheckroomIcon from '@mui/icons-material/Checkroom'
+import { IconChecklist, IconPinned, IconPin } from '@tabler/icons-react'
 import {
+  ActionIcon,
+  Badge,
   Box,
   Button,
-  CardContent,
-  Grid,
+  CardSection,
+  Flex,
+  SimpleGrid,
   Stack,
-  Typography,
-} from '@mui/material'
+  Text,
+} from '@mantine/core'
 import { memo, useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useOptimizerDisplayStore } from '../stores/useOptimizerDisplayStore'
 
 function useGeneratedBuildList(listId: string) {
   const { database } = useDatabaseContext()
   return useDataManagerBase(database.generatedBuildList, listId)
 }
 
-/**
- * A UI component that renders a list of generated builds
- */
 const GeneratedBuildsDisplay = memo(function GeneratedBuildsDisplay() {
   const { optConfig } = useContext(OptConfigContext)
+  const comparisonMode = useOptimizerDisplayStore((s) => s.comparisonMode)
+  const compareBuildIndex = useOptimizerDisplayStore((s) => s.compareBuildIndex)
   const generatedBuildList = useGeneratedBuildList(
     optConfig.generatedBuildListId ?? ''
   )
   return (
-    <Stack spacing={1}>
+    <Stack gap={1}>
       {generatedBuildList?.builds.map((build, i) => (
-        <GeneratedBuildDisplay
+        <Box
           key={`${i}-${build.wengineId}-${Object.values(build.discIds).join(
             '-'
           )}`}
-          build={build}
-          index={i}
-        />
+          style={{
+            outline:
+              comparisonMode && compareBuildIndex === i
+                ? '2px solid var(--mantine-color-yellow-6)'
+                : undefined,
+            borderRadius: 6,
+          }}
+        >
+          <GeneratedBuildDisplay
+            build={build}
+            index={i}
+            isCompareTarget={comparisonMode && compareBuildIndex === i}
+          />
+        </Box>
       ))}
     </Stack>
   )
@@ -78,9 +92,9 @@ function EquipBtn({
   }, [characterKey, discIds, wengineId, database.wengines, database.discs])
   return (
     <Button
-      color="info"
-      size="small"
-      startIcon={<CheckroomIcon />}
+      color="blue"
+      size="compact-sm"
+      leftSection={<IconChecklist size={16} />}
       onClick={onEquip}
     >
       {t('buildDisplay.equipToCrr')}
@@ -88,16 +102,95 @@ function EquipBtn({
   )
 }
 
+function PinBuildBtn({
+  build,
+  index,
+}: { build: GeneratedBuild; index: number }) {
+  const pinnedBuilds = useOptimizerDisplayStore((s) => s.pinnedBuilds)
+  const addPinnedBuild = useOptimizerDisplayStore((s) => s.addPinnedBuild)
+  const removePinnedBuild = useOptimizerDisplayStore((s) => s.removePinnedBuild)
+
+  const buildId = `${build.wengineId}-${Object.values(build.discIds).join('-')}`
+  const isPinned = pinnedBuilds.some((b) => b.buildId === buildId)
+
+  const handleTogglePin = useCallback(() => {
+    if (isPinned) {
+      removePinnedBuild(buildId)
+    } else {
+      addPinnedBuild({
+        buildId,
+        index,
+        value: build.value,
+        wengineId: build.wengineId,
+      })
+    }
+  }, [
+    isPinned,
+    buildId,
+    index,
+    build.value,
+    build.wengineId,
+    addPinnedBuild,
+    removePinnedBuild,
+  ])
+
+  return (
+    <ActionIcon
+      size="sm"
+      variant={isPinned ? 'filled' : 'subtle'}
+      color={isPinned ? 'yellow' : 'gray'}
+      onClick={handleTogglePin}
+    >
+      {isPinned ? <IconPinned size={14} /> : <IconPin size={14} />}
+    </ActionIcon>
+  )
+}
+
+function CompareBtn({ index }: { index: number }) {
+  const comparisonMode = useOptimizerDisplayStore((s) => s.comparisonMode)
+  const setComparisonMode = useOptimizerDisplayStore((s) => s.setComparisonMode)
+  const compareBuildIndex = useOptimizerDisplayStore((s) => s.compareBuildIndex)
+  const setCompareBuildIndex = useOptimizerDisplayStore(
+    (s) => s.setCompareBuildIndex
+  )
+
+  const isSelected = comparisonMode && compareBuildIndex === index
+
+  const handleClick = useCallback(() => {
+    if (isSelected) {
+      setComparisonMode(false)
+      setCompareBuildIndex(null)
+    } else {
+      setComparisonMode(true)
+      setCompareBuildIndex(index)
+    }
+  }, [isSelected, index, setComparisonMode, setCompareBuildIndex])
+
+  return (
+    <Button
+      size="compact-sm"
+      variant={isSelected ? 'filled' : 'light'}
+      color={isSelected ? 'yellow' : 'gray'}
+      onClick={handleClick}
+    >
+      {isSelected ? 'Comparing' : 'Compare'}
+    </Button>
+  )
+}
+
 function GeneratedBuildDisplay({
   build,
   index,
+  isCompareTarget = false,
 }: {
   build: GeneratedBuild
   index: number
+  isCompareTarget?: boolean
 }) {
   const character = useCharacterContext()!
   const team = useTeam(character.key)!
   const discs = useDiscs(build.discIds)
+  const comparisonMode = useOptimizerDisplayStore((s) => s.comparisonMode)
   return (
     <CharCalcProvider
       character={character}
@@ -106,55 +199,62 @@ function GeneratedBuildDisplay({
       wengineId={build.wengineId}
     >
       <CardThemed>
-        <CardContent>
-          <Stack spacing={1}>
+        <CardSection>
+          <Stack gap={1}>
             <Box
-              sx={{
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 gap: 1,
               }}
             >
-              <Typography>
-                Build {index + 1}: {valueString(build.value)}
-              </Typography>
-              <EquipBtn build={build} />
+              <Flex gap="xs" align="center">
+                {comparisonMode && (
+                  <Badge
+                    size="xs"
+                    color={isCompareTarget ? 'yellow' : 'gray'}
+                    variant={isCompareTarget ? 'filled' : 'outline'}
+                  >
+                    {isCompareTarget ? 'Target' : 'Baseline'}
+                  </Badge>
+                )}
+                <Text>
+                  Build {index + 1}: {valueString(build.value)}
+                </Text>
+              </Flex>
+              <Flex gap={4} align="center">
+                <CompareBtn index={index} />
+                <PinBuildBtn build={build} index={index} />
+                <EquipBtn build={build} />
+              </Flex>
             </Box>
-            <Grid container spacing={1}>
-              <Grid item xs={3}>
-                <CharStatsDisplay />
-              </Grid>
-              <Grid item xs={3}>
-                <Stack spacing={1}>
-                  {(['1', '2', '3'] as const).map((slotKey) => (
-                    <CompactDiscCard
-                      key={slotKey}
-                      disc={discs?.[slotKey]}
-                      slotKey={slotKey}
-                    />
-                  ))}
-                </Stack>
-              </Grid>
-              <Grid item xs={3}>
-                <Stack spacing={1}>
-                  <CompactWengineCard wengineId={build.wengineId} />
-                  <DiscSetCardCompact discs={discs} />
-                </Stack>
-              </Grid>
-              <Grid item xs={3}>
-                <Stack spacing={1}>
-                  {(['6', '5', '4'] as const).map((slotKey) => (
-                    <CompactDiscCard
-                      key={slotKey}
-                      disc={discs?.[slotKey]}
-                      slotKey={slotKey}
-                    />
-                  ))}
-                </Stack>
-              </Grid>
-            </Grid>
+            <SimpleGrid cols={4} spacing={1}>
+              <CharStatsDisplay />
+              <Stack gap={1}>
+                {(['1', '2', '3'] as const).map((slotKey) => (
+                  <CompactDiscCard
+                    key={slotKey}
+                    disc={discs?.[slotKey]}
+                    slotKey={slotKey}
+                  />
+                ))}
+              </Stack>
+              <Stack gap={1}>
+                <CompactWengineCard wengineId={build.wengineId} />
+                <DiscSetCardCompact discs={discs} />
+              </Stack>
+              <Stack gap={1}>
+                {(['6', '5', '4'] as const).map((slotKey) => (
+                  <CompactDiscCard
+                    key={slotKey}
+                    disc={discs?.[slotKey]}
+                    slotKey={slotKey}
+                  />
+                ))}
+              </Stack>
+            </SimpleGrid>
           </Stack>
-        </CardContent>
+        </CardSection>
       </CardThemed>
     </CharCalcProvider>
   )

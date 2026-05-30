@@ -1,13 +1,10 @@
 import {
-  zodBoolean,
   zodBoundedNumber,
   zodEnum,
-  zodEnumWithDefault,
 } from '@genshin-optimizer/common/database'
 import {
   type MilestoneKey,
   type PhaseKey,
-  allLocationKeys,
   allWengineKeys,
   validateLevelMilestone,
   wengineMaxLevel,
@@ -19,8 +16,6 @@ export const wengineBaseSchema = z.object({
   level: zodBoundedNumber(1, wengineMaxLevel, 1),
   phase: zodBoundedNumber(1, 5, 1) as z.ZodType<PhaseKey>,
   modification: zodBoundedNumber(0, 5, 0) as z.ZodType<MilestoneKey>,
-  location: zodEnumWithDefault(allLocationKeys, ''),
-  lock: zodBoolean(),
 })
 
 export const wengineSchema = wengineBaseSchema.transform((data) => {

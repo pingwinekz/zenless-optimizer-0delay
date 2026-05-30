@@ -1,15 +1,7 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import DescriptionIcon from '@mui/icons-material/Description'
-import {
-  Box,
-  CardContent,
-  CardHeader,
-  Grid,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material'
+import { IconFileDescription } from '@tabler/icons-react'
+import { Box, CardSection, Group, SimpleGrid, Title } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
@@ -21,49 +13,30 @@ import TeamCard from './TeamCard'
 
 declare const __VERSION__: string
 export default function PageHome() {
-  const theme = useTheme()
-  const lg = useMediaQuery(theme.breakpoints.up('lg'))
-  if (lg)
-    return (
-      <Box sx={{ my: 1 }}>
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            lg={7}
-            xl={8}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
-            <IntroCard />
-            <Roadmap />
-            <ZCard>
-              <PatchNotesCard />
-            </ZCard>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            lg={5}
-            xl={4}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
-            <QuickLinksCard />
-            <TeamCard />
-          </Grid>
-        </Grid>
-      </Box>
-    )
-  // separate layout for vertical
-  else
-    return (
-      <Box my={1} display="flex" flexDirection="column" gap={1}>
-        <IntroCard />
-        <QuickLinksCard />
-        <TeamCard />
-        <Roadmap />
-        <PatchNotesCard />
-      </Box>
-    )
+  return (
+    <Box style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <SimpleGrid cols={{ base: 1, lg: 3 }} spacing={2}>
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            gridColumn: 'span 2',
+          }}
+        >
+          <IntroCard />
+          <Roadmap />
+          <ZCard>
+            <PatchNotesCard />
+          </ZCard>
+        </Box>
+        <Box style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <QuickLinksCard />
+          <TeamCard />
+        </Box>
+      </SimpleGrid>
+    </Box>
+  )
 }
 
 function PatchNotesCard() {
@@ -85,22 +58,17 @@ function PatchNotesCard() {
 
   return (
     <CardThemed>
-      <CardHeader
-        title={
-          <Typography variant="h5">
-            {t('quickLinksCard.buttons.patchNotes.title')}
-          </Typography>
-        }
-        avatar={<DescriptionIcon fontSize="large" />}
-        sx={{ padding: '16px 16px 0 16px' }}
-      />
-      <CardContent>
+      <Group p="md" style={{ paddingBottom: 0 }}>
+        <IconFileDescription />
+        <Title order={5}>{t('quickLinksCard.buttons.patchNotes.title')}</Title>
+      </Group>
+      <CardSection>
         {isLoaded ? (
           <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />
         ) : (
           'Loading...'
         )}
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }

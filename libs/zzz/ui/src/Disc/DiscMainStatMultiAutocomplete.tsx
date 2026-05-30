@@ -4,7 +4,7 @@ import { getUnitStr } from '@genshin-optimizer/common/util'
 import type { DiscMainStatKey, StatKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscMainStatKeys } from '@genshin-optimizer/zzz/consts'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Chip } from '@mui/material'
+import { Badge } from '@mantine/core'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -38,7 +38,7 @@ export function DiscMainStatMultiAutocomplete({
     [totals]
   )
   const toExItemLabel = useCallback(
-    (key: DiscMainStatKey) => <Chip size="small" label={totals[key]} />,
+    (key: DiscMainStatKey) => <Badge size="sm">{totals[key]}</Badge>,
     [totals]
   )
   return (

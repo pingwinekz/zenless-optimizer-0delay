@@ -13,13 +13,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import {
-  Box,
-  CardActionArea,
-  CardContent,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, CardSection, Group, Stack, Text } from '@mantine/core'
 import seasons from './daSeasons_gen.json'
 
 const BOSS_CDN = 'https://static.nanoka.cc/assets/zzz'
@@ -168,64 +162,68 @@ export function DeadlyAssaultBuffs() {
 
   return (
     <CardThemed bgt="light">
-      <CardContent>
-        <Stack spacing={1.5}>
-          <Typography variant="subtitle2">Boss</Typography>
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+      <CardSection>
+        <Stack gap={1.5}>
+          <Text size="sm" fw={700}>
+            Boss
+          </Text>
+          <Group gap={1}>
             {zones.map((zone) => (
               <CardThemed
                 key={zone.name}
                 bgt="dark"
-                sx={{
+                style={{
                   flex: '1 1 160px',
                   outline: `2px solid ${
                     zone.name === selectedBossName
-                      ? 'var(--mui-palette-secondary-main)'
+                      ? 'var(--mantine-color-yellow-6)'
                       : 'transparent'
                   }`,
                 }}
               >
-                <CardActionArea onClick={() => selectBoss(zone)}>
-                  <Stack alignItems="center" sx={{ p: 1 }}>
+                <CardSection
+                  onClick={() => selectBoss(zone)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <Stack align="center" p={4}>
                     <Box
                       component="img"
                       src={`${BOSS_CDN}/Monster_${zone.monsterImage}.webp`}
                       alt={zone.monsterName ?? zone.name}
-                      sx={{ width: 96, height: 96, objectFit: 'contain' }}
+                      style={{ width: 96, height: 96, objectFit: 'contain' }}
                       onError={(e) => {
                         const el = e.target as HTMLImageElement
                         el.style.display = 'none'
                       }}
                     />
-                    <Typography variant="caption" textAlign="center">
+                    <Text size="xs" style={{ textAlign: 'center' }}>
                       {zone.name}
-                    </Typography>
+                    </Text>
                   </Stack>
-                </CardActionArea>
+                </CardSection>
               </CardThemed>
             ))}
-          </Stack>
-          <Typography variant="subtitle2">Buff</Typography>
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          </Group>
+          <Text size="sm" fw={700}>
+            Buff
+          </Text>
+          <Group gap={1}>
             {buffs.map((buff) => {
               const hasConfig = !!buffConfigs[buff.title]
               return (
                 <CardThemed
                   key={buff.id}
                   bgt="dark"
-                  sx={{ flex: '1 1 200px', opacity: hasConfig ? 1 : 0.5 }}
+                  style={{ flex: '1 1 200px', opacity: hasConfig ? 1 : 0.5 }}
                 >
-                  <CardActionArea
-                    onClick={() => applyBuff(buff.title)}
-                    disabled={!hasConfig}
+                  <CardSection
+                    onClick={() => hasConfig && applyBuff(buff.title)}
+                    style={{ cursor: hasConfig ? 'pointer' : 'default' }}
                   >
-                    <Stack sx={{ p: 1 }}>
-                      <Typography variant="subtitle1" fontWeight="bold">
-                        {buff.title}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
+                    <Stack p={4}>
+                      <Text fw={700}>{buff.title}</Text>
+                      <Text
+                        size="xs"
                         dangerouslySetInnerHTML={{
                           __html: buff.desc
                             .replace(/\n/g, ' ')
@@ -238,22 +236,18 @@ export function DeadlyAssaultBuffs() {
                         }}
                       />
                       {!hasConfig && (
-                        <Typography
-                          variant="caption"
-                          color="warning.main"
-                          sx={{ mt: 0.5 }}
-                        >
+                        <Text size="xs" style={{ marginTop: 4 }}>
                           No stat mapping configured
-                        </Typography>
+                        </Text>
                       )}
                     </Stack>
-                  </CardActionArea>
+                  </CardSection>
                 </CardThemed>
               )
             })}
-          </Stack>
+          </Group>
         </Stack>
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }

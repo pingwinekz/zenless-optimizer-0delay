@@ -1,4 +1,5 @@
 export * from './Character'
+export * from './store'
 export * from './Components'
 export * from './Disc'
 export * from './LevelSelect'

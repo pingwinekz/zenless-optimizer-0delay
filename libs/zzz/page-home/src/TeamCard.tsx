@@ -1,14 +1,15 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import GroupsIcon from '@mui/icons-material/Groups'
+import { IconUsers } from '@tabler/icons-react'
 import {
+  Anchor,
   Box,
-  CardContent,
-  CardHeader,
-  Grid,
-  Link,
-  Typography,
-} from '@mui/material'
+  CardSection,
+  Group,
+  SimpleGrid,
+  Text,
+  Title,
+} from '@mantine/core'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import failchon from './teamIcons/failchon.png'
@@ -58,91 +59,70 @@ export default function TeamCard() {
   const { t } = useTranslation(['page_home', 'ui'])
   return (
     <ZCard>
-      <CardHeader
-        title={<Typography variant="h5">{t('teamCard.title')}</Typography>}
-        avatar={<GroupsIcon fontSize="large" />}
-      />
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Grid container spacing={1}>
+      <CardSection>
+        <Group>
+          <IconUsers />
+          <Title order={5}>{t('teamCard.title')}</Title>
+        </Group>
+      </CardSection>
+      <CardSection style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing={1}>
           {team.map(({ name, img, title, subtitle, url = '' }) => (
-            <Grid item key={name} xs={6} md={4}>
-              <CardThemed bgt="light" sx={{ height: '100%' }}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    src={img}
-                    sx={{ width: '100%', height: 'auto', borderRadius: '50%' }}
-                  />
-                  <Box display="flex" flexDirection="column">
-                    {url ? (
-                      <Typography
-                        variant="h6"
-                        sx={{ textAlign: 'center' }}
-                        color="inherit"
-                        component={Link}
-                        href={url}
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <strong>{name}</strong>
-                      </Typography>
-                    ) : (
-                      <Typography variant="h6" sx={{ textAlign: 'center' }}>
-                        <strong>{name}</strong>
-                      </Typography>
-                    )}
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ textAlign: 'center' }}
-                    >
-                      {title(t)}
-                    </Typography>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        textAlign: 'center',
-                      }}
-                      color="secondary.light"
-                    >
-                      {subtitle}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </CardThemed>
-            </Grid>
+            <CardThemed key={name} bgt="light" style={{ height: '100%' }}>
+              <CardSection>
+                <Box
+                  component="img"
+                  src={img}
+                  style={{ width: '100%', height: 'auto', borderRadius: '50%' }}
+                />
+                <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                  {url ? (
+                    <Anchor href={url} target="_blank" rel="noopener">
+                      <strong>{name}</strong>
+                    </Anchor>
+                  ) : (
+                    <Text style={{ textAlign: 'center' }}>
+                      <strong>{name}</strong>
+                    </Text>
+                  )}
+                  <Text style={{ textAlign: 'center' }}>{title(t)}</Text>
+                  <Text style={{ textAlign: 'center' }}>{subtitle}</Text>
+                </Box>
+              </CardSection>
+            </CardThemed>
           ))}
-        </Grid>
+        </SimpleGrid>
         <CardThemed bgt="light">
-          <CardContent>
-            <Typography>
+          <CardSection>
+            <Text>
               Thanks to{' '}
-              <Link
+              <Anchor
                 href="https://zzz.hakush.in/"
                 target="_blank"
                 rel="noreferrer"
               >
                 hakushin.in
-              </Link>{' '}
+              </Anchor>{' '}
               for providing the API data.
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               Thanks to{' '}
-              <Link
+              <Anchor
                 href="https://enka.network/?zzz"
                 target="_blank"
                 rel="noreferrer"
               >
                 enka.network
-              </Link>{' '}
+              </Anchor>{' '}
               for supplying the SVGs for stats.
-            </Typography>
-            <Typography>
+            </Text>
+            <Text>
               A huge thank you to our community for using Zenless Optimizer and
               supporting the project!
-            </Typography>
-          </CardContent>
+            </Text>
+          </CardSection>
         </CardThemed>
-      </CardContent>
+      </CardSection>
     </ZCard>
   )
 }

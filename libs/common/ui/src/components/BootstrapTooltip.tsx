@@ -1,16 +1,19 @@
-import type { TooltipProps } from '@mui/material'
-import { Tooltip, styled, tooltipClasses } from '@mui/material'
+import type { TooltipProps } from '@mantine/core'
+import { Tooltip } from '@mantine/core'
 
-export const BootstrapTooltip = styled(
-  ({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
+export function BootstrapTooltip({ children, ...props }: TooltipProps) {
+  return (
+    <Tooltip
+      {...props}
+      styles={{
+        tooltip: {
+          backgroundColor: 'var(--mantine-color-dark-9)',
+          maxWidth: 500,
+        },
+        arrow: { backgroundColor: 'var(--mantine-color-dark-9)' },
+      }}
+    >
+      {children}
+    </Tooltip>
   )
-)(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black,
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
-    maxWidth: 500,
-  },
-}))
+}

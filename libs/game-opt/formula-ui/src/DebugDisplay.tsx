@@ -5,21 +5,16 @@ import {
 } from '@genshin-optimizer/common/ui'
 import { prettify } from '@genshin-optimizer/common/util'
 import type { Read } from '@genshin-optimizer/game-opt/engine'
-import CloseIcon from '@mui/icons-material/Close'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { IconChevronDown, IconX } from '@tabler/icons-react'
 import {
   Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  CardContent,
-  CardHeader,
+  ActionIcon,
   Divider,
-  IconButton,
-  Typography,
-} from '@mui/material'
-import { Box, Stack } from '@mui/system'
-import type { SyntheticEvent } from 'react'
-import { useContext, useState } from 'react'
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
+import { useContext } from 'react'
 import { CalcContext, DebugReadContext, TagContext } from './context'
 
 export function DebugListingsDisplay({
@@ -33,98 +28,82 @@ export function DebugListingsDisplay({
   const calc = useContext(CalcContext)?.withTag(tag)
   const debugCalc = calc?.toDebug()
 
-  const [expanded, setExpanded] = useState<string | false>(false)
-  const handleChange =
-    (panel: string) => (_event: SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false)
-    }
-
   return (
     <CardThemed bgt="dark">
-      <CardContent>
-        <Accordion
-          expanded={expanded === 'formulas'}
-          onChange={handleChange('formulas')}
-          slotProps={{ transition: { unmountOnExit: true } }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            All target listings
-          </AccordionSummary>
-          <AccordionDetails>
+      <Accordion chevron={<IconChevronDown size={20} />}>
+        <Accordion.Item value="formulas">
+          <Accordion.Control>All target listings</Accordion.Control>
+          <Accordion.Panel>
             <Stack>
               {calc &&
                 debugCalc &&
-                expanded === 'formulas' &&
                 calc.listFormulas(formulasRead).map((read, index) => {
                   const computed = calc.compute(read)
                   const debugMeta = debugCalc.compute(read).meta
                   const name = read.tag.name || read.tag.q
                   return (
-                    <Box key={`${name}${index}`}>
-                      <Typography>
+                    <div key={`${name}${index}`}>
+                      <Text>
                         {name}: {computed.val}
-                      </Typography>
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                          debug for {name}
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          conds:
-                          <CodeBlock text={prettify(computed.meta.conds)} />
-                          read:
-                          <CodeBlock text={prettify(read)} />
-                          formula:
-                          <CodeBlock text={prettify(debugMeta)} />
-                        </AccordionDetails>
+                      </Text>
+                      <Accordion chevron={<IconChevronDown size={16} />}>
+                        <Accordion.Item value="debug">
+                          <Accordion.Control>
+                            debug for {name}
+                          </Accordion.Control>
+                          <Accordion.Panel>
+                            conds:
+                            <CodeBlock text={prettify(computed.meta.conds)} />
+                            read:
+                            <CodeBlock text={prettify(read)} />
+                            formula:
+                            <CodeBlock text={prettify(debugMeta)} />
+                          </Accordion.Panel>
+                        </Accordion.Item>
                       </Accordion>
-                    </Box>
+                    </div>
                   )
                 })}
             </Stack>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === 'buffs'}
-          onChange={handleChange('buffs')}
-          slotProps={{ transition: { unmountOnExit: true } }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            All target buffs
-          </AccordionSummary>
-          <AccordionDetails>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="buffs">
+          <Accordion.Control>All target buffs</Accordion.Control>
+          <Accordion.Panel>
             <Stack>
               {calc &&
                 debugCalc &&
-                expanded === 'buffs' &&
                 calc.listFormulas(buffsRead).map((read, index) => {
                   const computed = calc.compute(read)
                   const debugMeta = debugCalc.compute(read).meta
                   const name = read.tag.name || read.tag.q
                   return (
-                    <Box key={`${name}${index}`}>
-                      <Typography>
+                    <div key={`${name}${index}`}>
+                      <Text>
                         {name}: {computed.val}
-                      </Typography>
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                          debug for {name}
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          conds:
-                          <CodeBlock text={prettify(computed.meta.conds)} />
-                          read:
-                          <CodeBlock text={prettify(read)} />
-                          formula:
-                          <CodeBlock text={prettify(debugMeta)} />
-                        </AccordionDetails>
+                      </Text>
+                      <Accordion chevron={<IconChevronDown size={16} />}>
+                        <Accordion.Item value="debug">
+                          <Accordion.Control>
+                            debug for {name}
+                          </Accordion.Control>
+                          <Accordion.Panel>
+                            conds:
+                            <CodeBlock text={prettify(computed.meta.conds)} />
+                            read:
+                            <CodeBlock text={prettify(read)} />
+                            formula:
+                            <CodeBlock text={prettify(debugMeta)} />
+                          </Accordion.Panel>
+                        </Accordion.Item>
                       </Accordion>
-                    </Box>
+                    </div>
                   )
                 })}
             </Stack>
-          </AccordionDetails>
-        </Accordion>
-      </CardContent>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
     </CardThemed>
   )
 }
@@ -141,40 +120,43 @@ export function DebugReadModal() {
   const jsonStr = meta && prettify(meta)
 
   return (
-    <ModalWrapper open={!!read} onClose={() => setRead(undefined)}>
+    <ModalWrapper opened={!!read} onClose={() => setRead(undefined)}>
       <CardThemed bgt="dark">
-        <CardHeader
-          title={`Debug formula for ${name}`}
-          action={
-            <IconButton onClick={() => setRead(undefined)}>
-              <CloseIcon />
-            </IconButton>
-          }
-        />
-        <CardContent>
-          <CardThemed bgt="normal">
-            <CardContent>
-              <Stack gap={1}>
-                Computed value: {computed?.val}
-                <Divider />
-                <Typography variant="h6">Read</Typography>
-                <CodeBlock text={prettify(read)} />
-                <Divider />
-                <Typography variant="h6">Calculator Tag</Typography>
-                <CodeBlock text={JSON.stringify(calculator?.cache.tag)} />
-                <Divider />
-                <Typography variant="h6">Tag Context</Typography>
-                <CodeBlock text={JSON.stringify(tag)} />
-                <Divider />
-                <Typography variant="h6">Conditionals</Typography>
-                <CodeBlock text={prettify(computed?.meta.conds)} />
-                <Divider />
-                <Typography variant="h6">Formula</Typography>
-                <CodeBlock text={jsonStr || ''} />
-              </Stack>
-            </CardContent>
-          </CardThemed>
-        </CardContent>
+        <CardThemed
+          bgt="normal"
+          style={{ padding: 'var(--mantine-spacing-md)' }}
+        >
+          <Stack gap={1}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text fw={500}>Debug formula for {name}</Text>
+              <ActionIcon onClick={() => setRead(undefined)} variant="subtle">
+                <IconX size={18} />
+              </ActionIcon>
+            </div>
+            Computed value: {computed?.val}
+            <Divider />
+            <Title order={6}>Read</Title>
+            <CodeBlock text={prettify(read)} />
+            <Divider />
+            <Title order={6}>Calculator Tag</Title>
+            <CodeBlock text={JSON.stringify(calculator?.cache.tag)} />
+            <Divider />
+            <Title order={6}>Tag Context</Title>
+            <CodeBlock text={JSON.stringify(tag)} />
+            <Divider />
+            <Title order={6}>Conditionals</Title>
+            <CodeBlock text={prettify(computed?.meta.conds)} />
+            <Divider />
+            <Title order={6}>Formula</Title>
+            <CodeBlock text={jsonStr || ''} />
+          </Stack>
+        </CardThemed>
       </CardThemed>
     </ModalWrapper>
   )

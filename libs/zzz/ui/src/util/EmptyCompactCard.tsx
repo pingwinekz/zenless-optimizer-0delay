@@ -1,5 +1,5 @@
 import { ConditionalWrapper } from '@genshin-optimizer/common/ui'
-import { Box, CardActionArea, Typography } from '@mui/material'
+import { Box, Text } from '@mantine/core'
 import type { ReactNode } from 'react'
 import { useCallback } from 'react'
 import { ZCard } from '../Components'
@@ -13,9 +13,9 @@ export function EmptyCompactCard({
 }) {
   const wrapperFunc = useCallback(
     (children: ReactNode) => (
-      <CardActionArea sx={{ borderRadius: 0 }} onClick={onClick}>
+      <Box style={{ cursor: 'pointer' }} onClick={onClick}>
         {children}
-      </CardActionArea>
+      </Box>
     ),
     [onClick]
   )
@@ -32,24 +32,23 @@ export function EmptyCompactCard({
         falseWrapper={falseWrapperFunc}
       >
         <Box
-          sx={{
+          style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             height: `${COMPACT_CARD_HEIGHT_PX}px`,
           }}
         >
-          <Typography
-            variant="h5"
-            sx={(theme) => ({
+          <Text
+            style={{
               textTransform: 'uppercase',
-              color: `${theme.palette.contentZzz.main}`,
-              fontWeight: '900',
+              color: 'var(--layer-2)',
+              fontWeight: 900,
               textAlign: 'center',
-            })}
+            }}
           >
             {placeholder}
-          </Typography>
+          </Text>
         </Box>
       </ConditionalWrapper>
     </ZCard>

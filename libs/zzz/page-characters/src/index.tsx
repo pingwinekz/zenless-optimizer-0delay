@@ -2,82 +2,85 @@ import {
   useDataEntryBase,
   useDataManagerKeys,
 } from '@genshin-optimizer/common/database-ui'
-import { useMediaQueryUp } from '@genshin-optimizer/common/react-util'
-import {
-  CardThemed,
-  ShowingAndSortOptionSelect,
-  useInfScroll,
-} from '@genshin-optimizer/common/ui'
-import {
-  catTotal,
-  filterFunction,
-  sortFunction,
-} from '@genshin-optimizer/common/util'
-import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
+
+import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import {
-  allAttributeKeys,
-  allCharacterKeys,
-  allCharacterRarityKeys,
-  allSpecialityKeys,
-} from '@genshin-optimizer/zzz/consts'
-import {
-  useCharacter,
-  useDatabaseContext,
-  useTeam,
-} from '@genshin-optimizer/zzz/db-ui'
-import type { Tag } from '@genshin-optimizer/zzz/formula'
-import {
-  CharCalcProvider,
-  CharacterEditor,
-} from '@genshin-optimizer/zzz/formula-ui'
-import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import type { CharacterSortKey } from '@genshin-optimizer/zzz/ui'
-import {
-  CharSpecialtyToggle,
-  CharacterCard,
-  CharacterRarityToggle,
+  CharacterMenu,
+  CharacterRow,
   CharacterSingleSelectionModal,
-  ElementToggle,
+  DragOverlayRow,
   StatHighlightContext,
   characterFilterConfigs,
   characterSortConfigs,
   characterSortMap,
+  precomputedCssVars,
+  useCharacterTabStore,
 } from '@genshin-optimizer/zzz/ui'
-import AddIcon from '@mui/icons-material/Add'
+import { CharacterEditModal } from './CharacterEditModal'
+import { CharacterPreview } from './CharacterPreview'
+export { ShowcaseDiscPanel, ShowcaseDiscCard } from './card/ShowcaseDiscPanel'
+import { FilterBar } from './FilterBar'
+import { cardTotalW, defaultGap, parentH } from './constantsUi'
+import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
+import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
+import { oklchCharacterListColor } from './color/colorUtilsOklch'
 import {
-  Box,
-  Button,
-  CardContent,
-  Grid,
-  Skeleton,
-  TextField,
-} from '@mui/material'
-import type { ChangeEvent } from 'react'
+  closestCenter,
+  defaultDropAnimationSideEffects,
+  DndContext,
+  type DragEndEvent,
+  DragOverlay,
+  type DragStartEvent,
+  type DropAnimation,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from '@dnd-kit/modifiers'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { Box, Flex, SegmentedControl } from '@mantine/core'
+import { useMergedRef } from '@mantine/hooks'
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import {
   Suspense,
+  memo,
+  startTransition,
   useCallback,
   useDeferredValue,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useMatch, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-const columns = { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
-const numToShowMap = { xs: 1, sm: 2, md: 2, lg: 3, xl: 12 }
-const sortKeys = Object.keys(characterSortMap)
+const dropAnimationDuration = 200
+
+const dropAnimationConfig: DropAnimation = {
+  duration: dropAnimationDuration,
+  easing: 'ease',
+  sideEffects: defaultDropAnimationSideEffects({
+    styles: { active: { opacity: '0' } },
+  }),
+}
 
 export default function PageCharacter() {
-  const { t } = useTranslation('page_characters')
   const { database } = useDatabaseContext()
   const navigate = useNavigate()
-  const {
-    params: { characterKey: characterKeyRaw },
-  } = useMatch({ path: '/characters/:characterKey', end: false }) ?? {
-    params: {},
-  }
   const displayCharacter = useDataEntryBase(database.displayCharacter)
+  const focusCharacter = useCharacterTabStore((s) => s.focusCharacter)
+  const setFocusCharacter = useCharacterTabStore((s) => s.setFocusCharacter)
   const [searchTerm, setSearchTerm] = useState('')
   const deferredSearchTerm = useDeferredValue(searchTerm)
 
@@ -87,25 +90,8 @@ export default function PageCharacter() {
     [statHighlight, setStatHighlight]
   )
 
-  const characterKey = useMemo(() => {
-    if (!characterKeyRaw) return null
-    if (!allCharacterKeys.includes(characterKeyRaw as CharacterKey)) {
-      navigate('/characters')
-      return null
-    }
-    return characterKeyRaw as CharacterKey
-  }, [characterKeyRaw, navigate])
-  const character = useCharacter(characterKey ?? undefined)
-  const team =
-    useTeam(characterKey ?? undefined) ??
-    (characterKey && database.teams.getOrCreate(characterKey))
-  const tag = useMemo<Tag>(
-    () => ({
-      src: characterKey,
-      dst: characterKey,
-      preset: `preset0`,
-    }),
-    [characterKey]
+  const [editCharacterKey, setEditCharacterKey] = useState<CharacterKey | null>(
+    null
   )
 
   const [newCharacter, setnewCharacter] = useState(false)
@@ -117,12 +103,27 @@ export default function PageCharacter() {
       if (!character) {
         database.chars.getOrCreate(characterKey)
       }
-      navigate(`/characters/${characterKey}`)
+      setEditCharacterKey(characterKey)
     },
-    [database.chars, navigate]
+    [database.chars]
   )
+
+  const deleteCharacter = useCallback(
+    (charKey: CharacterKey) => {
+      if (!window.confirm(`Remove ${charKey}?`)) return
+      database.chars.remove(charKey)
+      if (editCharacterKey === charKey) {
+        setEditCharacterKey(null)
+      }
+      if (focusCharacter === charKey) {
+        setFocusCharacter(null)
+      }
+    },
+    [database.chars, editCharacterKey, focusCharacter, setFocusCharacter]
+  )
+
   const charKeys = useDataManagerKeys(database.chars)
-  const totalCharNum = charKeys.length
+
   const filteredCharKeys = useMemo(() => {
     const { attribute, specialtyType, rarity, sortType, ascending } =
       displayCharacter
@@ -138,214 +139,384 @@ export default function PageCharacter() {
           characterSortMap[sortType] ?? [],
           ascending,
           characterSortConfigs(database),
-          ['new']
+          ['new', 'custom']
         )
       )
   }, [displayCharacter, charKeys, deferredSearchTerm, database])
 
-  const { specialtyType, attribute, rarity, sortType, ascending } =
-    displayCharacter
+  // Sync visual order to customSortOrder so the optimizer priority matches
+  // what the user sees on the characters page
+  useEffect(() => {
+    const current = displayCharacter.customSortOrder
+    if (
+      current.length !== filteredCharKeys.length ||
+      current.some((ck, i) => ck !== filteredCharKeys[i])
+    ) {
+      database.displayCharacter.set({ customSortOrder: filteredCharKeys })
+    }
+  }, [filteredCharKeys, displayCharacter, database.displayCharacter])
 
-  const charSpecialtyTotals = useMemo(
-    () =>
-      catTotal(allSpecialityKeys, (sk) =>
-        database.chars.entries.forEach(([id, char]) => {
-          const specialty = getCharStat(char.key).specialty
-          sk[specialty].total++
-          if (database.chars.keys.includes(id)) sk[specialty].current++
-        })
-      ),
-    [database]
+  const { specialtyType, attribute, rarity } = displayCharacter
+
+  // DnD state
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [activeId, setActiveId] = useState<string | null>(null)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 3 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 5 },
+    })
   )
 
-  const attributeTotals = useMemo(
-    () =>
-      catTotal(allAttributeKeys, (ct) =>
-        Object.entries(database.chars.data).forEach(([ck]) => {
-          const attribute = getCharStat(ck).attribute
-          ct[attribute].total++
-          if (database.chars.keys.includes(ck)) ct[attribute].current++
-        })
-      ),
-    [database]
-  )
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveId(event.active.id as string)
+    gridRef.current?.setAttribute('data-dragging-active', '')
+  }, [])
 
-  const rarityTotals = useMemo(
-    () =>
-      catTotal(allCharacterRarityKeys, (ct) =>
-        Object.entries(database.chars.data).forEach(([ck]) => {
-          const rarity = getCharStat(ck).rarity
-          ct[rarity].total++
-          if (database.chars.keys.includes(ck)) ct[rarity].current++
-        })
-      ),
-    [database]
-  )
-  const brPt = useMediaQueryUp()
-  const { numShow, setTriggerElement } = useInfScroll(
-    numToShowMap[brPt],
-    filteredCharKeys.length
-  )
-  const charKeysToShow = useMemo(
-    () => filteredCharKeys.slice(0, numShow),
-    [filteredCharKeys, numShow]
-  )
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      gridRef.current?.removeAttribute('data-dragging-active')
 
-  const totalShowing =
-    filteredCharKeys.length !== totalCharNum
-      ? `${filteredCharKeys.length}/${totalCharNum}`
-      : `${totalCharNum}`
+      // Suppress row transitions for one paint to prevent "float from top" glitch
+      const container = gridRef.current
+      if (container) {
+        container.setAttribute('data-suppress-transition', 'true')
+        requestAnimationFrame(() =>
+          container.removeAttribute('data-suppress-transition')
+        )
+      }
 
-  const showingTextProps = {
-    numShowing: charKeysToShow.length,
-    total: totalShowing,
-    t: t,
-    namespace: 'page_character',
-  }
+      setTimeout(() => setActiveId(null), dropAnimationDuration)
 
-  const sortByButtonProps = {
-    sortKeys: [...sortKeys],
-    value: sortType,
-    onChange: (sortType: CharacterSortKey) => {
-      if (sortType !== 'new')
-        database.displayCharacter.set({
-          sortType: sortType,
-        })
+      const { active, over } = event
+      if (!over || active.id === over.id) return
+
+      const existing = displayCharacter.customSortOrder
+      const currentOrder =
+        existing && existing.length > 0 ? existing : [...charKeys]
+
+      const oldIndex = currentOrder.indexOf(active.id as string)
+      const newIndex = currentOrder.indexOf(over.id as string)
+      if (oldIndex === -1 || newIndex === -1) return
+
+      const reordered = [...currentOrder]
+      const [moved] = reordered.splice(oldIndex, 1)
+      reordered.splice(newIndex, 0, moved)
+      database.displayCharacter.set({
+        sortType: 'custom',
+        customSortOrder: reordered,
+      })
     },
-    ascending: ascending,
-    onChangeAsc: (ascending: boolean) =>
-      database.displayCharacter.set({ ascending }),
-  }
+    [charKeys, displayCharacter.customSortOrder, database.displayCharacter]
+  )
+
+  const handleDragCancel = useCallback(() => {
+    gridRef.current?.removeAttribute('data-dragging-active')
+    setTimeout(() => setActiveId(null), dropAnimationDuration)
+  }, [])
+
+  const itemIds = useMemo(
+    () => filteredCharKeys as string[],
+    [filteredCharKeys]
+  )
+
+  const density = useCharacterTabStore((s) => s.density)
+  const setDensity = useCharacterTabStore((s) => s.setDensity)
+
+  const rowCssVars = useMemo(() => precomputedCssVars[density], [density])
+
+  // Sync focus from optimizer's optCharKey on mount (HSR tab activation pattern)
+  useEffect(() => {
+    const optCharKey = database.dbMeta.get().optCharKey
+    if (optCharKey) {
+      setFocusCharacter(optCharKey)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Local focus for instant click feedback
+  const [localFocus, setLocalFocus] = useState<CharacterKey | null>(null)
+  useEffect(() => {
+    setLocalFocus(null)
+  }, [focusCharacter])
+  const displayFocus = localFocus ?? focusCharacter
+
+  const rankMap = useMemo(
+    () => new Map(filteredCharKeys.map((ck, i) => [ck, i])),
+    [filteredCharKeys]
+  )
+
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
-      {characterKey && character && team && (
-        <TagContext.Provider value={tag}>
-          <StatHighlightContext.Provider value={statHLContextObj}>
-            <CharCalcProvider
-              character={character}
-              team={team}
-              wengineId={character.equippedWengine}
-              discIds={character.equippedDiscs}
-            >
-              <CharacterEditor
-                characterKey={characterKey}
-                onClose={() => navigate('/characters')}
-              />
-            </CharCalcProvider>
-          </StatHighlightContext.Provider>
-        </TagContext.Provider>
-      )}
+    <Box style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <StatHighlightContext.Provider value={statHLContextObj}>
+        <CharacterEditModal
+          characterKey={editCharacterKey}
+          onClose={() => setEditCharacterKey(null)}
+        />
+      </StatHighlightContext.Provider>
       <Suspense fallback={false}>
         <CharacterSingleSelectionModal
           show={newCharacter}
           onHide={() => setnewCharacter(false)}
-          onSelect={editCharacter}
+          onSelect={(ck) => {
+            editCharacter(ck)
+            setnewCharacter(false)
+          }}
           newFirst={true}
         />
       </Suspense>
-      <CardThemed>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Grid container spacing={1}>
-            <Grid item>
-              <CharSpecialtyToggle
-                sx={{ height: '100%' }}
-                onChange={(specialtyType) =>
-                  database.displayCharacter.set({ specialtyType })
-                }
-                value={specialtyType}
-                totals={charSpecialtyTotals}
-                size="small"
-              ></CharSpecialtyToggle>
-            </Grid>
-            <Grid item>
-              <ElementToggle
-                sx={{ height: '100%' }}
-                onChange={(attribute) =>
-                  database.displayCharacter.set({ attribute })
-                }
-                value={attribute}
-                totals={attributeTotals}
-                size="small"
-              />
-            </Grid>
-            <Grid item>
-              <CharacterRarityToggle
-                sx={{ height: '100%' }}
-                onChange={(rarity) => database.displayCharacter.set({ rarity })}
-                value={rarity}
-                totals={rarityTotals}
-                size="small"
-              />
-            </Grid>
-            <Grid item flexGrow={1} />
-            <Grid item>
-              <TextField
-                autoFocus
-                value={searchTerm}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                  setSearchTerm(e.target.value)
-                }
-                label={t('characterName')}
-                size="small"
-                sx={{ height: '100%' }}
-                InputProps={{
-                  sx: { height: '100%' },
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-          >
-            <ShowingAndSortOptionSelect
-              showingTextProps={showingTextProps}
-              sortByButtonProps={sortByButtonProps}
-            />
-          </Box>
-        </CardContent>
-      </CardThemed>
-      <Button
-        fullWidth
-        onClick={() => setnewCharacter(true)}
-        color="info"
-        startIcon={<AddIcon />}
-      >
-        {t('addNew')}
-      </Button>
-      <Suspense
-        fallback={
-          <Skeleton
-            variant="rectangular"
-            sx={{ width: '100%', height: '100%', minHeight: 5000 }}
-          />
-        }
-      >
-        <Grid container spacing={2} columns={columns}>
-          {charKeysToShow.map((charKey) => (
-            <Grid item key={charKey} xs={1}>
-              <CharacterCard
-                characterKey={charKey}
-                onClick={() => navigate(`${charKey}`)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Suspense>
-      {filteredCharKeys.length !== charKeysToShow.length && (
-        <Skeleton
-          ref={(node) => {
-            if (!node) return
-            setTriggerElement(node)
+
+      {/* Root flex: fixed-width row matching HSR CharacterTab */}
+      <Flex style={{ width: 1593, height: '100%' }} gap={defaultGap}>
+        {/* Left: CharacterMenu + Grid + Density */}
+        <Box
+          miw={300}
+          style={{
+            flex: '0 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            width: 300,
           }}
-          sx={{ borderRadius: 1 }}
-          variant="rectangular"
-          width="100%"
-          height={100}
-        />
-      )}
+        >
+          {/* Character Menu */}
+          <CharacterMenu
+            hasFocus={!!focusCharacter}
+            onAdd={() => setnewCharacter(true)}
+            onEdit={() => {
+              if (focusCharacter) editCharacter(focusCharacter)
+            }}
+            onDelete={() => {
+              if (focusCharacter) deleteCharacter(focusCharacter)
+            }}
+            onOptimize={() => {
+              if (focusCharacter) {
+                database.dbMeta.set({ optCharKey: focusCharacter })
+                navigate(`/optimize?character=${focusCharacter}`)
+              }
+            }}
+          />
+
+          {/* Character Grid with DnD + OverlayScrollbars */}
+          <OverlayScrollbarsComponent
+            style={{
+              height: parentH,
+              border: '1px solid var(--layer-2)',
+              borderRadius: 'var(--mantine-radius-sm)',
+            }}
+            data-container-border="true"
+            options={{ scrollbars: { autoHide: 'move', autoHideDelay: 500 } }}
+            tabIndex={0}
+          >
+            <Box
+              ref={gridRef}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--cr-row-gap, 1px)',
+                width: '100%',
+                ...rowCssVars,
+              }}
+            >
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onDragCancel={handleDragCancel}
+              >
+                <SortableContext
+                  items={itemIds}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {filteredCharKeys.map((charKey) => (
+                    <SortableCharacterRow
+                      key={charKey}
+                      characterKey={charKey}
+                      isFocused={charKey === displayFocus}
+                      rank={rankMap.get(charKey) ?? 0}
+                      onClick={() => {
+                        setLocalFocus(charKey)
+                        startTransition(() => setFocusCharacter(charKey))
+                      }}
+                      onDoubleClick={() => {
+                        setFocusCharacter(charKey)
+                        database.dbMeta.set({ optCharKey: charKey })
+                        navigate(`/optimize?character=${charKey}`)
+                      }}
+                      onEdit={(ck) => editCharacter(ck)}
+                      onDelete={(ck) => deleteCharacter(ck)}
+                      isDragging={activeId === charKey}
+                    />
+                  ))}
+                </SortableContext>
+                <DragOverlay
+                  dropAnimation={dropAnimationConfig}
+                  modifiers={[restrictToVerticalAxis]}
+                >
+                  {activeId && (
+                    <DragOverlayRow
+                      characterKey={activeId as CharacterKey}
+                      rank={rankMap.get(activeId as CharacterKey) ?? 0}
+                    />
+                  )}
+                </DragOverlay>
+              </DndContext>
+            </Box>
+          </OverlayScrollbarsComponent>
+
+          {/* Density toggle */}
+          <SegmentedControl
+            data={[
+              { value: 'default', label: 'Default' },
+              { value: 'compact', label: 'Compact' },
+            ]}
+            value={density}
+            onChange={(v) => setDensity(v as 'default' | 'compact')}
+            fullWidth
+            size="xs"
+          />
+        </Box>
+
+        {/* Right: Filter toggles + Preview */}
+        <Box
+          style={{
+            width: cardTotalW,
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            position: 'relative',
+          }}
+        >
+          <FilterBar
+            specialtyType={specialtyType}
+            onSpecialtyChange={(v) =>
+              database.displayCharacter.set({ specialtyType: v })
+            }
+            attribute={attribute}
+            onAttributeChange={(v) =>
+              database.displayCharacter.set({ attribute: v })
+            }
+            rarity={rarity}
+            onRarityChange={(v) => database.displayCharacter.set({ rarity: v })}
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+          />
+
+          {/* CharacterPreview — always visible */}
+          <CharacterPreview
+            characterKey={focusCharacter}
+            onEdit={
+              focusCharacter ? () => editCharacter(focusCharacter) : undefined
+            }
+            onDelete={
+              focusCharacter ? () => deleteCharacter(focusCharacter) : undefined
+            }
+          />
+        </Box>
+      </Flex>
     </Box>
   )
 }
+
+const SortableCharacterRow = memo(function SortableCharacterRow({
+  characterKey,
+  isFocused,
+  rank,
+  onClick,
+  onDoubleClick,
+  onEdit,
+  onDelete,
+  isDragging,
+}: {
+  characterKey: CharacterKey
+  isFocused: boolean
+  rank: number
+  onClick: () => void
+  onDoubleClick?: () => void
+  onEdit?: (ck: CharacterKey) => void
+  onDelete?: (ck: CharacterKey) => void
+  isDragging: boolean
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: characterKey,
+      animateLayoutChanges: () => false,
+    })
+
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const mergedRef = useMergedRef(setNodeRef, scrollRef)
+
+  // Load-once via IntersectionObserver
+  const [loadImages, setLoadImages] = useState(false)
+
+  useEffect(() => {
+    if (isFocused) {
+      scrollRef.current?.scrollIntoView({ block: 'nearest' })
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry], obs) => {
+        if (entry.isIntersecting) {
+          setLoadImages(true)
+          obs.disconnect()
+        }
+      },
+      { rootMargin: '500px 0px', threshold: 0 }
+    )
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+    }
+  }, [characterKey])
+
+  const showcaseColor = useMemo(
+    () =>
+      oklchCharacterListColor(
+        getCharacterShowcaseColor(characterKey),
+        true,
+        DEFAULT_CONFIG
+      ),
+    [characterKey]
+  )
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition: transform ? transition : undefined,
+    opacity: isDragging ? 0.4 : undefined,
+  }
+
+  const handleClick = useCallback(() => onClick(), [onClick])
+  const handleDoubleClick = useCallback(
+    () => onDoubleClick?.(),
+    [onDoubleClick]
+  )
+  const handleEdit = useCallback((ck: CharacterKey) => onEdit?.(ck), [onEdit])
+  const handleDelete = useCallback(
+    (ck: CharacterKey) => onDelete?.(ck),
+    [onDelete]
+  )
+
+  return (
+    <Box ref={mergedRef} style={style} {...attributes} {...listeners}>
+      <CharacterRow
+        characterKey={characterKey}
+        isFocused={isFocused}
+        rank={rank}
+        loadImages={loadImages || isFocused}
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        showcaseColor={showcaseColor}
+      />
+    </Box>
+  )
+})

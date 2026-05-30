@@ -1,17 +1,16 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import { CardThemed, ModalWrapper } from '@genshin-optimizer/common/ui'
-import InfoIcon from '@mui/icons-material/Info'
+import { IconInfoCircle } from '@tabler/icons-react'
 import {
   Alert,
   Box,
   Button,
-  CardContent,
-  CardHeader,
   Divider,
+  Image,
   Skeleton,
   Stack,
-  Typography,
-} from '@mui/material'
+  Text,
+} from '@mantine/core'
 import { Suspense } from 'react'
 import card from './card-sc.png'
 import full from './full-sc.png'
@@ -19,58 +18,44 @@ export function ScanInfoModal() {
   const [show, onOpen, onClose] = useBoolState()
   return (
     <>
-      <Button color="info" onClick={onOpen}>
-        <InfoIcon />
+      <Button color="blue" onClick={onOpen} variant="default">
+        <IconInfoCircle size={18} />
       </Button>
       <ModalWrapper
-        open={show}
+        opened={show}
         onClose={onClose}
         containerProps={{ maxWidth: 'sm' }}
       >
         <CardThemed>
-          <CardHeader title="How to Scan using screenshots" />
+          <Box p="sm">
+            <Text fw={700}>How to Scan using screenshots</Text>
+          </Box>
           <Divider />
-          <CardContent>
-            <Suspense
-              fallback={
-                <Skeleton variant="rectangular" width="100%" height={1000} />
-              }
-            >
-              <Stack spacing={1}>
-                <Alert severity="info">
+          <Box p="sm">
+            <Suspense fallback={<Skeleton width="100%" height={1000} />}>
+              <Stack gap={8}>
+                <Alert color="blue">
                   The on-site scanner can only scan screenshots in ENGLISH.
                 </Alert>
-                <Typography>
+                <Text>
                   Take a full screenshot of your game, in the inventory view.
                   You can use <strong>Alt + Print Screen</strong> to take a
                   picture of the current window.
-                </Typography>
+                </Text>
                 <Box>
-                  <Box
-                    component="img"
-                    src={full}
-                    sx={{
-                      height: '300px',
-                    }}
-                  />
+                  <Image src={full} h={300} fit="contain" />
                 </Box>
-                <Typography>
+                <Text>
                   If the site is unable to detect from your screenshot, you can
                   provide a cropped image. You can use the{' '}
                   <strong>Windows Snippet tool (Windows + Shift + S)</strong>.
-                </Typography>
+                </Text>
                 <Box>
-                  <Box
-                    component="img"
-                    src={card}
-                    sx={{
-                      height: '400px',
-                    }}
-                  />
+                  <Image src={card} h={400} fit="contain" />
                 </Box>
               </Stack>
             </Suspense>
-          </CardContent>
+          </Box>
         </CardThemed>
       </ModalWrapper>
     </>

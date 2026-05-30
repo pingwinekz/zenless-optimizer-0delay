@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@mantine/core'
 import type { FunctionComponent } from 'react'
 import type { AdProps } from '../type'
 import { AdWrapper } from './AdWrapper'
@@ -18,11 +18,11 @@ export function AdBanner({
   if (!width) return null
 
   return (
-    <Box m={1}>
+    <Box style={{ margin: 8 }}>
       <AdWrapper
         fullWidth
         dataAdSlot={dataAdSlot}
-        sx={{
+        style={{
           height: 90,
           minWidth: 300,
           // 20 to compensate for the margin of the outer Box

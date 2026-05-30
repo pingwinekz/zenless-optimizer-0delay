@@ -1,6 +1,6 @@
 import { DropdownButton } from '@genshin-optimizer/common/ui'
 import { potentialLimits } from '@genshin-optimizer/zzz/consts'
-import { MenuItem } from '@mui/material'
+import { Menu } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 
 export function PotentialSelect({
@@ -22,14 +22,13 @@ export function PotentialSelect({
         const selected = potential === limit
 
         return (
-          <MenuItem
+          <Menu.Item
             key={`potential-${limit}`}
-            selected={selected}
             disabled={selected}
             onClick={() => setPotential(limit)}
           >
             {`${t('potential', { level: limit })}`}
-          </MenuItem>
+          </Menu.Item>
         )
       })}
     </DropdownButton>

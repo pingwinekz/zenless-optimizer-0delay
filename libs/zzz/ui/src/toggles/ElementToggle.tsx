@@ -4,8 +4,10 @@ import { handleMultiSelect } from '@genshin-optimizer/common/util'
 import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
 import { allAttributeKeys } from '@genshin-optimizer/zzz/consts'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Chip, ToggleButtonGroup, useMediaQuery, useTheme } from '@mui/material'
+import { Badge, Group } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import type { ReactNode } from 'react'
+
 type ElementToggleProps = Omit<
   SolidToggleButtonGroupProps,
   'onChange' | 'value'
@@ -21,30 +23,32 @@ export function ElementToggle({
   onChange,
   ...props
 }: ElementToggleProps) {
-  const theme = useTheme()
-  const sm = !useMediaQuery(theme.breakpoints.up('md'))
-  const xs = !useMediaQuery(theme.breakpoints.up('sm'))
+  const sm = !useMediaQuery('(min-width: 900px)')
+  const xs = !useMediaQuery('(min-width: 600px)')
   return (
-    <ToggleButtonGroup exclusive value={value} {...props}>
+    <Group {...(props as any)} gap="xs">
       {allAttributeKeys.map((atr) => (
         <SolidColoredToggleButton
           key={atr}
           value={atr}
-          sx={{
-            p: sm ? 1 : undefined,
+          selected={value.includes(atr)}
+          style={{
+            padding: sm ? 4 : undefined,
             minWidth: sm ? 0 : '6em',
-            display: 'flex',
           }}
-          selectedColor={'primary'}
           onClick={() => onChange(elementHandler(value, atr))}
         >
           <ElementIcon
             ele={atr}
             iconProps={{ fontSize: sm && !xs ? 'inherit' : undefined }}
           />
-          {!xs && <Chip sx={{ ml: 0.5 }} label={totals[atr]} size="small" />}
+          {!xs && (
+            <Badge ml={2} size="sm">
+              {totals[atr]}
+            </Badge>
+          )}
         </SolidColoredToggleButton>
       ))}
-    </ToggleButtonGroup>
+    </Group>
   )
 }

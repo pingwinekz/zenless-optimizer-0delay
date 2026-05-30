@@ -1,55 +1,35 @@
-import type { ButtonProps, InputProps } from '@mui/material'
-import { Button, InputBase, styled } from '@mui/material'
-import type { ChangeEvent, KeyboardEvent } from 'react'
+import type { ButtonProps } from '@mantine/core'
+import { Button, NumberInput } from '@mantine/core'
+import type { KeyboardEvent } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-export type CustomNumberInputProps = Omit<InputProps, 'onChange'> & {
+
+export type CustomNumberInputProps = {
   value?: number | undefined
   onChange: (newValue: number | undefined) => void
   disabled?: boolean
   float?: boolean
   allowEmpty?: boolean
   disableNegative?: boolean
+  min?: number
+  max?: number
+  color?: string
+  sx?: Record<string, any>
+  placeholder?: string
+  endAdornment?: string
+  inputProps?: Record<string, any>
 }
 
-export const StyledInputBase = styled(InputBase)(
-  ({ theme, color = 'primary' }) => ({
-    backgroundColor: theme.palette[color].main,
-    transition: 'all 0.5s ease',
-    '&:hover': {
-      backgroundColor: theme.palette[color].dark,
-    },
-    '&.Mui-focused': {
-      backgroundColor: theme.palette[color].dark,
-    },
-    '&.Mui-disabled': {
-      backgroundColor: theme.palette[color].dark,
-    },
-  })
-)
+const Wrapper = Button.withProps({
+  variant: 'filled',
+  color: 'primary',
+  style: { padding: 0, overflow: 'hidden' },
+})
 
-const Wrapper = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  padding: 0,
-  overflow: 'hidden',
-  div: {
-    width: '100%',
-    height: '100%',
-  },
-}))
-
-// wrap the Input with this when using the input in a buttongroup
 export function CustomNumberInputButtonGroupWrapper({
   children,
-  disableRipple,
-  disableFocusRipple,
-  disableTouchRipple,
   ...props
 }: ButtonProps) {
-  return (
-    <Wrapper disableRipple disableFocusRipple disableTouchRipple {...props}>
-      {children}
-    </Wrapper>
-  )
+  return <Wrapper {...props}>{children}</Wrapper>
 }
 
 export function CustomNumberInput({
@@ -59,20 +39,15 @@ export function CustomNumberInput({
   float = false,
   ...props
 }: CustomNumberInputProps) {
-  const { inputProps = {}, ...restProps } = props
-  const { min, max } = inputProps
+  const { min, max, sx, placeholder, endAdornment, inputProps, ...restProps } =
+    props as any
   const [display, setDisplay] = useState(value.toString())
-
-  const onInputChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setDisplay(e.target.value),
-    []
-  )
 
   const parseFunc = useCallback(
     (val: string) => (float ? parseFloat(val) : parseInt(val)),
     [float]
   )
+
   const onValidate = useCallback(() => {
     const change = (v: number) => {
       setDisplay(v.toString())
@@ -84,7 +59,7 @@ export function CustomNumberInput({
     return change(newNum)
   }, [min, max, parseFunc, onChange, display])
 
-  useEffect(() => setDisplay(value.toString()), [value, setDisplay]) // update value on value change
+  useEffect(() => setDisplay(value.toString()), [value, setDisplay])
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -93,15 +68,22 @@ export function CustomNumberInput({
   )
 
   return (
-    <StyledInputBase
-      value={display}
+    <NumberInput
+      value={Number(display) || 0}
       aria-label="custom-input"
-      type="number"
-      inputProps={{ step: float ? 0.1 : 1, ...inputProps }}
-      onChange={onInputChange}
-      onBlurCapture={onValidate}
+      step={float ? 0.1 : 1}
+      onChange={(val) => setDisplay(String(val))}
+      onBlur={onValidate}
       disabled={disabled}
-      onKeyDown={onKeyDown}
+      onKeyDown={onKeyDown as any}
+      min={min}
+      max={max}
+      placeholder={placeholder}
+      hideControls
+      style={{
+        textAlign: inputProps?.sx?.textAlign as any,
+        ...sx,
+      }}
       {...restProps}
     />
   )

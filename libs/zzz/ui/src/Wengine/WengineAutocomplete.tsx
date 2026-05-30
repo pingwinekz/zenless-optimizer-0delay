@@ -3,8 +3,7 @@ import { GeneralAutocomplete, ImgIcon } from '@genshin-optimizer/common/ui'
 import { wengineAsset } from '@genshin-optimizer/zzz/assets'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { allWengineKeys } from '@genshin-optimizer/zzz/consts'
-import type { AutocompleteProps } from '@mui/material'
-import { Skeleton } from '@mui/material'
+import { Skeleton } from '@mantine/core'
 import { Suspense, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,12 +15,7 @@ export function WengineAutocomplete({
   wkey: WengineKey | ''
   setWKey: (v: WengineKey | '') => void
 } & Omit<
-  AutocompleteProps<
-    GeneralAutocompleteOption<WengineKey | ''>,
-    false,
-    boolean,
-    false
-  >,
+  React.ComponentProps<typeof GeneralAutocomplete>,
   'options' | 'valueKey' | 'onChange' | 'toImg' | 'renderInput'
 >) {
   const { t } = useTranslation('wengineNames_gen')
@@ -30,7 +24,7 @@ export function WengineAutocomplete({
     () => [
       {
         key: '',
-        label: 'Select a Wengine', //t('inventory') // TODO: Translation
+        label: 'Select a Wengine',
       },
       ...allWengineKeys.map(
         (key): GeneralAutocompleteOption<WengineKey | ''> => ({
@@ -46,16 +40,16 @@ export function WengineAutocomplete({
       !key ? undefined : (
         <ImgIcon
           size={2}
-          sx={{ width: 'auto' }}
+          style={{ width: 'auto' }}
           src={wengineAsset(key, 'icon')}
         />
       ),
     []
   )
   return (
-    <Suspense fallback={<Skeleton variant="text" width={100} />}>
+    <Suspense fallback={<Skeleton width={100} />}>
       <GeneralAutocomplete
-        size="small"
+        size="sm"
         options={options}
         toImg={toImg}
         valueKey={wkey}

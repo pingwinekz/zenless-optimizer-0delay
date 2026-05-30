@@ -2,40 +2,31 @@ import {
   useDataEntryBase,
   useDataManagerValues,
 } from '@genshin-optimizer/common/database-ui'
-import {
-  useBoolState,
-  useMediaQueryUp,
-} from '@genshin-optimizer/common/react-util'
+import { useMediaQueryUp } from '@genshin-optimizer/common/react-util'
 import {
   CardThemed,
   ShowingAndSortOptionSelect,
   useInfScroll,
 } from '@genshin-optimizer/common/ui'
 import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
-import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import type { WengineSortKey } from '@genshin-optimizer/zzz/db'
-import { initialWengine } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import {
   WengineCard,
-  WengineEditor,
-  WengineSelectionModal,
   wengineFilterConfigs,
   wengineSortConfigs,
   wengineSortMap,
 } from '@genshin-optimizer/zzz/ui'
 import {
   Box,
-  Button,
-  CardContent,
-  Grid,
+  CardSection,
+  Group,
+  SimpleGrid,
   Skeleton,
-  TextField,
-} from '@mui/material'
+  TextInput,
+} from '@mantine/core'
 import type { ChangeEvent } from 'react'
 import {
-  Suspense,
-  useCallback,
   useDeferredValue,
   useMemo,
   useState,
@@ -50,38 +41,15 @@ const sortKeys = Object.keys(wengineSortMap)
 export default function PageWengine() {
   const { t } = useTranslation(['page_wengine', 'ui'])
   const { database } = useDatabaseContext()
-  const [newWengineModalShow, onNewWengineModalShow, onNewWengineModalHide] =
-    useBoolState(false)
   const displayWengine = useDataEntryBase(database.displayWengine)
-  // useEffect(() => {
-  //   ReactGA.send({ hitType: 'pageview', page: '/wengine' }) Needs Google Analytics
-  // }, [])
   const [searchTerm, setSearchTerm] = useState('')
   const deferredSearchTerm = useDeferredValue(searchTerm)
-
-  const editWegine = useCallback(
-    (key: string | undefined) => {
-      database.displayWengine.set({ editWengineId: key })
-    },
-    [database]
-  )
-
-  const newWengine = useCallback(
-    (wengineKey: WengineKey) => {
-      editWegine(database.wengines.new(initialWengine(wengineKey)))
-    },
-    [database.wengines, editWegine]
-  )
 
   const {
     sortType,
     ascending,
     speciality,
     rarity,
-    locked,
-    showEquipped,
-    showInventory,
-    locations,
   } = displayWengine
 
   const allWegines = useDataManagerValues(database.wengines)
@@ -95,10 +63,6 @@ export default function PageWengine() {
               speciality,
               rarity,
               name: deferredSearchTerm,
-              locked,
-              showInventory,
-              showEquipped,
-              locations,
             },
             wengineFilterConfigs()
           )
@@ -116,10 +80,6 @@ export default function PageWengine() {
       speciality,
       rarity,
       deferredSearchTerm,
-      locked,
-      showInventory,
-      showEquipped,
-      locations,
       sortType,
       ascending,
     ]
@@ -135,16 +95,6 @@ export default function PageWengine() {
     () => wengineIds.slice(0, numShow),
     [wengineIds, numShow]
   )
-
-  const resetEditWengine = useCallback(
-    () => database.displayWengine.set({ editWengineId: '' }),
-    [database]
-  )
-
-  const { editWengineId } = displayWengine
-
-  // Validate wengineId to be an actual wengine
-  if (editWengineId && !database.wengines.get(editWengineId)) resetEditWengine()
 
   // Pagination
   const totalShowing =
@@ -169,67 +119,42 @@ export default function PageWengine() {
       database.displayWengine.set({ ascending }),
   }
   return (
-    <Box display="flex" flexDirection="column" gap={1}>
-      <Suspense fallback={false}>
-        <WengineSelectionModal
-          show={newWengineModalShow}
-          onHide={onNewWengineModalHide}
-          onSelect={newWengine}
-        />
-      </Suspense>
-      <Suspense fallback={false}>
-        <WengineEditor
-          wengineId={editWengineId}
-          footer
-          onClose={resetEditWengine}
-        />
-      </Suspense>
+    <Box style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
       <WengineFilter
         numShowing={wengineIds.length}
         total={totalWengineNum}
         wengineIds={wengineIds}
       />
       <CardThemed>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-          >
-            <TextField
+        <CardSection
+          style={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+        >
+          <Group>
+            <TextInput
               autoFocus
-              size="small"
+              size="sm"
               value={searchTerm}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setSearchTerm(e.target.value)
               }
               label={t('wengineName')}
-              sx={{ height: '100%' }}
-              InputProps={{ sx: { height: '100%' } }}
             />
             <ShowingAndSortOptionSelect
               showingTextProps={showingTextProps}
               sortByButtonProps={sortByButtonProps}
             />
-          </Box>
-        </CardContent>
+          </Group>
+        </CardSection>
       </CardThemed>
-      <Button fullWidth onClick={onNewWengineModalShow} color="info">
-        {t('page_wengine:addWengine')}
-      </Button>
       <Box>
-        <Grid container spacing={1} columns={columns}>
+        <SimpleGrid cols={columns} spacing={1}>
           {wenginesIdsToShow.map((wengineId) => (
-            <Grid item key={wengineId} xs={1}>
-              <WengineCard
-                key={wengineId}
-                wengineId={wengineId}
-                onEdit={editWegine}
-              />
-            </Grid>
+            <WengineCard
+              key={wengineId}
+              wengineId={wengineId}
+            />
           ))}
-        </Grid>
+        </SimpleGrid>
       </Box>
       {wengineIds.length !== wenginesIdsToShow.length && (
         <Skeleton
@@ -237,8 +162,7 @@ export default function PageWengine() {
             if (!node) return
             setTriggerElement(node)
           }}
-          sx={{ borderRadius: 1 }}
-          variant="rectangular"
+          style={{ borderRadius: 1 }}
           width="100%"
           height={100}
         />

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Text } from '@mantine/core'
 import type { TFunction } from 'i18next'
 import { Trans } from 'react-i18next'
 import { SortByButton } from './SortByButton'
@@ -58,7 +58,7 @@ function ShowingItem({
   namespace: string
 }) {
   return (
-    <Typography color="text.secondary">
+    <Text c="dimmed">
       <Trans
         t={t}
         ns={namespace}
@@ -69,6 +69,6 @@ function ShowingItem({
         Showing <b>{{ count: numShowing } as any}</b> out of{' '}
         {{ value: total } as any} Items
       </Trans>
-    </Typography>
+    </Text>
   )
 }

@@ -12,19 +12,8 @@ import type {
   INumConditionalData,
 } from '@genshin-optimizer/game-opt/engine'
 import { CalcContext, TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import type { SliderProps } from '@mui/material'
-import {
-  Box,
-  Button,
-  Divider,
-  MenuItem,
-  Slider,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { IconArrowRight, IconCheck, IconSquare } from '@tabler/icons-react'
+import { Button, Divider, Group, Menu, Slider, Stack } from '@mantine/core'
 import type { ReactNode } from 'react'
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import {
@@ -75,7 +64,7 @@ export function ConditionalsDisplay({
     targeted ? Object.keys(dstDisplay)[0] : null
   )
   return (
-    <Stack spacing={1}>
+    <Stack>
       {filteredConditionals.map(({ src, dst, condKey, condValue }) => (
         <ConditionalDisplay
           key={(src ?? 'all') + (dst ?? 'all') + condKey}
@@ -184,7 +173,7 @@ function ConditionalSelector(props: ConditionalProps) {
 }
 function Badge({ children }: { children: ReactNode }) {
   if (!children) return null
-  return <SqBadge sx={{ ml: 1 }}>{children}</SqBadge>
+  return <SqBadge style={{ marginLeft: 4 }}>{children}</SqBadge>
 }
 
 function BoolConditional({
@@ -204,13 +193,12 @@ function BoolConditional({
   return (
     <Button
       fullWidth
-      size="small"
-      sx={{ borderRadius: 0 }}
-      color={value ? 'success' : 'primary'}
+      size="compact-sm"
+      style={{ borderRadius: 0 }}
+      color={value ? 'green' : 'blue'}
       onClick={() => setValue(+!value)}
-      // disabled={disabled}
-      startIcon={value ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
       disabled={disabled}
+      leftSection={value ? <IconCheck size={16} /> : <IconSquare size={16} />}
     >
       {labelEle} <Badge>{badgeEle}</Badge>
     </Button>
@@ -235,9 +223,9 @@ function ListConditional({
   return (
     <DropdownButton
       fullWidth
-      size="small"
-      sx={{ borderRadius: 0 }}
-      color={value ? 'success' : 'primary'}
+      size="compact-sm"
+      style={{ borderRadius: 0 }}
+      color={value ? 'green' : 'blue'}
       title={
         <>
           {evalIfFunc(label, calc, value)}{' '}
@@ -248,15 +236,19 @@ function ListConditional({
     >
       <Divider />
       {['0', ...list].map((val, ind) => (
-        <MenuItem
+        <Menu.Item
           key={val}
           onClick={() => setValue(ind)}
-          selected={value === ind}
+          style={{
+            backgroundColor:
+              value === ind ? 'var(--mantine-color-blue-filled)' : undefined,
+            color: value === ind ? '#fff' : undefined,
+          }}
           disabled={value === ind}
         >
           {evalIfFunc(label, calc, ind)}
           <Badge>{evalIfFunc(badge, calc, ind)}</Badge>
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )
@@ -285,38 +277,36 @@ function NumConditional({
   if (typeof min === 'undefined' || typeof max === 'undefined')
     return (
       <NumberInputLazy
-        fullWidth
+        style={{ width: '100%' }}
         float={!int_only}
-        inputProps={{ min, max }}
-        InputProps={{
-          startAdornment: labelEle && <Box sx={{ mr: 1 }}>{labelEle}</Box>,
-          endAdornment: <Badge>{evalIfFunc(badge, calc, value)}</Badge>,
-        }}
+        min={min}
+        max={max}
         value={value}
-        onChange={(newVal) => setValue(newVal)}
+        onChange={(newVal) => setValue(newVal as number)}
         disabled={disabled}
       />
     )
   return (
-    <Box sx={{ px: 2 }}>
+    <div style={{ padding: '0 var(--mantine-spacing-md)' }}>
       {(labelEle || badge) && (
-        <Typography display="flex" justifyContent="space-between">
+        <Group justify="space-between">
           {labelEle} {<Badge>{badgeEle}</Badge>}
-        </Typography>
+        </Group>
       )}
       <CondSlider
         max={max}
         min={min}
         value={value}
-        // onChange={(_e, v) => setInnerValue(v as number)}
-        onChangeCommitted={(_e, v) => setValue(v as number)}
-        valueLabelDisplay="auto"
+        onChangeEnd={(v) => setValue(v as number)}
+        label={null}
         disabled={disabled}
       />
-    </Box>
+    </div>
   )
 }
-function CondSlider(props: Omit<SliderProps, 'onChange'>) {
+function CondSlider(
+  props: Omit<React.ComponentProps<typeof Slider>, 'onChange'>
+) {
   const [innerValue, setInnerValue] = useState(props.value)
 
   // Handle multiple sliders, currently only works in non strict mode
@@ -327,7 +317,7 @@ function CondSlider(props: Omit<SliderProps, 'onChange'>) {
   return (
     <Slider
       {...props}
-      onChange={(_e, v) => setInnerValue(v as number)}
+      onChange={(v) => setInnerValue(v as number)}
       value={innerValue}
     />
   )
@@ -351,11 +341,11 @@ function CondSrcDst<S extends string, D extends string>({
   if (!Object.keys(srcDisplay).length || !Object.keys(dstDisplay).length)
     return null
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between">
+    <Group justify="space-between" align="center">
       <SrcDisplay target={src} targetMap={srcDisplay} setTarget={setSrc} />
-      <ArrowRightAltIcon />
+      <IconArrowRight size={20} />
       <DstDisplay target={dst} targetMap={dstDisplay} setTarget={setDst} />
-    </Box>
+    </Group>
   )
 }
 
@@ -389,9 +379,9 @@ function SrcDropDown<K extends string>({
   return (
     <DropdownButton title={targetMap[target]} disabled={onlyOption}>
       {Object.entries(targetMap).map(([key, display]) => (
-        <MenuItem key={key} onClick={() => onChange(key as K)}>
+        <Menu.Item key={key} onClick={() => onChange(key as K)}>
           {display}
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )
@@ -430,13 +420,13 @@ function DstDropDown<K extends string>({
       title={target ? targetMap[target] : 'All'}
       disabled={onlyOption}
     >
-      <MenuItem key="all" onClick={() => onChange(null)}>
+      <Menu.Item key="all" onClick={() => onChange(null)}>
         All
-      </MenuItem>
+      </Menu.Item>
       {Object.entries(targetMap).map(([key, display]) => (
-        <MenuItem key={key} onClick={() => onChange(key as K)}>
+        <Menu.Item key={key} onClick={() => onChange(key as K)}>
           {display}
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )

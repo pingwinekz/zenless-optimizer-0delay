@@ -1,5 +1,5 @@
 import { damageTypeKeysMap } from '@genshin-optimizer/zzz/formula-ui'
-import { Button } from '@mui/material'
+import { Button } from '@mantine/core'
 
 export function AfterShockToggleButton({
   isAftershock,
@@ -11,7 +11,7 @@ export function AfterShockToggleButton({
   return (
     <Button
       onClick={() => setAftershock(!isAftershock)}
-      color={isAftershock ? 'success' : 'secondary'}
+      color={isAftershock ? 'green' : 'gray'}
     >
       {damageTypeKeysMap.aftershock}
     </Button>

@@ -1,7 +1,7 @@
 import { DropdownButton } from '@genshin-optimizer/common/ui'
 import type { DamageType } from '@genshin-optimizer/zzz/formula'
 import { damageTypeKeysMap } from '@genshin-optimizer/zzz/formula-ui'
-import { Box, MenuItem } from '@mui/material'
+import { Box, MenuItem } from '@mantine/core'
 
 export function DmgTypeDropdown<T extends DamageType>({
   dmgType,
@@ -15,14 +15,18 @@ export function DmgTypeDropdown<T extends DamageType>({
   return (
     <DropdownButton
       title={
-        <Box sx={{ textWrap: 'nowrap' }}>
+        <Box style={{ textWrap: 'nowrap' }}>
           Dmg Type: {dmgType ? damageTypeKeysMap[dmgType] : 'Any'}
         </Box>
       }
     >
       <MenuItem
         key={'any'}
-        selected={!dmgType}
+        style={
+          !dmgType
+            ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+            : undefined
+        }
         disabled={!dmgType}
         onClick={() => setDmgType()}
       >
@@ -31,7 +35,11 @@ export function DmgTypeDropdown<T extends DamageType>({
       {keys.map((k) => (
         <MenuItem
           key={k}
-          selected={dmgType === k}
+          style={
+            dmgType === k
+              ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+              : undefined
+          }
           disabled={dmgType === k}
           onClick={() => setDmgType(k)}
         >

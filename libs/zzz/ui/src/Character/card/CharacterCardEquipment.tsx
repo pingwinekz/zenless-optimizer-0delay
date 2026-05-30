@@ -7,8 +7,7 @@ import type { CharacterKey, DiscSlotKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSlotKeys, rarityColor } from '@genshin-optimizer/zzz/consts'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import { Box, Typography } from '@mui/material'
-import type { Theme } from '@mui/system'
+import { Box, Text } from '@mantine/core'
 import { useMemo } from 'react'
 
 const commonStyles = Object.freeze({
@@ -73,19 +72,21 @@ export function CharacterCardEquipment({
   )
   return (
     <Box
-      sx={{
+      style={{
         position: 'relative',
       }}
     >
       <Box
-        flexShrink={1}
         component="img"
         src={characterAsset(characterKey, 'full')}
-        sx={{ maxWidth: '100%' }}
-        position="absolute"
-        zIndex={0}
-        left="-83px"
-        top="15px"
+        style={{
+          maxWidth: '100%',
+          flexShrink: 1,
+          position: 'absolute',
+          zIndex: 0,
+          left: '-83px',
+          top: '15px',
+        }}
       />
 
       <Discs discs={characterDiscs} />
@@ -100,7 +101,7 @@ function Discs({ discs }: { discs: ICachedDisc[] }) {
   }))
   return (
     <Box
-      sx={{
+      style={{
         position: 'absolute',
         width: '147px',
         height: '129px',
@@ -108,7 +109,7 @@ function Discs({ discs }: { discs: ICachedDisc[] }) {
         right: '75px',
         background: `url(${commonDefImages('discDrive')})`,
         backgroundSize: '100% 100%',
-        zIndex: '10',
+        zIndex: 10,
         transform: 'scale(1.96)',
       }}
     >
@@ -116,21 +117,19 @@ function Discs({ discs }: { discs: ICachedDisc[] }) {
         discInfo.disc ? (
           <Box key={discInfo.key}>
             <Box
-              sx={(theme: Theme) => ({
+              style={{
                 border: `2px solid ${
-                  discInfo.disc?.rarity
-                    ? theme.palette[rarityColor[discInfo.disc.rarity]].main
-                    : ''
+                  discInfo.disc?.rarity ? rarityColor[discInfo.disc.rarity] : ''
                 }`,
                 ...discInfo.styles,
-              })}
+              }}
             >
               <Box
-                width="30px"
-                height="30px"
-                display="flex"
-                justifyContent="center"
-                sx={{
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  justifyContent: 'center',
                   position: 'relative',
                   borderRadius: '50%',
                   overflow: 'hidden',
@@ -142,21 +141,20 @@ function Discs({ discs }: { discs: ICachedDisc[] }) {
                   width="30px"
                   height="30px"
                 />
-                <Box sx={{ position: 'absolute', bottom: -3 }}>
-                  <Typography
-                    sx={{
+                <Box style={{ position: 'absolute', bottom: -3 }}>
+                  <Text
+                    style={{
                       backgroundColor: 'rgba(0,0,0,0.85)',
-                      py: '3px',
-                      px: '5px',
+                      padding: '3px 5px',
                       borderRadius: '20px',
                       fontWeight: 'bold',
                       lineHeight: '6px',
                       fontSize: '8px',
                     }}
-                    variant="subtitle2"
+                    size="sm"
                   >
                     {discInfo.disc.level}
-                  </Typography>
+                  </Text>
                 </Box>
               </Box>
             </Box>

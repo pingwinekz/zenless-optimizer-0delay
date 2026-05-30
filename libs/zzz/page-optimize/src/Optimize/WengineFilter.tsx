@@ -7,7 +7,7 @@ import {
   allSpecialityKeys,
   allWengineKeys,
 } from '@genshin-optimizer/zzz/consts'
-import type { ICachedWengine, TeamConditional } from '@genshin-optimizer/zzz/db'
+import type { TeamConditional } from '@genshin-optimizer/zzz/db'
 import {
   OptConfigContext,
   useCharacterContext,
@@ -21,28 +21,26 @@ import {
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
 import { WengineToggle } from '@genshin-optimizer/zzz/ui'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import CloseIcon from '@mui/icons-material/Close'
+import { IconCheckbox, IconSquare, IconX } from '@tabler/icons-react'
 import {
+  ActionIcon,
+  Box,
   Button,
-  CardContent,
-  CardHeader,
+  CardSection,
   Divider,
-  Grid,
-  IconButton,
+  Group,
+  SimpleGrid,
   Skeleton,
   Stack,
-  Typography,
-} from '@mui/material'
-import { Box } from '@mui/system'
+  Text,
+} from '@mantine/core'
 import { Suspense, useContext, useMemo } from 'react'
 import { WengineLevelFilter } from './WengineLevelFilter'
 export function WengineFilter({
   wengines,
   disabled,
 }: {
-  wengines: ICachedWengine[]
+  wengines: WengineKey[]
   disabled?: boolean
 }) {
   const { database } = useDatabaseContext()
@@ -50,10 +48,10 @@ export function WengineFilter({
   const [show, onOpen, onClose] = useBoolState()
   return (
     <CardThemed bgt="light">
-      <CardContent>
-        <Stack spacing={1}>
+      <CardSection>
+        <Stack gap={1}>
           <Box
-            sx={{
+            style={{
               display: 'flex',
               gap: 2,
               justifyContent: 'space-between',
@@ -61,7 +59,11 @@ export function WengineFilter({
             }}
           >
             <Box
-              sx={{ display: 'flex', gap: 1, justifyContent: 'space-between' }}
+              style={{
+                display: 'flex',
+                gap: 1,
+                justifyContent: 'space-between',
+              }}
             >
               Wengines:{' '}
               <SqBadge color={wengines.length ? 'primary' : 'error'}>
@@ -69,15 +71,15 @@ export function WengineFilter({
               </SqBadge>
             </Box>
             <Button
-              sx={{ flexGrow: 1 }}
-              startIcon={
+              style={{ flexGrow: 1 }}
+              leftSection={
                 optConfig.optWengine ? (
-                  <CheckBoxIcon />
+                  <IconCheckbox size={16} />
                 ) : (
-                  <CheckBoxOutlineBlankIcon />
+                  <IconSquare size={16} />
                 )
               }
-              color={optConfig.optWengine ? 'success' : 'secondary'}
+              color={optConfig.optWengine ? 'green' : 'gray'}
               onClick={() =>
                 database.optConfigs.set(optConfigId, {
                   optWengine: !optConfig.optWengine,
@@ -92,9 +94,8 @@ export function WengineFilter({
             onClose={onClose}
             wengines={wengines}
           />
-          {/* TODO: localization */}
           <Button
-            color="info"
+            color="blue"
             fullWidth
             onClick={onOpen}
             disabled={disabled || !optConfig.optWengine}
@@ -102,7 +103,7 @@ export function WengineFilter({
             Wengine Filter Config
           </Button>
         </Stack>
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }
@@ -113,7 +114,7 @@ function WengineFilterModal({
   onClose,
   disabled,
 }: {
-  wengines: ICachedWengine[]
+  wengines: WengineKey[]
   show: boolean
   onClose: () => void
   disabled?: boolean
@@ -121,20 +122,18 @@ function WengineFilterModal({
   const { database } = useDatabaseContext()
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   return (
-    <ModalWrapper open={show} onClose={onClose}>
+    <ModalWrapper opened={show} onClose={onClose}>
       <CardThemed>
-        <CardHeader
-          title="Wengine Filter"
-          action={
-            <IconButton onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
-          }
-        />
+        <Group p="sm">
+          <Text fw={700}>Wengine Filter</Text>
+          <ActionIcon onClick={onClose} style={{ marginLeft: 'auto' }}>
+            <IconX />
+          </ActionIcon>
+        </Group>
         <Divider />
-        <CardContent>
-          <Suspense fallback={<Skeleton width="100%" height={'500px'} />}>
-            <Stack spacing={1}>
+        <CardSection>
+          <Suspense fallback={<Skeleton width="100%" height={500} />}>
+            <Stack gap={1}>
               <WengineLevelFilter disabled={disabled} />
               <SpecialitySelector disabled={disabled} />
               <Button
@@ -144,14 +143,14 @@ function WengineFilterModal({
                     useEquippedWengine: !optConfig.useEquippedWengine,
                   })
                 }
-                color={optConfig.useEquippedWengine ? 'success' : 'secondary'}
+                color={optConfig.useEquippedWengine ? 'green' : 'gray'}
               >
                 Use equipped Wengine
               </Button>
               <WengineCondSelector wengines={wengines} />
             </Stack>
           </Suspense>
-        </CardContent>
+        </CardSection>
       </CardThemed>
     </ModalWrapper>
   )
@@ -161,20 +160,11 @@ function SpecialitySelector({ disabled }: { disabled?: boolean }) {
   const { database } = useDatabaseContext()
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   const { wEngineTypes } = optConfig
-  const wengines = useDataManagerValues(database.wengines)
-  const { key: characterKey } = useCharacterContext()!
+  const allWengineData = useDataManagerValues(database.wengines)
   const totals = useMemo(() => {
     return optConfig.optWengine
-      ? wengines.reduce(
-          (totals, { key, level, location }) => {
-            if (level < optConfig.wlevelLow || level > optConfig.wlevelHigh)
-              return totals
-            if (
-              location &&
-              !optConfig.useEquippedWengine &&
-              location !== characterKey
-            )
-              return totals
+      ? allWengineData.reduce(
+          (totals, { key }) => {
             const type = getWengineStat(key).type
             if (!type) return totals
             totals[type]++
@@ -184,12 +174,8 @@ function SpecialitySelector({ disabled }: { disabled?: boolean }) {
         )
       : objKeyMap(allSpecialityKeys, () => 0)
   }, [
-    characterKey,
-    wengines,
-    optConfig.wlevelLow,
-    optConfig.wlevelHigh,
+    allWengineData,
     optConfig.optWengine,
-    optConfig.useEquippedWengine,
   ])
   return (
     <WengineToggle
@@ -204,7 +190,7 @@ function SpecialitySelector({ disabled }: { disabled?: boolean }) {
   )
 }
 
-function WengineCondSelector({ wengines }: { wengines: ICachedWengine[] }) {
+function WengineCondSelector({ wengines }: { wengines: WengineKey[] }) {
   const character = useCharacterContext()
   const team = useTeam(character?.key)
   const conditionals =
@@ -222,26 +208,25 @@ function WengineCondSelector({ wengines }: { wengines: ICachedWengine[] }) {
   )
   return (
     <Box>
-      <Typography variant="h6">Wengine Condtional Configuration</Typography>
-      <Typography>
+      <Text fw={700}>Wengine Condtional Configuration</Text>
+      <Text>
         Wengine stats are displayed to be Lvl 60/60, P1, actual level/phase of
         wengine will be used in the solver.
-      </Typography>
+      </Text>
       {character && (
         <CharCalcMockCountProvider
           character={character}
           conditionals={conditionals}
         >
-          <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4 }}>
+          <SimpleGrid cols={{ base: 2, md: 3, lg: 4 }} spacing={1}>
             {wengineKeys.map((d) => (
-              <Grid item key={d} xs={1}>
-                <WengineCondCard
-                  wengineKey={d}
-                  count={wengines.filter((w) => w.key === d).length}
-                />
-              </Grid>
+              <WengineCondCard
+                key={d}
+                wengineKey={d}
+                count={wengines.filter((w) => w === d).length}
+              />
             ))}
-          </Grid>
+          </SimpleGrid>
         </CharCalcMockCountProvider>
       )}
     </Box>

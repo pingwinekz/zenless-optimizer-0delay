@@ -1,348 +1,452 @@
-import { ConditionalWrapper, ImgIcon } from '@genshin-optimizer/common/ui'
+import { ImgIcon } from '@genshin-optimizer/common/ui'
 import {
-  commonDefIcon,
   rarityDefIcon,
   specialityDefIcon,
+  wengineAsset,
 } from '@genshin-optimizer/zzz/assets'
-import {
-  type CharacterKey,
-  type MilestoneKey,
-  allSkillKeys,
-  milestoneMaxLevel,
-} from '@genshin-optimizer/zzz/consts'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { allSkillKeys, milestoneMaxLevel } from '@genshin-optimizer/zzz/consts'
 import { useCharacter } from '@genshin-optimizer/zzz/db-ui'
-import type { CharacterDatum } from '@genshin-optimizer/zzz/stats'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Badge, CardActionArea, Typography } from '@mui/material'
-import type { Variant } from '@mui/material/styles/createTypography'
-import { Box } from '@mui/system'
-import type { ReactNode } from 'react'
-import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ZCard } from '../Components'
+import { ActionIcon, Badge, Box, Flex, Text, Tooltip } from '@mantine/core'
+import { IconEdit, IconPlayerPlay, IconTrash } from '@tabler/icons-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
+import type { CharacterGridDensity } from '../store'
+import { equipDotColor } from '../store'
 import { CharacterName } from './CharacterTrans'
 
-export type CharCardConfigProps = {
-  cardWidth: string
-  charImgWidth: string
-  iconsSize: number
-  isEditing: boolean
-  charNameWidth: string //166px //290
-  charNameVariant: Variant
-  scrollingBgSize: string
+const CHARACTER_IMAGE_URL_BASE =
+  'https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_'
+
+const HEIGHT_MAP: Record<CharacterGridDensity, number> = {
+  default: 180,
+  compact: 130,
+}
+
+const PADDING_MAP: Record<CharacterGridDensity, number> = {
+  default: 8,
+  compact: 4,
 }
 
 export function CharacterCard({
   characterKey,
   onClick,
-  charCardConfig,
+  onDoubleClick,
+  onEdit,
+  onDelete,
+  onOptimize,
+  rank,
+  isFocused = false,
+  density = 'default',
+  style,
 }: {
   characterKey: CharacterKey
   onClick?: (characterKey: CharacterKey) => void
-  charCardConfig?: CharCardConfigProps
+  onDoubleClick?: (characterKey: CharacterKey) => void
+  onEdit?: (characterKey: CharacterKey) => void
+  onDelete?: (characterKey: CharacterKey) => void
+  onOptimize?: (characterKey: CharacterKey) => void
+  rank?: number
+  isFocused?: boolean
+  density?: CharacterGridDensity
+  style?: CSSProperties
 }) {
-  const { level = 0, promotion = 0 } = useCharacter(characterKey) ?? {}
+  const character = useCharacter(characterKey)
+  const { level = 0, promotion = 0 } = character ?? {}
   const characterStat = getCharStat(characterKey)
-  const config: CharCardConfigProps = charCardConfig
-    ? charCardConfig
-    : {
-        cardWidth: '100%',
-        charImgWidth: '100%',
-        iconsSize: 1.7,
-        isEditing: false,
-        charNameWidth: '191px',
-        charNameVariant: 'h6' as Variant,
-        scrollingBgSize: '200px',
-      }
+  const { attribute, rarity, specialty, id } = characterStat
+  const dotColor = character ? equipDotColor(character.equippedDiscs) : null
+
+  // W-Engine
+  const wengineKey = character?.wengineKey
+
+  // Lazy image loading
+  const imgRef = useRef<HTMLDivElement | null>(null)
+  const [loadImg, setLoadImg] = useState(false)
+  useEffect(() => {
+    const el = imgRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoadImg(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '500px 0px', threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const portraitH = HEIGHT_MAP[density]
+  const infoP = PADDING_MAP[density]
+
   const onClickHandler = useCallback(
     () => characterKey && onClick?.(characterKey),
     [characterKey, onClick]
   )
-  const actionWrapperFunc = useCallback(
-    (children: ReactNode) => (
-      <CardActionArea
-        onClick={onClickHandler}
-        sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
-      >
-        {children}
-      </CardActionArea>
-    ),
-    [onClickHandler]
+
+  const onDoubleClickHandler = useCallback(
+    () => characterKey && onDoubleClick?.(characterKey),
+    [characterKey, onDoubleClick]
   )
 
-  return (
-    <ZCard>
-      <ConditionalWrapper condition={!!onClick} wrapper={actionWrapperFunc}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: config.cardWidth,
-          }}
-        >
-          <CharImage
-            characterKey={characterKey}
-            characterStat={characterStat}
-            charCardConfig={config}
-          />
-          <CharInformation
-            characterKey={characterKey}
-            characterStat={characterStat}
-            promotion={promotion}
-            level={level}
-            charCardConfig={config}
-          />
-        </Box>
-      </ConditionalWrapper>
-    </ZCard>
+  const onEditHandler = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      onEdit?.(characterKey)
+    },
+    [characterKey, onEdit]
   )
-}
 
-function CharImage({
-  characterKey,
-  characterStat,
-  charCardConfig,
-}: {
-  characterKey: CharacterKey
-  characterStat: CharacterDatum
-  charCardConfig: CharCardConfigProps
-}) {
-  const { attribute, id } = characterStat
-  const CHARACTER_IMAGE_URL_BASE =
-    'https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_'
+  const onDeleteHandler = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      onDelete?.(characterKey)
+    },
+    [characterKey, onDelete]
+  )
+
+  const onOptimizeHandler = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      onOptimize?.(characterKey)
+    },
+    [characterKey, onOptimize]
+  )
+
+  const hasActions = !!(onEdit || onDelete)
 
   return (
     <Box
-      sx={(theme) => ({
-        width: '100%',
-        height: '100%',
+      ref={imgRef}
+      onClick={onClickHandler}
+      onDoubleClick={onDoubleClickHandler}
+      style={{
         position: 'relative',
-        display: 'flex',
-        background: `${theme.palette[attribute].main}`,
-        zIndex: 1,
+        borderRadius: 'var(--radius-md)',
         overflow: 'hidden',
-      })}
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          left: '0',
-          right: '0',
-          display: 'flex',
-          transform: 'rotate(5deg) translateX(-50%)',
-          zIndex: 2,
-        }}
-      >
-        <ScrollingBackgroundText
-          characterKey={characterKey}
-          charCardConfig={charCardConfig}
-        />
-        <ScrollingBackgroundText
-          characterKey={characterKey}
-          charCardConfig={charCardConfig}
-        />
-      </Box>
-      <Box
-        src={`${CHARACTER_IMAGE_URL_BASE}${id}.png`}
-        component="img"
-        width={charCardConfig.charImgWidth}
-        height="auto"
-        position="relative"
-        zIndex="2"
-      ></Box>
-    </Box>
-  )
-}
-function CharInformation({
-  characterKey,
-  characterStat,
-  promotion,
-  level,
-  charCardConfig,
-}: {
-  characterKey: CharacterKey
-  characterStat: CharacterDatum
-  promotion: MilestoneKey
-  level: number
-  charCardConfig: CharCardConfigProps
-}) {
-  const { t } = useTranslation('page_characters')
-  const { attribute, rarity, specialty } = characterStat
-  const character = useCharacter(characterKey)
-  return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '100%',
-        padding: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        cursor: 'pointer',
+        backgroundColor: 'var(--layer-2)',
+        boxShadow: isFocused
+          ? '0 0 0 2px var(--mantine-primary-color-filled), 0 4px 12px rgba(0,0,0,0.4)'
+          : 'var(--shadow-card)',
+        transition: 'box-shadow 0.2s, transform 0.2s',
+        ...style,
+      }}
+      onMouseEnter={(e) => {
+        if (!isFocused) {
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.4)'
+        }
+        e.currentTarget.style.transform = 'translateY(-1px)'
+        const actions = e.currentTarget.querySelector(
+          '.character-card-actions'
+        ) as HTMLElement | null
+        if (actions) actions.style.opacity = '1'
+        const scrim = e.currentTarget.querySelector(
+          '.character-card-scrim'
+        ) as HTMLElement | null
+        if (scrim) scrim.style.opacity = '1'
+        const grip = e.currentTarget.querySelector(
+          '.character-card-grip'
+        ) as HTMLElement | null
+        if (grip) grip.style.opacity = '1'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = isFocused
+          ? '0 0 0 2px var(--mantine-primary-color-filled), 0 4px 12px rgba(0,0,0,0.4)'
+          : 'var(--shadow-card)'
+        e.currentTarget.style.transform = 'translateY(0)'
+        const actions = e.currentTarget.querySelector(
+          '.character-card-actions'
+        ) as HTMLElement | null
+        if (actions) actions.style.opacity = '0'
+        const scrim = e.currentTarget.querySelector(
+          '.character-card-scrim'
+        ) as HTMLElement | null
+        if (scrim) scrim.style.opacity = '0'
+        const grip = e.currentTarget.querySelector(
+          '.character-card-grip'
+        ) as HTMLElement | null
+        if (grip) grip.style.opacity = '0'
       }}
     >
+      {/* Portrait background */}
       <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: portraitH,
+          background: attribute
+            ? `var(--mantine-color-${attribute}-8)`
+            : 'var(--layer-2)',
+          overflow: 'hidden',
         }}
       >
+        {loadImg && (
+          <Box
+            component="img"
+            src={`${CHARACTER_IMAGE_URL_BASE}${id}.png`}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'top center',
+            }}
+          />
+        )}
+
+        {/* Frosted glass scrim (hover) */}
         <Box
-          gap={1}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            opacity: 0,
+            transition: 'opacity 0.2s',
+            backdropFilter: 'blur(6px) brightness(0.8) saturate(1.2)',
+            WebkitBackdropFilter: 'blur(6px) brightness(0.8) saturate(1.2)',
+            maskImage:
+              'linear-gradient(90deg, black 0%, black 77%, transparent 100%)',
+            WebkitMaskImage:
+              'linear-gradient(90deg, black 0%, black 77%, transparent 100%)',
+            pointerEvents: 'none',
+          }}
+          className="character-card-scrim"
+        />
+
+        {/* Bottom scrim overlay */}
+        <Box
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '50%',
+            background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+          }}
+        />
+
+        {/* Rank number / Grip (rank visible by default, grip on hover) */}
+        {rank !== undefined && (
+          <>
+            <Box
+              style={{
+                position: 'absolute',
+                top: 4,
+                left: 4,
+                zIndex: 2,
+                fontFamily: 'Consolas, Menlo, Monaco, monospace',
+                fontSize: 12,
+                fontWeight: 700,
+                color: 'rgba(255,255,255,0.8)',
+                textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                lineHeight: 1,
+              }}
+              className="character-card-rank"
+            >
+              {rank + 1}
+            </Box>
+            <Flex
+              className="character-card-grip"
+              gap={1}
+              style={{
+                position: 'absolute',
+                top: 4,
+                left: 4,
+                zIndex: 2,
+                opacity: 0,
+                transition: 'opacity 0.15s',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'grab',
+                width: 16,
+              }}
+            >
+              {[0, 1, 2].map((i) => (
+                <Box
+                  key={i}
+                  style={{
+                    width: 12,
+                    height: 2,
+                    borderRadius: 1,
+                    backgroundColor: 'rgba(255,255,255,0.7)',
+                  }}
+                />
+              ))}
+            </Flex>
+          </>
+        )}
+
+        {/* Top-right skill badges */}
+        <Flex
+          gap={2}
+          style={{
+            position: 'absolute',
+            top: 4,
+            right: 4,
           }}
         >
+          {allSkillKeys.map((skill, i) => (
+            <Badge
+              key={i}
+              size="xs"
+              variant="filled"
+              color="dark"
+              style={{ padding: '0 2px', minWidth: 18, textAlign: 'center' }}
+            >
+              {character?.[skill]}
+            </Badge>
+          ))}
+        </Flex>
+
+        {/* W-Engine icon overlay (right side) */}
+        {wengineKey && (
+          <Tooltip label={wengineKey} position="left">
+            <Box
+              style={{
+                position: 'absolute',
+                bottom: 4,
+                right: 4,
+                zIndex: 2,
+                width: density === 'compact' ? 28 : 36,
+                height: density === 'compact' ? 28 : 36,
+                borderRadius: 4,
+                overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+              }}
+            >
+              <Box
+                component="img"
+                src={wengineAsset(wengineKey, 'icon')}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </Box>
+          </Tooltip>
+        )}
+
+        {/* Equip dot */}
+        {dotColor && (
+          <Box
+            style={{
+              position: 'absolute',
+              bottom: 4,
+              left: 4,
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              backgroundColor: dotColor === 'red' ? '#903040' : '#b89040',
+            }}
+          />
+        )}
+
+        {/* Hover action buttons */}
+        {hasActions && (
+          <Flex
+            gap={4}
+            className="character-card-actions"
+            style={{
+              position: 'absolute',
+              top: 4,
+              left: 28,
+              zIndex: 3,
+              opacity: 0,
+              transition: 'opacity 0.2s',
+            }}
+          >
+            {onEdit && (
+              <Tooltip label="Edit">
+                <ActionIcon
+                  variant="filled"
+                  color="dark"
+                  size="sm"
+                  onClick={onEditHandler}
+                >
+                  <IconEdit size={14} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            {onDelete && (
+              <Tooltip label="Delete">
+                <ActionIcon
+                  variant="filled"
+                  color="dark"
+                  size="sm"
+                  onClick={onDeleteHandler}
+                >
+                  <IconTrash size={14} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+            {onOptimize && (
+              <Tooltip label="Optimize">
+                <ActionIcon
+                  variant="filled"
+                  color="dark"
+                  size="sm"
+                  onClick={onOptimizeHandler}
+                >
+                  <IconPlayerPlay size={14} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </Flex>
+        )}
+      </Box>
+
+      {/* Info section */}
+      <Box p={infoP}>
+        <Flex align="center" gap={4} mb={density === 'compact' ? 0 : 4}>
           <ImgIcon
-            size={charCardConfig.iconsSize}
+            size={density === 'compact' ? 1 : 1.2}
             src={rarityDefIcon(rarity)}
           />
-          <Typography
-            variant={charCardConfig.charNameVariant}
-            sx={{
-              fontWeight: '900',
-              maxWidth: charCardConfig.charNameWidth,
+          <Text
+            fw={700}
+            size={density === 'compact' ? 'xs' : 'sm'}
+            style={{
+              lineHeight: 1.2,
               textOverflow: 'ellipsis',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
             }}
           >
             <CharacterName characterKey={characterKey} />
-          </Typography>
+          </Text>
+        </Flex>
+        <Flex align="center" gap={4}>
           <ElementIcon
             ele={attribute}
             iconProps={{
-              sx: {
-                fontSize: `${charCardConfig.iconsSize}em`,
-              },
+              style: { fontSize: density === 'compact' ? '0.9em' : '1.1em' },
             }}
           />
           <ImgIcon
-            size={charCardConfig.iconsSize}
+            size={density === 'compact' ? 0.9 : 1.1}
             src={specialityDefIcon(specialty)}
           />
-          {!charCardConfig.isEditing ? (
-            <Typography
-              variant="h5"
-              color="primary"
-              sx={{
-                fontWeight: '900',
-              }}
+          <Text size={density === 'compact' ? '10' : 'xs'} c="dark.2" ml="auto">
+            Lv.{level}/{milestoneMaxLevel[promotion]}
+          </Text>
+        </Flex>
+        {character && (
+          <Flex align="center" gap={4} mt={2}>
+            <Badge
+              size="xs"
+              variant="filled"
+              color="dark"
+              style={{ fontWeight: 600 }}
             >
-              {t('mindscape', { level: character ? character.mindscape : 0 })}
-            </Typography>
-          ) : (
-            ''
-          )}
-        </Box>
-        {!charCardConfig.isEditing ? (
-          <Box
-            sx={{ mt: '12px', display: 'flex', gap: '14px', flexWrap: 'wrap' }}
-          >
-            <Box
-              sx={(theme) => ({
-                border: `2px solid ${theme.palette['contentZzz'].main}`,
-                borderRadius: '20px',
-                display: 'flex',
-              })}
-            >
-              <Typography
-                sx={{
-                  fontWeight: '900',
-                  paddingLeft: '12px',
-                  fontSize: '16px',
-                }}
-              >
-                {t('charLevel', { level })}
-              </Typography>
-              <Typography
-                color="primary"
-                sx={{
-                  fontWeight: '900',
-                  paddingLeft: '4px',
-                  pr: '10px',
-                }}
-              >
-                / {milestoneMaxLevel[promotion]}
-              </Typography>
-            </Box>
-            <Box
-              gap={1.5}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {allSkillKeys.map((item, index) => (
-                <Badge
-                  key={index}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  badgeContent={`${character ? character[item] : 0}`}
-                  color="primary"
-                >
-                  <ImgIcon size={1.9} src={commonDefIcon(item)} />
-                </Badge>
-              ))}
-              <Badge
-                key={6}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                badgeContent={`${character ? character['core'] : 0}`}
-                color="primary"
-              >
-                <ImgIcon size={1.9} src={commonDefIcon('core')} />
-              </Badge>
-            </Box>
-          </Box>
-        ) : (
-          ''
+              M{character.mindscape}
+            </Badge>
+          </Flex>
         )}
       </Box>
-    </Box>
-  )
-}
-
-function ScrollingBackgroundText({
-  characterKey,
-  charCardConfig,
-}: {
-  characterKey: CharacterKey
-  charCardConfig: CharCardConfigProps
-}) {
-  const { t } = useTranslation('charNames_gen')
-  const scroll = {
-    animation: 'scroll 16s infinite linear',
-    '@keyframes scroll': {
-      '0%': { transform: 'translateX(-100%)' },
-      '100%': { transform: 'translateX(0)' },
-    },
-  } as React.CSSProperties
-
-  return (
-    <Box
-      component={'span'}
-      sx={{
-        color: '#000',
-        marginTop: '20px',
-        fontStyle: 'italic',
-        fontSize: charCardConfig.scrollingBgSize,
-        lineHeight: '150px',
-        whiteSpace: 'nowrap',
-        textTransform: 'uppercase',
-        display: 'flex',
-        justifyContent: 'center',
-        fontFamily: 'Impact',
-        opacity: 0.1,
-        ...scroll,
-      }}
-    >
-      {t(`${characterKey}`)}
     </Box>
   )
 }

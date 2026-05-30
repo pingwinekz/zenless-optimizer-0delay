@@ -205,7 +205,7 @@ export const elementalData: Record<AttributeKey, string> = {
 } as const
 
 Object.entries(elementalData).forEach(([e, name]) => {
-  statKeyTextMap[`${e}_dmg_`] = `${name} DMG Bonus`
+  statKeyTextMap[`${e}_dmg_`] = `${name} DMG`
 })
 
 export const rarityColor = {

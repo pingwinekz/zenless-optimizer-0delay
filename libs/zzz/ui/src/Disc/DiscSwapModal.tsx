@@ -17,18 +17,15 @@ import {
   initialDiscFilterOption,
 } from '@genshin-optimizer/zzz/util'
 import type { IDisc } from '@genshin-optimizer/zzz/zood'
-import CloseIcon from '@mui/icons-material/Close'
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
+import { IconX, IconCircleMinus } from '@tabler/icons-react'
 import {
+  ActionIcon,
   Box,
-  CardActionArea,
-  CardContent,
   Divider,
-  Grid,
-  IconButton,
+  SimpleGrid,
   Skeleton,
-  Typography,
-} from '@mui/material'
+  Text,
+} from '@mantine/core'
 import { Suspense, useCallback, useMemo, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DiscCardObj } from './DiscCard'
@@ -77,9 +74,8 @@ export function DiscSwapModal({
     const filterFunc = filterFunction(filterOption, filterConfigs)
     let discsIds = allDiscs.filter(filterFunc).map((disc) => disc.id)
     if (discId && database.discs.get(discId)) {
-      // always show discId first if it exists
-      discsIds = discsIds.filter((id) => id !== discId) // remove
-      discsIds.unshift(discId) // add to beginnig
+      discsIds = discsIds.filter((id) => id !== discId)
+      discsIds.unshift(discId)
     }
     return discsIds
   }, [filterOption, filterConfigs, allDiscs, discId, database.discs])
@@ -119,30 +115,26 @@ export function DiscSwapModal({
 
   return (
     <ModalWrapper
-      open={show}
+      opened={show}
       onClose={onClose}
       containerProps={{ maxWidth: 'xl' }}
     >
       <CardThemed>
-        <CardContent
-          sx={{
-            py: 1,
+        <Box
+          p="sm"
+          style={{
             display: 'flex',
             alignItems: 'center',
           }}
         >
-          <Typography variant="h6">{t('tabEquip.swapDisc')}</Typography>
-          <IconButton onClick={onClose} sx={{ ml: 'auto' }}>
-            <CloseIcon />
-          </IconButton>
-        </CardContent>
+          <Text fw={700}>{t('tabEquip.swapDisc')}</Text>
+          <ActionIcon onClick={onClose} style={{ marginLeft: 'auto' }}>
+            <IconX />
+          </ActionIcon>
+        </Box>
         <Divider />
-        <CardContent>
-          <Suspense
-            fallback={
-              <Skeleton variant="rectangular" width="100%" height={200} />
-            }
-          >
+        <Box p="sm">
+          <Suspense fallback={<Skeleton width="100%" height={200} />}>
             <DiscFilterDisplay
               filterOption={filterOption}
               filterOptionDispatch={filterOptionDispatch}
@@ -150,72 +142,65 @@ export function DiscSwapModal({
               disableSlotFilter
             />
           </Suspense>
-        </CardContent>
+        </Box>
         <Divider />
-        <CardContent>
+        <Box p="sm">
           <Box
-            pb={1}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="flex-end"
-            flexWrap="wrap"
+            pb={8}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+            }}
           >
             <ShowingAndSortOptionSelect showingTextProps={showingTextProps} />
           </Box>
-          <Box mt={1}>
-            <Suspense
-              fallback={
-                <Skeleton variant="rectangular" width="100%" height={1000} />
-              }
-            >
-              <Grid container spacing={1} columns={{ xs: 2, md: 3, lg: 4 }}>
-                {/* only show "unequip" when a disc is equipped */}
+          <Box mt={8}>
+            <Suspense fallback={<Skeleton width="100%" height={1000} />}>
+              <SimpleGrid cols={{ base: 2, md: 3, lg: 4 }} spacing={8}>
                 {discId && (
-                  <Grid item xs={1}>
+                  <Box>
                     <CardThemed
                       bgt="light"
-                      sx={{ width: '100%', height: '100%' }}
+                      style={{ width: '100%', height: '100%' }}
                     >
-                      <CardActionArea
-                        sx={{
+                      <Box
+                        style={{
                           width: '100%',
                           height: '100%',
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
+                          cursor: 'pointer',
                         }}
                         onClick={() => setSwapDiscId(slotKey)}
                       >
                         <Box
-                          sx={{
+                          style={{
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                           }}
                         >
-                          <RemoveCircleIcon sx={{ fontSize: '10em' }} />
-                          <Typography>
-                            {t('disc:button.unequipDisc')}
-                          </Typography>
+                          <IconCircleMinus size={160} />
+                          <Text>{t('disc:button.unequipDisc')}</Text>
                         </Box>
-                      </CardActionArea>
+                      </Box>
                     </CardThemed>
-                  </Grid>
+                  </Box>
                 )}
                 {discIdsToShow.map((id) => (
-                  <Grid
-                    item
+                  <Box
                     key={id}
-                    xs={1}
-                    sx={(theme) => ({
-                      ...(discId === id && {
-                        '> .MuiCard-root': {
-                          outline: `${theme.spacing(0.5)} solid ${
-                            theme.palette.warning.main
-                          }`,
-                        },
-                      }),
-                    })}
+                    style={
+                      discId === id
+                        ? {
+                            outline:
+                              '4px solid var(--mantine-color-yellow-filled)',
+                          }
+                        : undefined
+                    }
                   >
                     <DiscCardObj
                       disc={database.discs.get(id) as IDisc}
@@ -223,9 +208,9 @@ export function DiscSwapModal({
                         discId === id ? undefined : () => setSwapDiscId(id)
                       }
                     />
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </SimpleGrid>
             </Suspense>
           </Box>
           {discsIds.length !== discIdsToShow.length && (
@@ -234,13 +219,12 @@ export function DiscSwapModal({
                 if (!node) return
                 setTriggerElement(node)
               }}
-              sx={{ borderRadius: 1, mt: 1 }}
-              variant="rectangular"
               width="100%"
               height={100}
+              mt={8}
             />
           )}
-        </CardContent>
+        </Box>
       </CardThemed>
     </ModalWrapper>
   )

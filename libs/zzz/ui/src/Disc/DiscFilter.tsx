@@ -4,8 +4,8 @@ import {
   useDisplayDisc,
 } from '@genshin-optimizer/zzz/db-ui'
 import type { DiscFilterOption } from '@genshin-optimizer/zzz/util'
-import ReplayIcon from '@mui/icons-material/Replay'
-import { Button, CardContent, Grid, Skeleton, Typography } from '@mui/material'
+import { IconRefresh } from '@tabler/icons-react'
+import { Box, Button, Group, Skeleton, Text } from '@mantine/core'
 import { t } from 'i18next'
 import { Suspense, useCallback } from 'react'
 import { Trans } from 'react-i18next'
@@ -33,49 +33,32 @@ export default function DiscFilter({
     [database, filterOption]
   )
   return (
-    <Suspense
-      fallback={<Skeleton variant="rectangular" width="100%" height={300} />}
-    >
+    <Suspense fallback={<Skeleton width="100%" height={300} />}>
       <CardThemed>
-        <CardContent>
-          <Grid container>
-            <Grid item>
-              <Typography variant="h6">{t('discFilter')}</Typography>
-            </Grid>
-            <Grid
-              item
-              flexGrow={1}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
+        <Box p="sm">
+          <Group justify="space-between" mb="sm">
+            <Text fw={700}>{t('discFilter')}</Text>
+            <Text>
+              <strong>{numShowing}</strong> / {total}
+            </Text>
+            <Button
+              size="sm"
+              color="red"
+              onClick={() => database.displayDisc.set({ action: 'reset' })}
+              leftSection={<IconRefresh size={16} />}
+              variant="default"
             >
-              <Typography>
-                <strong>{numShowing}</strong> / {total}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                size="small"
-                color="error"
-                onClick={() => database.displayDisc.set({ action: 'reset' })}
-                startIcon={<ReplayIcon />}
-              >
-                <Trans t={t} i18nKey="ui:reset" />
-              </Button>
-            </Grid>
-          </Grid>
-          <Suspense
-            fallback={
-              <Skeleton variant="rectangular" width="100%" height={400} />
-            }
-          >
+              <Trans t={t} i18nKey="ui:reset" />
+            </Button>
+          </Group>
+          <Suspense fallback={<Skeleton width="100%" height={400} />}>
             <DiscFilterDisplay
               filterOption={filterOption}
               filterOptionDispatch={filterOptionDispatch}
               filteredIds={discIds}
             />
           </Suspense>
-        </CardContent>
+        </Box>
       </CardThemed>
     </Suspense>
   )

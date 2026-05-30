@@ -6,6 +6,11 @@ export function isOptTargetTag(
   target: TargetTag | undefined
 ): boolean {
   if (!target) return false
+  if (target.rotation) {
+    return target.rotation.some(
+      ({ sheet, name }) => tag.sheet === sheet && tag.name === name
+    )
+  }
   return (
     (tag.sheet === target.sheet && tag.name === target.name) ||
     target.q === tag.q

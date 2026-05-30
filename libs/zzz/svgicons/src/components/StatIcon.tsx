@@ -1,6 +1,6 @@
+import type { SvgIconProps } from '@genshin-optimizer/common/svgicons'
 import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
 import { allAttributeKeys } from '@genshin-optimizer/zzz/consts'
-import type { SvgIconProps } from '@mui/material'
 import {
   AnomMasIcon,
   AnomProfIcon,

@@ -1,6 +1,5 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import {
-  BootstrapTooltip,
   CardThemed,
   ConditionalWrapper,
   ImgIcon,
@@ -12,27 +11,25 @@ import {
   wenginePhaseIcon,
 } from '@genshin-optimizer/zzz/assets'
 import type { PhaseKey } from '@genshin-optimizer/zzz/consts'
-import { type LocationKey, rarityColor } from '@genshin-optimizer/zzz/consts'
-import { useDatabaseContext, useWengine } from '@genshin-optimizer/zzz/db-ui'
+import { useWengine } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat, getWengineStats } from '@genshin-optimizer/zzz/stats'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import { Edit } from '@mui/icons-material'
+import { IconEdit } from '@tabler/icons-react'
 import {
+  ActionIcon,
   Box,
-  Button,
-  CardActionArea,
-  CardContent,
-  ClickAwayListener,
+  Card,
   Skeleton,
   Stack,
-  Typography,
-} from '@mui/material'
+  Text,
+  Tooltip,
+} from '@mantine/core'
+import React from 'react'
 import type { ReactNode } from 'react'
 import { Suspense, memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatDisplay } from '../Character'
-import { LocationAutocomplete } from '../Character/LocationAutocomplete'
-import { LocationName } from '../Character/LocationName'
+
 import { ZCard } from '../Components'
 import { WengineSubstatDisplay } from './WengineSubstatDisplay'
 import { WengineName } from './WengineTrans'
@@ -54,22 +51,16 @@ export const WengineCard = memo(function WengineCard({
   onEdit?: (id: string) => void
   onClick?: () => void
 }) {
-  const { database } = useDatabaseContext()
   const wengine = useWengine(wengineId)
   const onEditCB = useCallback(
     () => onEdit && onEdit(wengineId),
     [wengineId, onEdit]
-  )
-  const setLocation = useCallback(
-    (location: LocationKey) => database.wengines.set(wengineId, { location }),
-    [database.wengines, wengineId]
   )
   if (!wengine) return null
   return (
     <WengineCardObj
       wengine={wengine}
       onEdit={onEditCB}
-      setLocation={setLocation}
       onClick={onClick}
     />
   )
@@ -78,20 +69,20 @@ export function WengineCardObj({
   wengine,
   onClick,
   onEdit,
-  setLocation,
   extraButtons,
 }: {
   wengine: IWengine
   onClick?: () => void
   onEdit?: () => void
-  setLocation?: (lk: LocationKey) => void
-  extraButtons?: JSX.Element
+  extraButtons?: React.JSX.Element
 }) {
   const { t } = useTranslation('ui')
-  const [show, onShow, onHide] = useBoolState()
+  const [show, onShow] = useBoolState()
   const wrapperFunc = useCallback(
     (children: ReactNode) => (
-      <CardActionArea onClick={() => onClick?.()}>{children}</CardActionArea>
+      <Box onClick={() => onClick?.()} style={{ cursor: 'pointer' }}>
+        {children}
+      </Box>
     ),
     [onClick]
   )
@@ -99,28 +90,21 @@ export function WengineCardObj({
     (children: ReactNode) => <Box>{children}</Box>,
     []
   )
-  const { key, level = 0, phase = 1, location = '', modification = 0 } = wengine
+  const { key, level = 0, phase = 1, modification = 0 } = wengine
   if (!key)
     return (
       <CardThemed>
-        <Typography color="error">Error: Wengine not found</Typography>
+        <Text c="red">Error: Wengine not found</Text>
       </CardThemed>
     )
   const wengineStat = getWengineStat(key)
   const wengineStats = getWengineStats(key, level, phase, modification)
 
   return (
-    <Suspense
-      fallback={
-        <Skeleton
-          variant="rectangular"
-          sx={{ width: '100%', height: '100%', minHeight: 350 }}
-        />
-      }
-    >
+    <Suspense fallback={<Skeleton width="100%" height={350} />}>
       <ZCard
         bgt="dark"
-        sx={{
+        style={{
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -132,61 +116,51 @@ export function WengineCardObj({
           wrapper={wrapperFunc}
           falseWrapper={falseWrapperFunc}
         >
-          <CardContent>
-            <CardThemed bgt="light" sx={{ borderRadius: '11px' }}>
-              <CardContent
-                sx={{
+          <Card.Section>
+            <CardThemed bgt="light" style={{ borderRadius: '11px' }}>
+              <Card.Section
+                style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  paddingBottom: '0 !important',
+                  padding: 16,
                 }}
               >
-                <ClickAwayListener onClickAway={onHide}>
-                  <div>
-                    <BootstrapTooltip
-                      placement="top"
-                      onClose={onHide}
-                      open={show}
-                      disableFocusListener
-                      disableTouchListener
-                      title={
-                        <Box>
-                          <Typography>Description</Typography>
-                        </Box>
-                      }
-                      slotProps={{
-                        popper: {
-                          disablePortal: true,
-                        },
+                <Box onClick={onShow} style={{ cursor: 'pointer' }}>
+                  <Tooltip
+                    label={
+                      <Box>
+                        <Text>Description</Text>
+                      </Box>
+                    }
+                    opened={show}
+                    withinPortal={false}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        maxWidth: '100%',
+                        width: '200px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      <Typography
-                        noWrap
-                        variant="subtitle1"
-                        align="center"
-                        fontWeight="bold"
-                        maxWidth={'100%'}
-                        width="200px"
-                        onClick={onShow}
-                      >
-                        {
-                          <ImgIcon
-                            size={2}
-                            src={specialityDefIcon(wengineStat.type)}
-                          />
-                        }{' '}
-                        <WengineName wKey={key} />
-                      </Typography>
-                    </BootstrapTooltip>
-                  </div>
-                </ClickAwayListener>
+                      <ImgIcon
+                        size={2}
+                        src={specialityDefIcon(wengineStat.type)}
+                      />{' '}
+                      <WengineName wKey={key} />
+                    </Text>
+                  </Tooltip>
+                </Box>
                 <Box component="div">
                   <Box
                     component="img"
                     alt="Wengine Image"
                     src={wengineAsset(key, 'icon')}
-                    sx={{
+                    style={{
                       width: 'auto',
                       float: 'right',
                       height: '150px',
@@ -194,42 +168,35 @@ export function WengineCardObj({
                   />
                 </Box>
                 <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  width="100%"
-                  alignItems="center"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    alignItems: 'center',
+                  }}
                 >
-                  <Typography
-                    sx={{
-                      fontWeight: 'bold',
-                    }}
-                    variant="h6"
-                  >
-                    Lv.{level}
-                  </Typography>
+                  <Text fw="bold">Lv.{level}</Text>
                   <Box>
                     <ImgIcon
                       size={3}
                       src={wenginePhaseIcon(wenginePhaseIconsMap[phase])}
-                      sx={{ py: '10px', margin: 0, width: '5em' }}
+                      style={{ paddingTop: '10px', margin: 0, width: '5em' }}
                     />{' '}
                   </Box>
                 </Box>
-                {/* Main stats */}
-              </CardContent>
+              </Card.Section>
             </CardThemed>
-            <Stack spacing={1} sx={{ pt: 1 }}>
+            <Stack gap={4} p="md">
               <Box
-                display="flex"
-                gap={1}
-                alignItems="center"
-                width={'100%'}
-                color={`${rarityColor[wengineStat.rarity]}.main`}
+                style={{
+                  display: 'flex',
+                  gap: 4,
+                  alignItems: 'center',
+                  width: '100%',
+                }}
               >
-                <Typography
-                  variant="subtitle1"
-                  noWrap
-                  sx={{
+                <Text
+                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     flexGrow: 1,
@@ -237,53 +204,42 @@ export function WengineCardObj({
                   }}
                 >
                   <StatDisplay statKey={'atk'} />
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  {wengineStats['atk_base'].toFixed()}
-                </Typography>
+                </Text>
+                <Text fw="bold">{wengineStats['atk_base'].toFixed()}</Text>
               </Box>
               <WengineSubstatDisplay
                 substatKey={wengineStat['second_statkey']}
                 substatValue={wengineStats[wengineStat['second_statkey']]}
               />
             </Stack>
-          </CardContent>
+          </Card.Section>
         </ConditionalWrapper>
 
-        <Box flexGrow={1} />
+        <Box style={{ flexGrow: 1 }} />
         <Box
-          sx={{
-            p: 1,
+          style={{
+            padding: 8,
             display: 'flex',
-            gap: 1,
+            gap: 8,
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
-          <Box sx={{ flexGrow: 1 }}>
-            {setLocation ? (
-              <LocationAutocomplete locKey={location} setLocKey={setLocation} />
-            ) : (
-              <LocationName location={location} />
-            )}
-          </Box>
+          <Box style={{ flexGrow: 1 }} />
           <Box
-            display="flex"
-            gap={1}
-            alignItems="stretch"
-            height="100%"
-            sx={{ '& .MuiButton-root': { minWidth: 0, height: '100%' } }}
+            style={{
+              display: 'flex',
+              gap: 8,
+              alignItems: 'stretch',
+              height: '100%',
+            }}
           >
             {!!onEdit && (
-              <BootstrapTooltip
-                title={<Typography>{t('edit')}</Typography>}
-                placement="top"
-                arrow
-              >
-                <Button color="info" size="small" onClick={() => onEdit()}>
-                  <Edit />
-                </Button>
-              </BootstrapTooltip>
+              <Tooltip label={t('edit')}>
+                <ActionIcon color="blue" size="sm" onClick={() => onEdit()}>
+                  <IconEdit size={16} />
+                </ActionIcon>
+              </Tooltip>
             )}
             {extraButtons}
           </Box>

@@ -1,6 +1,6 @@
+import type React from 'react'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import {
-  BootstrapTooltip,
   CardThemed,
   ColorText,
   ConditionalWrapper,
@@ -19,18 +19,16 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext, useDisc } from '@genshin-optimizer/zzz/db-ui'
 import type { IDisc, ISubstat } from '@genshin-optimizer/zzz/zood'
-import { Edit } from '@mui/icons-material'
+import { IconEdit } from '@tabler/icons-react'
 import {
+  ActionIcon,
   Box,
-  Button,
-  CardActionArea,
-  CardContent,
-  ClickAwayListener,
+  Card,
   Skeleton,
   Stack,
-  Typography,
-} from '@mui/material'
-import type { Theme } from '@mui/system'
+  Text,
+  Tooltip,
+} from '@mantine/core'
 import type { ReactNode } from 'react'
 import { Suspense, memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +43,7 @@ export const DiscCard = memo(function DiscCard({
   discId,
   onEdit,
 }: {
-  key: string //remount when id changes
+  key: string
   discId: string
   onEdit?: (id: string) => void
 }) {
@@ -87,7 +85,7 @@ export function DiscCardObj({
   onDelete?: () => void
   onLockToggle?: () => void
   setLocation?: (lk: LocationKey) => void
-  extraButtons?: JSX.Element
+  extraButtons?: React.JSX.Element
 }) {
   const { t } = useTranslation('disc')
   const {
@@ -99,50 +97,38 @@ export function DiscCardObj({
   } = useSpinner()
   const { slotKey, setKey, rarity, level, mainStatKey, substats, location } =
     disc
-  const [show, onShow, onHide] = useBoolState()
+  const [show, onShow] = useBoolState()
 
   const wrapperFunc = useCallback(
     (children: ReactNode) => (
-      <CardActionArea onClick={onClick}>{children}</CardActionArea>
+      <Box
+        onClick={onClick}
+        style={{
+          cursor: 'pointer',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {children}
+      </Box>
     ),
     [onClick]
   )
   const falseWrapperFunc = useCallback(
     (children: ReactNode) => (
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         {children}
       </Box>
     ),
     []
   )
 
-  // const ele = allElementalDamageKeys.find((e) => mainStatKey.startsWith(e))
-  // TODO: requires individual disc set piece names/desc added to sheets
-  // const slotName = <DiscSetSlotName setKey={setKey} slotKey={slotKey} />
-  // const slotDesc = <DiscSetSlotDesc setKey={setKey} slotKey={slotKey} />
-  // const slotDescTooltip = slotDesc && (
-  //   <InfoTooltip
-  //     title={
-  //       <Box>
-  //         <Typography variant="h6">{slotName}</Typography>
-  //         <Typography>{slotDesc}</Typography>
-  //       </Box>
-  //     }
-  //   />
-  // )
-
   return (
-    <Suspense
-      fallback={
-        <Skeleton
-          variant="rectangular"
-          sx={{ width: '100%', height: '100%', minHeight: 350 }}
-        />
-      }
-    >
+    <Suspense fallback={<Skeleton width="100%" height={350} />}>
       <ZCard
         bgt="dark"
-        sx={{
+        style={{
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -154,59 +140,50 @@ export function DiscCardObj({
           wrapper={wrapperFunc}
           falseWrapper={falseWrapperFunc}
         >
-          <CardContent>
-            <CardThemed bgt="light" sx={{ borderRadius: '11px' }}>
-              <CardContent
-                sx={{
+          <Card.Section>
+            <CardThemed bgt="light" style={{ borderRadius: '11px' }}>
+              <Card.Section
+                style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
+                  padding: 16,
                 }}
               >
-                <ClickAwayListener onClickAway={onHide}>
-                  <div>
-                    <BootstrapTooltip
-                      placement="top"
-                      onClose={onHide}
-                      open={show}
-                      disableFocusListener
-                      disableTouchListener
-                      title={
-                        <Box>
-                          <Typography>
-                            2-Piece Set: <DiscSet2p setKey={setKey} />
-                          </Typography>
-                          <Typography>
-                            4-Piece Set: <DiscSet4p setKey={setKey} />
-                          </Typography>
-                        </Box>
-                      }
-                      slotProps={{
-                        popper: {
-                          disablePortal: true,
-                        },
+                <Box onClick={onShow} style={{ cursor: 'pointer' }}>
+                  <Tooltip
+                    label={
+                      <Box>
+                        <Text>
+                          2-Piece Set: <DiscSet2p setKey={setKey} />
+                        </Text>
+                        <Text>
+                          4-Piece Set: <DiscSet4p setKey={setKey} />
+                        </Text>
+                      </Box>
+                    }
+                    opened={show}
+                    withinPortal={false}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      <Typography
-                        noWrap
-                        variant="subtitle1"
-                        align="center"
-                        fontWeight="bold"
-                        maxWidth={'100%'}
-                        onClick={onShow}
-                      >
-                        [{slotKey}] <DiscSetName setKey={setKey} />
-                      </Typography>
-                    </BootstrapTooltip>
-                  </div>
-                </ClickAwayListener>
+                      [{slotKey}] <DiscSetName setKey={setKey} />
+                    </Text>
+                  </Tooltip>
+                </Box>
                 <Box
-                  sx={(theme: Theme) => ({
-                    border: `4px solid ${
-                      theme.palette[rarityColor[rarity]].main
-                    }`,
+                  style={{
+                    border: `4px solid ${rarityColor[rarity]}`,
                     borderRadius: '50%',
-                  })}
+                  }}
                 >
                   <Box
                     component="div"
@@ -214,7 +191,7 @@ export function DiscCardObj({
                     onMouseMove={handleMouseMove as any}
                     onMouseUp={handleMouseUp as any}
                     onMouseLeave={handleMouseUp as any}
-                    sx={{
+                    style={{
                       position: 'relative',
                       display: 'flex',
                       flexDirection: 'column',
@@ -231,8 +208,6 @@ export function DiscCardObj({
                       src={discDefIcon(setKey)}
                       style={{
                         transform: `rotate(${rotation}deg)`,
-                      }}
-                      sx={{
                         width: 'auto',
                         float: 'right',
                         height: '150px',
@@ -241,37 +216,35 @@ export function DiscCardObj({
                           : 'transform 0.1s ease-out',
                       }}
                     />
-                    <Box sx={{ height: 0, position: 'absolute', bottom: 30 }}>
-                      <Typography
-                        sx={{
+                    <Box
+                      style={{ height: 0, position: 'absolute', bottom: 30 }}
+                    >
+                      <Text
+                        style={{
                           backgroundColor: 'rgba(0,0,0,0.85)',
-                          py: '3px',
-                          px: '30px',
+                          padding: '3px 30px',
                           borderRadius: '20px',
                           fontWeight: 'bold',
                         }}
-                        variant="h6"
                       >
                         {level}
-                      </Typography>
+                      </Text>
                     </Box>
                   </Box>
                 </Box>
-                {/* Main stats */}
-              </CardContent>
+              </Card.Section>
             </CardThemed>
-            <Stack spacing={1} sx={{ pt: 1 }}>
+            <Stack gap={4} p="md">
               <Box
-                display="flex"
-                gap={1}
-                alignItems="center"
-                width={'100%'}
-                color={`${rarityColor[rarity]}.main`}
+                style={{
+                  display: 'flex',
+                  gap: 4,
+                  alignItems: 'center',
+                  width: '100%',
+                }}
               >
-                <Typography
-                  variant="subtitle1"
-                  noWrap
-                  sx={{
+                <Text
+                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     flexGrow: 1,
@@ -279,14 +252,14 @@ export function DiscCardObj({
                   }}
                 >
                   <StatDisplay statKey={mainStatKey} />
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                </Text>
+                <Text fw="bold">
                   {toPercent(
                     getDiscMainStatVal(rarity, mainStatKey, level),
                     mainStatKey
                   ).toFixed(statKeyToFixed(mainStatKey))}
                   {getUnitStr(mainStatKey)}
-                </Typography>
+                </Text>
               </Box>
               {substats.map(
                 (substat) =>
@@ -299,20 +272,20 @@ export function DiscCardObj({
                   )
               )}
             </Stack>
-          </CardContent>
+          </Card.Section>
         </ConditionalWrapper>
 
-        <Box flexGrow={1} />
+        <Box style={{ flexGrow: 1 }} />
         <Box
-          sx={{
-            p: 1,
+          style={{
+            padding: 8,
             display: 'flex',
-            gap: 1,
+            gap: 8,
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
-          <Box sx={{ flexGrow: 1 }}>
+          <Box style={{ flexGrow: 1 }}>
             {setLocation ? (
               <LocationAutocomplete locKey={location} setLocKey={setLocation} />
             ) : (
@@ -320,41 +293,20 @@ export function DiscCardObj({
             )}
           </Box>
           <Box
-            display="flex"
-            gap={1}
-            alignItems="stretch"
-            height="100%"
-            sx={{ '& .MuiButton-root': { minWidth: 0, height: '100%' } }}
+            style={{
+              display: 'flex',
+              gap: 8,
+              alignItems: 'stretch',
+              height: '100%',
+            }}
           >
             {!!onEdit && (
-              <BootstrapTooltip
-                title={<Typography>{t('edit')}</Typography>}
-                placement="top"
-                arrow
-              >
-                <Button color="info" size="small" onClick={onEdit}>
-                  <Edit />
-                </Button>
-              </BootstrapTooltip>
+              <Tooltip label={t('edit')}>
+                <ActionIcon color="blue" size="sm" onClick={onEdit}>
+                  <IconEdit size={16} />
+                </ActionIcon>
+              </Tooltip>
             )}
-            {/* {!!onDelete && (
-              <BootstrapTooltip
-                title={lock ? t('cantDeleteLock') : ''}
-                placement="top"
-              >
-                <span>
-                  <Button
-                    color="error"
-                    size="small"
-                    onClick={onDelete}
-                    disabled={lock}
-                    sx={{ top: '1px' }}
-                  >
-                    <DeleteForever />
-                  </Button>
-                </span>
-              </BootstrapTooltip>
-            )} */}
             {extraButtons}
           </Box>
         </Box>
@@ -376,24 +328,23 @@ function SubstatDisplay({
     key
   ).toFixed(statKeyToFixed(key))
   return (
-    <Typography
-      variant="subtitle2"
-      sx={{
+    <Text
+      style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontWeight: 'bold',
-        gap: 1,
+        gap: 4,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         <StatDisplay statKey={key} />
-        {upgrades > 1 && <ColorText color="warning">+{upgrades - 1}</ColorText>}
+        {upgrades > 1 && <ColorText color="yellow">+{upgrades - 1}</ColorText>}
       </Box>
-      <span>
+      <Box component="span">
         {displayValue}
         {getUnitStr(key)}
-      </span>
-    </Typography>
+      </Box>
+    </Text>
   )
 }

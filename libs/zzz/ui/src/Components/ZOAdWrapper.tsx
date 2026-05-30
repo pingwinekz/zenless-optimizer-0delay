@@ -9,11 +9,11 @@ import type { FunctionComponent, ReactNode } from 'react'
 /**
  * A component that aggregates all ads shown on ZO
  */
-export function ZOAdWrapper({ sx = {}, bgt = 'light', children }: AdProps) {
+export function ZOAdWrapper({ style = {}, bgt = 'light', children }: AdProps) {
   const maxHeight: number | undefined =
-    (sx as any)?.['maxHeight'] || (sx as any)?.['height']
+    (style as any)?.['maxHeight'] || (style as any)?.['height']
   const maxWidth: number | undefined =
-    (sx as any)?.['maxWidth'] || (sx as any)?.['width']
+    (style as any)?.['maxWidth'] || (style as any)?.['width']
   const Comp = useMemo(
     () =>
       getRandomElementFromArray(
@@ -26,7 +26,7 @@ export function ZOAdWrapper({ sx = {}, bgt = 'light', children }: AdProps) {
     <CardThemed
       bgt={bgt}
       className="zo-ad-wrapper"
-      sx={{ margin: 'auto', ...sx }}
+      style={{ margin: 'auto', ...style }}
     >
       <Comp>{children}</Comp>
     </CardThemed>

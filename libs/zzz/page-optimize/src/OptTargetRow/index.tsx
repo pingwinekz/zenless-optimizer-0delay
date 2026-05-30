@@ -7,7 +7,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { qtMap } from '@genshin-optimizer/zzz/formula-ui'
-import { Box, MenuItem } from '@mui/material'
+import { Box, MenuItem } from '@mantine/core'
 import { useCallback } from 'react'
 import { AfterShockToggleButton } from '../AfterShockToggleButton'
 import { CritModeSelector } from './CritModeSelector'
@@ -19,9 +19,9 @@ export function OptTargetRow({
 }: { character: ICachedCharacter; team: Team }) {
   return (
     <Box
-      display="flex"
-      gap={1}
-      sx={{
+      style={{
+        display: 'flex',
+        gap: 1,
         position: 'sticky',
         top: 36,
         zIndex: 100,
@@ -78,7 +78,11 @@ function StatQtDropDown() {
       {(['final', 'initial'] as const).map((mqt) => (
         <MenuItem
           key={mqt}
-          selected={mqt === qt}
+          style={
+            mqt === qt
+              ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+              : undefined
+          }
           disabled={mqt === qt}
           onClick={() =>
             database.teams.setFrame0(character.key, { tag: { q, qt: mqt } })

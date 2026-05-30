@@ -1,22 +1,28 @@
-import type { Palette, PaletteColor } from '@mui/material'
-import { styled } from '@mui/material'
+import { Badge } from '@mantine/core'
 import type { HTMLAttributes } from 'react'
 
 interface ColorTextProps extends HTMLAttributes<HTMLSpanElement> {
-  color?: keyof Palette
+  color?: string
 }
 
-export const SqBadge = styled('span', {
-  name: 'SqBadge',
-  slot: 'Root',
-})<ColorTextProps>(({ theme, color = 'primary' }) => ({
-  display: 'inline-block',
-  padding: '.25em .4em',
-  lineHeight: 1,
-  textAlign: 'center',
-  whiteSpace: 'nowrap',
-  verticalAlign: 'baseline',
-  borderRadius: '.25em',
-  backgroundColor: (theme.palette[color] as PaletteColor | undefined)?.main,
-  color: (theme.palette[color] as PaletteColor | undefined)?.contrastText,
-}))
+export const SqBadge = ({
+  color = 'primary',
+  children,
+  style,
+  ...props
+}: ColorTextProps) => (
+  <Badge
+    variant="filled"
+    color={color}
+    size="lg"
+    style={{
+      lineHeight: 1,
+      whiteSpace: 'nowrap',
+      verticalAlign: 'baseline',
+      ...style,
+    }}
+    {...(props as any)}
+  >
+    {children}
+  </Badge>
+)

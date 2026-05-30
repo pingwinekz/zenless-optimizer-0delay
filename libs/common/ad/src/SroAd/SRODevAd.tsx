@@ -1,41 +1,39 @@
-import { Link, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Anchor, Box, Text, Title } from '@mantine/core'
 import type { ReactNode } from 'react'
 import type { AdDims } from '../type'
 import { DISCORD_LINK } from '../urlUtil'
 import sro from './sro.png'
 export function SRODevAd({ children }: { children: ReactNode }) {
   return (
-    <Box
-      component={Link}
+    <Anchor
       href={DISCORD_LINK}
       target="_blank"
-      sx={{
+      style={{
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        p: '10px',
+        padding: '10px',
         cursor: 'pointer',
-        gap: 1,
+        gap: '8px',
         minHeight: '100%',
         minWidth: '100%',
       }}
     >
       {children}
-      <Typography variant="h5" color="crimson">
+      <Title order={4} c="crimson">
         DO YOU WANT A STAR RAIL OPTIMIZER?
-      </Typography>
-      <Box component="img" src={sro} maxWidth={100} />
+      </Title>
+      <Box component="img" src={sro} style={{ maxWidth: 100 }} />
 
-      <Typography>
+      <Text>
         Exciting News! We're currently developing the Star Rail Optimizer, and
         we're on the lookout for talented web developers to join our team. If
         you're passionate about shaping the future of rail optimization, come be
         a part of our journey!
-      </Typography>
-    </Box>
+      </Text>
+    </Anchor>
   )
 }
 export function getSRODevAd(dims: AdDims) {

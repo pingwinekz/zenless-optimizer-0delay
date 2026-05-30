@@ -23,5 +23,30 @@
   "mindscapeTitle": "Mindscape",
   "mindscape": "M{{level}}",
   "characterName": "Character Name",
-  "potential": "Potential Lv. {{level}}"
+  "potential": "Potential Lv. {{level}}",
+  "searchPlaceholder": "Search",
+  "gridDensity": {
+    "default": "Default",
+    "compact": "Compact"
+  },
+  "editCharacter": {
+    "change": "Change",
+    "selectWengine": "Select W-Engine",
+    "phase": "Phase",
+    "cancel": "Cancel",
+    "save": "Save",
+    "wengine": "W-Engine"
+  },
+  "customizationSidebar": {
+    "label": "Customization",
+    "colorMode": {
+      "auto": "Auto",
+      "custom": "Custom",
+      "standard": "Standard"
+    },
+    "preset": {
+      "shine": "Shine",
+      "natural": "Natural"
+    }
+  }
 }

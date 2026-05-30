@@ -1,6 +1,4 @@
-import ReplayIcon from '@mui/icons-material/Replay'
-import type { ButtonGroupProps } from '@mui/material'
-import { Button, ButtonGroup, styled } from '@mui/material'
+import { Button, ButtonGroup } from '@mantine/core'
 import type { ReactNode } from 'react'
 import {
   CustomNumberInput,
@@ -8,7 +6,7 @@ import {
 } from './CustomNumberInput'
 import { TextButton } from './TextButton'
 
-type StatInputInput = ButtonGroupProps & {
+type StatInputInput = {
   name: ReactNode
   children?: ReactNode
   value: number
@@ -19,9 +17,6 @@ type StatInputInput = ButtonGroupProps & {
   disabled?: boolean
   onReset?: () => void
 }
-const FlexButtonGroup = styled(ButtonGroup)({
-  display: 'flex',
-})
 
 export function StatInput({
   name,
@@ -36,17 +31,17 @@ export function StatInput({
   ...restProps
 }: StatInputInput) {
   return (
-    <FlexButtonGroup {...restProps}>
+    <ButtonGroup {...(restProps as any)} style={{ display: 'flex' }}>
       {children}
-      <TextButton sx={{ px: 1 }}>{name}</TextButton>
+      <TextButton style={{ paddingLeft: '0.25rem', paddingRight: '0.25rem' }}>
+        {name}
+      </TextButton>
       <CustomNumberInputButtonGroupWrapper
-        sx={{ flexBasis: '10em', flexGrow: 1 }}
+        style={{ flexBasis: '10em', flexGrow: 1 }}
       >
         <CustomNumberInput
-          sx={{ px: 1 }}
-          inputProps={{
-            sx: { textAlign: 'right' },
-          }}
+          sx={{ paddingLeft: '0.25rem', paddingRight: '0.25rem' }}
+          inputProps={{ sx: { textAlign: 'right' } } as any}
           float={percent}
           placeholder={placeholder}
           value={value}
@@ -56,14 +51,24 @@ export function StatInput({
         />
       </CustomNumberInputButtonGroupWrapper>
       <Button
-        sx={{ flexShrink: 2 }}
-        size="small"
-        color="secondary"
+        style={{ flexShrink: 2 } as any}
+        size="compact-sm"
+        color="gray"
         onClick={() => (onReset ? onReset() : onValueChange(defaultValue))}
         disabled={disabled || value === defaultValue}
       >
-        <ReplayIcon />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <polyline points="1 4 1 10 7 10" />
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+        </svg>
       </Button>
-    </FlexButtonGroup>
+    </ButtonGroup>
   )
 }

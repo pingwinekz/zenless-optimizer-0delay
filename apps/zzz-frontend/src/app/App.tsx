@@ -1,24 +1,22 @@
 import { AdBlockContextWrapper } from '@genshin-optimizer/common/ad'
-import { ScrollTop, useRefSize } from '@genshin-optimizer/common/ui'
+import { ScrollTop } from '@genshin-optimizer/common/ui'
 import { isDev } from '@genshin-optimizer/common/util'
+import { Box, Flex, MantineProvider, Skeleton } from '@mantine/core'
 import { setDebugMode } from '@genshin-optimizer/pando/engine'
 import { DatabaseProvider } from '@genshin-optimizer/zzz/db-ui'
 import '@genshin-optimizer/zzz/i18n' // import to load translations
 import PageHome from '@genshin-optimizer/zzz/page-home'
-import { theme } from '@genshin-optimizer/zzz/theme'
 import {
-  Box,
-  Container,
-  CssBaseline,
-  Skeleton,
-  StyledEngineProvider,
-  ThemeProvider,
-} from '@mui/material'
-import { Suspense, lazy } from 'react'
+  createMantineTheme,
+  themeResolver,
+  useThemeStore,
+} from '@genshin-optimizer/zzz/theme'
+import { Suspense, lazy, useMemo } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import '../styles.scss'
 import Footer from './Footer'
 import Header from './Header'
+import { LayoutSider } from './LayoutSider'
 const PageDiscs = lazy(() => import('@genshin-optimizer/zzz/page-discs'))
 const PageOptimize = lazy(() => import('@genshin-optimizer/zzz/page-optimize'))
 const PageCharacters = lazy(
@@ -31,51 +29,45 @@ const PageSettings = lazy(() => import('@genshin-optimizer/zzz/page-settings'))
 setDebugMode(isDev)
 
 export default function App() {
+  const seedColor = useThemeStore((s) => s.seedColor)
+  const mantineTheme = useMemo(() => createMantineTheme(seedColor), [seedColor])
+
   return (
-    <StyledEngineProvider injectFirst>
-      {/* https://mui.com/guides/interoperability/#css-injection-order-2 */}
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
-        <DatabaseProvider>
-          <HashRouter basename="/">
-            <AdBlockContextWrapper>
-              <Content />
-            </AdBlockContextWrapper>
-            <ScrollTop />
-          </HashRouter>
-        </DatabaseProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <MantineProvider
+      theme={mantineTheme}
+      cssVariablesResolver={themeResolver}
+      defaultColorScheme="dark"
+    >
+      <DatabaseProvider>
+        <HashRouter basename="/">
+          <AdBlockContextWrapper>
+            <Content />
+          </AdBlockContextWrapper>
+          <ScrollTop />
+        </HashRouter>
+      </DatabaseProvider>
+    </MantineProvider>
   )
 }
 
 function Content() {
-  const { ref } = useRefSize(true)
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      minHeight="100vh"
-      position="relative"
-    >
+    <Flex direction="column" mih="100vh" pos="relative">
       <Header anchor="back-to-top-anchor" />
-      {/* Main content */}
-      <Box
-        display="flex"
-        ref={ref}
-        justifyContent="center"
-        alignItems="flex-start"
-      >
-        {/* Content */}
-        <Container maxWidth="xl" sx={{ px: { xs: 0.5, sm: 1 } }}>
-          <Suspense
-            fallback={
-              <Skeleton
-                variant="rectangular"
-                sx={{ width: '100%', height: '100%' }}
-              />
-            }
-          >
+      <Flex style={{ flex: 1 }}>
+        <LayoutSider />
+        <Box
+          style={{
+            padding: '10px 10px 0 10px',
+            margin: '0 auto',
+            minHeight: 280,
+            overflow: 'initial',
+            display: 'flex',
+            justifyContent: 'space-around',
+            width: '100%',
+          }}
+        >
+          <Suspense fallback={<Skeleton h="100%" />}>
             <Routes>
               <Route index element={<PageHome />} />
               <Route path="/discs" element={<PageDiscs />} />
@@ -85,13 +77,13 @@ function Content() {
               <Route path="/settings" element={<PageSettings />} />
             </Routes>
           </Suspense>
-        </Container>
-      </Box>
+        </Box>
+      </Flex>
 
       {/* make sure footer is always at bottom */}
-      <Box flexGrow={1} />
+      <div style={{ flexGrow: 1 }} />
 
       <Footer />
-    </Box>
+    </Flex>
   )
 }

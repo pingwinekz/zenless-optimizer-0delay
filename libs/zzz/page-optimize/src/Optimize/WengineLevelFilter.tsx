@@ -5,7 +5,7 @@ import {
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
 import { WengineLevelSlider } from '@genshin-optimizer/zzz/ui'
-import { CardContent, Divider, Typography } from '@mui/material'
+import { CardSection, Divider, Text } from '@mantine/core'
 import { memo, useContext } from 'react'
 
 export const WengineLevelFilter = memo(function WengineLevelFilter({
@@ -17,13 +17,9 @@ export const WengineLevelFilter = memo(function WengineLevelFilter({
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   return (
     <CardThemed bgt="light">
-      <CardContent sx={{ display: 'flex', gap: 1 }}>
-        <Typography sx={{ fontWeight: 'bold' }}>
-          Wengine Level Filter
-          {/* TODO: Translate */}
-          {/* {t('levelFilter')} */}
-        </Typography>
-      </CardContent>
+      <CardSection style={{ display: 'flex', gap: 1 }}>
+        <Text fw={700}>Wengine Level Filter</Text>
+      </CardSection>
       <Divider />
       <WengineLevelSlider
         levelLow={optConfig?.wlevelLow ?? wengineMaxLevel}

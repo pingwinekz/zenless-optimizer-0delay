@@ -147,6 +147,7 @@ export type TargetTag = {
   damageType2?: 'aftershock' | 'abloom'
   q?: (typeof targetQ)[number]
   qt?: (typeof targetQt)[number]
+  rotation?: Array<{ sheet: string; name: string }>
 }
 
 const targetTagSchema = z
@@ -157,6 +158,9 @@ const targetTagSchema = z
     damageType2: z.literal('aftershock').or(z.literal('abloom')).optional(),
     q: z.enum(targetQ).optional(),
     qt: z.enum(targetQt).optional(),
+    rotation: z
+      .array(z.object({ sheet: z.string(), name: z.string() }))
+      .optional(),
   })
   .optional() as z.ZodType<TargetTag | undefined>
 
@@ -365,6 +369,17 @@ export class TeamDataManager extends DataManager<
     rawTarget: TargetTag | undefined
   ): TargetTag | undefined {
     if (!rawTarget) return undefined
+
+    if (rawTarget.rotation) {
+      const rotation = rawTarget.rotation
+        .filter(({ sheet, name }) => {
+          const formula = getFormula({ sheet, name })
+          return !!formula
+        })
+        .map(({ sheet, name }) => ({ sheet, name }))
+      if (rotation.length > 0) return { rotation }
+      return undefined
+    }
 
     if (rawTarget.name) {
       const formula = getFormula(rawTarget)

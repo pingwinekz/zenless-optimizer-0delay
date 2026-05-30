@@ -1,31 +1,28 @@
-import type { CardProps, Palette, PaletteColor } from '@mui/material'
-import { Card, styled } from '@mui/material'
+import { Card } from '@mantine/core'
+import type { CardProps } from '@mantine/core'
 
 export type CardBackgroundColor = 'light' | 'dark' | 'normal'
 const bgMap = {
-  light: 'contentLight',
-  dark: 'contentDark',
-  normal: 'contentNormal',
+  light: 'var(--layer-3)',
+  dark: 'var(--layer-1)',
+  normal: 'var(--layer-2)',
 } as const
 
 interface StyledCardProps extends CardProps {
   bgt?: CardBackgroundColor | string
 }
-/**
- * A colored Card that is by default `contentNormal` colored.
- *
- * Use bgt=["light", "dark"] to use [`contentLight`, `contentDark`]
- */
-export const CardThemed = styled(Card, {
-  shouldForwardProp: (prop) => prop !== 'bgt',
-})<StyledCardProps>(({ theme, bgt }) => {
-  const palette = (
-    bgt && bgt in bgMap
-      ? bgMap[bgt as CardBackgroundColor]
-      : (bgt ?? 'contentNormal')
-  ) as keyof Palette
-  const paletteColor = theme.palette[palette] as PaletteColor
-  return {
-    backgroundColor: paletteColor?.main,
-  }
-})
+
+export function CardThemed({ bgt, style, ...props }: StyledCardProps) {
+  const bg =
+    bgt && bgt in bgMap ? bgMap[bgt as CardBackgroundColor] : 'var(--layer-2)'
+  return (
+    <Card
+      style={{
+        backgroundColor: bg,
+        boxShadow: 'var(--shadow-card)',
+        ...style,
+      }}
+      {...props}
+    />
+  )
+}

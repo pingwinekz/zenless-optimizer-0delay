@@ -1,7 +1,7 @@
 import { CustomNumberInput, usePrev } from '@genshin-optimizer/common/ui'
 import { clamp } from '@genshin-optimizer/common/util'
 import { wengineMaxLevel } from '@genshin-optimizer/zzz/consts'
-import { Box, Divider, Slider } from '@mui/material'
+import { Box, Divider, RangeSlider } from '@mantine/core'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,8 +30,7 @@ export function WengineLevelSlider({
   const [sliderHigh, setsliderHigh] = useState(levelHigh)
   if (usePrev(levelHigh) !== levelHigh) setsliderHigh(levelHigh)
   const setSlider = useCallback(
-    (_: unknown, value: number | number[]) => {
-      if (typeof value == 'number') throw new TypeError()
+    (value: [number, number]) => {
       const [l, h] = value
       setsliderLow(l)
       setsliderHigh(h)
@@ -41,15 +40,17 @@ export function WengineLevelSlider({
 
   return (
     <Box
-      sx={{
+      style={{
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        bgcolor: dark ? 'contentNormal.main' : 'contentLight.main',
+        backgroundColor: dark
+          ? 'var(--mantine-color-gray-8)'
+          : 'var(--mantine-color-gray-1)',
         overflow: 'visible',
       }}
     >
-      <Box sx={{ width: 'max-content', height: 32, display: 'flex' }}>
+      <Box style={{ width: 'max-content', height: 32, display: 'flex' }}>
         {showLevelText ? (
           <>
             <span
@@ -66,7 +67,7 @@ export function WengineLevelSlider({
             >
               {t('levelSliderTitle')}
             </span>
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" />
           </>
         ) : undefined}
 
@@ -81,19 +82,23 @@ export function WengineLevelSlider({
           disabled={disabled}
         />
       </Box>
-      <Slider
-        sx={{ flex: '0 1 100%', mx: 2 }}
-        getAriaLabel={() => 'Wengine Level Range'}
+      <RangeSlider
+        style={{ flex: '0 1 100%', margin: '0 16px' }}
         value={[sliderLow, sliderHigh]}
         onChange={setSlider}
-        onChangeCommitted={(_, value) =>
-          Array.isArray(value) && setBoth(value[0], value[1])
-        }
-        valueLabelDisplay="auto"
+        onChangeEnd={(value) => setBoth(value[0], value[1])}
         min={0}
         max={wengineMaxLevel}
         step={1}
-        marks
+        marks={[
+          { value: 0 },
+          { value: 10 },
+          { value: 20 },
+          { value: 30 },
+          { value: 40 },
+          { value: 50 },
+          { value: 60 },
+        ]}
         disabled={disabled}
       />
       <CustomNumberInput

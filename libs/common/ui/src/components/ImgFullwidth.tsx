@@ -1,5 +1,3 @@
-import { styled } from '@mui/material'
-export const ImgFullwidth = styled('img')({
-  width: '100%',
-  height: 'auto',
-})
+export const ImgFullwidth = (
+  props: React.ImgHTMLAttributes<HTMLImageElement>
+) => <img alt="" style={{ width: '100%', height: 'auto' }} {...props} />

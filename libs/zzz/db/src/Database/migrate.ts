@@ -7,14 +7,14 @@
 
 import type { DBStorage } from '@genshin-optimizer/common/database'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
-import type { ICharacter, IWengine } from '@genshin-optimizer/zzz/zood'
+import type { ICharacter } from '@genshin-optimizer/zzz/zood'
 import type {
   ICharMeta,
   IZZZDatabase,
   IZenlessObjectDescription,
 } from '../Interfaces'
 
-export const currentDBVersion = 2
+export const currentDBVersion = 3
 
 export function migrateZOOD(
   zood: IZenlessObjectDescription & IZZZDatabase
@@ -60,15 +60,31 @@ export function migrateZOOD(
           .forEach((disc) => (disc.location = newKey))
       }
 
-      const weng = zood['wengines'] as IWengine[]
+      const weng = zood['wengines'] as any[]
       if (weng) {
         weng
-          .filter((weng) => (weng.location as string) === oldKey)
-          .forEach((weng) => (weng.location = newKey))
+          .filter((weng: any) => (weng.location as string) === oldKey)
+          .forEach((weng: any) => (weng.location = newKey))
       }
     }
     migrateData('Astra', 'AstraYao')
     migrateData('QingYi', 'Qingyi')
+  })
+
+  // Migrate equippedWengine → wengineKey/wenginePhase
+  migrateVersion(3, () => {
+    const chars = zood['characters'] as (ICharacter & { equippedWengine?: string })[]
+    if (chars) {
+      for (const char of chars) {
+        // 'equippedWengine' was a string ID; we can't resolve key from ID
+        // so we clear it and let user re-select
+        delete (char as any).equippedWengine
+        char.wengineKey = ''
+        char.wenginePhase = 1
+      }
+    }
+    // Remove old wengine instances (they become catalog entries)
+    delete zood['wengines']
   })
 
   zood.dbVersion = currentDBVersion
@@ -137,8 +153,8 @@ export function migrateStorage(storage: DBStorage) {
           }
         }
         if (key.startsWith('zzz_wengine_')) {
-          const weng = storage.get(key)
-          if (weng.location === oldKey) {
+          const weng = storage.get(key) as any
+          if (weng?.location === oldKey) {
             weng.location = newKey
             storage.set(key, weng)
           }
@@ -147,6 +163,25 @@ export function migrateStorage(storage: DBStorage) {
     }
     migrateData('Astra', 'AstraYao')
     migrateData('QingYi', 'Qingyi')
+  })
+
+  migrateVersion(3, () => {
+    const keys = storage.keys
+    for (const key of keys) {
+      if (key.startsWith('zzz_character_')) {
+        const char = storage.get(key)
+        if (char && 'equippedWengine' in char) {
+          delete char.equippedWengine
+          char.wengineKey = ''
+          char.wenginePhase = 1
+          storage.set(key, char)
+        }
+      }
+      // Remove old wengine entries (they become catalog)
+      if (key.startsWith('zzz_wengine_')) {
+        storage.remove(key)
+      }
+    }
   })
 
   storage.setDBVersion(currentDBVersion)

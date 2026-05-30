@@ -1,3 +1,4 @@
+import { IconCircleMinus } from '@tabler/icons-react'
 import { useDataEntryBase } from '@genshin-optimizer/common/database-ui'
 import {
   CardThemed,
@@ -5,7 +6,14 @@ import {
   ModalWrapper,
   usePrev,
 } from '@genshin-optimizer/common/ui'
-import { catTotal } from '@genshin-optimizer/common/util'
+import {
+  Box,
+  CloseButton,
+  Divider,
+  SimpleGrid,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import {
   rarityDefIcon,
   specialityDefIcon,
@@ -20,28 +28,18 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
-import CloseIcon from '@mui/icons-material/Close'
-import {
-  Box,
-  CardActionArea,
-  CardContent,
-  Divider,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material'
 import type { ChangeEvent } from 'react'
 import { useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { WengineRarityToggle, WengineToggle } from '../toggles'
+import { SegmentedFilterRow } from '../toggles'
 import { WengineName } from './WengineTrans'
 
 type WengineSelectionModalProps = {
   show: boolean
   onHide: () => void
-  onSelect: (wKey: WengineKey) => void
+  onSelect: (wKey: WengineKey | '') => void
   wengineTypeFilter?: SpecialityKey | ''
+  zIndex?: number
 }
 
 export function WengineSelectionModal({
@@ -49,6 +47,7 @@ export function WengineSelectionModal({
   onHide,
   onSelect,
   wengineTypeFilter,
+  zIndex,
 }: WengineSelectionModalProps) {
   const { t } = useTranslation(['page_wengine'])
   const [wengineFilter, setWenginefilter] = useState<SpecialityKey[]>(
@@ -86,113 +85,145 @@ export function WengineSelectionModal({
     [deferredSearchTerm, rarity, t, wengineFilter]
   )
 
-  const wengineTotals = useMemo(
-    () =>
-      catTotal(allSpecialityKeys, (ct) =>
-        allWengineKeys.forEach((wk) => {
-          const wtk = getWengineStat(wk).type
-          if (wk) {
-            ct[wtk].total++
-            if (wengineIdList.includes(wk)) ct[wtk].current++
-          }
-        })
-      ),
-    [wengineIdList]
-  )
-
-  const wengineRarityTotals = useMemo(
-    () =>
-      catTotal(allWengineRarityKeys, (ct) =>
-        allWengineKeys.forEach((wk) => {
-          const wr = getWengineStat(wk).rarity
-          if (wr) {
-            ct[wr].total++
-            if (wengineIdList.includes(wk)) ct[wr].current++
-          }
-        })
-      ),
-    [wengineIdList]
-  )
-
   return (
-    <ModalWrapper open={show} onClose={onHide}>
-      <CardThemed>
-        <CardContent sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <WengineToggle
-            value={wengineFilter}
-            totals={wengineTotals}
-            onChange={setWenginefilter}
-            size="small"
-          />
-          <WengineRarityToggle
-            sx={{ height: '100%' }}
-            onChange={(rarity) => database.displayWengine.set({ rarity })}
-            value={rarity}
-            totals={wengineRarityTotals}
-            size="small"
-          />
-          <TextField
-            autoFocus
-            size="small"
-            value={searchTerm}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setSearchTerm(e.target.value)
-            }
-            label={t('wengineName')}
-            sx={{ height: '100%' }}
-            InputProps={{
-              sx: { height: '100%' },
+    <ModalWrapper
+      opened={show}
+      onClose={onHide}
+      zIndex={zIndex}
+      size="75%"
+      containerProps={{ style: { height: '100vh' } }}
+    >
+      <CardThemed
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
+        <Box
+          style={{
+            display: 'flex',
+            gap: 8,
+            padding: '16px',
+            alignItems: 'center',
+          }}
+        >
+          <TextInput
+            styles={{
+              input: {
+                height: 40,
+                lineHeight: '40px',
+                fontSize: 14,
+                borderRadius: 4,
+              },
             }}
+            w={200}
+            placeholder={t('wengineName')}
+            value={searchTerm}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearchTerm(e.target.value.toLowerCase())
+            }
+            rightSection={
+              searchTerm ? (
+                <CloseButton size="sm" onClick={() => setSearchTerm('')} />
+              ) : undefined
+            }
+            rightSectionPointerEvents="all"
           />
-          <IconButton onClick={onHide} sx={{ ml: 'auto' }}>
-            <CloseIcon />
-          </IconButton>
-        </CardContent>
+          <Box style={{ flex: 1 }}>
+            <SegmentedFilterRow
+              tags={allSpecialityKeys.map((sk) => ({
+                key: sk,
+                display: <ImgIcon src={specialityDefIcon(sk)} size={1.5} />,
+              }))}
+              currentFilter={wengineFilter}
+              setCurrentFilters={setWenginefilter}
+            />
+          </Box>
+          <Box style={{ minWidth: 180 }}>
+            <SegmentedFilterRow
+              tags={allWengineRarityKeys.map((rk) => ({
+                key: rk,
+                display: <ImgIcon src={rarityDefIcon(rk)} size={1.2} />,
+              }))}
+              currentFilter={rarity}
+              setCurrentFilters={(rarity) =>
+                database.displayWengine.set({ rarity })
+              }
+            />
+          </Box>
+        </Box>
         <Divider />
-        <CardContent>
-          <Grid container spacing={1}>
+        <Box style={{ flex: 1, overflow: 'auto' }} p="sm">
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={8}>
+            {/* Unequip / None option */}
+            <CardThemed
+              bgt="light"
+              style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+            >
+              <Box
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                  minHeight: 100,
+                  padding: 8,
+                }}
+                onClick={() => {
+                  onHide()
+                  onSelect('')
+                }}
+              >
+                <IconCircleMinus size={48} />
+                <Text size="sm" c="dimmed">
+                  {t('wengine:button.unequipWengine')}
+                </Text>
+              </Box>
+            </CardThemed>
             {wengineIdList.map((wengineKey) => {
               const wengineStat = getWengineStat(wengineKey)
               return (
-                <Grid item key={wengineKey} lg={3} md={4}>
-                  <CardThemed bgt="light" sx={{ height: '100%' }}>
-                    <CardActionArea
-                      onClick={() => {
-                        onHide()
-                        onSelect(wengineKey)
-                      }}
-                      sx={{ display: 'flex' }}
-                    >
-                      <Box
-                        component="img"
-                        src={wengineAsset(wengineKey, 'icon')}
-                        sx={{ width: 100, height: 'auto' }}
-                        className={` grad-${wengineStat.rarity}star`}
-                      />
-                      <Box sx={{ flexGrow: 1, px: 1 }}>
-                        <Typography variant="subtitle1">
-                          <WengineName wKey={wengineKey} />
-                        </Typography>
-                        <Typography
-                          sx={{ display: 'flex', alignItems: 'baseline' }}
-                        >
-                          <ImgIcon
-                            size={1.5}
-                            src={specialityDefIcon(wengineStat.type)}
-                          />
-                          <ImgIcon
-                            size={1.5}
-                            src={rarityDefIcon(wengineStat.rarity)}
-                          />
-                        </Typography>
-                      </Box>
-                    </CardActionArea>
-                  </CardThemed>
-                </Grid>
+                <CardThemed
+                  key={wengineKey}
+                  bgt="light"
+                  style={{ height: '100%' }}
+                >
+                  <Box
+                    style={{ display: 'flex', cursor: 'pointer' }}
+                    onClick={() => {
+                      onHide()
+                      onSelect(wengineKey)
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={wengineAsset(wengineKey, 'icon')}
+                      style={{ width: 100, height: 'auto' }}
+                      className={` grad-${wengineStat.rarity}star`}
+                    />
+                    <Box style={{ flexGrow: 1, padding: '0 8px' }}>
+                      <Text>
+                        <WengineName wKey={wengineKey} />
+                      </Text>
+                      <Text style={{ display: 'flex', alignItems: 'baseline' }}>
+                        <ImgIcon
+                          size={1.5}
+                          src={specialityDefIcon(wengineStat.type)}
+                        />
+                        <ImgIcon
+                          size={1.5}
+                          src={rarityDefIcon(wengineStat.rarity)}
+                        />
+                      </Text>
+                    </Box>
+                  </Box>
+                </CardThemed>
               )
             })}
-          </Grid>
-        </CardContent>
+          </SimpleGrid>
+        </Box>
       </CardThemed>
     </ModalWrapper>
   )

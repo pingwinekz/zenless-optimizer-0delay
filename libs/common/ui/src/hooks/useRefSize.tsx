@@ -5,8 +5,10 @@ import { useDeferredValue, useEffect, useRef, useState } from 'react'
  * @param deferred - When true, returns deferred values that update less frequently to improve performance
  * @returns
  */
-export function useRefSize(deferred = false) {
-  const ref = useRef<HTMLElement>()
+export function useRefSize<T extends HTMLElement = HTMLElement>(
+  deferred = false
+) {
+  const ref = useRef<T>(null)
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const deferredWidth = useDeferredValue(width)

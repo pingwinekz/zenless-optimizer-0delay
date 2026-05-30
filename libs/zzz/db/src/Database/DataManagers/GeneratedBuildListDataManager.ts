@@ -13,7 +13,7 @@ const discIdsSchema = zodTypedRecord(
 
 const generatedBuildSchema = z.object({
   value: z.number(),
-  wengineId: z.string().optional(),
+  wengineKey: z.string().optional(),
   discIds: discIdsSchema,
 })
 
@@ -44,11 +44,11 @@ export class GeneratedBuildListDataManager extends DataManager<
     // Validate builds with database lookups
     const builds: GeneratedBuild[] = rawBuilds.map((build) => {
       const { discIds: discIdsRaw, value } = build
-      let { wengineId } = build
+      let { wengineKey } = build
 
-      // Validate wengineId exists in database
-      if (wengineId && !this.database.wengines.get(wengineId))
-        wengineId = undefined
+      // Validate wengineKey is a valid key
+      if (wengineKey && !this.database.wengines.get(wengineKey))
+        wengineKey = undefined
 
       // Validate discIds - ensure each disc exists and matches its slot
       const discIds = objKeyMap(allDiscSlotKeys, (slotKey) =>
@@ -57,7 +57,7 @@ export class GeneratedBuildListDataManager extends DataManager<
           : undefined
       )
 
-      return { discIds, wengineId, value }
+      return { discIds, wengineKey, value }
     })
 
     return {

@@ -1,7 +1,6 @@
 import {
   BootstrapTooltip,
   SolidToggleButtonGroup,
-  theme,
 } from '@genshin-optimizer/common/ui'
 import {
   bulkCatTotal,
@@ -19,20 +18,22 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { type DiscFilterOption } from '@genshin-optimizer/zzz/util'
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
-import LockIcon from '@mui/icons-material/Lock'
-import LockOpenIcon from '@mui/icons-material/LockOpen'
-import PersonSearchIcon from '@mui/icons-material/PersonSearch'
 import {
+  IconBriefcase,
+  IconLock,
+  IconLockOpen,
+  IconUserSearch,
+} from '@tabler/icons-react'
+import {
+  Badge,
   Box,
   Button,
   Card,
-  Chip,
   Divider,
-  Grid,
-  ToggleButton,
-} from '@mui/material'
-import Stack from '@mui/system/Stack'
+  SimpleGrid,
+  Stack,
+  Tabs,
+} from '@mantine/core'
 import { Suspense, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { LocationFilterMultiAutocomplete } from '../Character/LocationFilterMultiAutocomplete'
@@ -121,8 +122,6 @@ export function DiscFilterDisplay({
         const lns = disc.substats.length
         const equipped = location ? 'equipped' : 'unequipped'
         const excluded = excludedIds.includes(id) ? 'excluded' : 'included'
-        // The slot filter is disabled during artifact swapping, in which case our artifact total displayed by
-        // the filter should reflect only the slot being swapped.
         if (!disableSlotFilter || disc.slotKey === filterOption.slotKeys[0]) {
           ctMap['rarityTotal'][rarity].total++
           ctMap['slotTotal'][slotKey].total++
@@ -163,15 +162,15 @@ export function DiscFilterDisplay({
   ])
   return (
     <Box>
-      <Grid container spacing={1}>
+      <SimpleGrid cols={{ base: 1, md: 2 }} spacing={8}>
         {/* left */}
-        <Grid item xs={12} md={6} display="flex" flexDirection="column">
+        <Box style={{ display: 'flex', flexDirection: 'column' }}>
           {/* General */}
           <Trans t={t} i18nKey="subheadings.general" />
-          <Stack spacing={1}>
-            <Divider sx={{ bgcolor: theme.palette.contentNormal.light }} />
+          <Stack gap={8}>
+            <Divider />
             {/* Disc level filter */}
-            <Card>
+            <Card padding="sm" withBorder>
               <DiscLevelSlider
                 levelLow={levelLow}
                 levelHigh={levelHigh}
@@ -183,11 +182,11 @@ export function DiscFilterDisplay({
               ></DiscLevelSlider>
             </Card>
             {/* Disc rarity filter */}
-            <SolidToggleButtonGroup fullWidth value={rarity} size="small">
+            <SolidToggleButtonGroup fullWidth value={rarity} size="sm">
               {allDiscRarityKeys.map((rarityKey) => (
-                <ToggleButton
+                <Tabs.Tab
                   key={rarityKey}
-                  sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}
+                  style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
                   value={rarityKey}
                   onClick={() =>
                     filterOptionDispatch({
@@ -196,26 +195,32 @@ export function DiscFilterDisplay({
                   }
                 >
                   {rarityKey}
-                  <Chip label={rarityTotal[rarityKey]} size="small" />
-                </ToggleButton>
+                  <Badge size="sm">{rarityTotal[rarityKey]}</Badge>
+                </Tabs.Tab>
               ))}
             </SolidToggleButtonGroup>
             {/* Number of Sub stats filter */}
-            <SolidToggleButtonGroup fullWidth value={lines} size="small">
+            <SolidToggleButtonGroup
+              fullWidth
+              value={lines.map(String)}
+              size="sm"
+            >
               {[1, 2, 3, 4].map((line) => (
-                <ToggleButton
+                <Tabs.Tab
                   key={line}
-                  sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}
-                  value={line}
+                  style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
+                  value={String(line)}
                   onClick={() =>
                     filterOptionDispatch({
                       lines: lineHandler(lines, line) as Array<1 | 2 | 3 | 4>,
                     })
                   }
                 >
-                  <Box whiteSpace="nowrap">{t('sub', { count: line })}</Box>
-                  <Chip label={linesTotal[line]} size="small" />
-                </ToggleButton>
+                  <Box style={{ whiteSpace: 'nowrap' }}>
+                    {t('sub', { count: line })}
+                  </Box>
+                  <Badge size="sm">{linesTotal[line]}</Badge>
+                </Tabs.Tab>
               ))}
             </SolidToggleButtonGroup>
             {/* Disc Slot */}
@@ -228,7 +233,7 @@ export function DiscFilterDisplay({
               value={slotKeys}
             />
           </Stack>
-          <Stack spacing={1.5} pt={1.5}>
+          <Stack gap={12} pt={12}>
             {/* Disc set dropdown */}
             <DiscSetMultiAutocomplete
               totals={setTotal}
@@ -253,97 +258,91 @@ export function DiscFilterDisplay({
               allSubstatKeys={[...allDiscSubStatKeys]}
             />
           </Stack>
-        </Grid>
+        </Box>
         {/* right */}
-        <Grid item xs={12} md={6} display="flex" flexDirection="column" gap={1}>
+        <Box style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {/* Inventory */}
           <Box>
             <Trans t={t} i18nKey="subheadings.inventory" />
-            <Stack spacing={1}>
-              <Divider sx={{ bgcolor: theme.palette.contentNormal.light }} />
+            <Stack gap={8}>
+              <Divider />
               {/* exclusion + locked */}
-              <SolidToggleButtonGroup fullWidth value={locked} size="small">
+              <SolidToggleButtonGroup fullWidth value={locked} size="sm">
                 {lockedValues.map((v, i) => (
-                  <ToggleButton
+                  <Tabs.Tab
                     key={v}
                     value={v}
-                    sx={{ display: 'flex', gap: 1 }}
+                    style={{ display: 'flex', gap: 8 }}
                     onClick={() =>
                       filterOptionDispatch({ locked: lockedHandler(locked, v) })
                     }
                   >
-                    {i ? <LockOpenIcon /> : <LockIcon />}
+                    {i ? <IconLockOpen size={18} /> : <IconLock size={18} />}
                     <Trans i18nKey={`ui:${v}`} t={t} />
-                    <Chip
-                      label={lockedTotal[i ? 'unlocked' : 'locked']}
-                      size="small"
-                    />
-                  </ToggleButton>
+                    <Badge size="sm">
+                      {lockedTotal[i ? 'unlocked' : 'locked']}
+                    </Badge>
+                  </Tabs.Tab>
                 ))}
               </SolidToggleButtonGroup>
               {/* Excluded from optimization */}
               {enableExclusionFilter && (
-                <SolidToggleButtonGroup fullWidth value={excluded} size="small">
+                <SolidToggleButtonGroup fullWidth value={excluded} size="sm">
                   {excludedValues.map((v, i) => (
-                    <ToggleButton
+                    <Tabs.Tab
                       key={v}
                       value={v}
-                      sx={{ display: 'flex', gap: 1 }}
+                      style={{ display: 'flex', gap: 8 }}
                       onClick={() =>
                         filterOptionDispatch({
                           excluded: excludedHandler(excluded, v),
                         })
                       }
                     >
-                      {/* {i ? <OptimizationIcon /> : <ExcludeIcon />} */}
                       <Trans i18nKey={`ui:${v}`} t={t} />
-                      <Chip
-                        label={excludedTotal[i ? 'included' : 'excluded']}
-                        size="small"
-                      />
-                    </ToggleButton>
+                      <Badge size="sm">
+                        {excludedTotal[i ? 'included' : 'excluded']}
+                      </Badge>
+                    </Tabs.Tab>
                   ))}
                 </SolidToggleButtonGroup>
               )}
               {/* All inventory toggle */}
               <Button
-                startIcon={<BusinessCenterIcon />}
-                color={showInventory ? 'success' : 'secondary'}
+                leftSection={<IconBriefcase size={16} />}
+                color={showInventory ? 'green' : 'gray'}
                 onClick={() =>
                   filterOptionDispatch({ showInventory: !showInventory })
                 }
+                variant={showInventory ? 'filled' : 'default'}
               >
                 {t('unequippedDiscs')}{' '}
-                <Chip
-                  sx={{ ml: 1 }}
-                  label={equippedTotal['unequipped']}
-                  size="small"
-                />
+                <Badge style={{ marginLeft: 8 }} size="sm">
+                  {equippedTotal['unequipped']}
+                </Badge>
               </Button>
               {/* All equipped toggle */}
               <Button
-                startIcon={<PersonSearchIcon />}
-                color={showEquipped ? 'success' : 'secondary'}
+                leftSection={<IconUserSearch size={16} />}
+                color={showEquipped ? 'green' : 'gray'}
                 onClick={() =>
                   filterOptionDispatch({ showEquipped: !showEquipped })
                 }
+                variant={showEquipped ? 'filled' : 'default'}
               >
                 {t('equippedDiscs')}{' '}
-                <Chip
-                  sx={{ ml: 1 }}
-                  label={equippedTotal['equipped']}
-                  size="small"
-                />
+                <Badge style={{ marginLeft: 8 }} size="sm">
+                  {equippedTotal['equipped']}
+                </Badge>
               </Button>
             </Stack>
-            <Stack spacing={1.5} pt={1.5}>
+            <Stack gap={12} pt={12}>
               {/* Filter characters */}
               <Suspense fallback={null}>
                 <BootstrapTooltip
-                  title={showEquipped ? t('locationsTooltip') : ''}
-                  placement="top"
+                  label={showEquipped ? t('locationsTooltip') : ''}
                 >
-                  <span>
+                  <Box component="span">
                     <LocationFilterMultiAutocomplete
                       totals={locationTotal}
                       locations={showEquipped ? [] : locations}
@@ -352,14 +351,13 @@ export function DiscFilterDisplay({
                       }
                       disabled={showEquipped}
                     />
-                  </span>
+                  </Box>
                 </BootstrapTooltip>
               </Suspense>
             </Stack>
           </Box>
-          {/* Role Value */}
-        </Grid>
-      </Grid>
+        </Box>
+      </SimpleGrid>
     </Box>
   )
 }

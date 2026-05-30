@@ -19,5 +19,5 @@ export function ConditionalWrapper({
       : falseWrapper
         ? falseWrapper(children)
         : children
-  ) as JSX.Element
+  ) as React.JSX.Element
 }

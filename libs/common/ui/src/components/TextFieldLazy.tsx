@@ -1,10 +1,9 @@
-import type { TextFieldProps } from '@mui/material'
-import { TextField } from '@mui/material'
+import { TextInput } from '@mantine/core'
 import { useState } from 'react'
 import { usePrev } from '../hooks'
 
 /**
- * A textfield that only triggers `onChange` when it is blurred (unfocused) or if not multi-line, the enter key.
+ * A text input that only triggers `onChange` when it is blurred (unfocused) or if not multi-line, the enter key.
  */
 export function TextFieldLazy<T extends string | undefined | null>({
   value: valueProp,
@@ -13,7 +12,7 @@ export function TextFieldLazy<T extends string | undefined | null>({
 }: {
   value: T
   onChange: (value: T) => void
-} & Omit<TextFieldProps, 'value' | 'onChange' | 'onBlur' | 'onKeyDown'>) {
+} & Omit<React.ComponentProps<typeof TextInput>, 'value' | 'onChange'>) {
   const [value, setValue] = useState(valueProp)
 
   if (usePrev(valueProp) !== valueProp) setValue(valueProp)
@@ -21,12 +20,12 @@ export function TextFieldLazy<T extends string | undefined | null>({
   const saveValue = () => onChange(value)
 
   return (
-    <TextField
-      value={value}
-      onChange={(e) => setValue(e.target.value as T)}
+    <TextInput
+      value={value ?? ''}
+      onChange={(e) => setValue(e.currentTarget.value as T)}
       onBlur={saveValue}
-      onKeyDown={(e) => e.key === 'Enter' && !props.multiline && saveValue()}
-      {...props}
+      onKeyDown={(e) => e.key === 'Enter' && saveValue()}
+      {...(props as any)}
     />
   )
 }

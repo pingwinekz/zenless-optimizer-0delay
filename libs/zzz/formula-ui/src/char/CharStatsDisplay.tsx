@@ -1,10 +1,8 @@
 import { shouldShowDevComponents } from '@genshin-optimizer/common/util'
+import { Box } from '@mantine/core'
 import type { Read } from '@genshin-optimizer/game-opt/engine'
 import { DebugReadContext } from '@genshin-optimizer/game-opt/formula-ui'
-import {
-  FieldDisplayList,
-  TagFieldDisplay,
-} from '@genshin-optimizer/game-opt/sheet-ui'
+import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { StatKey } from '@genshin-optimizer/zzz/consts'
 import { applyDamageTypeToTag } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0 } from '@genshin-optimizer/zzz/db'
@@ -17,7 +15,6 @@ import {
   getHighlightRGBA,
   isHighlight,
 } from '@genshin-optimizer/zzz/ui'
-import { ListItem } from '@mui/material'
 import { useContext, useMemo } from 'react'
 import { useZzzCalcContext } from '../hooks'
 import { tagToTagField } from '../util'
@@ -26,11 +23,11 @@ export function CharStatsDisplay() {
   const calc = useZzzCalcContext()
   return (
     <ZCard>
-      <FieldDisplayList sx={{ m: 0 }} bgt="normal">
+      <Box>
         {calc?.listFormulas(own.listing.formulas).map((read, index) => (
           <CharStatRow key={index} read={read} />
         ))}
-      </FieldDisplayList>
+      </Box>
     </ZCard>
   )
 }
@@ -81,7 +78,7 @@ function CharStatRow({ read }: { read: Read<Tag> }) {
       field={tagToTagField(mergedTag)}
       calcRead={calcRead}
       showZero
-      component={ListItem}
+      component={'li' as any}
       onMouseEnter={() => tagQStatKey && setStatHighlight(tagQStatKey)}
       onMouseLeave={() => setStatHighlight('')}
       rowSx={{

@@ -9,18 +9,17 @@ import { toggleInArr } from '@genshin-optimizer/common/util'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSetKeys } from '@genshin-optimizer/zzz/consts'
-import CloseIcon from '@mui/icons-material/Close'
+import { IconX } from '@tabler/icons-react'
 import {
+  ActionIcon,
   Box,
   Button,
-  ButtonGroup,
-  CardContent,
-  CardHeader,
   Divider,
-  Grid,
-  IconButton,
-  MenuItem,
-} from '@mui/material'
+  Group,
+  SimpleGrid,
+  Text,
+} from '@mantine/core'
+import { Menu } from '@mantine/core'
 import { DiscSetName } from './DiscTrans'
 
 export function DiscSetFilter({
@@ -39,7 +38,7 @@ export function DiscSetFilter({
   const [open, onOpen, onClose] = useBoolState()
   return (
     <CardThemed bgt="light">
-      <ModalWrapper open={open} onClose={onClose}>
+      <ModalWrapper opened={open} onClose={onClose}>
         <AdvSetFilterCard
           onClose={onClose}
           setFilter2={setFilter2}
@@ -48,9 +47,14 @@ export function DiscSetFilter({
           setSetFilter4={setSetFilter4}
         />
       </ModalWrapper>
-      <CardContent sx={{ display: 'flex', gap: 1 }}>
+      <Box p="sm" style={{ display: 'flex', gap: 8 }}>
         <Box
-          sx={{ flexGrow: 1, display: 'flex', gap: 1, flexDirection: 'column' }}
+          style={{
+            flexGrow: 1,
+            display: 'flex',
+            gap: 8,
+            flexDirection: 'column',
+          }}
         >
           {setFilter4.length <= 1 ? (
             <DropdownButton
@@ -67,18 +71,18 @@ export function DiscSetFilter({
                   'Select to force 4-Set'
                 )
               }
-              sx={{ flexGrow: 1 }}
+              style={{ flexGrow: 1 }}
             >
-              <MenuItem onClick={() => setSetFilter4([])}>No 4-Set</MenuItem>
+              <Menu.Item onClick={() => setSetFilter4([])}>No 4-Set</Menu.Item>
 
               {allDiscSetKeys.map((d) => (
-                <MenuItem key={d} onClick={() => setSetFilter4([d])}>
+                <Menu.Item key={d} onClick={() => setSetFilter4([d])}>
                   <DiscSetName setKey={d} />
-                </MenuItem>
+                </Menu.Item>
               ))}
             </DropdownButton>
           ) : (
-            <Button disabled>
+            <Button disabled variant="default">
               <span>
                 <strong>{setFilter4.length}</strong> Disc 4p-set Selected
               </span>
@@ -100,30 +104,35 @@ export function DiscSetFilter({
                   'Select to force 2-Set'
                 )
               }
-              sx={{ flexGrow: 1 }}
+              style={{ flexGrow: 1 }}
             >
-              <MenuItem onClick={() => setSetFilter2([])}>No 2-Set</MenuItem>
+              <Menu.Item onClick={() => setSetFilter2([])}>No 2-Set</Menu.Item>
 
               {allDiscSetKeys.map((d) => (
-                <MenuItem key={d} onClick={() => setSetFilter2([d])}>
+                <Menu.Item key={d} onClick={() => setSetFilter2([d])}>
                   <DiscSetName setKey={d} />
-                </MenuItem>
+                </Menu.Item>
               ))}
             </DropdownButton>
           ) : (
-            <Button disabled>
+            <Button disabled variant="default">
               <span>
                 <strong>{setFilter2.length}</strong> Disc 2p-set Selected
               </span>
             </Button>
           )}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
-          <Button disabled={disabled} onClick={onOpen} color="info">
+        <Box style={{ display: 'flex', alignItems: 'stretch' }}>
+          <Button
+            disabled={disabled}
+            onClick={onOpen}
+            color="blue"
+            variant="default"
+          >
             Advanced Set-Filter Config
           </Button>
         </Box>
-      </CardContent>
+      </Box>
     </CardThemed>
   )
 }
@@ -142,33 +151,33 @@ function AdvSetFilterCard({
 }) {
   return (
     <CardThemed>
-      <CardHeader
-        title="Advanced Set-Filter Config"
-        action={
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        }
-      />
+      <Group justify="space-between" p="sm">
+        <Text fw={700}>Advanced Set-Filter Config</Text>
+        <ActionIcon onClick={onClose} variant="subtle">
+          <IconX />
+        </ActionIcon>
+      </Group>
       <Divider />
-      <CardContent>
-        <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+      <Box p="sm">
+        <Group gap={8} mb={8}>
           <Button
             disabled={!setFilter4.length}
             onClick={() => setSetFilter4([])}
+            variant="default"
           >
             Reset 4p filter
           </Button>
           <Button
             disabled={!setFilter2.length}
             onClick={() => setSetFilter2([])}
+            variant="default"
           >
             Reset 2p filter
           </Button>
-        </Box>
-        <Grid container spacing={1}>
+        </Group>
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing={8}>
           {allDiscSetKeys.map((d) => (
-            <Grid item key={d} xs={1} md={2} lg={3}>
+            <Box key={d}>
               <AdvSetFilterDiscCard
                 setKey={d}
                 setFilter4={setFilter4}
@@ -176,10 +185,10 @@ function AdvSetFilterCard({
                 setSetFilter4={setSetFilter4}
                 setSetFilter2={setSetFilter2}
               />
-            </Grid>
+            </Box>
           ))}
-        </Grid>
-      </CardContent>
+        </SimpleGrid>
+      </Box>
     </CardThemed>
   )
 }
@@ -198,16 +207,18 @@ function AdvSetFilterDiscCard({
 }) {
   return (
     <CardThemed bgt="light">
-      <CardHeader
-        title={<DiscSetName setKey={setKey} />}
-        avatar={<ImgIcon src={discDefIcon(setKey)} size={2} />}
-      />
-      <ButtonGroup fullWidth>
+      <Box p="sm">
+        <Group gap={8}>
+          <ImgIcon src={discDefIcon(setKey)} size={2} />
+          <Text fw={700}>
+            <DiscSetName setKey={setKey} />
+          </Text>
+        </Group>
+      </Box>
+      <Button.Group>
         <Button
           color={
-            !setFilter4.length || setFilter4.includes(setKey)
-              ? 'success'
-              : 'secondary'
+            !setFilter4.length || setFilter4.includes(setKey) ? 'green' : 'gray'
           }
           onClick={() =>
             setSetFilter4(
@@ -216,14 +227,18 @@ function AdvSetFilterDiscCard({
                 : [setKey]
             )
           }
+          variant={
+            !setFilter4.length || setFilter4.includes(setKey)
+              ? 'filled'
+              : 'default'
+          }
+          style={{ flex: 1 }}
         >
           Allow 4p
         </Button>
         <Button
           color={
-            !setFilter2.length || setFilter2.includes(setKey)
-              ? 'success'
-              : 'secondary'
+            !setFilter2.length || setFilter2.includes(setKey) ? 'green' : 'gray'
           }
           onClick={() =>
             setSetFilter2(
@@ -232,10 +247,16 @@ function AdvSetFilterDiscCard({
                 : [setKey]
             )
           }
+          variant={
+            !setFilter2.length || setFilter2.includes(setKey)
+              ? 'filled'
+              : 'default'
+          }
+          style={{ flex: 1 }}
         >
           Allow 2p
         </Button>
-      </ButtonGroup>
+      </Button.Group>
     </CardThemed>
   )
 }

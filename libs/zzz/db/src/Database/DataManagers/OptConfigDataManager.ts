@@ -96,6 +96,8 @@ const optConfigSchema = z.object({
   setFilter2: zodFilteredArray(allDiscSetKeys, []) as z.ZodType<DiscSetKey[]>,
   setFilter4: zodFilteredArray(allDiscSetKeys, []) as z.ZodType<DiscSetKey[]>,
   useEquipped: zodBoolean(),
+  useCharacterPriority: zodBoolean(),
+  includeOffsets: zodBoolean(),
 
   optWengine: zodBoolean(),
   wlevelLow: z.number().int().min(0).max(60).catch(wengineMaxLevel),
@@ -174,8 +176,13 @@ export class OptConfigDataManager extends DataManager<
   export(optConfigId: string): object {
     const optConfig = this.database.optConfigs.get(optConfigId)
     if (!optConfig) return {}
-    const { useEquipped, useEquippedWengine, generatedBuildListId, ...rest } =
-      optConfig
+    const {
+      useEquipped,
+      useCharacterPriority,
+      useEquippedWengine,
+      generatedBuildListId,
+      ...rest
+    } = optConfig
     return rest
   }
   import(data: object): string {

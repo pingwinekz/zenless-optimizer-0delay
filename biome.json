@@ -13,6 +13,7 @@
       "./dist",
       "./coverage",
       "./.yarn",
+      "./.fribbels-hsr-optimizer",
       "./libs/gi/dm/GenshinData",
       "./libs/gi/dm/HakushinData",
       "./libs/sr/dm/StarRailData",

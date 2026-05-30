@@ -5,17 +5,32 @@ import {
 } from '@genshin-optimizer/common/database'
 import {
   allAttributeKeys,
+  allCharacterKeys,
   allCharacterRarityKeys,
   allSpecialityKeys,
+  type CharacterKey,
 } from '@genshin-optimizer/zzz/consts'
 import { z } from 'zod'
 import { DataEntry } from '../DataEntry'
 import type { ZzzDatabase } from '../Database'
 
-export const characterSortKeys = ['new', 'level', 'rarity', 'name'] as const
+export const characterSortKeys = [
+  'new',
+  'level',
+  'rarity',
+  'name',
+  'custom',
+  'score',
+] as const
 export type CharacterSortKey = (typeof characterSortKeys)[number]
 
-const persistedSortKeys = ['level', 'rarity', 'name'] as const
+const persistedSortKeys = [
+  'level',
+  'rarity',
+  'name',
+  'custom',
+  'score',
+] as const
 type PersistedSortKey = (typeof persistedSortKeys)[number]
 
 const displayCharacterSchema = z.object({
@@ -24,9 +39,15 @@ const displayCharacterSchema = z.object({
     'level'
   ) as z.ZodType<PersistedSortKey>,
   ascending: zodBoolean(),
-  specialtyType: zodFilteredArray(allSpecialityKeys),
-  attribute: zodFilteredArray(allAttributeKeys),
-  rarity: zodFilteredArray(allCharacterRarityKeys),
+  specialtyType: zodFilteredArray(allSpecialityKeys, []),
+  attribute: zodFilteredArray(allAttributeKeys, []),
+  rarity: zodFilteredArray(allCharacterRarityKeys, []),
+  customSortOrder: z
+    .array(z.string())
+    .refine((arr) =>
+      arr.every((k) => allCharacterKeys.includes(k as CharacterKey))
+    )
+    .default([]),
 })
 export type IDisplayCharacterEntry = z.infer<typeof displayCharacterSchema>
 

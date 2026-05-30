@@ -1,14 +1,14 @@
-import type { BoxProps } from '@mui/material'
-import { Box } from '@mui/material'
+import { Box } from '@mantine/core'
+import type { CSSProperties } from 'react'
 import { useEffect } from 'react'
 
 export function AdSenseUnit({
   dataAdSlot,
-  sx = {},
+  style: extraStyle = {},
   fullWidth = false,
 }: {
   dataAdSlot: string
-  sx?: BoxProps['sx']
+  style?: CSSProperties
   fullWidth?: boolean
 }) {
   useEffect(() => {
@@ -25,7 +25,7 @@ export function AdSenseUnit({
     <Box
       component="ins"
       className="adsbygoogle"
-      sx={{ display: 'block', margin: 'auto', ...sx }}
+      style={{ display: 'block', margin: 'auto', ...extraStyle }}
       data-ad-client="ca-pub-2443965532085844"
       data-ad-slot={dataAdSlot}
       data-full-width-responsive={fullWidth ? 'true' : undefined}

@@ -19,8 +19,7 @@ import {
   CharacterSingleSelectionModal,
   ZCard,
 } from '@genshin-optimizer/zzz/ui'
-import { Button, Grid, Stack } from '@mui/material'
-import { Box } from '@mui/system'
+import { Button, SimpleGrid, Stack, Box } from '@mantine/core'
 import { Suspense, useCallback, useState } from 'react'
 
 const EXTRA_TEAMMATE_SLOTS = [1, 2] as const
@@ -49,7 +48,7 @@ export function TeammatesSection() {
   )
 
   return (
-    <Grid container spacing={1} columns={{ xs: 1, md: 2 }}>
+    <SimpleGrid cols={{ base: 1, md: 2 }} spacing={1}>
       <Suspense fallback={false}>
         <CharacterSingleSelectionModal
           show={pickingSlot !== undefined}
@@ -64,7 +63,7 @@ export function TeammatesSection() {
       {EXTRA_TEAMMATE_SLOTS.map((slot) => {
         const teammateKey = team.teammates[slot]?.characterKey
         return (
-          <Grid item xs={1} key={slot}>
+          <div key={slot}>
             <Stack gap={1}>
               <Button
                 fullWidth
@@ -81,37 +80,32 @@ export function TeammatesSection() {
               </Button>
               {teammateKey && (
                 <ZCard bgt="dark">
-                  <Grid
-                    container
-                    sx={{ display: 'flex', padding: 0.5 }}
-                    columns={{ xs: 2, lg: 4 }}
-                    spacing={0.5}
-                  >
+                  <SimpleGrid cols={{ base: 2, lg: 4 }} spacing={0.5}>
                     {range(0, 2).map((icon) => (
-                      <Grid item xs={1} key={icon} height="90px">
+                      <div key={icon} style={{ height: '90px' }}>
                         <TeammateIconCard>
                           <ImgIcon size={5} src={icons(teammateKey)?.[icon]} />
                         </TeammateIconCard>
-                      </Grid>
+                      </div>
                     ))}
-                    <Grid item xs={1}>
+                    <div>
                       <TeammateIconCard>
                         <ElementIcon
                           ele={getCharStat(teammateKey)?.attribute}
                           iconProps={{
-                            sx: { width: '2.5em', height: '2.5em' },
+                            style: { width: '2.5em', height: '2.5em' },
                           }}
                         />
                       </TeammateIconCard>
-                    </Grid>
-                  </Grid>
+                    </div>
+                  </SimpleGrid>
                 </ZCard>
               )}
             </Stack>
-          </Grid>
+          </div>
         )
       })}
-    </Grid>
+    </SimpleGrid>
   )
 }
 
@@ -119,7 +113,7 @@ function TeammateIconCard({ children }: { children?: React.ReactNode }) {
   return (
     <CardThemed
       bgt="light"
-      sx={{
+      style={{
         height: '100%',
         borderRadius: '12px',
         display: 'flex',
@@ -127,8 +121,8 @@ function TeammateIconCard({ children }: { children?: React.ReactNode }) {
       }}
     >
       <Box
-        sx={{
-          padding: 0.5,
+        style={{
+          padding: 4,
           display: 'flex',
           justifyContent: 'center',
           height: '100%',

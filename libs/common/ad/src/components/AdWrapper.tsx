@@ -1,7 +1,6 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import type { CardBackgroundColor } from '@genshin-optimizer/common/ui'
-import type { BoxProps } from '@mui/material'
-import type { FunctionComponent, MouseEventHandler } from 'react'
+import type { CSSProperties, FunctionComponent, MouseEventHandler } from 'react'
 import { useContext } from 'react'
 import { IsAdBlockedContext } from '../context'
 import type { AdProps } from '../type'
@@ -11,7 +10,7 @@ import { AdSenseUnit } from './AdSenseUnit'
 export function AdWrapper({
   dataAdSlot,
   fullWidth = false,
-  sx,
+  style,
   onClose,
   bgt = 'light',
   Ad,
@@ -19,7 +18,7 @@ export function AdWrapper({
   dataAdSlot: string
   height?: number
   width?: number
-  sx?: BoxProps['sx']
+  style?: CSSProperties
   fullWidth?: boolean
   onClose?: MouseEventHandler
   bgt?: CardBackgroundColor
@@ -30,10 +29,16 @@ export function AdWrapper({
   const hostname = window.location.hostname
 
   if (hostname === 'frzyc.github.io' && !adblockEnabled)
-    return <AdSenseUnit dataAdSlot={dataAdSlot} sx={sx} fullWidth={fullWidth} />
+    return (
+      <AdSenseUnit
+        dataAdSlot={dataAdSlot}
+        style={style}
+        fullWidth={fullWidth}
+      />
+    )
   if (!show) return null
   return (
-    <Ad sx={sx} bgt={bgt}>
+    <Ad style={style} bgt={bgt}>
       <AdButtons
         onClose={
           onClose ??

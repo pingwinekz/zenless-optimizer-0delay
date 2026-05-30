@@ -10,19 +10,24 @@ import {
 } from '@genshin-optimizer/common/ui'
 import { range } from '@genshin-optimizer/common/util'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import { Delete, Download, ImportExport, Upload } from '@mui/icons-material'
-import ContentPasteIcon from '@mui/icons-material/ContentPaste'
 import {
   Box,
   Button,
-  CardContent,
-  Chip,
   Divider,
-  Grid,
-  Typography,
-} from '@mui/material'
+  Group,
+  SimpleGrid,
+  Badge,
+  Text,
+} from '@mantine/core'
 import { useCallback } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import {
+  IconClipboard,
+  IconDownload,
+  IconFileImport,
+  IconTrash,
+  IconUpload,
+} from '@tabler/icons-react'
 import { UploadCard } from './UploadCard'
 
 export function DatabaseCard() {
@@ -30,19 +35,19 @@ export function DatabaseCard() {
 
   return (
     <CardThemed bgt="light">
-      <CardContent sx={{ py: 1 }}>
-        <Typography variant="subtitle1">{t('DatabaseCard.title')}</Typography>
-      </CardContent>
+      <Box p="md" style={{ paddingBottom: 0 }}>
+        <Text fw={700}>{t('DatabaseCard.title')}</Text>
+      </Box>
       <Divider />
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Grid container spacing={2} columns={{ xs: 1, md: 2 }}>
+      <Box p="md" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="sm">
           {range(0, 3).map((i) => (
-            <Grid key={i} item xs={1}>
+            <Box key={i}>
               <DataCard index={i} />
-            </Grid>
+            </Box>
           ))}
-        </Grid>
-      </CardContent>
+        </SimpleGrid>
+      </Box>
     </CardThemed>
   )
 }
@@ -102,116 +107,110 @@ function DataCard({ index }: { index: number }) {
 
   return (
     <CardThemed
-      sx={{
+      style={{
         height: '100%',
         boxShadow: current ? '0px 0px 0px 2px green inset' : undefined,
       }}
     >
-      <CardContent
-        sx={{
+      <Box
+        p="md"
+        style={{
           display: 'flex',
-          gap: 1,
+          gap: 4,
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
         <TextFieldLazy
-          size="small"
-          fullWidth
+          size="sm"
           value={name}
-          sx={{ borderRadius: 1, px: 1, flexGrow: 1 }}
+          style={{ borderRadius: 4, padding: '0 4px', flexGrow: 1 }}
           onChange={(name) => {
             database.dbMeta.set({ name })
             database.toExtraLocalDB()
           }}
         />
         {!current && (
-          <Button startIcon={<ImportExport />} onClick={onSwap} color="warning">
+          <Button
+            leftSection={<IconFileImport />}
+            onClick={onSwap}
+            color="orange"
+          >
             {t('DatabaseCard.button.swap')}
           </Button>
         )}
-        <Chip
-          color={current ? 'success' : 'secondary'}
-          sx={{ alignSelf: 'center' }}
-          label={
-            current
-              ? t('DatabaseCard.currentDB')
-              : `${t('DatabaseCard.title')} ${database.dbIndex}`
-          }
-        />
-      </CardContent>
+        <Badge
+          color={current ? 'green' : 'gray'}
+          style={{ alignSelf: 'center' }}
+        >
+          {current
+            ? t('DatabaseCard.currentDB')
+            : `${t('DatabaseCard.title')} ${database.dbIndex}`}
+        </Badge>
+      </Box>
       <Divider />
-      <CardContent>
-        <Box display="flex" gap={2}>
-          <Box flexGrow={1}>
-            <Typography noWrap>
+      <Box p="md">
+        <Group gap="md" align="flex-start">
+          <Box style={{ flexGrow: 1 }}>
+            <Text>
               <Trans t={t} i18nKey="count.chars" /> <strong>{numChar}</strong>
-            </Typography>
-            <Typography noWrap>
+            </Text>
+            <Text>
               <Trans t={t} i18nKey="count.discs" /> <strong>{numDiscs}</strong>
-            </Typography>
-            <Typography noWrap>
+            </Text>
+            <Text>
               <Trans t={t} i18nKey="count.wengines" />{' '}
               <strong>{numWengines}</strong>
-            </Typography>
+            </Text>
           </Box>
           <Box>
-            <Grid container spacing={1} columns={{ xs: 2 }}>
-              <Grid item xs={1}>
-                <Button
-                  fullWidth
-                  disabled={!hasData}
-                  color="info"
-                  onClick={copyToClipboard}
-                  startIcon={<ContentPasteIcon />}
-                >
-                  <Trans t={t} i18nKey="DatabaseCard.button.copy" />
-                </Button>
-              </Grid>
-              <Grid item xs={1}>
-                <ModalWrapper open={uploadOpen} onClose={onClose}>
-                  <UploadCard index={index} onReplace={onClose} />
-                </ModalWrapper>
-                <Button
-                  fullWidth
-                  component="span"
-                  color="info"
-                  startIcon={<Upload />}
-                  onClick={onOpen}
-                >
-                  {t('DatabaseCard.button.upload')}
-                </Button>
-              </Grid>
-              <Grid item xs={1}>
-                <Button
-                  fullWidth
-                  disabled={!hasData}
-                  onClick={download}
-                  startIcon={<Download />}
-                >
-                  {t('DatabaseCard.button.download')}
-                </Button>
-              </Grid>
-              <Grid item xs={1}>
-                <Button
-                  fullWidth
-                  disabled={!hasData}
-                  color="error"
-                  onClick={onDelete}
-                  startIcon={<Delete />}
-                >
-                  {t('DatabaseCard.button.delete')}
-                </Button>
-              </Grid>
-            </Grid>
+            <SimpleGrid cols={2} spacing="xs">
+              <Button
+                disabled={!hasData}
+                color="cyan"
+                onClick={copyToClipboard}
+                leftSection={<IconClipboard />}
+                size="sm"
+              >
+                <Trans t={t} i18nKey="DatabaseCard.button.copy" />
+              </Button>
+              <ModalWrapper opened={uploadOpen} onClose={onClose}>
+                <UploadCard index={index} onReplace={onClose} />
+              </ModalWrapper>
+              <Button
+                color="cyan"
+                leftSection={<IconUpload />}
+                onClick={onOpen}
+                size="sm"
+              >
+                {t('DatabaseCard.button.upload')}
+              </Button>
+              <Button
+                disabled={!hasData}
+                onClick={download}
+                leftSection={<IconDownload />}
+                size="sm"
+              >
+                {t('DatabaseCard.button.download')}
+              </Button>
+              <Button
+                disabled={!hasData}
+                color="red"
+                onClick={onDelete}
+                leftSection={<IconTrash />}
+                size="sm"
+              >
+                {t('DatabaseCard.button.delete')}
+              </Button>
+            </SimpleGrid>
             {!!lastEdit && (
-              <Typography noWrap align="center" style={{ paddingTop: '1.5em' }}>
+              <Text ta="center" pt="xl">
                 <strong>{new Date(lastEdit).toLocaleString()}</strong>
-              </Typography>
+              </Text>
             )}
           </Box>
-        </Box>
-      </CardContent>
+        </Group>
+      </Box>
     </CardThemed>
   )
 }

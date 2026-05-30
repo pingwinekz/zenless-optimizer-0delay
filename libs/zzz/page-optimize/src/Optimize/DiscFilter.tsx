@@ -16,18 +16,18 @@ import {
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
 import { StatDisplay } from '@genshin-optimizer/zzz/ui'
-import CloseIcon from '@mui/icons-material/Close'
+import { IconX } from '@tabler/icons-react'
 import {
+  ActionIcon,
+  Box,
   Button,
-  CardContent,
-  CardHeader,
+  CardSection,
   Divider,
-  IconButton,
+  Group,
   Skeleton,
   Stack,
-  Typography,
-} from '@mui/material'
-import { Box } from '@mui/system'
+  Text,
+} from '@mantine/core'
 import { Suspense, useCallback, useContext } from 'react'
 import { DiscLevelFilter } from './DiscLevelFilter'
 import { DiscSetFilter } from './DiscSetFilter'
@@ -40,10 +40,10 @@ export function DiscFilter({
   const [show, onOpen, onClose] = useBoolState()
   return (
     <CardThemed bgt="light">
-      <CardContent>
-        <Stack spacing={1}>
+      <CardSection>
+        <Stack gap={1}>
           <Box
-            sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}
+            style={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}
           >
             {allDiscSlotKeys.map((key) => (
               <DiscTypo key={key} discsBySlot={discsBySlot} slotKey={key} />
@@ -54,12 +54,11 @@ export function DiscFilter({
             onClose={onClose}
             discsBySlot={discsBySlot}
           />
-          {/* TODO: localization */}
-          <Button color="info" fullWidth onClick={onOpen}>
+          <Button color="blue" fullWidth onClick={onOpen}>
             Disc Filter Config
           </Button>
         </Stack>
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }
@@ -71,12 +70,12 @@ function DiscTypo({
   slotKey: DiscSlotKey
 }) {
   return (
-    <Typography>
+    <Text>
       Disc {slotKey}{' '}
       <SqBadge color={discsBySlot[slotKey].length ? 'primary' : 'error'}>
         {discsBySlot[slotKey].length}
       </SqBadge>
-    </Typography>
+    </Text>
   )
 }
 
@@ -94,20 +93,18 @@ function DiscFilterModal({
   const { database } = useDatabaseContext()
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   return (
-    <ModalWrapper open={show} onClose={onClose}>
+    <ModalWrapper opened={show} onClose={onClose}>
       <CardThemed>
-        <CardHeader
-          title="Disc Filter"
-          action={
-            <IconButton onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
-          }
-        />
+        <Group p="sm">
+          <Text fw={700}>Disc Filter</Text>
+          <ActionIcon onClick={onClose} style={{ marginLeft: 'auto' }}>
+            <IconX />
+          </ActionIcon>
+        </Group>
         <Divider />
-        <CardContent>
-          <Suspense fallback={<Skeleton width="100%" height={'500px'} />}>
-            <Stack spacing={1}>
+        <CardSection>
+          <Suspense fallback={<Skeleton width="100%" height={500} />}>
+            <Stack gap={1}>
               <DiscLevelFilter disabled={disabled} />
               <MainStatSelector discsBySlot={discsBySlot} disabled={disabled} />
               <Button
@@ -117,14 +114,14 @@ function DiscFilterModal({
                     useEquipped: !optConfig.useEquipped,
                   })
                 }
-                color={optConfig.useEquipped ? 'success' : 'secondary'}
+                color={optConfig.useEquipped ? 'green' : 'gray'}
               >
                 Use equipped Discs
               </Button>
               <SetFilter discBySlot={discsBySlot} disabled={disabled} />
             </Stack>
           </Suspense>
-        </CardContent>
+        </CardSection>
       </CardThemed>
     </ModalWrapper>
   )
@@ -157,12 +154,12 @@ function MainStatSelector({
         database.optConfigs.set(optConfigId, { slot6 }),
     } as Record<'4' | '5' | '6', (slots: DiscMainStatKey[]) => void>
     return (
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+      <Box style={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         {discSlotToMainStatKeys[slotKey].map((key) => (
           <Button
             disabled={disabled}
             key={key}
-            variant={keysMap[slotKey].includes(key) ? 'contained' : 'outlined'}
+            variant={keysMap[slotKey].includes(key) ? 'filled' : 'outline'}
             onClick={() =>
               funcMap[slotKey](mainKeysHandler([...keysMap[slotKey]], key))
             }
@@ -175,9 +172,9 @@ function MainStatSelector({
   }
   return (
     <CardThemed bgt="light">
-      <CardContent>
-        <Stack spacing={1}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <CardSection>
+        <Stack gap={1}>
+          <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
             <DiscTypo slotKey="1" discsBySlot={discsBySlot} />
             <DiscTypo slotKey="2" discsBySlot={discsBySlot} />
             <DiscTypo slotKey="3" discsBySlot={discsBySlot} />
@@ -189,7 +186,7 @@ function MainStatSelector({
           <DiscTypo slotKey="6" discsBySlot={discsBySlot} />
           {discSlotBtns('6')}
         </Stack>
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }

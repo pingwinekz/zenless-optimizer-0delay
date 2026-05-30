@@ -7,24 +7,25 @@ import type {
 } from '@genshin-optimizer/zzz/db'
 import { ZzzDatabase } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import { CheckBox, CheckBoxOutlineBlank, FileOpen } from '@mui/icons-material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import TextSnippetIcon from '@mui/icons-material/TextSnippet'
-import UploadFileIcon from '@mui/icons-material/UploadFile'
 import {
   Box,
   Button,
-  CardContent,
   Divider,
-  Grid,
+  Group,
+  SimpleGrid,
+  Text,
   Tooltip,
-  Typography,
-  styled,
-} from '@mui/material'
+} from '@mantine/core'
 import { useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-
-const InvisInput = styled('input')({ display: 'none' })
+import {
+  IconCheckbox,
+  IconFile,
+  IconFileDescription,
+  IconArrowLeft,
+  IconSquare,
+  IconUpload,
+} from '@tabler/icons-react'
 
 export function UploadCard({
   index,
@@ -105,105 +106,95 @@ export function UploadCard({
   return (
     <CardThemed
       bgt="light"
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={onDrop}
-      sx={{ height: '100%' }}
+      style={{ height: '100%' }}
+      {...({ onDragOver: (e: any) => e.preventDefault(), onDrop } as any)}
     >
-      <CardContent sx={{ py: 1 }}>
+      <Box p="md" style={{ paddingBottom: 4 }}>
         <Trans t={t} i18nKey="uploadCard.title" />
-      </CardContent>
-      <CardContent>
-        <Grid container spacing={2} sx={{ mb: 1 }}>
-          <Grid item>
-            <label htmlFor="icon-button-file">
-              <InvisInput
-                accept=".json"
-                id="icon-button-file"
-                type="file"
-                onChange={onUpload}
-              />
-              <Button component="span" color="info" startIcon={<FileOpen />}>
-                {t('uploadCard.buttons.open')}
-              </Button>
-            </label>
-          </Grid>
-          <Grid item flexGrow={1}>
-            <CardThemed sx={{ px: 2, py: 1 }}>
-              <Typography>
+      </Box>
+      <Box p="md">
+        <Group mb="sm" gap="sm">
+          <label htmlFor="icon-button-file">
+            <input
+              accept=".json"
+              id="icon-button-file"
+              type="file"
+              onChange={onUpload}
+              style={{ display: 'none' }}
+            />
+            <Button component="span" color="cyan" leftSection={<IconFile />}>
+              {t('uploadCard.buttons.open')}
+            </Button>
+          </label>
+          <Box style={{ flexGrow: 1 }}>
+            <CardThemed style={{ padding: '4px 8px' }}>
+              <Text>
                 {filename ? (
                   <span>
-                    <TextSnippetIcon {...iconInlineProps} /> {filename}
+                    <IconFileDescription {...iconInlineProps} /> {filename}
                   </span>
                 ) : (
                   <span>
-                    <ArrowBackIcon {...iconInlineProps} />{' '}
+                    <IconArrowLeft {...iconInlineProps} />{' '}
                     <Trans t={t} i18nKey="uploadCard.hint" />
                   </span>
                 )}
-              </Typography>
+              </Text>
             </CardThemed>
-          </Grid>
-        </Grid>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          </Box>
+        </Group>
+        <Group gap="sm" wrap="wrap">
           <Tooltip
-            title={
-              <Typography>
-                {ignoreDups
-                  ? t('uploadCard.tooltip.ignoreDup')
-                  : t('uploadCard.tooltip.detectdup')}
-              </Typography>
+            label={
+              ignoreDups
+                ? t('uploadCard.tooltip.ignoreDup')
+                : t('uploadCard.tooltip.detectdup')
             }
-            placement="top"
-            arrow
           >
-            <Box sx={{ flexGrow: 1, flexBasis: '10em' }}>
+            <Box style={{ flexGrow: 1, flexBasis: '10em' }}>
               <Button
                 fullWidth
                 disabled={!data}
-                color={ignoreDups ? 'primary' : 'success'}
+                color={ignoreDups ? 'blue' : 'green'}
                 onClick={() => setIgnoreDups(!ignoreDups)}
-                startIcon={ignoreDups ? <CheckBoxOutlineBlank /> : <CheckBox />}
+                leftSection={ignoreDups ? <IconSquare /> : <IconCheckbox />}
               >
                 {t('uploadCard.buttons.detectDups')}
               </Button>
             </Box>
           </Tooltip>
           <Tooltip
-            title={
-              <Typography>
-                {keepNotInImport
-                  ? t('uploadCard.tooltip.keepNotInImport')
-                  : t('uploadCard.tooltip.delNotInImport')}
-              </Typography>
+            label={
+              keepNotInImport
+                ? t('uploadCard.tooltip.keepNotInImport')
+                : t('uploadCard.tooltip.delNotInImport')
             }
-            placement="top"
-            arrow
           >
-            <Box sx={{ flexGrow: 1, flexBasis: '10em' }}>
+            <Box style={{ flexGrow: 1, flexBasis: '10em' }}>
               <Button
                 fullWidth
                 disabled={!data}
-                color={keepNotInImport ? 'primary' : 'success'}
+                color={keepNotInImport ? 'blue' : 'green'}
                 onClick={() => setKeepNotInImport(!keepNotInImport)}
-                startIcon={
-                  keepNotInImport ? <CheckBoxOutlineBlank /> : <CheckBox />
+                leftSection={
+                  keepNotInImport ? <IconSquare /> : <IconCheckbox />
                 }
               >
                 {t('uploadCard.buttons.delNotInImport')}
               </Button>
             </Box>
           </Tooltip>
-        </Box>
-        <Typography gutterBottom variant="caption">
+        </Group>
+        <Text size="xs" mb="xs">
           <Trans t={t} i18nKey="uploadCard.hintPaste" />
-        </Typography>
+        </Text>
         <Box
           component="textarea"
-          sx={{
+          style={{
             width: '100%',
             fontFamily: 'monospace',
             minHeight: '10em',
-            mb: 2,
+            marginBottom: 8,
             resize: 'vertical',
           }}
           value={data}
@@ -215,9 +206,9 @@ export function UploadCard({
             importedDatabase={importedDatabase}
           />
         ) : (
-          t(errorMsg)
+          <Text>{t(errorMsg)}</Text>
         )}
-      </CardContent>
+      </Box>
       <ZOUploadAction
         index={index}
         importedDatabase={importedDatabase}
@@ -237,40 +228,24 @@ function ZOODUploadInfo({
   const { t } = useTranslation('page_settings')
   return (
     <CardThemed>
-      <CardContent sx={{ py: 1 }}>
-        <Typography>
+      <Box p="md" style={{ paddingBottom: 4 }}>
+        <Text>
           <Trans t={t} i18nKey="uploadCard.dbSource" />
           <strong> {source}</strong>
-        </Typography>
-      </CardContent>
+        </Text>
+      </Box>
       <Divider />
-      <CardContent>
-        <Grid container spacing={2}>
-          <Grid container item spacing={2}>
-            <Grid item flexGrow={1}>
-              <MergeResult
-                result={discs}
-                dbTotal={importedDatabase.discs.values.length}
-                type="discs"
-              />
-            </Grid>
-            {/* <Grid item flexGrow={1}>
-              <MergeResult
-                result={wengines}
-                dbTotal={importedDatabase.wengines.values.length}
-                type="wengines"
-              />
-            </Grid>
-            <Grid item flexGrow={1}>
-              <MergeResult
-                result={characters}
-                dbTotal={importedDatabase.chars.values.length}
-                type="chars"
-              />
-            </Grid> */}
-          </Grid>
-        </Grid>
-      </CardContent>
+      <Box p="md">
+        <SimpleGrid spacing="sm" cols={2}>
+          <Box style={{ flexGrow: 1 }}>
+            <MergeResult
+              result={discs}
+              dbTotal={importedDatabase.discs.values.length}
+              type="discs"
+            />
+          </Box>
+        </SimpleGrid>
+      </Box>
     </CardThemed>
   )
 }
@@ -288,67 +263,67 @@ function MergeResult({
   const total = result.import
   return (
     <CardThemed bgt="light">
-      <CardContent sx={{ py: 1 }}>
-        <Typography>
+      <Box p="md" style={{ paddingBottom: 4 }}>
+        <Text>
           <Trans t={t} i18nKey={`count.${type}`} /> {total}
-        </Typography>
-      </CardContent>
+        </Text>
+      </Box>
       <Divider />
-      <CardContent>
+      <Box p="md">
         {'new' in result && (
-          <Typography>
+          <Text>
             <Trans t={t} i18nKey="count.new" />{' '}
             <strong>{result.new.length}</strong> / {total}
-          </Typography>
+          </Text>
         )}
         {'unchanged' in result && (
-          <Typography>
+          <Text>
             <Trans t={t} i18nKey="count.unchanged" />{' '}
             <strong>{result.unchanged.length}</strong> / {total}
-          </Typography>
+          </Text>
         )}
         {'upgraded' in result && (
-          <Typography>
+          <Text>
             <Trans t={t} i18nKey="count.upgraded" />{' '}
             <strong>{result.upgraded.length}</strong> / {total}
-          </Typography>
+          </Text>
         )}
         {'remove' in result && !!result.remove.length && (
-          <Typography color="warning.main">
+          <Text c="orange">
             <Trans t={t} i18nKey="count.removed" />{' '}
             <strong>{result.remove.length}</strong>
-          </Typography>
+          </Text>
         )}
         {'notInImport' in result && !!result.notInImport && (
-          <Typography>
+          <Text>
             <Trans t={t} i18nKey="count.notInImport" />{' '}
             <strong>{result.notInImport}</strong>
-          </Typography>
+          </Text>
         )}
-        <Typography>
+        <Text>
           <Trans t={t} i18nKey="count.dbTotal" />{' '}
           <strong>{result.beforeMerge}</strong> -&gt; <strong>{dbTotal}</strong>
-        </Typography>
+        </Text>
         {'invalid' in result && !!result.invalid?.length && (
           <div>
-            <Typography color="error.main">
+            <Text c="red">
               <Trans t={t} i18nKey="count.invalid" />{' '}
               <strong>{result.invalid.length}</strong> / {total}
-            </Typography>
+            </Text>
             <Box
               component="textarea"
-              sx={{
+              style={{
                 width: '100%',
                 fontFamily: 'monospace',
                 minHeight: '10em',
                 resize: 'vertical',
               }}
               value={JSON.stringify(result.invalid, undefined, 2)}
-              disabled
+              readOnly
             />
           </div>
         )}
-      </CardContent>
+      </Box>
     </CardThemed>
   )
 }
@@ -376,16 +351,16 @@ function ZOUploadAction({
   return (
     <>
       <Divider />
-      <CardContent sx={{ py: 1 }}>
+      <Box p="md" style={{ paddingTop: 4 }}>
         <Button
-          color={importedDatabase ? 'success' : 'error'}
+          color={importedDatabase ? 'green' : 'red'}
           disabled={!importedDatabase}
           onClick={replaceDB}
-          startIcon={<UploadFileIcon />}
+          leftSection={<IconUpload />}
         >
           <Trans t={t} i18nKey="uploadCard.replaceDatabase" />
         </Button>
-      </CardContent>
+      </Box>
     </>
   )
 }

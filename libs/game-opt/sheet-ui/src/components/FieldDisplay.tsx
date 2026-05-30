@@ -12,17 +12,8 @@ import {
 } from '@genshin-optimizer/game-opt/formula-ui'
 import type { CalcResult } from '@genshin-optimizer/pando/engine'
 import { read } from '@genshin-optimizer/pando/engine'
-import HelpIcon from '@mui/icons-material/Help'
-import type { ListProps, PaletteColor, SxProps, Theme } from '@mui/material'
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  Stack,
-  Typography,
-  styled,
-} from '@mui/material'
+import { IconHelp } from '@tabler/icons-react'
+import { ActionIcon, Box, Divider, Stack, Text } from '@mantine/core'
 import type { ReactNode } from 'react'
 import React, { useCallback, useContext, useMemo } from 'react'
 import {
@@ -33,6 +24,12 @@ import {
 } from '../context'
 import type { Field, TagField, TextField } from '../types'
 
+const bgColorMap = {
+  normal: 'var(--layer-2)',
+  light: 'var(--layer-3)',
+  dark: 'var(--layer-1)',
+} as const
+
 export function FieldsDisplay({
   fields,
   bgt = 'normal',
@@ -40,18 +37,26 @@ export function FieldsDisplay({
   fields: Field[]
   bgt?: CardBackgroundColor
 }) {
+  const palette = bgColorMap[bgt] || 'var(--layer-2)'
   return (
-    <FieldDisplayList sx={{ m: 0 }} bgt={bgt}>
+    <div style={{ margin: 0 }}>
       {fields.map((field, i) => (
-        <FieldDisplay key={i} field={field} />
+        <div
+          key={i}
+          style={{
+            backgroundColor: i % 2 === 0 ? palette : 'rgba(0, 0, 0, 0.15)',
+          }}
+        >
+          <FieldDisplay field={field} />
+        </div>
       ))}
-    </FieldDisplayList>
+    </div>
   )
 }
 
 function FieldDisplay({
   field,
-  component = ListItem,
+  component = 'div',
 }: {
   field: Field
   component?: React.ElementType
@@ -76,32 +81,37 @@ export function TextFieldDisplay({
   const subtitleEle = subtitle && <span> {subtitle}</span>
   return (
     <Box
-      width="100%"
-      sx={{
+      component={component as any}
+      style={{
+        width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        gap: 1,
-        py: 0.25,
+        gap: 4,
+        paddingTop: 2,
+        paddingBottom: 2,
       }}
-      component={component}
     >
-      <Typography color={`${variant}.main`}>
+      <Text
+        span
+        style={{
+          color: variant ? `var(--mantine-color-${variant}-filled)` : undefined,
+        }}
+      >
         {titleEle}
         {subtitleEle}
-      </Typography>
-      <Typography>
+      </Text>
+      <Text span>
         {typeof fieldValue === 'number' && toFixed !== undefined
           ? fieldValue.toFixed?.(toFixed)
           : fieldValue}
         {unit}
-      </Typography>
+      </Text>
     </Box>
   )
 }
 
 export function TagFieldDisplay({
   field,
-  component = ListItem,
   emphasize,
   showZero = process.env['NODE_ENV'] === 'development',
   calcRead: calcReadOverride,
@@ -118,7 +128,7 @@ export function TagFieldDisplay({
   showZero?: boolean
   /** Use when `listFormulas` returns a full `Read`. */
   calcRead?: Read
-  rowSx?: SxProps<Theme>
+  rowSx?: Record<string, any>
   /** Override help-icon click; pass a no-op to disable debug read. */
   onClickFormula?: () => void
   onMouseEnter?: () => void
@@ -171,17 +181,17 @@ export function TagFieldDisplay({
       <span>{valueString(calcValue, unit)}</span>
       {Math.abs(diff) > 0.0001 && !!compareCalcValue && (
         <BootstrapTooltip
-          title={
-            <Typography>
+          label={
+            <Text>
               Compare to <strong>{valueString(compareCalcValue, unit)}</strong>
-            </Typography>
+            </Text>
           }
         >
           <ColorText
             color={diff > 0 ? 'success' : 'error'}
-            sx={{
+            style={{
               display: 'flex',
-              gap: 0.5,
+              gap: '0.125rem',
               alignItems: 'center',
               justifyContent: 'flex-end',
               flexWrap: 'wrap',
@@ -203,34 +213,35 @@ export function TagFieldDisplay({
     </>
   )
 
+  const mergedSx: Record<string, any> = {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: 4,
+    boxShadow: emphasize ? '0px 0px 0px 2px red inset' : undefined,
+    paddingTop: 2,
+    paddingBottom: 2,
+  }
+  const extraSx = [
+    ...(contextRowSx
+      ? Array.isArray(contextRowSx)
+        ? contextRowSx
+        : [contextRowSx]
+      : []),
+    ...(rowSx ? (Array.isArray(rowSx) ? rowSx : [rowSx]) : []),
+  ]
+  extraSx.forEach((sx) => Object.assign(mergedSx, sx))
+
   return (
-    <Box
-      width="100%"
+    <div
+      style={mergedSx}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      sx={[
-        {
-          display: 'flex',
-          justifyContent: 'space-between',
-          gap: 1,
-          // Red inset: sheet conditional emphasis. Green opt-target uses `TagRowSxContext`.
-          boxShadow: emphasize ? '0px 0px 0px 2px red inset' : undefined,
-          py: 0.25,
-        },
-        ...(contextRowSx
-          ? Array.isArray(contextRowSx)
-            ? contextRowSx
-            : [contextRowSx]
-          : []),
-        ...(rowSx ? (Array.isArray(rowSx) ? rowSx : [rowSx]) : []),
-      ]}
-      component={component}
     >
-      <Typography
-        component="div"
-        sx={{
+      <Text
+        style={{
           display: 'flex',
-          gap: 1,
+          gap: 4,
           alignItems: 'center',
           marginRight: 'auto',
         }}
@@ -238,11 +249,11 @@ export function TagFieldDisplay({
         {icon}
         {title}
         {subtitle}
-      </Typography>
-      <Typography
-        sx={{
+      </Text>
+      <Text
+        style={{
           display: 'flex',
-          gap: 0.5,
+          gap: 2,
           alignItems: 'center',
           justifyContent: 'flex-end',
           flexWrap: 'wrap',
@@ -250,9 +261,9 @@ export function TagFieldDisplay({
       >
         {multiDisplay}
         {fieldVal}
-      </Typography>
+      </Text>
       <FormulaHelpIcon computed={valueCalcRes} onClick={onClick} />
-    </Box>
+    </div>
   )
 }
 function FormulaHelpIcon({
@@ -275,54 +286,36 @@ function FormulaHelpIcon({
   if (!tag) return null
   return (
     <BootstrapTooltip
-      title={
-        <Typography component="div">
-          <Box sx={{ display: 'flex', gap: 1 }}>
+      label={
+        <div>
+          <div style={{ display: 'flex', gap: 4 }}>
             <FullTagDisplay tag={tag} />
             <span>{valDisplay}</span>
-          </Box>
+          </div>
           <Divider />
-          <Box>{fText?.formula}</Box>
+          <div>{fText?.formula}</div>
 
-          <Stack spacing={1} sx={{ pl: 1, pt: 1 }}>
+          <Stack style={{ paddingLeft: 4, paddingTop: 4 }}>
             {fText?.deps.map((dep, i) => (
-              <Box key={i}>
-                <Box>{dep.name}</Box>
+              <div key={i}>
+                <div>{dep.name}</div>
                 <Divider />
-                <Box> {dep.formula}</Box>
-              </Box>
+                <div> {dep.formula}</div>
+              </div>
             ))}
           </Stack>
-        </Typography>
+        </div>
       }
     >
-      <HelpIcon onClick={onClick} fontSize="inherit" sx={{ cursor: 'help' }} />
+      <ActionIcon
+        variant="subtle"
+        color="gray"
+        size="xs"
+        onClick={onClick}
+        style={{ cursor: 'help' }}
+      >
+        <IconHelp size={16} />
+      </ActionIcon>
     </BootstrapTooltip>
   )
 }
-
-export interface FieldDisplayListProps extends ListProps {
-  bgt?: CardBackgroundColor
-  palletOption?: keyof PaletteColor
-}
-export const FieldDisplayList = styled(List)<FieldDisplayListProps>(
-  ({ theme, bgt = 'normal' }) => {
-    const palette =
-      bgt === 'light'
-        ? 'contentLight'
-        : bgt === 'dark'
-          ? 'contentDark'
-          : 'contentNormal'
-    return {
-      borderRadius: theme.shape.borderRadius,
-      overflow: 'hidden',
-      margin: 0,
-      '> .MuiListItem-root:nth-of-type(even)': {
-        backgroundColor: (theme.palette[palette] as PaletteColor)['main'],
-      },
-      '> .MuiListItem-root:nth-of-type(odd)': {
-        backgroundColor: (theme.palette[palette] as PaletteColor)['dark'],
-      },
-    }
-  }
-)

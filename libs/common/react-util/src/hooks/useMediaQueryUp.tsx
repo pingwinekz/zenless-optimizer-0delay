@@ -1,11 +1,10 @@
-import { useMediaQuery, useTheme } from '@mui/material'
+import { useMediaQuery } from '@mantine/hooks'
 
 export function useMediaQueryUp() {
-  const theme = useTheme()
-  const sm = useMediaQuery(theme.breakpoints.up('sm'))
-  const md = useMediaQuery(theme.breakpoints.up('md'))
-  const lg = useMediaQuery(theme.breakpoints.up('lg'))
-  const xl = useMediaQuery(theme.breakpoints.up('xl'))
+  const sm = useMediaQuery('(min-width: 600px)')
+  const md = useMediaQuery('(min-width: 900px)')
+  const lg = useMediaQuery('(min-width: 1200px)')
+  const xl = useMediaQuery('(min-width: 1536px)')
   if (xl) return 'xl'
   if (lg) return 'lg'
   if (md) return 'md'

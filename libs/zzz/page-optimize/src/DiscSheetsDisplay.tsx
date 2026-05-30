@@ -5,7 +5,7 @@ import type { TeamConditional } from '@genshin-optimizer/zzz/db'
 import { useCharacterContext, useTeam } from '@genshin-optimizer/zzz/db-ui'
 import { DiscSheetDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { DiscSetAutocomplete } from '@genshin-optimizer/zzz/ui'
-import { Box, Grid, Stack } from '@mui/material'
+import { Box, SimpleGrid, Stack } from '@mantine/core'
 import { useMemo, useState } from 'react'
 
 export function DiscSheetsDisplay() {
@@ -19,24 +19,21 @@ export function DiscSheetsDisplay() {
       .map((c) => c.sheet)
       .filter(isDiscSetKey) as DiscSetKey[]
     if (discSetKey) sets.push(discSetKey)
-    // Make sure the currently selected set is at the front
     return [...new Set(sets)].sort((set) => (set === discSetKey ? -1 : 1))
   }, [conditionals, discSetKey])
   return (
-    <Stack spacing={1} sx={{ pt: 1 }}>
+    <Stack gap={1} style={{ paddingTop: 4 }}>
       <DiscSetAutocomplete
         discSetKey={discSetKey}
         setDiscSetKey={setDiscSetKey}
-        label="Search Disc Set" // TODO: translation
+        label="Search Disc Set"
       />
       <Box>
-        <Grid container columns={3} spacing={1}>
+        <SimpleGrid cols={3} spacing={1}>
           {discList.map((setKey) => (
-            <Grid item xs={1} key={setKey}>
-              <DiscSheetDisplay setKey={setKey} />
-            </Grid>
+            <DiscSheetDisplay setKey={setKey} key={setKey} />
           ))}
-        </Grid>
+        </SimpleGrid>
       </Box>
     </Stack>
   )

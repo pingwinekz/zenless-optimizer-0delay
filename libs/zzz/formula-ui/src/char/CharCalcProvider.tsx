@@ -21,6 +21,7 @@ import {
 import type { CalcResult } from '@genshin-optimizer/pando/engine'
 import { constant } from '@genshin-optimizer/pando/engine'
 import { allDiscSetKeys, allWengineKeys } from '@genshin-optimizer/zzz/consts'
+import type { PhaseKey } from '@genshin-optimizer/zzz/consts'
 import type {
   DiscIds,
   ICachedCharacter,
@@ -28,7 +29,7 @@ import type {
   TeamConditional,
 } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0, teamCharacterKeys } from '@genshin-optimizer/zzz/db'
-import { useDiscs, useWengine } from '@genshin-optimizer/zzz/db-ui'
+import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import {
   charTagMapNodeEntries,
   conditionalEntries,
@@ -53,17 +54,15 @@ import { formulaText } from '../formulaText'
 export function CharCalcProvider({
   character,
   team,
-  wengineId,
   discIds,
   children,
 }: {
   character: ICachedCharacter
   team: Team
-  wengineId?: string
   discIds: DiscIds
   children: ReactNode
 }) {
-  const member0 = useCharacterAndEquipment(character, wengineId, discIds)
+  const member0 = useCharacterAndEquipment(character, discIds)
 
   const calc = useMemo(() => {
     const frames = team.frames.length > 0 ? team.frames : [getTeamFrame0(team)]
@@ -154,14 +153,22 @@ function ZzzSheetUiProviders({
 
 function useCharacterAndEquipment(
   character: ICachedCharacter | undefined,
-  wengineId: string | undefined,
   discIds: DiscIds
 ) {
-  const wengine = useWengine(wengineId)
   const discs = useDiscs(discIds)
   const wengineTagEntries = useMemo(
-    () => wengineTagMapNodeEntries(wengine),
-    [wengine]
+    () =>
+      wengineTagMapNodeEntries(
+        character?.wengineKey
+          ? {
+              key: character.wengineKey,
+              level: 60,
+              modification: 5,
+              phase: character.wenginePhase as PhaseKey,
+            }
+          : undefined
+      ),
+    [character?.wengineKey, character?.wenginePhase]
   )
   const discTagEntries = useMemo(
     () => discsToTagMapNodeEntries(Object.values(discs).filter(notEmpty)),

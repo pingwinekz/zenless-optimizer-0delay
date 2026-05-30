@@ -1,47 +1,45 @@
-import { Link, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Anchor, Text, Title } from '@mantine/core'
 import type { ReactNode } from 'react'
 import type { AdDims } from '../type'
 import { DISCORD_LINK } from '../urlUtil'
 
 function GODevAd({ children }: { children: ReactNode }) {
   return (
-    <Box
-      component={Link}
+    <Anchor
       href={DISCORD_LINK}
       target="_blank"
-      sx={{
+      style={{
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        p: '10px',
+        padding: '10px',
         cursor: 'pointer',
         minHeight: '100%',
         minWidth: '100%',
       }}
     >
       {children}
-      <Typography variant="h5" color="crimson">
+      <Title order={4} c="crimson">
         WE NEED HELP!
-      </Typography>
-      <Typography>
+      </Title>
+      <Text>
         Are you a web developer who is looking to contribute to the most
         over-engineered Genshin website ever made? Can you distinguish which one
         of the following is a pokemon?
-      </Typography>
-      <Typography color="coral" fontFamily="monospace">
+      </Text>
+      <Text c="coral" style={{ fontFamily: 'monospace' }}>
         React MaterialUI nx ekans GraphQL git metapod NextJS discord.js vite
         nodeJS emotion prisma Agumon tesseract.js typescript bun sawk webpack
         next-auth jest
-      </Typography>
-      <Typography>
+      </Text>
+      <Text>
         If you have knowledge in some(or any) of those technologies mentioned
         above, or are hoping to learn in an actively-developed app with
         thousands of users, please join our Discord! We'd love to work with you.
-      </Typography>
-    </Box>
+      </Text>
+    </Anchor>
   )
 }
 export function getGODevAd(dims: AdDims) {

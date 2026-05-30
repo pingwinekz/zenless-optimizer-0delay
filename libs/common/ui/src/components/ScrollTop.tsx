@@ -1,18 +1,11 @@
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { Box, Fab, Zoom, useScrollTrigger } from '@mui/material'
+import { ActionIcon, Affix, Transition } from '@mantine/core'
+import { useWindowScroll } from '@mantine/hooks'
 
 export function ScrollTop() {
-  const trigger = useScrollTrigger({
-    target: window,
-    disableHysteresis: true,
-    threshold: 100,
-  })
+  const [scroll] = useWindowScroll()
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const anchor = (
-      (event.target as HTMLDivElement).ownerDocument || document
-    ).querySelector('#back-to-top-anchor')
-
+  const handleClick = () => {
+    const anchor = document.querySelector('#back-to-top-anchor')
     if (anchor) {
       anchor.scrollIntoView({
         behavior: 'smooth',
@@ -22,16 +15,29 @@ export function ScrollTop() {
   }
 
   return (
-    <Zoom in={trigger}>
-      <Box
-        onClick={handleClick}
-        role="presentation"
-        sx={{ position: 'fixed', bottom: 100, right: 16 }}
-      >
-        <Fab color="secondary" size="small" aria-label="scroll back to top">
-          <KeyboardArrowUpIcon />
-        </Fab>
-      </Box>
-    </Zoom>
+    <Affix position={{ bottom: 100, right: 16 }}>
+      <Transition mounted={scroll.y > 100} transition="slide-up" duration={200}>
+        {(transitionStyle) => (
+          <div style={transitionStyle}>
+            <ActionIcon
+              variant="filled"
+              color="gray"
+              size="md"
+              aria-label="scroll back to top"
+              onClick={handleClick}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+              </svg>
+            </ActionIcon>
+          </div>
+        )}
+      </Transition>
+    </Affix>
   )
 }

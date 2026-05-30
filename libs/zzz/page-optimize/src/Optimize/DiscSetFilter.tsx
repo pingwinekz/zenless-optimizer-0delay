@@ -12,7 +12,7 @@ import {
   CharCalcMockCountProvider,
   DiscSheetDisplay,
 } from '@genshin-optimizer/zzz/formula-ui'
-import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material'
+import { Box, Button, ButtonGroup, SimpleGrid, Text } from '@mantine/core'
 import { useMemo } from 'react'
 
 export function DiscSetFilter({
@@ -47,10 +47,8 @@ export function DiscSetFilter({
   }, [discBySlot])
   return (
     <>
-      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Disc Set Config
-        </Typography>
+      <Box style={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Text style={{ flexGrow: 1 }}>Disc Set Config</Text>
         <Button disabled={!setFilter4.length} onClick={() => setSetFilter4([])}>
           Reset 4p filter
         </Button>
@@ -65,20 +63,19 @@ export function DiscSetFilter({
             character={character}
             conditionals={conditionals}
           >
-            <Grid container spacing={1}>
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing={1}>
               {allDiscSetKeys.map((d) => (
-                <Grid item key={d} xs={1} md={2} lg={3}>
-                  <AdvSetFilterDiscCard
-                    numSlot={discSetBySlot[d]}
-                    setKey={d}
-                    setFilter4={setFilter4}
-                    setFilter2={setFilter2}
-                    setSetFilter4={setSetFilter4}
-                    setSetFilter2={setSetFilter2}
-                  />
-                </Grid>
+                <AdvSetFilterDiscCard
+                  key={d}
+                  numSlot={discSetBySlot[d]}
+                  setKey={d}
+                  setFilter4={setFilter4}
+                  setFilter2={setFilter2}
+                  setSetFilter4={setSetFilter4}
+                  setSetFilter2={setSetFilter2}
+                />
               ))}
-            </Grid>
+            </SimpleGrid>
           </CharCalcMockCountProvider>
         )}
       </Box>
@@ -104,20 +101,24 @@ function AdvSetFilterDiscCard({
   const greyOut4 = !!setFilter4.length && !setFilter4.includes(setKey)
   return (
     <DiscSheetDisplay setKey={setKey} fade2={greyOut2} fade4={greyOut4}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', pb: 1 }}>
+      <Box
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          paddingBottom: 4,
+        }}
+      >
         {Object.entries(numSlot).map(([slotKey, count]) => (
           <Box key={slotKey}>
             <SqBadge color={count ? 'primary' : 'secondary'}>{count}</SqBadge>
           </Box>
         ))}
       </Box>
-      <ButtonGroup fullWidth>
+      <ButtonGroup style={{ width: '100%' }}>
         <Button
-          sx={{ borderRadius: 0 }}
+          style={{ borderRadius: 0 }}
           color={
-            !setFilter4.length || setFilter4.includes(setKey)
-              ? 'success'
-              : 'secondary'
+            !setFilter4.length || setFilter4.includes(setKey) ? 'green' : 'gray'
           }
           onClick={() =>
             setSetFilter4(
@@ -130,11 +131,9 @@ function AdvSetFilterDiscCard({
           Allow 4p
         </Button>
         <Button
-          sx={{ borderRadius: 0 }}
+          style={{ borderRadius: 0 }}
           color={
-            !setFilter2.length || setFilter2.includes(setKey)
-              ? 'success'
-              : 'secondary'
+            !setFilter2.length || setFilter2.includes(setKey) ? 'green' : 'gray'
           }
           onClick={() =>
             setSetFilter2(

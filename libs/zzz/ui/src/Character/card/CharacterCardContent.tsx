@@ -8,7 +8,7 @@ import { type CharacterKey, allSkillKeys } from '@genshin-optimizer/zzz/consts'
 import { useCharacter } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Box, Typography } from '@mui/material'
+import { Box, Flex, Text, Title } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { CharacterName } from '../CharacterTrans'
 
@@ -23,78 +23,75 @@ export function CharacterCardContent({
   const { level, core } = character
   return (
     <>
-      <Box display="flex" gap={1.5} alignItems="center">
+      <Flex gap={1.5} align="center">
         <ImgIcon size={2} src={rarityDefIcon(rarity)} />
-        <Typography variant="h4">
+        <Title order={4}>
           <CharacterName characterKey={characterKey} />
-        </Typography>
+        </Title>
         <ElementIcon ele={attribute} />
         <ImgIcon size={2} src={specialityDefIcon(specialty)} />
-      </Box>
+      </Flex>
 
-      <Box display="flex" gap={3} alignItems="center">
+      <Flex gap={3} align="center">
         <Box>
-          <Typography
+          <Text
             component="span"
-            variant="h5"
-            whiteSpace="nowrap"
-            fontStyle="italic"
-            fontWeight="bold"
-            fontSize="1.625rem"
-            sx={{
+            style={{
+              whiteSpace: 'nowrap',
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              fontSize: '1.625rem',
               textShadow: 'none',
             }}
           >
             <strong>{t('characterCard.charLevel', { level: level })}</strong>
-          </Typography>
+          </Text>
         </Box>
-        <Box display="flex" gap={1.5} marginLeft="14px" alignItems="center">
+        <Flex gap={1.5} ml="14px" align="center">
           {allSkillKeys.map((item, index) => (
-            <Box key={index} position="relative">
+            <Box key={index} style={{ position: 'relative' }}>
               <ImgIcon size={2} src={commonDefIcon(item)} />
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                position="absolute"
-                bottom="-10px"
-                left="-4px"
-                width="1.7em"
-                height="1.7em"
-                borderRadius="1rem"
-                fontWeight="bold"
-                fontSize="0.8rem"
-                sx={{
+              <Flex
+                align="center"
+                justify="center"
+                style={{
+                  position: 'absolute',
+                  bottom: '-10px',
+                  left: '-4px',
+                  width: '1.7em',
+                  height: '1.7em',
+                  borderRadius: '1rem',
+                  fontWeight: 'bold',
+                  fontSize: '0.8rem',
                   background: '#1C1C1C',
                 }}
               >
                 {character[item]}
-              </Box>
+              </Flex>
             </Box>
           ))}
-          <Box position="relative">
+          <Box style={{ position: 'relative' }}>
             <ImgIcon size={2} src={commonDefIcon('core')} />
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              position="absolute"
-              bottom="-10px"
-              left="-4px"
-              width="1.7em"
-              height="1.7em"
-              borderRadius="1rem"
-              fontWeight="bold"
-              fontSize="0.8rem"
-              sx={{
+            <Flex
+              align="center"
+              justify="center"
+              style={{
+                position: 'absolute',
+                bottom: '-10px',
+                left: '-4px',
+                width: '1.7em',
+                height: '1.7em',
+                borderRadius: '1rem',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
                 background: '#1C1C1C',
               }}
             >
               {core}
-            </Box>
+            </Flex>
           </Box>
-        </Box>
-      </Box>
+        </Flex>
+      </Flex>
     </>
   )
 }

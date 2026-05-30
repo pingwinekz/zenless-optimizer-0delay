@@ -15,6 +15,7 @@ const zoodMetadataSchema = z.object({
 export const zoodFormatSchema = z.object({
   ...zoodMetadataSchema.shape,
   wengines: z.array(wengineBaseSchema.extend({ id: z.string() })).optional(),
+  // wengines are now catalog entries; exported data uses character-level wengineKey/wenginePhase
   characters: z.array(characterSchema).optional(),
   discs: z.array(discSchema.extend({ id: z.string() })).optional(),
 })

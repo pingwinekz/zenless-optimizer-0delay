@@ -2,7 +2,6 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "esModuleInterop": false,
-    "jsxImportSource": "@emotion/react",
     "types": ["vite/client"]
   },
   "files": [],

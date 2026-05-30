@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 export function useRefOverflow() {
-  const ref = useRef<HTMLElement>()
+  const ref = useRef<HTMLElement>(null!)
 
   const [isOverflowX, setIsOverflowX] = useState(false)
   const [isOverflowY, setIsOverflowY] = useState(false)

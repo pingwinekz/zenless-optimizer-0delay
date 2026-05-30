@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@mantine/core'
 import type { FunctionComponent } from 'react'
 import { AD_RAIL_HEIGHT, AD_RAIL_MAXWIDTH } from '../consts'
 import type { AdProps } from '../type'
@@ -21,10 +21,18 @@ export function AdRailSticky({
   const hasBothRails = adWidth >= MIN_RAIL_WIDTH * 2
   return (
     // Adding a padding of 60 ensures that there is at least 60px between ads (from top or bottom)
-    <Box sx={{ flexShrink: 1, position: 'sticky', top: 0, py: '60px' }}>
+    <Box
+      style={{
+        flexShrink: 1,
+        position: 'sticky',
+        top: 0,
+        paddingTop: '60px',
+        paddingBottom: '60px',
+      }}
+    >
       <AdWrapper
         dataAdSlot={dataAdSlot}
-        sx={{
+        style={{
           minWidth: MIN_RAIL_WIDTH,
           maxWidth: Math.min(
             hasBothRails ? adWidth * 0.5 : adWidth,

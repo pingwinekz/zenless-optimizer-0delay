@@ -8,7 +8,7 @@ export function EquippedGrid({ onClick }: { onClick?: () => void }) {
   return (
     <EquipGrid
       discIds={character?.equippedDiscs}
-      wengineId={character?.equippedWengine}
+      wengineKey={character?.wengineKey || ''}
       onClick={onClick}
       columns={columns}
     />

@@ -9,7 +9,7 @@ import {
   statKeyTextMap,
 } from '@genshin-optimizer/zzz/consts'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Button, ButtonGroup } from '@mui/material'
+import { Button } from '@mantine/core'
 import type { ReactNode } from 'react'
 import { StatDisplay } from '../Character'
 
@@ -27,28 +27,25 @@ export function DiscMainStatGroup({
   if (!slotKey) return null
   if (statKey && ['1', '2', '3'].includes(slotKey))
     return (
-      <CardThemed sx={{ p: 1 }} bgt="light">
+      <CardThemed p={8} bgt="light">
         <StatDisplay statKey={discSlotToMainStatKeys[slotKey][0]} showPercent />
       </CardThemed>
     )
   return (
-    <ButtonGroup>
+    <Button.Group>
       {slotKey &&
         discSlotToMainStatKeys[slotKey].map((stat) => (
-          <BootstrapTooltip
-            key={stat}
-            placement="top"
-            title={statKeyTextMap[stat]}
-          >
+          <BootstrapTooltip key={stat} label={statKeyTextMap[stat]}>
             <Button
-              color={statKey === stat ? 'success' : undefined}
+              color={statKey === stat ? 'green' : undefined}
               onClick={() => setStatKey(stat)}
-              sx={{ p: 0 }}
+              variant={statKey === stat ? 'filled' : 'default'}
+              p={0}
             >
               <StatIcon statKey={stat} />
             </Button>
           </BootstrapTooltip>
         ))}
-    </ButtonGroup>
+    </Button.Group>
   )
 }

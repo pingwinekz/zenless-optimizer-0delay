@@ -4,8 +4,7 @@
     "allowJs": false,
     "esModuleInterop": false,
     "exactOptionalPropertyTypes": false,
-    "strict": true,
-    "jsxImportSource": "@emotion/react"
+    "strict": true
   },
   "files": [],
   "include": [],

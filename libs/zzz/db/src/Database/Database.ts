@@ -9,6 +9,7 @@ import { CharMetaDataManager, DiscDataManager } from './DataManagers/'
 import { CharacterDataManager } from './DataManagers/CharacterDataManager'
 import { GeneratedBuildListDataManager } from './DataManagers/GeneratedBuildListDataManager'
 import { OptConfigDataManager } from './DataManagers/OptConfigDataManager'
+import { SavedBuildDataManager } from './DataManagers/SavedBuildDataManager'
 import { TeamDataManager } from './DataManagers/TeamDataManager'
 import { WengineDataManager } from './DataManagers/WengineDataManager'
 import type { ImportResult } from './exim'
@@ -26,6 +27,7 @@ export class ZzzDatabase extends Database {
   displayCharacter: DisplayCharacterEntry
   displayWengine: DisplayWengineEntry
   generatedBuildList: GeneratedBuildListDataManager
+  savedBuilds: SavedBuildDataManager
   dbIndex: 1 | 2 | 3 | 4
   dbVer: number
 
@@ -46,14 +48,16 @@ export class ZzzDatabase extends Database {
     // discs needs to be instantiated after character to check for relations
     this.discs = new DiscDataManager(this)
 
-    // Wengines needs to be instantiated after character to check for relations
+    // Wengines (catalog, auto-populates all keys at lvl60/mod5/phase1)
     this.wengines = new WengineDataManager(this)
 
-    // Depends on wengines and discs
     this.generatedBuildList = new GeneratedBuildListDataManager(this)
 
     // Depends on discs and characters
     this.optConfigs = new OptConfigDataManager(this)
+
+    // Depends on discs and wengines (references existing database items)
+    this.savedBuilds = new SavedBuildDataManager(this)
 
     // Depends on optConfigs
     this.teams = new TeamDataManager(this)
@@ -93,6 +97,7 @@ export class ZzzDatabase extends Database {
       this.charMeta,
       this.generatedBuildList,
       this.optConfigs,
+      this.savedBuilds,
       this.teams,
     ] as const
   }

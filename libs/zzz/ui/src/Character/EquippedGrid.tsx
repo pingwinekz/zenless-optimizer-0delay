@@ -1,7 +1,12 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import { ImgIcon } from '@genshin-optimizer/common/ui'
 import { specialityDefIcon } from '@genshin-optimizer/zzz/assets'
-import type { DiscSlotKey, SpecialityKey } from '@genshin-optimizer/zzz/consts'
+import type {
+  DiscSlotKey,
+  PhaseKey,
+  SpecialityKey,
+  WengineKey,
+} from '@genshin-optimizer/zzz/consts'
 import { allSpecialityKeys } from '@genshin-optimizer/zzz/consts'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import {
@@ -9,54 +14,39 @@ import {
   useDatabaseContext,
   useDisc,
   useDiscs,
-  useWengine,
 } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import {
   Box,
   Button,
-  CardContent,
   Divider,
-  Grid,
+  SimpleGrid,
   Stack,
+  Text,
   Tooltip,
-  Typography,
-} from '@mui/material'
-import { Suspense, useCallback, useContext, useState } from 'react'
+} from '@mantine/core'
+import { Suspense, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { IconArrowsHorizontal } from '@tabler/icons-react'
 import { ZCard } from '../Components'
 import { DiscCardObj, DiscEditor, DiscSwapModal } from '../Disc'
-import { WengineCardObj, WengineEditor, WengineSwapModal } from '../Wengine'
+import { WengineCardObj, WengineSwapModal } from '../Wengine'
 
-const columns = {
-  xs: 1,
-  sm: 2,
-  md: 3,
-  lg: 3,
-  xl: 3,
-} as const
 export function EquippedGrid({
   setWengine,
   setDisc,
 }: {
-  // set undefined to unequip
-  setWengine: (id: string | undefined) => void
-  // set undefined to unequip
+  setWengine: (key: WengineKey | '') => void
   setDisc: (slotKey: DiscSlotKey, id: string | null) => void
 }) {
   const { database } = useDatabaseContext()
   const character = useContext(CharacterContext)
   const [discIdToEdit, setDiscIdToEdit] = useState<string | undefined>()
-  const [editWengineId, setEditorWengineId] = useState('')
-  const onEditWengine = useCallback((id: string) => {
-    setEditorWengineId(id)
-  }, [])
-  const onEditDisc = useCallback((id: string) => {
-    setDiscIdToEdit(id)
-  }, [])
 
-  const wengine = useWengine(character?.equippedWengine)
+  // Wengine key and phase come directly from the character
+  const wengineKey = character?.wengineKey
+  const wenginePhase = character?.wenginePhase ?? 1
+
   const characterType = character
     ? getCharStat(character.key).specialty
     : allSpecialityKeys[0]
@@ -65,23 +55,7 @@ export function EquippedGrid({
 
   return (
     <Box>
-      <Stack spacing={2}>
-        <Suspense fallback={false}>
-          {editWengineId && (
-            <WengineEditor
-              wengineId={editWengineId}
-              footer
-              onClose={() => setEditorWengineId('')}
-              extraButtons={
-                <LargeWeaponSwapButton
-                  wengineId={wengine?.id || ''}
-                  wengineTypeKey={characterType}
-                  onChangeId={setWengine}
-                />
-              }
-            />
-          )}
-        </Suspense>
+      <Stack>
         <Suspense fallback={false}>
           {disc && (
             <DiscEditor
@@ -94,31 +68,38 @@ export function EquippedGrid({
           )}
         </Suspense>
         <Box>
-          {wengine?.id ? (
+          {wengineKey ? (
             <WengineCardObj
-              wengine={wengine}
-              onEdit={() => onEditWengine(wengine.id)}
+              wengine={{
+                key: wengineKey,
+                level: 60,
+                modification: 5,
+                phase: wenginePhase as PhaseKey,
+              }}
+              onEdit={() => setDiscIdToEdit(undefined)}
               extraButtons={
                 <WengineSwapButton
-                  wengineId={wengine.id}
+                  wengineKey={wengineKey}
                   wengineTypeKey={characterType}
-                  onChangeId={setWengine}
+                  onChangeKey={(key) => setWengine(key)}
                 />
               }
             />
           ) : (
             <WeaponSwapCard
-              wengineId=""
               wengineTypeKey={characterType}
-              onChangeId={setWengine}
+              onChangeKey={(key) => setWengine(key)}
             />
           )}
         </Box>
         <Box>
-          <Grid item columns={columns} container spacing={1}>
+          <SimpleGrid
+            cols={{ base: 1, sm: 2, md: 3, lg: 3, xl: 3 }}
+            spacing="xs"
+          >
             {!!discs &&
               Object.entries(discs).map(([slotKey, disc]) => (
-                <Grid item xs={1} key={disc?.id || slotKey}>
+                <Box key={disc?.id || slotKey}>
                   {disc?.id ? (
                     <DiscCardObj
                       disc={disc}
@@ -129,7 +110,7 @@ export function EquippedGrid({
                           onChangeId={(id) => setDisc(slotKey, id)}
                         />
                       }
-                      onEdit={() => onEditDisc(disc.id)}
+                      onEdit={() => setDiscIdToEdit(disc.id)}
                       onLockToggle={() =>
                         database.discs.set(disc.id, ({ lock }) => ({
                           lock: !lock,
@@ -142,9 +123,9 @@ export function EquippedGrid({
                       onChangeId={(id) => setDisc(slotKey, id)}
                     />
                   )}
-                </Grid>
+                </Box>
               ))}
-          </Grid>
+          </SimpleGrid>
         </Box>
       </Stack>
     </Box>
@@ -152,19 +133,17 @@ export function EquippedGrid({
 }
 
 export function WeaponSwapCard({
-  wengineId,
   wengineTypeKey,
-  onChangeId,
+  onChangeKey,
 }: {
-  wengineId: string
   wengineTypeKey: SpecialityKey
-  onChangeId: (id: string) => void
+  onChangeKey: (key: WengineKey | '') => void
 }) {
   const [show, onOpen, onClose] = useBoolState()
   return (
     <ZCard
       bgt="light"
-      sx={{
+      style={{
         height: '100%',
         width: '100%',
         minHeight: 300,
@@ -172,14 +151,14 @@ export function WeaponSwapCard({
         flexDirection: 'column',
       }}
     >
-      <CardContent>
-        <Typography>
+      <Box p="md">
+        <Text>
           <ImgIcon src={specialityDefIcon(wengineTypeKey)} />{' '}
-        </Typography>
-      </CardContent>
+        </Text>
+      </Box>
       <Divider />
       <Box
-        sx={{
+        style={{
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'center',
@@ -187,14 +166,14 @@ export function WeaponSwapCard({
         }}
       >
         <WengineSwapModal
-          wengineId={wengineId}
+          wengineKey=""
           wengineTypeKey={wengineTypeKey}
           show={show}
           onClose={onClose}
-          onChangeId={onChangeId}
+          onChangeKey={onChangeKey}
         />
-        <Button onClick={onOpen} color="info" sx={{ borderRadius: '1em' }}>
-          <SwapHorizIcon sx={{ height: 100, width: 100 }} />
+        <Button onClick={onOpen} color="cyan" style={{ borderRadius: '1em' }}>
+          <IconArrowsHorizontal style={{ height: 100, width: 100 }} />
         </Button>
       </Box>
     </ZCard>
@@ -213,7 +192,7 @@ export function DiscSwapCard({
   return (
     <ZCard
       bgt="light"
-      sx={{
+      style={{
         height: '100%',
         width: '100%',
         minHeight: 300,
@@ -221,12 +200,12 @@ export function DiscSwapCard({
         flexDirection: 'column',
       }}
     >
-      <CardContent>
-        <Typography>{t(`slotName`, { slotKey: slotKey })}</Typography>
-      </CardContent>
+      <Box p="md">
+        <Text>{t(`slotName`, { slotKey: slotKey })}</Text>
+      </Box>
       <Divider />
       <Box
-        sx={{
+        style={{
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'center',
@@ -240,8 +219,8 @@ export function DiscSwapCard({
           onClose={onClose}
           onChangeId={onChangeId}
         />
-        <Button onClick={onOpen} color="info" sx={{ borderRadius: '1em' }}>
-          <SwapHorizIcon sx={{ height: 100, width: 100 }} />
+        <Button onClick={onOpen} color="cyan" style={{ borderRadius: '1em' }}>
+          <IconArrowsHorizontal style={{ height: 100, width: 100 }} />
         </Button>
       </Box>
     </ZCard>
@@ -260,18 +239,14 @@ function DiscSwapButtonButton({
   const [show, onOpen, onClose] = useBoolState()
   return (
     <>
-      <Tooltip
-        title={<Typography>{t('tabEquip.swapDisc')}</Typography>}
-        placement="top"
-        arrow
-      >
+      <Tooltip label={t('tabEquip.swapDisc')}>
         <Button
-          color="info"
-          size="small"
+          color="cyan"
+          size="compact-sm"
           onClick={onOpen}
           aria-label={t('tabEquip.swapDisc')}
         >
-          <SwapHorizIcon />
+          <IconArrowsHorizontal />
         </Button>
       </Tooltip>
       <DiscSwapModal
@@ -286,59 +261,28 @@ function DiscSwapButtonButton({
 }
 
 function WengineSwapButton({
-  wengineId,
+  wengineKey,
   wengineTypeKey,
-  onChangeId,
+  onChangeKey,
 }: {
-  wengineId: string
+  wengineKey: WengineKey | ''
   wengineTypeKey: SpecialityKey
-  onChangeId: (id: string) => void
+  onChangeKey: (key: WengineKey | '') => void
 }) {
   const { t } = useTranslation('page_characters')
 
   const [show, onOpen, onClose] = useBoolState()
   return (
     <>
-      <Tooltip
-        title={<Typography>{t('tabEquip.swapWengine')}</Typography>}
-        placement="top"
-        arrow
-      >
-        <Button color="info" size="small" onClick={onOpen}>
-          <SwapHorizIcon />
+      <Tooltip label={t('tabEquip.swapWengine')}>
+        <Button color="cyan" size="compact-sm" onClick={onOpen}>
+          <IconArrowsHorizontal />
         </Button>
       </Tooltip>
       <WengineSwapModal
-        wengineId={wengineId}
+        wengineKey={wengineKey}
         wengineTypeKey={wengineTypeKey}
-        onChangeId={onChangeId}
-        show={show}
-        onClose={onClose}
-      />
-    </>
-  )
-}
-
-function LargeWeaponSwapButton({
-  wengineId,
-  wengineTypeKey,
-  onChangeId,
-}: {
-  wengineId: string
-  wengineTypeKey: SpecialityKey
-  onChangeId: (id: string) => void
-}) {
-  const { t } = useTranslation('page_characters')
-  const [show, onOpen, onClose] = useBoolState()
-  return (
-    <>
-      <Button color="info" onClick={onOpen} startIcon={<SwapHorizIcon />}>
-        {t('tabEquip.swapWengine')}
-      </Button>
-      <WengineSwapModal
-        wengineId={wengineId}
-        wengineTypeKey={wengineTypeKey}
-        onChangeId={onChangeId}
+        onChangeKey={onChangeKey}
         show={show}
         onClose={onClose}
       />

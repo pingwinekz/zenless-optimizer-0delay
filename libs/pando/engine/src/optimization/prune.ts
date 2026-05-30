@@ -211,7 +211,10 @@ export function pruneRange<ID>(state: State<OP, ID>, numReq: number) {
     const newCnds = cnds.filter((c) => {
       cndRanges[i] = computeCndRanges([c])
       const ranges = computeNodeRanges(nodes, cat, cndRanges)
-      return minimum.every((m, i) => ranges.get(nodes[i])!.max >= m)
+      return minimum.every((m, j) => {
+        const max = ranges.get(nodes[j])!.max
+        return isNaN(max) || max >= m
+      })
     })
     if (newCnds.length != cnds.length) {
       candidates[i] = newCnds

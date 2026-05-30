@@ -47,6 +47,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Reference-only directory (not part of this project)
+.fribbels-hsr-optimizer
+
 # dotenv
 .env.local
 .env.development.local

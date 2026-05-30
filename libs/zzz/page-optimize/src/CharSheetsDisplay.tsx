@@ -11,7 +11,7 @@ import {
   Yixuan,
 } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay, charSheets } from '@genshin-optimizer/zzz/formula-ui'
-import { Box } from '@mui/material'
+import { Box } from '@mantine/core'
 
 export function CharSheetSection() {
   const { key: characterKey } = useCharacterContext()!

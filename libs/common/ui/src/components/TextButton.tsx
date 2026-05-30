@@ -1,17 +1,10 @@
-import type { ButtonProps } from '@mui/material'
-import { Button, styled } from '@mui/material'
+import type { ButtonProps } from '@mantine/core'
+import { Button } from '@mantine/core'
 
-const DisabledButton = styled(Button)(({ theme }) => ({
-  '&.Mui-disabled': {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.text.secondary,
-  },
-}))
-
-export function TextButton({ children, disabled, ...props }: ButtonProps) {
+export function TextButton({ children, ...props }: ButtonProps) {
   return (
-    <DisabledButton {...props} disabled>
+    <Button variant="subtle" {...props}>
       {children}
-    </DisabledButton>
+    </Button>
   )
 }

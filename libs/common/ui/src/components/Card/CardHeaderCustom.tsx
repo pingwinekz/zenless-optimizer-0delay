@@ -1,8 +1,6 @@
-import { Box, Typography } from '@mui/material'
+import { Group, Text } from '@mantine/core'
 import type { ReactNode } from 'react'
-/**
- * A Cardheader thta also has space for an avatar element
- */
+
 export function CardHeaderCustom({
   avatar,
   title,
@@ -13,12 +11,12 @@ export function CardHeaderCustom({
   action?: ReactNode
 }) {
   return (
-    <Box display="flex" gap={1} p={2} alignItems="center">
+    <Group gap="sm" p="md" wrap="nowrap">
       {avatar}
-      <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
+      <Text style={{ flexGrow: 1 }} fw={500}>
         {title}
-      </Typography>
-      {action && <Typography variant="caption">{action}</Typography>}
-    </Box>
+      </Text>
+      {action && <Text size="sm">{action}</Text>}
+    </Group>
   )
 }

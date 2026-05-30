@@ -13,13 +13,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import {
-  Box,
-  CardActionArea,
-  CardContent,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, CardSection, Group, Stack, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import seasons from './shiyuSeasons_gen.json'
 
@@ -202,79 +196,63 @@ export function ShiyuDefenseBuffs() {
 
   return (
     <CardThemed bgt="light">
-      <CardContent>
-        <Stack spacing={1.5}>
-          <Typography variant="subtitle2">
+      <CardSection>
+        <Stack gap={1.5}>
+          <Text size="sm" fw={700}>
             {`${t('sdBuffs')} - ${activeSeason.name}`}
-          </Typography>
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          </Text>
+          <Group gap={1}>
             {rooms.map((room) => {
               const hasConfig = room.buff && !!buffConfigs[room.buff.title]
               return (
                 <CardThemed
                   key={room.id}
                   bgt="dark"
-                  sx={{
+                  style={{
                     flex: '1 1 200px',
                     outline: `2px solid ${
                       room.id === selectedRoomId
-                        ? 'var(--mui-palette-secondary-main)'
+                        ? 'var(--mantine-color-yellow-6)'
                         : 'transparent'
                     }`,
                     opacity: hasConfig ? 1 : 0.5,
                   }}
                 >
-                  <CardActionArea
-                    onClick={() => applyRoom(room)}
-                    disabled={!hasConfig}
+                  <CardSection
+                    onClick={() => hasConfig && applyRoom(room)}
+                    style={{ cursor: hasConfig ? 'pointer' : 'default' }}
                   >
-                    <Stack sx={{ p: 1 }}>
+                    <Stack p={4}>
                       <Box
                         component="img"
                         src={`${BOSS_CDN}/Monster_${room.bigMonster.image}.webp`}
                         alt={room.bigMonster.name}
-                        sx={{
+                        style={{
                           width: 96,
                           height: 96,
                           objectFit: 'contain',
-                          mx: 'auto',
+                          margin: '0 auto',
                         }}
                         onError={(e) => {
                           const el = e.target as HTMLImageElement
                           el.style.display = 'none'
                         }}
                       />
-                      <Typography
-                        variant="caption"
-                        fontWeight="bold"
-                        textAlign="center"
-                      >
+                      <Text size="xs" fw={700} style={{ textAlign: 'center' }}>
                         {room.bigMonster.name}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        textAlign="center"
-                      >
+                      </Text>
+                      <Text size="xs" style={{ textAlign: 'center' }}>
                         {room.name}
-                      </Typography>
+                      </Text>
                       {room.buff && (
-                        <Typography
-                          variant="caption"
-                          color="info.main"
-                          textAlign="center"
-                        >
+                        <Text size="xs" style={{ textAlign: 'center' }}>
                           {room.buff.title}
-                        </Typography>
+                        </Text>
                       )}
                       {room.buff && (
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          textAlign="center"
-                          sx={{
-                            '& span[style]': { lineHeight: 'inherit' },
-                          }}
+                        <Text
+                          size="xs"
+                          style={{ textAlign: 'center' }}
                           dangerouslySetInnerHTML={{
                             __html: room.buff.desc
                               .replace(/\n/g, ' ')
@@ -288,22 +266,18 @@ export function ShiyuDefenseBuffs() {
                         />
                       )}
                       {!hasConfig && room.buff && (
-                        <Typography
-                          variant="caption"
-                          color="warning.main"
-                          textAlign="center"
-                        >
+                        <Text size="xs" style={{ textAlign: 'center' }}>
                           No stat mapping
-                        </Typography>
+                        </Text>
                       )}
                     </Stack>
-                  </CardActionArea>
+                  </CardSection>
                 </CardThemed>
               )
             })}
-          </Stack>
+          </Group>
         </Stack>
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }

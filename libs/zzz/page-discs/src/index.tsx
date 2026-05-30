@@ -2,7 +2,7 @@ import { useBoolState } from '@genshin-optimizer/common/react-util'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { DiscEditor, DiscInventory } from '@genshin-optimizer/zzz/ui'
-import { Box } from '@mui/material'
+import { Box } from '@mantine/core'
 
 import { Suspense, useCallback, useState } from 'react'
 import DupModal from './DupModal'
@@ -28,7 +28,7 @@ export default function PageDiscs() {
   )
 
   return (
-    <Box display="flex" flexDirection="column" gap={1} my={1}>
+    <Box display="flex" style={{ flexDirection: 'column', gap: 1 }}>
       <Suspense fallback={false}>
         <DiscEditor
           disc={disc}

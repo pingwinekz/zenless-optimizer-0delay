@@ -4,8 +4,10 @@ import { handleMultiSelect } from '@genshin-optimizer/common/util'
 import { specialityDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { SpecialityKey } from '@genshin-optimizer/zzz/consts'
 import { allSpecialityKeys } from '@genshin-optimizer/zzz/consts'
-import { Chip, ToggleButtonGroup, useMediaQuery, useTheme } from '@mui/material'
+import { Badge, Group } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import type { ReactNode } from 'react'
+
 type CharSpecialtyToggleProps = Omit<
   SolidToggleButtonGroupProps,
   'onChange' | 'value'
@@ -22,27 +24,24 @@ export function CharSpecialtyToggle({
   onChange,
   ...props
 }: CharSpecialtyToggleProps) {
-  const theme = useTheme()
-  const xs = !useMediaQuery(theme.breakpoints.up('sm'))
+  const xs = !useMediaQuery('(min-width: 600px)')
   return (
-    <ToggleButtonGroup exclusive value={value} {...props}>
+    <Group {...(props as any)} gap="xs">
       {allSpecialityKeys.map((sk) => (
         <SolidColoredToggleButton
           key={sk}
           value={sk}
-          sx={{
-            p: xs ? 1 : undefined,
+          selected={value.includes(sk)}
+          style={{
+            padding: xs ? 4 : undefined,
             minWidth: xs ? 0 : '6em',
-            display: 'flex',
-            gap: xs ? 0 : 1,
           }}
-          selectedColor={'primary'}
           onClick={() => onChange(specaltyTypeHandler(value, sk))}
         >
           <ImgIcon src={specialityDefIcon(sk)} size={2} sideMargin />
-          <Chip label={totals[sk]} size="small" />
+          <Badge size="sm">{totals[sk]}</Badge>
         </SolidColoredToggleButton>
       ))}
-    </ToggleButtonGroup>
+    </Group>
   )
 }

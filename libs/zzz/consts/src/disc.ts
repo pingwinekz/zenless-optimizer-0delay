@@ -114,8 +114,8 @@ export type DiscMainSubStatKey = (typeof allDiscMainSubStatKeys)[number]
 
 // TODO: use dm values
 const subData = {
-  hp: { B: 39, A: 79, S: 112 },
-  atk: { B: 7, A: 15, S: 19 },
+  hp: { B: 39, A: 75, S: 112 },
+  atk: { B: 7, A: 13, S: 19 },
   def: { B: 5, A: 10, S: 15 },
   hp_: { B: 0.01, A: 0.02, S: 0.03 },
   atk_: { B: 0.01, A: 0.02, S: 0.03 },

@@ -5,8 +5,8 @@ import {
 } from '@genshin-optimizer/common/util'
 import type { WengineSubStatKey } from '@genshin-optimizer/zzz/consts'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Text } from '@mantine/core'
+import { Box } from '@mantine/core'
 import { StatDisplay } from '../Character'
 
 export function WengineSubstatDisplay({
@@ -23,18 +23,17 @@ export function WengineSubstatDisplay({
     statKeyToFixed(substatKey)
   )
   return (
-    <Typography
-      variant="subtitle2"
-      sx={{
+    <Text
+      style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontWeight: '500',
         fontSize: '1rem',
-        gap: 1,
+        gap: 4,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         {showStatName ? (
           <StatDisplay statKey={substatKey} />
         ) : (
@@ -45,6 +44,6 @@ export function WengineSubstatDisplay({
         {displayValue}
         {getUnitStr(substatKey)}
       </Box>
-    </Typography>
+    </Text>
   )
 }

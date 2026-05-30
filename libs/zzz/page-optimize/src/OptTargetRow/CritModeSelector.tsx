@@ -7,7 +7,7 @@ import {
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
-import { Box, MenuItem } from '@mui/material'
+import { Box, MenuItem } from '@mantine/core'
 
 // TODO: translation
 const modeMap: Record<critModeKey, string> = {
@@ -23,13 +23,17 @@ export function CritModeSelector() {
   return (
     <DropdownButton
       title={
-        <Box sx={{ textWrap: 'nowrap' }}>Hit mode: {modeMap[critMode]}</Box>
+        <Box style={{ textWrap: 'nowrap' }}>Hit mode: {modeMap[critMode]}</Box>
       }
     >
       {critModeKeys.map((k) => (
         <MenuItem
           key={k}
-          selected={critMode === k}
+          style={
+            critMode === k
+              ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+              : undefined
+          }
           disabled={critMode === k}
           onClick={() =>
             database.teams.setFrame0(character.key, { critMode: k })

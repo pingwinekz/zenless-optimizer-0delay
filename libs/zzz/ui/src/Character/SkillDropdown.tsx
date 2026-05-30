@@ -7,7 +7,7 @@ import {
   useCharacterContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
-import { MenuItem } from '@mui/material'
+import { Menu } from '@mantine/core'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -33,19 +33,14 @@ export function SkillDropdown({ skillKey }: { skillKey: SkillKey }) {
       fullWidth
       title={t(skillKey, { level: level })}
       color={'primary'}
-      startIcon={
+      leftSection={
         <ImgIcon src={commonDefIcon(skillKey)} size={1.75} sideMargin />
       }
     >
       {range(1, skillByLevel(charLevel)).map((i) => (
-        <MenuItem
-          key={i}
-          selected={level === i}
-          disabled={level === i}
-          onClick={() => setSkill(i)}
-        >
+        <Menu.Item key={i} disabled={level === i} onClick={() => setSkill(i)}>
           {t(skillKey, { level: i })}
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )

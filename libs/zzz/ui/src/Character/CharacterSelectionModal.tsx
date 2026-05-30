@@ -6,11 +6,7 @@ import {
   SortByButton,
   SqBadge,
 } from '@genshin-optimizer/common/ui'
-import {
-  catTotal,
-  filterFunction,
-  sortFunction,
-} from '@genshin-optimizer/common/util'
+import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
 import {
   characterAsset,
   factionDefIcon,
@@ -20,35 +16,31 @@ import {
 import type {
   AttributeKey,
   CharacterKey,
+  CharacterRarityKey,
   SpecialityKey,
 } from '@genshin-optimizer/zzz/consts'
 import {
   allAttributeKeys,
   allCharacterKeys,
+  allCharacterRarityKeys,
   allSpecialityKeys,
   milestoneMaxLevel,
 } from '@genshin-optimizer/zzz/consts'
 import { useCharacter, useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Block } from '@mui/icons-material'
-import CloseIcon from '@mui/icons-material/Close'
 import {
   Box,
-  CardActionArea,
-  CardContent,
+  CloseButton,
   Divider,
-  Grid,
-  IconButton,
   Skeleton,
-  TextField,
-  Typography,
-  useTheme,
-} from '@mui/material'
+  Text,
+  TextInput,
+} from '@mantine/core'
 import type { ChangeEvent } from 'react'
 import React, { Suspense, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CharSpecialtyToggle, ElementToggle } from '../toggles'
+import { SegmentedFilterRow } from '../toggles'
 import {
   type CharacterSortKey,
   characterFilterConfigs,
@@ -75,7 +67,8 @@ export function CharacterSingleSelectionModal({
   const deferredSearchTerm = useDeferredValue(searchTerm)
   const deferredState = useDeferredValue(displayCharacter)
   const characterKeyList = useMemo(() => {
-    const { attribute, specialtyType, sortType, ascending } = deferredState
+    const { attribute, specialtyType, rarity, sortType, ascending } =
+      deferredState
     const sortByKeys = [
       ...(newFirst ? ['new'] : []),
       ...(characterSortMap[sortType] ?? []),
@@ -83,7 +76,7 @@ export function CharacterSingleSelectionModal({
     const filteredKeys = allCharacterKeys
       .filter(
         filterFunction(
-          { attribute, specialtyType, name: deferredSearchTerm },
+          { attribute, specialtyType, rarity, name: deferredSearchTerm },
           characterFilterConfigs(database)
         )
       )
@@ -108,6 +101,9 @@ export function CharacterSingleSelectionModal({
     onChangeAttributeFilter: (attribute: AttributeKey[]) => {
       database.displayCharacter.set({ attribute })
     },
+    onChangeRarityFilter: (rarity: CharacterRarityKey[]) => {
+      database.displayCharacter.set({ rarity })
+    },
     onChangeSearch: (e: ChangeEvent<HTMLTextAreaElement>) => {
       setSearchTerm(e.target.value)
     },
@@ -126,15 +122,17 @@ export function CharacterSingleSelectionModal({
       filterSearchSortProps={filterSearchSortProps}
       onClose={onClose}
     >
-      <CardContent sx={{ flex: '1', overflow: 'auto' }}>
-        <Suspense
-          fallback={
-            <Skeleton variant="rectangular" width="100%" height={1000} />
-          }
-        >
-          <Grid container spacing={0.5} columns={{ xs: 1, sm: 2, lg: 3 }}>
+      <Box style={{ flex: 1, overflow: 'auto' }}>
+        <Suspense fallback={<Skeleton width="100%" height={1000} />}>
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+              gap: '4px',
+            }}
+          >
             {showNone && (
-              <Grid item xs={1}>
+              <Box>
                 <CharacterCard
                   characterKey={undefined}
                   onClick={() => {
@@ -142,10 +140,10 @@ export function CharacterSingleSelectionModal({
                     onSelect(null)
                   }}
                 />
-              </Grid>
+              </Box>
             )}
             {characterKeyList.map((characterKey) => (
-              <Grid item key={characterKey} xs={1}>
+              <Box key={characterKey}>
                 <CharacterCard
                   characterKey={characterKey}
                   onClick={() => {
@@ -153,11 +151,11 @@ export function CharacterSingleSelectionModal({
                     onSelect(characterKey)
                   }}
                 />
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </Suspense>
-      </CardContent>
+      </Box>
     </CharacterSelectionModalBase>
   )
 }
@@ -169,14 +167,14 @@ function CharacterCard({
   return (
     <CardThemed
       bgt="light"
-      sx={(theme) => ({
+      style={{
         position: 'relative',
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '16px 16px 16px 16px',
-        border: `3px solid ${theme.palette.contentZzz.main}`,
-      })}
+        border: '3px solid var(--layer-2)',
+      }}
     >
       <SelectionCard characterKey={characterKey} onClick={onClick} />
     </CardThemed>
@@ -187,6 +185,7 @@ type FilterSearchSortProps = {
   searchTerm: string
   onChangeSpecialtyFilter: (weaps: SpecialityKey[]) => void
   onChangeAttributeFilter: (elements: AttributeKey[]) => void
+  onChangeRarityFilter: (rarity: CharacterRarityKey[]) => void
   onChangeSearch: (e: ChangeEvent<HTMLTextAreaElement>) => void
   onChangeSort: (sortType: CharacterSortKey) => void
   onChangeAsc: (asc: boolean) => void
@@ -203,7 +202,7 @@ const sortKeys = Object.keys(characterSortMap)
 
 function CharacterSelectionModalBase({
   show,
-  charactersToShow,
+  charactersToShow: _charactersToShow,
   filterSearchSortProps,
   onClose,
   children,
@@ -212,107 +211,117 @@ function CharacterSelectionModalBase({
   const { database } = useDatabaseContext()
   const displayCharacter = useDataEntryBase(database.displayCharacter)
 
-  const charSpecialtyTotals = useMemo(
-    () =>
-      catTotal(allSpecialityKeys, (sk) =>
-        database.chars.entries.forEach(([id, char]) => {
-          const specialty = getCharStat(char.key).specialty
-          sk[specialty].total++
-          if (charactersToShow.includes(id)) sk[specialty].current++
-        })
-      ),
-    [charactersToShow, database.chars.entries]
-  )
-
-  const attributeTotals = useMemo(
-    () =>
-      catTotal(allAttributeKeys, (ct) =>
-        Object.entries(database.chars.data).forEach(([ck]) => {
-          const attribute = getCharStat(ck).attribute
-          ct[attribute].total++
-          if (charactersToShow.includes(ck)) ct[attribute].current++
-        })
-      ),
-    [charactersToShow, database.chars.data]
-  )
-
-  const { specialtyType, attribute, sortType, ascending } = displayCharacter
+  const { specialtyType, attribute, rarity, sortType, ascending } =
+    displayCharacter
 
   return (
     <ModalWrapper
-      open={show}
+      opened={show}
       onClose={onClose}
+      size="75%"
       containerProps={{
-        sx: {
+        style: {
           height: '100vh',
-          p: { xs: 1 },
         },
       }}
     >
       <CardThemed
-        sx={{
+        style={{
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
         }}
       >
-        <CardContent
-          sx={{
+        <Box
+          style={{
             display: 'flex',
-            flexDirection: 'column',
-            gap: 1,
+            gap: 8,
+            padding: '16px',
+            alignItems: 'center',
           }}
         >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              <CharSpecialtyToggle
-                onChange={(specialtyType) =>
-                  database.displayCharacter.set({ specialtyType })
-                }
-                value={specialtyType}
-                totals={charSpecialtyTotals}
-                size="small"
-              />
-              <ElementToggle
-                onChange={(attribute) =>
-                  database.displayCharacter.set({ attribute })
-                }
-                value={attribute}
-                totals={attributeTotals}
-                size="small"
-              />
-            </Box>
-            <IconButton sx={{ ml: 'auto' }} onClick={() => onClose()}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          <Box display="flex" gap={1}>
-            <TextField
-              autoFocus
-              value={filterSearchSortProps.searchTerm}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                filterSearchSortProps.onChangeSearch(e)
-              }
-              label={t('characterName')}
-              size="small"
-              sx={{ height: '100%', mr: 'auto' }}
-              InputProps={{
-                sx: { height: '100%' },
-              }}
-            />
-            <SortByButton
-              sortKeys={sortKeys}
-              value={sortType}
-              onChange={(sortType) =>
-                filterSearchSortProps.onChangeSort(sortType)
-              }
-              ascending={ascending}
-              onChangeAsc={(ascending) =>
-                filterSearchSortProps.onChangeAsc(ascending)
+          <TextInput
+            styles={{
+              input: {
+                height: 40,
+                lineHeight: '40px',
+                fontSize: 14,
+                borderRadius: 4,
+              },
+            }}
+            w={200}
+            placeholder={t('searchPlaceholder')}
+            value={filterSearchSortProps.searchTerm}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              filterSearchSortProps.onChangeSearch(e as any)
+            }
+            rightSection={
+              filterSearchSortProps.searchTerm ? (
+                <CloseButton
+                  size="sm"
+                  onClick={() =>
+                    filterSearchSortProps.onChangeSearch({
+                      target: { value: '' },
+                    } as any)
+                  }
+                />
+              ) : undefined
+            }
+            rightSectionPointerEvents="all"
+          />
+          <Box style={{ flex: 1 }}>
+            <SegmentedFilterRow
+              tags={allSpecialityKeys.map((sk) => ({
+                key: sk,
+                display: <ImgIcon src={specialityDefIcon(sk)} size={1.5} />,
+              }))}
+              currentFilter={specialtyType}
+              setCurrentFilters={(specialtyType) =>
+                database.displayCharacter.set({ specialtyType })
               }
             />
           </Box>
-        </CardContent>
+          <Box style={{ width: 421 }}>
+            <SegmentedFilterRow
+              tags={allAttributeKeys.map((atr) => ({
+                key: atr,
+                display: (
+                  <ElementIcon
+                    ele={atr}
+                    iconProps={{ style: { fontSize: '1.3rem' } }}
+                  />
+                ),
+              }))}
+              currentFilter={attribute}
+              setCurrentFilters={(attribute) =>
+                database.displayCharacter.set({ attribute })
+              }
+            />
+          </Box>
+          <Box style={{ minWidth: 120 }}>
+            <SegmentedFilterRow
+              tags={allCharacterRarityKeys.map((rk) => ({
+                key: rk,
+                display: <ImgIcon src={rarityDefIcon(rk)} size={1.2} />,
+              }))}
+              currentFilter={rarity}
+              setCurrentFilters={(rarity) =>
+                database.displayCharacter.set({ rarity })
+              }
+            />
+          </Box>
+          <SortByButton
+            sortKeys={sortKeys}
+            value={sortType}
+            onChange={(sortType) =>
+              filterSearchSortProps.onChangeSort(sortType)
+            }
+            ascending={ascending}
+            onChangeAsc={(ascending) =>
+              filterSearchSortProps.onChangeAsc(ascending)
+            }
+          />
+        </Box>
         <Divider />
         {children}
       </CardThemed>
@@ -328,44 +337,40 @@ function SelectionCard({
   onClick: () => void
 }) {
   const { t } = useTranslation(['page_characters', 'charNames_gen'])
-  const theme = useTheme()
   const character = useCharacter(characterKey)
   const { rarity, attribute, faction, specialty } = characterKey
     ? getCharStat(characterKey)
     : {}
   const { level = 1, promotion = 0, mindscape = 0 } = character ?? {}
-  const selectorBackgroundColor = attribute
-    ? attribute === 'electric'
-      ? theme.palette[attribute].light
-      : theme.palette[attribute].main
-    : theme.palette.contentZzz.main
 
   return (
-    <CardActionArea onClick={onClick}>
+    <Box onClick={onClick} style={{ cursor: 'pointer' }}>
       <Box
-        sx={{
+        style={{
           position: 'relative',
           width: '100%',
           height: '120px',
           display: 'flex',
           paddingLeft: '3px',
-          gap: 0.5,
+          gap: '0.125rem',
           alignItems: 'center',
-          '&::before': {
-            content: '""',
-            display: 'block',
+        }}
+      >
+        <Box
+          style={{
             position: 'absolute',
             left: 0,
             top: 0,
             width: '100%',
             height: '100%',
             opacity: 0.7,
-            background: selectorBackgroundColor,
-          },
-        }}
-      >
+            background: attribute
+              ? `var(--mantine-color-${attribute}-filled)`
+              : 'var(--layer-2)',
+          }}
+        />
         <Box
-          sx={{
+          style={{
             display: 'flex',
             flexDirection: 'column',
             zIndex: 1,
@@ -375,20 +380,31 @@ function SelectionCard({
           {characterKey ? (
             <Box
               component="img"
-              sx={{ height: '120px' }}
+              style={{ height: '120px', display: 'block' }}
               src={characterAsset(characterKey, 'select')}
             />
           ) : (
-            <Block sx={{ fontSize: '100px' }} />
+            <Box
+              style={{
+                fontSize: '100px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100px',
+                height: '120px',
+              }}
+            >
+              <Text style={{ fontSize: '100px', lineHeight: 1 }}>—</Text>
+            </Box>
           )}
         </Box>
         <Box
-          sx={{
+          style={{
             display: 'flex',
             flexDirection: 'column',
             zIndex: 1,
             justifyContent: 'space-evenly',
-            background: theme.palette.contentNormal.main,
+            background: 'var(--layer-2)',
             padding: '4px 12px',
             width: '100%',
             height: '100%',
@@ -396,26 +412,37 @@ function SelectionCard({
         >
           {characterKey ? (
             <>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: '900',
+              <Box
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.125rem',
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: 900,
                     textTransform: 'uppercase',
                     fontStyle: 'italic',
                   }}
                 >
                   {t(`charNames_gen:${characterKey}`)}
-                </Typography>
+                </Text>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Box
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.125rem',
+                }}
+              >
                 <ImgIcon
                   size={2}
                   src={factionDefIcon(faction ?? 'BelebogHeavyIndustries')}
                 />
                 <ElementIcon
                   ele={attribute ?? 'physical'}
-                  iconProps={{ sx: { fontSize: '1.5em' } }}
+                  iconProps={{ style: { fontSize: '1.5em' } }}
                 />
                 <ImgIcon
                   size={1.5}
@@ -423,48 +450,48 @@ function SelectionCard({
                 />
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                }}
+              >
                 <ImgIcon size={1.5} src={rarityDefIcon(rarity ?? 'A')} />
                 {!!character && (
                   <Box
-                    sx={{ textShadow: '0 0 5px gray', display: 'flex', gap: 1 }}
+                    style={{
+                      textShadow: '0 0 5px gray',
+                      display: 'flex',
+                      gap: '0.25rem',
+                    }}
                   >
                     <Box>
-                      <Typography
-                        variant="body2"
-                        component="span"
-                        whiteSpace="nowrap"
-                      >
+                      <Text component="span" style={{ whiteSpace: 'nowrap' }}>
                         {t('charLevel', { level: level })}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        component="span"
-                        color="text.secondary"
-                      >
+                      </Text>
+                      <Text component="span" c="dimmed">
                         /{milestoneMaxLevel[promotion]}
-                      </Typography>
+                      </Text>
                     </Box>
-                    <Typography variant="body2" component="span">
-                      M{mindscape}
-                    </Typography>
+                    <Text component="span">M{mindscape}</Text>
                   </Box>
                 )}
 
                 {!character && (
-                  <Typography component="span" variant="body2">
+                  <Text component="span">
                     <SqBadge color={'electric'}>
                       {t('characterEditor.new')}
                     </SqBadge>
-                  </Typography>
+                  </Text>
                 )}
               </Box>
             </>
           ) : (
-            <Typography variant="h6">{t('characterEditor.none')}</Typography>
+            <Text>{t('characterEditor.none')}</Text>
           )}
         </Box>
       </Box>
-    </CardActionArea>
+    </Box>
   )
 }

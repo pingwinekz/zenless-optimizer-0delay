@@ -7,16 +7,8 @@ import {
   useDisplayDisc,
 } from '@genshin-optimizer/zzz/db-ui'
 import { discFilterConfigs } from '@genshin-optimizer/zzz/util'
-import AddIcon from '@mui/icons-material/Add'
-import DifferenceIcon from '@mui/icons-material/Difference'
-import {
-  Box,
-  Button,
-  CardContent,
-  Grid,
-  Skeleton,
-  Typography,
-} from '@mui/material'
+import { IconPlus, IconCopy } from '@tabler/icons-react'
+import { Box, Button, Card, SimpleGrid, Skeleton, Text } from '@mantine/core'
 import { Suspense, useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DiscCard } from './DiscCard'
@@ -79,59 +71,54 @@ export function DiscInventory({
         discIds={discIds}
       ></DiscFilter>
       <CardThemed bgt="dark">
-        <CardContent>
+        <Card.Section p="sm">
           <Box
-            pb={2}
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
+            pb={16}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
           >
-            <Typography color="text.secondary">
+            <Text c="dimmed">
               Showing <b>{showingTextProps.numShowing}</b> out of{' '}
               {showingTextProps.totalShowing} Items
-            </Typography>
+            </Text>
           </Box>
-        </CardContent>
+        </Card.Section>
       </CardThemed>
-      <Grid container columns={columns} spacing={1}>
-        <Grid item xs>
+      <SimpleGrid cols={columns} spacing={8}>
+        <Box>
           <Button
             fullWidth
             onClick={onAdd}
-            color="info"
-            startIcon={<AddIcon />}
+            color="blue"
+            leftSection={<IconPlus size={16} />}
           >
             {t('addNew')}
           </Button>
-        </Grid>
-        <Grid item xs={1}>
+        </Box>
+        <Box>
           <Button
             fullWidth
             onClick={onShowDup}
-            color="info"
-            startIcon={<DifferenceIcon />}
+            color="blue"
+            leftSection={<IconCopy size={16} />}
           >
             {t('showDupes')}
           </Button>
-        </Grid>
-      </Grid>
-      <Suspense
-        fallback={
-          <Skeleton
-            variant="rectangular"
-            sx={{ width: '100%', height: '100%', minHeight: 5000 }}
-          />
-        }
-      >
+        </Box>
+      </SimpleGrid>
+      <Suspense fallback={<Skeleton width="100%" height={5000} />}>
         <Box>
-          <Grid container columns={columns} spacing={1}>
+          <SimpleGrid cols={columns} spacing={8}>
             {discsIdsToShow.map((discId) => (
-              <Grid item key={discId} xs={1}>
+              <Box key={discId}>
                 <DiscCard key={discId} discId={discId} onEdit={onEdit} />
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </SimpleGrid>
         </Box>
         {discIds.length !== discsIdsToShow.length && (
           <Skeleton
@@ -139,10 +126,9 @@ export function DiscInventory({
               if (!node) return
               setTriggerElement(node)
             }}
-            sx={{ borderRadius: 1 }}
-            variant="rectangular"
             width="100%"
             height={100}
+            mt={8}
           />
         )}
       </Suspense>

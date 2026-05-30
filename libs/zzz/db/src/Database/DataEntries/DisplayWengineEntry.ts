@@ -5,7 +5,6 @@ import {
   zodString,
 } from '@genshin-optimizer/common/database'
 import {
-  allLocationKeys,
   allSpecialityKeys,
   allWengineRarityKeys,
 } from '@genshin-optimizer/zzz/consts'
@@ -22,10 +21,8 @@ const displayWengineSchema = z.object({
   ascending: zodBoolean(),
   rarity: zodFilteredArray(allWengineRarityKeys),
   speciality: zodFilteredArray(allSpecialityKeys),
-  locked: zodFilteredArray(['locked', 'unlocked'] as const),
-  showEquipped: zodBoolean(true),
-  showInventory: zodBoolean(true),
-  locations: zodFilteredArray(allLocationKeys, []),
+  // locked, showEquipped, showInventory, locations are removed since wengines
+  // are now catalog entries (no per-instance inventory management).
 })
 export type IDisplayWengine = z.infer<typeof displayWengineSchema>
 

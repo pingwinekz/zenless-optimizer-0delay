@@ -4,7 +4,7 @@ import {
   DropdownButton,
   NumberInputLazy,
 } from '@genshin-optimizer/common/ui'
-import { type UnArray, isPercentStat } from '@genshin-optimizer/common/util'
+import { type UnArray } from '@genshin-optimizer/common/util'
 import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
 import { allAttributeKeys } from '@genshin-optimizer/zzz/consts'
 import type { StatFilterTag } from '@genshin-optimizer/zzz/db'
@@ -22,21 +22,16 @@ import {
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay, qtMap } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName, StatDisplay } from '@genshin-optimizer/zzz/ui'
+import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
 import {
-  CheckBox,
-  CheckBoxOutlineBlank,
-  DeleteForever,
-} from '@mui/icons-material'
-import {
+  ActionIcon,
   Box,
   Button,
-  CardContent,
+  CardSection,
   Divider,
-  IconButton,
-  InputAdornment,
   MenuItem,
-  Typography,
-} from '@mui/material'
+  Text,
+} from '@mantine/core'
 import { useCallback, useContext } from 'react'
 
 export function StatFilterCard({ disabled = false }: { disabled?: boolean }) {
@@ -54,30 +49,26 @@ export function StatFilterCard({ disabled = false }: { disabled?: boolean }) {
   )
   return (
     <CardThemed bgt="light">
-      <CardContent
-        sx={{
+      <CardSection
+        style={{
           display: 'flex',
           gap: 1,
           justifyContent: 'space-between',
           flexDirection: 'column',
         }}
       >
-        <Box display="flex" justifyContent="space-between">
-          {/* TODO: Translate */}
-          <Typography sx={{ fontWeight: 'bold' }}>Stat Filter</Typography>
-          {/* <InfoTooltip
-              title={<Typography>{t('constraintFilter.tooltip')}</Typography>}
-            /> */}
+        <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Text fw={700}>Stat Filter</Text>
         </Box>
-      </CardContent>
+      </CardSection>
       <Divider />
-      <CardContent>
+      <CardSection>
         <StatFilterDisplay
           statFilters={statFilters}
           setStatFilters={setStatFilters}
           disabled={disabled}
         />
-      </CardContent>
+      </CardSection>
     </CardThemed>
   )
 }
@@ -142,7 +133,7 @@ export function StatFilterDisplay({
   const newTarget = (q: StatFilterStatKey) => setTarget(newStatFilterTag(q))
 
   return (
-    <Box display="flex" flexDirection="column" gap={1}>
+    <Box style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
       {statFilters.map((statFilter, i) => (
         <StatFilterItem
           statFilter={statFilter}
@@ -199,21 +190,24 @@ function StatFilterItem({
 }) {
   const { tag, value, isMax, disabled: valueDisabled } = statFilter
 
-  const isPercent = isPercentStat(tag.q ?? '')
   return (
     <CardThemed>
-      <CardContent sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+      <CardSection style={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <Button
-          color={valueDisabled ? 'secondary' : 'success'}
+          color={valueDisabled ? 'gray' : 'green'}
           onClick={() => setDisabled(!valueDisabled)}
           disabled={disabled}
-          size="small"
+          size="compact-sm"
         >
-          {valueDisabled ? <CheckBoxOutlineBlank /> : <CheckBox />}
+          {valueDisabled ? (
+            <IconSquare size={16} />
+          ) : (
+            <IconCheckbox size={16} />
+          )}
         </Button>
-        <Typography>
+        <Text>
           <TagDisplay tag={tag} />
-        </Typography>
+        </Text>
         <QtDropdown qt={tag.qt} setQt={(qt) => setTarget({ ...tag, qt })} />
         {tag.q === 'dmg_' && (
           <AttributeDropdown
@@ -224,35 +218,23 @@ function StatFilterItem({
             }}
           />
         )}
-        <Button onClick={() => setTargetisMax(!isMax)} size="small">
+        <Button onClick={() => setTargetisMax(!isMax)} size="compact-sm">
           <strong>{isMax ? 'MAX' : 'MIN'}</strong>
         </Button>
 
         <NumberInputLazy
           float
           value={value}
-          sx={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
+          style={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
           disabled={disabled}
           onChange={setTargetValue}
           placeholder="Stat Value"
           size="small"
-          inputProps={{ sx: { textAlign: 'right' } }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end" sx={{ ml: 0 }}>
-                {isPercent ? '%' : undefined}{' '}
-                <IconButton
-                  aria-label="Delete Stat Constraint"
-                  onClick={delTarget}
-                  edge="end"
-                >
-                  <DeleteForever fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
-      </CardContent>
+        <ActionIcon aria-label="Delete Stat Constraint" onClick={delTarget}>
+          <IconTrash size={16} />
+        </ActionIcon>
+      </CardSection>
     </CardThemed>
   )
 }
@@ -299,7 +281,11 @@ function QtDropdown({
         <MenuItem
           key={q}
           onClick={() => setQt(q)}
-          selected={qt === q}
+          style={
+            qt === q
+              ? { backgroundColor: 'var(--mantine-color-blue-light)' }
+              : undefined
+          }
           disabled={qt === q}
         >
           {qtMap[q]}

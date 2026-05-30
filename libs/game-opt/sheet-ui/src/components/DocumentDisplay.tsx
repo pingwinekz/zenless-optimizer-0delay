@@ -2,9 +2,8 @@ import type { CardBackgroundColor } from '@genshin-optimizer/common/ui'
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { evalIfFunc } from '@genshin-optimizer/common/util'
 import { CalcContext, TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import type { TypographyOwnProps } from '@mui/material'
-import { Box, Collapse, Typography } from '@mui/material'
+import { IconChevronDown } from '@tabler/icons-react'
+import { Box, Text } from '@mantine/core'
 import { useContext, useState } from 'react'
 import type { Document, FieldsDocument, TextDocument } from '../types'
 import { ConditionalsDisplay } from './ConditionalDisplay'
@@ -15,12 +14,12 @@ export function DocumentDisplay({
   document,
   bgt = 'normal',
   collapse = false,
-  typoVariant = 'body1',
+  typoVariant = 'body1' as any,
 }: {
   document: Document
   bgt?: CardBackgroundColor
   collapse?: boolean
-  typoVariant?: TypographyOwnProps['variant']
+  typoVariant?: string
 }) {
   switch (document.type) {
     case 'fields':
@@ -74,16 +73,16 @@ function TextSectionDisplay({
   typoVariant,
 }: {
   textDocument: TextDocument
-  typoVariant?: TypographyOwnProps['variant']
+  typoVariant?: string
 }) {
   const calculator = useContext(CalcContext)
   const tag = useContext(TagContext)
   if (!calculator) return null
   return (
-    <Typography variant={typoVariant}>
+    <Text style={{ fontSize: typoVariant === 'h6' ? undefined : undefined }}>
       {textDocument.header && <HeaderDisplay header={textDocument.header} />}
       {evalIfFunc(textDocument.text, calculator.withTag(tag))}
-    </Typography>
+    </Text>
   )
 }
 function TextSectionDisplayCollapse({
@@ -91,55 +90,55 @@ function TextSectionDisplayCollapse({
   typoVariant,
 }: {
   textDocument: TextDocument
-  typoVariant?: TypographyOwnProps['variant']
+  typoVariant?: string
 }) {
   const [expanded, setExpanded] = useState(false)
   const [hover, setHover] = useState(false)
   return (
-    <Box sx={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }}>
       {!expanded && (
-        <Box
-          sx={{
+        <div
+          style={{
             pointerEvents: 'none',
             position: 'absolute',
-            mx: 'auto',
+            margin: '0 auto',
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
             height: '100%',
             alignItems: 'flex-end',
-            zIndex: '10',
+            zIndex: 10,
             transition: 'transform 0.3s ease',
             transform: hover ? 'translate(0,-5px)' : undefined,
           }}
         >
-          <KeyboardArrowDownIcon />
-        </Box>
+          <IconChevronDown />
+        </div>
       )}
-      <Collapse
+      <Box
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        collapsedSize={55}
         onClick={() => setExpanded((e) => !e)}
-        in={expanded}
-        sx={{
+        style={{
           cursor: 'pointer',
           position: 'relative',
-          maskImage: expanded
-            ? undefined
-            : 'linear-gradient(to bottom, black 0%, transparent 100%)',
-          '&:hover': {
-            maskImage: expanded
-              ? undefined
-              : 'linear-gradient(to bottom, black 50%, transparent 100%)',
-          },
+          maxHeight: expanded ? 'none' : '55px',
+          overflow: 'hidden',
+          ...(!expanded
+            ? {
+                WebkitMaskImage:
+                  'linear-gradient(to bottom, black 0%, transparent 100%)',
+                maskImage:
+                  'linear-gradient(to bottom, black 0%, transparent 100%)',
+              }
+            : {}),
         }}
       >
         <TextSectionDisplay
           textDocument={textDocument}
           typoVariant={typoVariant}
         />
-      </Collapse>
-    </Box>
+      </Box>
+    </div>
   )
 }

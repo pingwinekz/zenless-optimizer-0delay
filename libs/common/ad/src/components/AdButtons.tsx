@@ -1,4 +1,4 @@
-import { Box } from '@mui/system'
+import { Box } from '@mantine/core'
 import type { MouseEventHandler } from 'react'
 
 /**
@@ -7,7 +7,7 @@ import type { MouseEventHandler } from 'react'
 export function AdButtons({ onClose }: { onClose: MouseEventHandler }) {
   return (
     <Box
-      sx={{
+      style={{
         position: 'absolute',
         height: '1em',
         stroke: '#00aecd',

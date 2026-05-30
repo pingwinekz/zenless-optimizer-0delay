@@ -1,11 +1,10 @@
-import type { TextFieldProps } from '@mui/material'
-import { TextField } from '@mui/material'
-import type { ChangeEvent, FocusEvent } from 'react'
+import { NumberInput } from '@mantine/core'
+import type { FocusEvent } from 'react'
 import { useEffect, useState } from 'react'
 
 /**
- * A textfield for numeric inputs that only triggers `onChange` when it is blurred (unfocused) or if not multi-line, the enter key.
- * Allows parsing of numbers as both intergers and float, respects `inputProps.min` and `inputProps.max`.
+ * A number input that only triggers `onChange` when it is blurred (unfocused) or if not multi-line, the enter key.
+ * Allows parsing of numbers as both integers and float, respects `inputProps.min` and `inputProps.max`.
  */
 export function NumberInputLazy({
   value: valueProp,
@@ -16,9 +15,11 @@ export function NumberInputLazy({
   value: number
   float?: boolean
   onChange: (value: number) => void
-} & Omit<TextFieldProps, 'value' | 'onChange' | 'onBlur' | 'onKeyDown'>) {
+} & Omit<React.ComponentProps<typeof NumberInput>, 'value' | 'onChange'>) {
   const [value, setValue] = useState(valueProp?.toString())
-  const { min, max } = props?.inputProps ?? {}
+  const min = (props as any).min
+  const max = (props as any).max
+
   useEffect(() => {
     setValue(valueProp?.toString())
   }, [valueProp])
@@ -43,36 +44,26 @@ export function NumberInputLazy({
     onChange(num)
   }
 
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const val = event.target.value
-
-    if (val.match(float ? /[^0-9.,-]/ : /[^0-9-]/)) {
-      return event.preventDefault()
-    }
-
-    setValue(val)
+  const handleChange = (val: string | number) => {
+    const strVal = String(val)
+    if (strVal.match(float ? /[^0-9.,-]/ : /[^0-9-]/)) return
+    setValue(strVal)
   }
 
-  const onFocus = (
-    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const onFocus = (event: FocusEvent<HTMLInputElement>) => {
     event.target.select()
   }
 
   return (
-    <TextField
-      value={value?.toString()}
+    <NumberInput
+      value={value ? Number(value) : 0}
       onChange={handleChange}
       onBlur={saveValue}
       onFocus={onFocus}
-      onKeyDown={(e) => e.key === 'Enter' && !props.multiline && saveValue()}
-      {...props}
-      inputProps={{
-        inputMode: 'numeric',
-        ...(props.inputProps ?? {}),
-      }}
+      onKeyDown={(e: any) => e.key === 'Enter' && saveValue()}
+      hideControls
+      {...(props as any)}
+      inputMode="numeric"
     />
   )
 }

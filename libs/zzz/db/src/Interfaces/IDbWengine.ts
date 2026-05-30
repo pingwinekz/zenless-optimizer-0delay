@@ -1,5 +1,9 @@
-import type { IWengine } from '@genshin-optimizer/zzz/zood'
+import type { MilestoneKey, PhaseKey, WengineKey } from '@genshin-optimizer/zzz/consts'
 
-export interface ICachedWengine extends IWengine {
+export interface ICachedWengine {
   id: string
+  key: WengineKey
+  level: number
+  modification: MilestoneKey
+  phase: PhaseKey
 }

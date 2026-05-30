@@ -10,7 +10,7 @@ import { rarityColor } from '@genshin-optimizer/zzz/consts'
 import { useWengine } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat, getWengineStats } from '@genshin-optimizer/zzz/stats'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Box, CardActionArea, Skeleton, Typography } from '@mui/material'
+import { Box, Skeleton, Text } from '@mantine/core'
 import type { ReactNode } from 'react'
 import { Suspense, useCallback, useContext } from 'react'
 import { ZCard } from '../Components'
@@ -27,9 +27,12 @@ export function CompactWengineCard({
   const { statHighlight, setStatHighlight } = useContext(StatHighlightContext)
   const wrapperFunc = useCallback(
     (children: ReactNode) => (
-      <CardActionArea sx={{ borderRadius: 0 }} onClick={() => onClick?.()}>
+      <Box
+        onClick={() => onClick?.()}
+        style={{ cursor: 'pointer', borderRadius: 0 }}
+      >
         {children}
-      </CardActionArea>
+      </Box>
     ),
     [onClick]
   )
@@ -56,13 +59,7 @@ export function CompactWengineCard({
     <ZCard bgt="dark">
       <Suspense
         fallback={
-          <Skeleton
-            variant="rectangular"
-            sx={{
-              width: '100%',
-              height: `${COMPACT_CARD_HEIGHT_PX}px`,
-            }}
-          />
+          <Skeleton width="100%" height={`${COMPACT_CARD_HEIGHT_PX}px`} />
         }
       >
         <ConditionalWrapper
@@ -71,116 +68,126 @@ export function CompactWengineCard({
           falseWrapper={falseWrapperFunc}
         >
           <Box
-            sx={{
-              p: 0.5,
+            style={{
+              padding: 4,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               height: `${COMPACT_CARD_HEIGHT_PX}px`,
-              gap: 0.5,
+              gap: 4,
             }}
           >
-            <Box sx={{ display: 'flex', flexGrow: 1 }}>
+            <Box style={{ display: 'flex', flexGrow: 1 }}>
               <Box
                 component="img"
                 alt="Wengine Image"
                 src={wengineAsset(wengine.key, 'icon')}
-                sx={(theme) => ({
-                  border: `${theme.spacing(0.5)} solid ${
-                    theme.palette[rarityColor[wengineStat.rarity]].main
-                  }`,
+                style={{
+                  border: `4px solid ${rarityColor[wengineStat.rarity]}`,
                   borderRadius: '12px',
-                  background: theme.palette.contentLight.main,
+                  background: 'var(--mantine-color-gray-1)',
                   width: `${COMPACT_CARD_HEIGHT_PX - 40}px`,
                   height: `${COMPACT_CARD_HEIGHT_PX - 40}px`,
-                })}
+                }}
               />
 
               <Box
-                sx={{
-                  ml: '10px',
-                  py: 0.5,
+                style={{
+                  marginLeft: '10px',
+                  paddingTop: 4,
+                  paddingBottom: 4,
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 2,
+                  gap: 16,
                 }}
               >
-                <Typography
+                <Text
                   onMouseEnter={() => setStatHighlight('atk')}
                   onMouseLeave={() => setStatHighlight('')}
-                  sx={{
+                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     fontWeight: 'bold',
-                    gap: 1,
+                    gap: 4,
                     position: 'relative',
                     overflow: 'visible',
-                    '::after': {
+                  }}
+                >
+                  <StatIcon statKey={'atk'} />
+                  <Box
+                    component="span"
+                    style={{ position: 'relative', zIndex: 1 }}
+                  >
+                    {wengineStats['atk_base'].toFixed()}
+                  </Box>
+                  <Box
+                    style={{
                       content: '""',
                       position: 'absolute',
                       left: '-5%',
                       width: '110%',
                       height: '150%',
-                      borderRadius: 0.5,
+                      borderRadius: 4,
                       backgroundColor: getHighlightRGBA(
                         isHighlight(statHighlight, 'atk')
                       ),
                       transition: 'background-color 0.3s ease-in-out',
-                    },
-                  }}
-                >
-                  <StatIcon statKey={'atk'} />
-                  <span>{wengineStats['atk_base'].toFixed()}</span>
-                </Typography>
-                <Typography
-                  sx={{
+                    }}
+                  />
+                </Text>
+                <Text
+                  style={{
                     display: 'flex',
                     alignItems: 'center',
                     fontWeight: 'bold',
-                    gap: 1,
+                    gap: 4,
                     position: 'relative',
-                    '::after': {
+                  }}
+                >
+                  <StatIcon statKey={substatKey} />
+                  <Box
+                    component="span"
+                    style={{ position: 'relative', zIndex: 1 }}
+                  >
+                    {toPercent(wengineStats[substatKey], substatKey).toFixed(
+                      statKeyToFixed(substatKey)
+                    )}
+                    {getUnitStr(substatKey)}
+                  </Box>
+                  <Box
+                    style={{
                       content: '""',
                       position: 'absolute',
                       left: '-5%',
                       width: '110%',
                       height: '150%',
-                      borderRadius: 0.5,
+                      borderRadius: 4,
                       backgroundColor: getHighlightRGBA(
                         isHighlight(statHighlight, substatKey)
                       ),
                       transition: 'background-color 0.3s ease-in-out',
-                    },
-                  }}
-                >
-                  <StatIcon statKey={substatKey} />
-                  <span>
-                    {toPercent(wengineStats[substatKey], substatKey).toFixed(
-                      statKeyToFixed(substatKey)
-                    )}
-                    {getUnitStr(substatKey)}
-                  </span>
-                </Typography>
+                    }}
+                  />
+                </Text>
               </Box>
             </Box>
             <CardThemed
               bgt="light"
-              sx={{
+              style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                px: 2,
+                padding: '0 16px',
               }}
             >
-              <Typography
-                sx={{
+              <Text
+                style={{
                   fontWeight: '900',
                 }}
-                variant="subtitle1"
               >
                 Lv.{wengine.level}
-              </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              </Text>
+              <Box style={{ display: 'flex', alignItems: 'center' }}>
                 {range(1, 5).map((index: number) => (
                   <Box
                     component={'img'}

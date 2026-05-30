@@ -43,9 +43,12 @@ export class Solver<ID extends string | number> {
         })
     )
 
+    const beforeCount = buildCount(cfg.candidates)
     const pruned = prune(cfg.nodes, cfg.candidates, 'q', cfg.minimum, topN)
     const { nodes, minimum, candidates } = pruned
-    progress.remaining = buildCount(candidates)
+    const afterCount = buildCount(candidates)
+    progress.remaining = afterCount
+    progress.skipped = beforeCount - afterCount
     progress.skipped = buildCount(cfg.candidates) - progress.remaining
     if (progress.remaining > Number.MAX_SAFE_INTEGER)
       // We use `remaining` to detect completion. Its accurate

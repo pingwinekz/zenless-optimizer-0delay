@@ -1,5 +1,4 @@
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace'
-import { Skeleton, Typography } from '@mui/material'
+import { Skeleton, Text } from '@mantine/core'
 import type { TFunction } from 'i18next'
 import type { ReactNode } from 'react'
 import { Suspense } from 'react'
@@ -19,7 +18,7 @@ export function TranslateBase({
   key18: string
   values?: Record<string, string | number>
   children?: ReactNode
-  components?: Record<string, EmotionJSX.Element>
+  components?: Record<string, React.ReactElement>
 }) {
   const { t } = useTranslation(ns)
   const textKey = `${ns}:${key18}`
@@ -45,8 +44,8 @@ export function TranslateBase({
   )
 }
 
-function Para({ children }: { children?: JSX.Element }) {
-  return <Typography gutterBottom>{children}</Typography>
+function Para({ children }: { children?: React.JSX.Element }) {
+  return <Text>{children}</Text>
 }
 
 function T({
@@ -62,7 +61,7 @@ function T({
   li?: boolean
   t: TFunction<string, undefined>
   values?: any
-  components?: Record<string, EmotionJSX.Element>
+  components?: Record<string, React.ReactElement>
 }) {
   if (typeof obj === 'string')
     return (
@@ -76,7 +75,7 @@ function T({
     )
   if (Array.isArray(obj))
     return (
-      <Typography component="div">
+      <Text component="div">
         <ul>
           <T
             key18={key18}
@@ -87,7 +86,7 @@ function T({
             components={components}
           />
         </ul>
-      </Typography>
+      </Text>
     )
   return Object.entries(obj).map(([key, val]) => {
     if (val === '<br/>') return null

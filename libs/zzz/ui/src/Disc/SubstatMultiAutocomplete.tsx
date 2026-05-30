@@ -3,7 +3,7 @@ import { GeneralAutocompleteMulti } from '@genshin-optimizer/common/ui'
 import { getUnitStr } from '@genshin-optimizer/common/util'
 import type { DiscSubStatKey } from '@genshin-optimizer/zzz/consts'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Chip } from '@mui/material'
+import { Badge } from '@mantine/core'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,13 +13,11 @@ export function SubstatMultiAutocomplete<
   substatKeys,
   setSubstatKeys,
   totals,
-  fullWidth = false,
   allSubstatKeys,
 }: {
   substatKeys: SubstatKeyParam[]
   setSubstatKeys: (keys: SubstatKeyParam[]) => void
   totals: any
-  fullWidth?: boolean
   allSubstatKeys: SubstatKeyParam[]
 }) {
   const { t } = useTranslation('disc')
@@ -43,12 +41,11 @@ export function SubstatMultiAutocomplete<
     [totals]
   )
   const toExItemLabel = useCallback(
-    (key: SubstatKeyParam) => <Chip size="small" label={totals[key]} />,
+    (key: SubstatKeyParam) => <Badge size="sm">{totals[key]}</Badge>,
     [totals]
   )
   return (
     <GeneralAutocompleteMulti
-      fullWidth={fullWidth}
       options={options}
       toImg={toImg}
       toExLabel={toExLabel}

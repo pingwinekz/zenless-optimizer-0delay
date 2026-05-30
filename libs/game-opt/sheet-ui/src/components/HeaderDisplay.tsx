@@ -1,5 +1,5 @@
 import { CardHeaderCustom } from '@genshin-optimizer/common/ui'
-import { Divider } from '@mui/material'
+import { Divider } from '@mantine/core'
 import type { Document, Header } from '../types'
 
 export function HeaderDisplay({

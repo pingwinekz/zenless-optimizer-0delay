@@ -8,10 +8,18 @@ import {
   allCharacterRarityKeys,
   allSpecialityKeys,
 } from '@genshin-optimizer/zzz/consts'
+import { calculateCharacterScore } from '@genshin-optimizer/zzz/util'
 import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
 import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-export const characterSortKeys = ['new', 'level', 'rarity', 'name'] as const
+export const characterSortKeys = [
+  'new',
+  'level',
+  'rarity',
+  'name',
+  'custom',
+  'score',
+] as const
 export type CharacterSortKey = (typeof characterSortKeys)[number]
 
 export function characterSortConfigs(
@@ -25,6 +33,28 @@ export function characterSortConfigs(
       return char ? char.level * (char.promotion + 1) : 0
     },
     rarity: (ck) => getCharStat(ck).rarity ?? 0,
+    custom: (ck) => {
+      const order = database.displayCharacter.get()?.customSortOrder
+      if (!order) return 0
+      const idx = order.indexOf(ck as CharacterKey)
+      return idx === -1 ? 9999 : idx
+    },
+    score: (ck) => {
+      const char = database.chars.get(ck as CharacterKey)
+      if (!char) return 0
+      const discSlots = [
+        char.equippedDiscs['1'],
+        char.equippedDiscs['2'],
+        char.equippedDiscs['3'],
+        char.equippedDiscs['4'],
+        char.equippedDiscs['5'],
+        char.equippedDiscs['6'],
+      ]
+      const discs = discSlots.map((id) =>
+        id ? database.discs.get(id) : undefined
+      )
+      return calculateCharacterScore(discs, ck as CharacterKey).efficiency
+    },
   }
 }
 
@@ -45,9 +75,12 @@ export function characterFilterConfigs(
   database: ZzzDatabase
 ): CharacterFilterConfigs {
   return {
-    attribute: (ck, filter) => filter.includes(getCharStat(ck).attribute),
-    specialtyType: (ck, filter) => filter.includes(getCharStat(ck).specialty),
-    rarity: (ck, filter) => filter.includes(getCharStat(ck).rarity),
+    attribute: (ck, filter) =>
+      !filter?.length || filter.includes(getCharStat(ck).attribute),
+    specialtyType: (ck, filter) =>
+      !filter?.length || filter.includes(getCharStat(ck).specialty),
+    rarity: (ck, filter) =>
+      !filter?.length || filter.includes(getCharStat(ck).rarity),
     name: (ck, filter) =>
       filter === undefined ||
       i18n.t(ck).toLowerCase().includes(filter.toLowerCase()),
@@ -63,6 +96,9 @@ export const characterSortMap: Partial<
   name: ['name'],
   level: ['level', 'rarity', 'name'],
   rarity: ['rarity', 'level', 'name'],
+  new: ['new'],
+  custom: ['custom'],
+  score: ['score', 'level', 'rarity', 'name'],
 }
 
 export const initialCharacterDisplayState = (): {

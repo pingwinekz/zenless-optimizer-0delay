@@ -4,7 +4,7 @@ import {
 } from '@genshin-optimizer/game-opt/sheet-ui'
 import { anomalyMeta } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay } from '@genshin-optimizer/zzz/formula-ui'
-import { Box } from '@mui/system'
+import { Box } from '@mantine/core'
 
 export function AnomalySection() {
   return (

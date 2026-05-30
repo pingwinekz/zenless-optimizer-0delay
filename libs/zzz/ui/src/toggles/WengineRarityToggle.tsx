@@ -1,17 +1,18 @@
 import type { SolidToggleButtonGroupProps } from '@genshin-optimizer/common/ui'
-import { SolidToggleButtonGroup } from '@genshin-optimizer/common/ui'
 import { handleMultiSelect } from '@genshin-optimizer/common/util'
 import type { WengineRarityKey } from '@genshin-optimizer/zzz/consts'
 import { allWengineRarityKeys } from '@genshin-optimizer/zzz/consts'
-import { Box, Chip, ToggleButton, useMediaQuery, useTheme } from '@mui/material'
+import { Badge, Button, Group } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import type { ReactNode } from 'react'
+
 type WengineRarityToggleProps = Omit<
   SolidToggleButtonGroupProps,
   'onChange' | 'value'
 > & {
   onChange: (value: WengineRarityKey[]) => void
   value: WengineRarityKey[]
-  totals: Record<WengineRarityKey, ReactNode>
+  totals?: Record<WengineRarityKey, ReactNode>
 }
 const rarityHandler = handleMultiSelect([...allWengineRarityKeys])
 export function WengineRarityToggle({
@@ -20,28 +21,27 @@ export function WengineRarityToggle({
   onChange,
   ...props
 }: WengineRarityToggleProps) {
-  const theme = useTheme()
-  const xs = !useMediaQuery(theme.breakpoints.up('sm'))
+  const xs = !useMediaQuery('(min-width: 600px)')
   return (
-    <SolidToggleButtonGroup exclusive value={value} {...props}>
+    <Group {...(props as any)} gap="xs">
       {allWengineRarityKeys.map((wrk) => (
-        <ToggleButton
+        <Button
           key={wrk}
-          value={wrk}
-          sx={{
-            p: xs ? 1 : undefined,
+          variant={value.includes(wrk) ? 'filled' : 'outline'}
+          style={{
+            padding: xs ? 4 : undefined,
             minWidth: xs ? 0 : '6em',
-            display: 'flex',
-            gap: xs ? 0 : 1,
           }}
           onClick={() => onChange(rarityHandler(value, wrk))}
         >
-          <Box display="flex">
-            <strong>{wrk}</strong>
-            <Chip label={totals[wrk]} size="small" />
-          </Box>
-        </ToggleButton>
+          <strong>{wrk}</strong>
+          {totals && (
+            <Badge size="sm" ml={4}>
+              {totals[wrk]}
+            </Badge>
+          )}
+        </Button>
       ))}
-    </SolidToggleButtonGroup>
+    </Group>
   )
 }

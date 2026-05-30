@@ -1,8 +1,8 @@
 import { DropdownButton } from '@genshin-optimizer/common/ui'
 import type { DiscRarityKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscRarityKeys } from '@genshin-optimizer/zzz/consts'
-import type { ButtonProps } from '@mui/material'
-import { MenuItem } from '@mui/material'
+import type { ButtonProps } from '@mantine/core'
+import { Menu } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 
 type props = ButtonProps & {
@@ -25,14 +25,13 @@ export function DiscRarityDropdown({
       color={rarity ? 'success' : 'primary'}
     >
       {allDiscRarityKeys.map((rarity) => (
-        <MenuItem
+        <Menu.Item
           key={rarity}
           disabled={filter ? !filter?.(rarity) : false}
           onClick={() => onRarityChange(rarity)}
         >
           {rarity}
-          {/* <StarNumDisplay stars={rarity} showNumber={showNumber} /> */}
-        </MenuItem>
+        </Menu.Item>
       ))}
     </DropdownButton>
   )

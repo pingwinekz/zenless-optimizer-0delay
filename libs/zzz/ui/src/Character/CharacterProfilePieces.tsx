@@ -13,7 +13,7 @@ import {
 import type { ICachedCharacter } from '@genshin-optimizer/zzz/db'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import { Box, Chip, FormControlLabel, Typography } from '@mui/material'
+import { Box, Text, Title } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { MindscapesSwitch, ZCard } from '../Components'
 import { CharacterName } from './CharacterTrans'
@@ -29,64 +29,64 @@ export function CharacterCompactMindscapeSelector({
 
   return (
     <Box
-      sx={{
+      style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 2,
+        gap: '8px',
         justifyContent: 'center',
       }}
     >
       {range(1, 6).map((i) => (
         <Box key={i}>
-          <ZCard sx={{ position: 'relative', borderRadius: '40px' }}>
-            <FormControlLabel
-              control={
-                <MindscapesSwitch
-                  checked={mindscape >= i}
-                  onChange={() => setMindscape(i === mindscape ? i - 1 : i)}
-                />
-              }
-              label={
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 9,
-                    left: mindscape >= i ? 75 : 16,
-                    transition: 'left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography
-                    variant={'subtitle1'}
-                    sx={(theme) => ({
-                      fontWeight: 900,
-                      color:
-                        mindscape >= i
-                          ? theme.palette.mindscapeActive.main
-                          : theme.palette.mindscapeInactive.main,
-                    })}
-                  >
-                    {t('mindscape', { level: i })}
-                  </Typography>
-                  <Typography
-                    variant={'subtitle2'}
-                    sx={(theme) => ({
-                      lineHeight: 0.2,
-                      fontWeight: 900,
-                      color:
-                        mindscape >= i
-                          ? theme.palette.mindscapeActive.main
-                          : theme.palette.mindscapeInactive.main,
-                    })}
-                  >
-                    {t('mindscapeTitle')}
-                  </Typography>
-                </Box>
-              }
-              sx={{
+          <ZCard style={{ position: 'relative', borderRadius: '40px' }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
                 margin: 0,
               }}
-            />
+            >
+              <MindscapesSwitch
+                checked={mindscape >= i}
+                onChange={() => setMindscape(i === mindscape ? i - 1 : i)}
+              />
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: 9,
+                  left: mindscape >= i ? 75 : 16,
+                  transition: 'left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+                  textAlign: 'center',
+                }}
+              >
+                <Text
+                  size="md"
+                  style={{
+                    fontWeight: 900,
+                    color:
+                      mindscape >= i
+                        ? 'var(--mantine-color-mindscapeActive-5)'
+                        : 'var(--mantine-color-mindscapeInactive-5)',
+                  }}
+                >
+                  {t('mindscape', { level: i })}
+                </Text>
+                <Text
+                  size="sm"
+                  style={{
+                    lineHeight: 0.2,
+                    fontWeight: 900,
+                    color:
+                      mindscape >= i
+                        ? 'var(--mantine-color-mindscapeActive-5)'
+                        : 'var(--mantine-color-mindscapeInactive-5)',
+                  }}
+                >
+                  {t('mindscapeTitle')}
+                </Text>
+              </Box>
+            </label>
           </ZCard>
         </Box>
       ))}
@@ -120,11 +120,11 @@ function CoverArea({
   const { rarity } = getCharStat(characterKey)
 
   return (
-    <Box sx={{ display: 'flex', position: 'relative' }}>
-      <Box sx={{ position: 'absolute', width: '100%', height: '100%' }}>
-        <Typography
-          variant="h6"
-          sx={{
+    <Box style={{ display: 'flex', position: 'relative' }}>
+      <Box style={{ position: 'absolute', width: '100%', height: '100%' }}>
+        <Title
+          order={6}
+          style={{
             position: 'absolute',
             width: '100%',
             left: '50%',
@@ -135,9 +135,9 @@ function CoverArea({
           }}
         >
           {<ImgIcon size={1.5} src={rarityDefIcon(rarity)} />}
-        </Typography>
+        </Title>
         <Box
-          sx={{
+          style={{
             position: 'absolute',
             left: '50%',
             bottom: '7%',
@@ -146,7 +146,8 @@ function CoverArea({
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
-            px: 1,
+            paddingLeft: '4px',
+            paddingRight: '4px',
           }}
         >
           <CharChip characterKey={characterKey} />
@@ -166,22 +167,26 @@ function CoverArea({
 function CharChip({ characterKey }: { characterKey: CharacterKey }) {
   const { attribute, specialty } = getCharStat(characterKey)
   return (
-    <Chip
-      color={attribute}
-      sx={{ height: 'auto' }}
-      label={
-        <Typography
-          variant="h6"
-          sx={{ display: 'flex', gap: 1, alignItems: 'center' }}
-        >
-          <ElementIcon ele={attribute} />
-          <Box sx={{ whiteSpace: 'normal', textAlign: 'center' }}>
+    <Box
+      style={{
+        background: `var(--mantine-color-${attribute}-5)`,
+        height: 'auto',
+        padding: '4px 12px',
+        borderRadius: '16px',
+        display: 'inline-flex',
+        alignItems: 'center',
+      }}
+    >
+      <Box style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+        <ElementIcon ele={attribute} />
+        <Box style={{ whiteSpace: 'normal', textAlign: 'center' }}>
+          <Text size="md">
             <CharacterName characterKey={characterKey} />
-          </Box>
-          <ImgIcon size={1.5} src={specialityDefIcon(specialty)} />
-        </Typography>
-      }
-    />
+          </Text>
+        </Box>
+        <ImgIcon size={1.5} src={specialityDefIcon(specialty)} />
+      </Box>
+    </Box>
   )
 }
 function LevelBadge({
@@ -192,10 +197,16 @@ function LevelBadge({
   promotion: MilestoneKey
 }) {
   return (
-    <Typography
-      sx={{ p: 1, position: 'absolute', right: 0, top: 0, opacity: 0.8 }}
+    <Text
+      style={{
+        padding: '4px',
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        opacity: 0.8,
+      }}
     >
       <SqBadge>{getLevelString(level, promotion)}</SqBadge>
-    </Typography>
+    </Text>
   )
 }

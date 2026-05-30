@@ -1,16 +1,14 @@
-import { Link } from '@mui/material'
-import { Box } from '@mui/system'
+import { Anchor, Box } from '@mantine/core'
 import type { ReactNode } from 'react'
 import type { AdDims } from '../type'
 import { ZO_LINK, isZOURL } from '../urlUtil'
 import zo_rect_chat from './zo_rect_chat.png'
 function ZORectAd({ children }: { children: ReactNode }) {
   return (
-    <Box
-      component={Link}
+    <Anchor
       href={ZO_LINK}
       target="_blank"
-      sx={{
+      style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -26,13 +24,15 @@ function ZORectAd({ children }: { children: ReactNode }) {
       <Box
         component="img"
         src={zo_rect_chat}
-        maxWidth="100%"
-        maxHeight="100%"
-        width="100%"
-        height="100%"
-        sx={{ objectFit: 'contain' }}
+        style={{
+          objectFit: 'contain',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          width: '100%',
+          height: '100%',
+        }}
       />
-    </Box>
+    </Anchor>
   )
 }
 export function getZORectAd(dim: AdDims) {

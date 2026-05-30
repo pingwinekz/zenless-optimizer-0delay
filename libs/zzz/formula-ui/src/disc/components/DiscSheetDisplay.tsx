@@ -4,14 +4,7 @@ import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { DiscSetName, ZCard } from '@genshin-optimizer/zzz/ui'
-import {
-  Box,
-  CardContent,
-  CardHeader,
-  Divider,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Divider, Group, Stack, Title } from '@mantine/core'
 import { discUiSheets } from '../sheets'
 
 export function DiscSheetDisplay({
@@ -28,17 +21,17 @@ export function DiscSheetDisplay({
   const discSheet = discUiSheets[setKey]
   if (!discSheet) return null
   return (
-    <ZCard bgt="light" sx={{ height: '100%' }}>
-      <CardHeader
-        title={<DiscSetName setKey={setKey} />}
-        avatar={<ImgIcon src={discDefIcon(setKey)} size={2} />}
-      />
+    <ZCard bgt="light" style={{ height: '100%' }}>
+      <Group gap="sm" p="md" wrap="nowrap">
+        <ImgIcon src={discDefIcon(setKey)} size={2} />
+        <DiscSetName setKey={setKey} />
+      </Group>
       {children}
-      <Stack divider={<Divider />}>
+      <Stack>
         {Object.entries(discSheet).map(([key, uiSheetElement]) => (
           <Box
             key={key}
-            sx={{
+            style={{
               opacity: (key === '2' ? fade2 : fade4) ? 0.5 : 1,
             }}
           >
@@ -46,6 +39,7 @@ export function DiscSheetDisplay({
               uiSheetElement={uiSheetElement}
               collapse={key !== '2'}
             />
+            <Divider />
           </Box>
         ))}
       </Stack>
@@ -61,9 +55,9 @@ function DiscUiSheetElement({
 }) {
   const { documents, title } = uiSheetElement
   return (
-    <CardContent>
-      <Typography variant="subtitle1">{title}</Typography>
-      <Stack spacing={1}>
+    <Box p="md">
+      <Title order={5}>{title}</Title>
+      <Stack gap={4}>
         {documents.map((doc, i) => (
           <DocumentDisplay
             key={i}
@@ -73,6 +67,6 @@ function DiscUiSheetElement({
           />
         ))}
       </Stack>
-    </CardContent>
+    </Box>
   )
 }
