@@ -28,14 +28,7 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { bulletsOrFieldHit } = allBoolConditionals(key)
-const { fieldHitsEnemy } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m6.stacks,
-  undefined,
-  { fieldHitsEnemy: 6 }
-)
+const { fieldHitsEnemy } = allNumConditionals(key, true, 0, dm.m6.stacks)
 
 const sheet = register(
   key,

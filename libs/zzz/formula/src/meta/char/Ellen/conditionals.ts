@@ -4,14 +4,8 @@ export const conditionals = {
     sheet: 'Ellen',
     name: 'exSpecial_chain_quickCharge',
     type: 'bool',
-    mindscapeRequirement: 6,
   },
-  feast_begins: {
-    sheet: 'Ellen',
-    name: 'feast_begins',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
+  feast_begins: { sheet: 'Ellen', name: 'feast_begins', type: 'bool' },
   flash_freeze: {
     sheet: 'Ellen',
     name: 'flash_freeze',
@@ -19,7 +13,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 3,
-    mindscapeRequirement: 2,
   },
   flash_freeze_consumed: {
     sheet: 'Ellen',
@@ -28,7 +21,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 6,
-    mindscapeRequirement: 1,
   },
   ice_attacks: {
     sheet: 'Ellen',

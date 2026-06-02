@@ -1,17 +1,7 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  erudition: {
-    sheet: 'Yidhari',
-    name: 'erudition',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
-  etherVeil: {
-    sheet: 'Yidhari',
-    name: 'etherVeil',
-    type: 'bool',
-    mindscapeRequirement: 4,
-  },
+  erudition: { sheet: 'Yidhari', name: 'erudition', type: 'bool' },
+  etherVeil: { sheet: 'Yidhari', name: 'etherVeil', type: 'bool' },
   missingHp: {
     sheet: 'Yidhari',
     name: 'missingHp',

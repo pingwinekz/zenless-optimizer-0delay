@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Soukaku',
       name: 'ult_crit_',
     },
-    team: false,
   },
   core_atk: {
     sheet: 'Soukaku',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Soukaku',
       name: 'core_atk',
     },
-    team: true,
   },
   ability_ice_dmg_: {
     sheet: 'Soukaku',
@@ -35,7 +33,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ability_ice_dmg_',
     },
-    team: false,
   },
   m4_ice_resRed_: {
     sheet: 'Soukaku',
@@ -48,7 +45,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'm4_ice_resRed_',
     },
-    team: true,
   },
   m6_common_dmg_: {
     sheet: 'Soukaku',
@@ -60,6 +56,5 @@ export const buffs = {
       sheet: 'Soukaku',
       name: 'm6_common_dmg_',
     },
-    team: false,
   },
 } as const

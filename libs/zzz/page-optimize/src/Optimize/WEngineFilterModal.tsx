@@ -129,7 +129,10 @@ function SpecialitySelectorInline({ disabled }: { disabled?: boolean }) {
           objKeyMap(allSpecialityKeys, () => 0)
         )
       : objKeyMap(allSpecialityKeys, () => 0)
-  }, [allWengineData, optConfig.optWengine])
+  }, [
+    allWengineData,
+    optConfig.optWengine,
+  ])
   return (
     <WengineToggle
       onChange={(wEngineTypes) =>

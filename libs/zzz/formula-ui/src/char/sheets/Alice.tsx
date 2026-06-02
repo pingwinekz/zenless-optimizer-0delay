@@ -15,8 +15,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          'When a squad member inflicts a Physical Anomaly, Alice gains increased Anomaly Multiplier.',
         metadata: cond.physical_anomaly_inflicted,
         fields: [fieldForBuff(buff.core_anom_mv_mult_)],
       },
@@ -29,8 +27,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond2'),
-        description:
-          'When Alice triggers Assault, she gains increased Physical Anomaly Buildup.',
         metadata: cond.assault_triggered,
         fields: [fieldForBuff(buff.core_physical_anomBuildup_)],
       },
@@ -47,8 +43,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond2'),
-        description:
-          'When Alice triggers Assault, her attacks reduce enemy defense.',
         metadata: cond.assault_triggered,
         fields: [fieldForBuff(buff.m1_defRed_)],
       },

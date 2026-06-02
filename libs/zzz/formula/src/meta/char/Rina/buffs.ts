@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Rina',
       name: 'core_pen_',
     },
-    team: true,
   },
   ability_electric_dmg_: {
     sheet: 'Rina',
@@ -23,7 +22,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'ability_electric_dmg_',
     },
-    team: true,
   },
   m2_common_dmg_: {
     sheet: 'Rina',
@@ -35,7 +33,6 @@ export const buffs = {
       sheet: 'Rina',
       name: 'm2_common_dmg_',
     },
-    team: false,
   },
   m4_enerRegen: {
     sheet: 'Rina',
@@ -47,7 +44,6 @@ export const buffs = {
       sheet: 'Rina',
       name: 'm4_enerRegen',
     },
-    team: false,
   },
   m6_electric_dmg_: {
     sheet: 'Rina',
@@ -60,6 +56,5 @@ export const buffs = {
       attribute: 'electric',
       name: 'm6_electric_dmg_',
     },
-    team: true,
   },
 } as const

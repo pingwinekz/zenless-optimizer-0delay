@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'StarlightRiderFaceplate',
       name: 'passive_crit_',
     },
-    team: false,
   },
   cond_physical_sheer_dmg_: {
     sheet: 'StarlightRiderFaceplate',
@@ -23,6 +22,5 @@ export const buffs = {
       attribute: 'physical',
       name: 'cond_physical_sheer_dmg_',
     },
-    team: false,
   },
 } as const

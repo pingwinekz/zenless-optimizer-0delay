@@ -1,6 +1,10 @@
 import type React from 'react'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
-import { ColorText, ConditionalWrapper } from '@genshin-optimizer/common/ui'
+import {
+  CardThemed,
+  ColorText,
+  ConditionalWrapper,
+} from '@genshin-optimizer/common/ui'
 import {
   getUnitStr,
   statKeyToFixed,
@@ -34,7 +38,6 @@ import { LocationName } from '../Character/LocationName'
 import { ZCard } from '../Components'
 import { DiscSet2p, DiscSet4p, DiscSetName } from './DiscTrans'
 import { useSpinner } from './util'
-import classes from './DiscCard.module.css'
 
 export const DiscCard = memo(function DiscCard({
   discId,
@@ -138,88 +141,99 @@ export function DiscCardObj({
           falseWrapper={falseWrapperFunc}
         >
           <Card.Section>
-            <Box className={classes.discArtSection}>
-              <Box onClick={onShow} style={{ cursor: 'pointer' }}>
-                <Tooltip
-                  label={
-                    <Box>
-                      <Text>
-                        2-Piece Set: <DiscSet2p setKey={setKey} />
-                      </Text>
-                      <Text>
-                        4-Piece Set: <DiscSet4p setKey={setKey} />
-                      </Text>
-                    </Box>
-                  }
-                  opened={show}
-                  withinPortal={false}
-                >
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      maxWidth: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    [{slotKey}] <DiscSetName setKey={setKey} />
-                  </Text>
-                </Tooltip>
-              </Box>
-              <Box
+            <CardThemed bgt="light" style={{ borderRadius: '11px' }}>
+              <Card.Section
                 style={{
-                  border: `4px solid ${rarityColor[rarity]}`,
-                  borderRadius: '50%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: 16,
                 }}
               >
+                <Box onClick={onShow} style={{ cursor: 'pointer' }}>
+                  <Tooltip
+                    label={
+                      <Box>
+                        <Text>
+                          2-Piece Set: <DiscSet2p setKey={setKey} />
+                        </Text>
+                        <Text>
+                          4-Piece Set: <DiscSet4p setKey={setKey} />
+                        </Text>
+                      </Box>
+                    }
+                    opened={show}
+                    withinPortal={false}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      [{slotKey}] <DiscSetName setKey={setKey} />
+                    </Text>
+                  </Tooltip>
+                </Box>
                 <Box
-                  component="div"
-                  onMouseDown={handleMouseDown as any}
-                  onMouseMove={handleMouseMove as any}
-                  onMouseUp={handleMouseUp as any}
-                  onMouseLeave={handleMouseUp as any}
                   style={{
-                    position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
+                    border: `4px solid ${rarityColor[rarity]}`,
                     borderRadius: '50%',
-                    border: `2px solid black`,
                   }}
                 >
                   <Box
-                    component="img"
-                    alt="Disc Piece Image"
-                    src={discDefIcon(setKey)}
+                    component="div"
+                    onMouseDown={handleMouseDown as any}
+                    onMouseMove={handleMouseMove as any}
+                    onMouseUp={handleMouseUp as any}
+                    onMouseLeave={handleMouseUp as any}
                     style={{
-                      transform: `rotate(${rotation}deg)`,
-                      width: 'auto',
-                      float: 'right',
-                      height: '150px',
-                      transition: isDragging
-                        ? 'none'
-                        : 'transform 0.1s ease-out',
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      borderRadius: '50%',
+                      border: `2px solid black`,
                     }}
-                  />
-                  <Box style={{ height: 0, position: 'absolute', bottom: 30 }}>
-                    <Text
+                  >
+                    <Box
+                      component="img"
+                      alt="Disc Piece Image"
+                      src={discDefIcon(setKey)}
                       style={{
-                        backgroundColor: 'rgba(0,0,0,0.85)',
-                        padding: '3px 30px',
-                        borderRadius: '20px',
-                        fontWeight: 'bold',
+                        transform: `rotate(${rotation}deg)`,
+                        width: 'auto',
+                        float: 'right',
+                        height: '150px',
+                        transition: isDragging
+                          ? 'none'
+                          : 'transform 0.1s ease-out',
                       }}
+                    />
+                    <Box
+                      style={{ height: 0, position: 'absolute', bottom: 30 }}
                     >
-                      {level}
-                    </Text>
+                      <Text
+                        style={{
+                          backgroundColor: 'rgba(0,0,0,0.85)',
+                          padding: '3px 30px',
+                          borderRadius: '20px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {level}
+                      </Text>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </Box>
+              </Card.Section>
+            </CardThemed>
             <Stack gap={4} p="md">
               <Box
                 style={{

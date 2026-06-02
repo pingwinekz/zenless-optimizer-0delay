@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'core_dash_crit_',
     },
-    team: false,
   },
   core_ult_crit_: {
     sheet: 'Harumasa',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_crit_',
     },
-    team: false,
   },
   core_dash_crit_dmg_: {
     sheet: 'Harumasa',
@@ -37,7 +35,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'core_dash_crit_dmg_',
     },
-    team: false,
   },
   core_ult_crit_dmg_: {
     sheet: 'Harumasa',
@@ -50,7 +47,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_crit_dmg_',
     },
-    team: false,
   },
   ability_common_dmg_: {
     sheet: 'Harumasa',
@@ -62,7 +58,6 @@ export const buffs = {
       sheet: 'Harumasa',
       name: 'ability_common_dmg_',
     },
-    team: false,
   },
   m2_dash_dmg_: {
     sheet: 'Harumasa',
@@ -75,7 +70,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'm2_dash_dmg_',
     },
-    team: false,
   },
   m6_electric_resIgn_: {
     sheet: 'Harumasa',
@@ -88,6 +82,5 @@ export const buffs = {
       attribute: 'electric',
       name: 'm6_electric_resIgn_',
     },
-    team: false,
   },
 } as const

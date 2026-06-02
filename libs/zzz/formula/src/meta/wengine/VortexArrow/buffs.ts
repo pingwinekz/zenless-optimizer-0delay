@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'VortexArrow',
       name: 'passive_daze_',
     },
-    team: false,
   },
 } as const

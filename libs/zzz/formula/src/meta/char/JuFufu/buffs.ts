@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'core_crit_dmg_',
     },
-    team: true,
   },
   core_chain_dmg_: {
     sheet: 'JuFufu',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'chain',
       name: 'core_chain_dmg_',
     },
-    team: true,
   },
   core_ult_dmg_: {
     sheet: 'JuFufu',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_dmg_',
     },
-    team: true,
   },
   core_impact: {
     sheet: 'JuFufu',
@@ -48,7 +45,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'core_impact',
     },
-    team: false,
   },
   m1_crit_: {
     sheet: 'JuFufu',
@@ -60,7 +56,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'm1_crit_',
     },
-    team: false,
   },
   m1_stun_: {
     sheet: 'JuFufu',
@@ -72,7 +67,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'm1_stun_',
     },
-    team: true,
   },
   m2_crit_dmg_: {
     sheet: 'JuFufu',
@@ -84,7 +78,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'm2_crit_dmg_',
     },
-    team: true,
   },
   m4_crit_dmg_: {
     sheet: 'JuFufu',
@@ -96,7 +89,6 @@ export const buffs = {
       sheet: 'JuFufu',
       name: 'm4_crit_dmg_',
     },
-    team: false,
   },
   m6_chain_dmg_: {
     sheet: 'JuFufu',
@@ -109,6 +101,5 @@ export const buffs = {
       damageType1: 'chain',
       name: 'm6_chain_dmg_',
     },
-    team: false,
   },
 } as const

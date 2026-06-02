@@ -26,9 +26,7 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { meridian_flow, depleted_qi } = allBoolConditionals(key, undefined, {
-  depleted_qi: 1,
-})
+const { meridian_flow, depleted_qi } = allBoolConditionals(key)
 
 const sheet = register(
   key,

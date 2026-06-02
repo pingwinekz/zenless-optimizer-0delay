@@ -30,6 +30,8 @@ const data: TagMapNodeEntries = [
     .reread(reader.sheet('anomaly')),
 
   // convert sheet:<char> to sheet:agg for accumulation
+  // sheet:<wengine> is reread in src/util.ts:wengineTagMapNodeEntries()
+  // sheet:<disc> is reread in src/util.ts:discTagMapNodeEntries()
   reader
     .sheet('agg')
     .reread(reader.sheet('char')),

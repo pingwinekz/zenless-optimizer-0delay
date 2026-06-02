@@ -16,8 +16,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "The entire squad gains bonus PEN Ratio while Rina's minions are on the field.",
         metadata: cond.minions_onField,
         fields: [fieldForBuff(buff.core_pen_)],
       },
@@ -28,8 +26,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
-        description:
-          "Increases the squad's Electric DMG while a Shocked enemy is on the field.",
         metadata: cond.shocked_enemy,
         fields: [fieldForBuff(buff.ability_electric_dmg_)],
       },
@@ -40,8 +36,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'Increases the Core PEN Ratio bonus when the squad member is within 10 meters of Rina.',
         metadata: cond.within_10m,
         fields: [
           {
@@ -58,8 +52,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('enterCombatOrSwitchIn'),
-        description:
-          'Grants bonus Common DMG upon entering combat or switching in.',
         metadata: cond.active_char,
         fields: [fieldForBuff(buff.m2_common_dmg_)],
       },
@@ -70,8 +62,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "Rina's Energy Regen increases while her minions are on the field.",
         metadata: cond.minions_onField,
         fields: [fieldForBuff(buff.m4_enerRegen)],
       },
@@ -86,8 +76,6 @@ const sheet = createBaseSheet(key, {
           val2: '$t(skills.chain)',
           val3: '$t(skills.ult)',
         }),
-        description:
-          "Increases the squad's Electric DMG after hitting an enemy with an EX Special Attack, Chain Attack, or Ultimate.",
         metadata: cond.exSpecial_chain_ult_hit,
         fields: [fieldForBuff(buff.m6_electric_dmg_)],
       },

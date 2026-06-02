@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'UnfetteredGameBall',
       name: 'cond_crit_',
     },
-    team: true,
   },
 } as const

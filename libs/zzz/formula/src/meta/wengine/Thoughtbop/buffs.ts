@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Thoughtbop',
       name: 'cond_enerRegen',
     },
-    team: false,
   },
   team_common_dmg_: {
     sheet: 'Thoughtbop',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Thoughtbop',
       name: 'team_common_dmg_',
     },
-    team: true,
   },
   team_atk_: {
     sheet: 'Thoughtbop',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'Thoughtbop',
       name: 'team_atk_',
     },
-    team: true,
   },
 } as const

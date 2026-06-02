@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'ether',
       name: 'set2',
     },
-    team: false,
   },
   set4_passive: {
     sheet: 'ChaoticMetal',
@@ -23,7 +22,6 @@ export const buffs = {
       sheet: 'ChaoticMetal',
       name: 'set4_passive',
     },
-    team: false,
   },
   set4_cond_trigger_corruption: {
     sheet: 'ChaoticMetal',
@@ -35,6 +33,5 @@ export const buffs = {
       sheet: 'ChaoticMetal',
       name: 'set4_cond_trigger_corruption',
     },
-    team: false,
   },
 } as const

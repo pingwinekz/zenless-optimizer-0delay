@@ -24,10 +24,7 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { core_after3rdBasic, m1After4thBasicHit, m6ChargeConsumed } =
-  allBoolConditionals(key, undefined, {
-    m1After4thBasicHit: 1,
-    m6ChargeConsumed: 6,
-  })
+  allBoolConditionals(key)
 
 const core_after3rdBasic_dazeInc_ = ownBuff.combat.dazeInc_.add(
   core_after3rdBasic.ifOn(

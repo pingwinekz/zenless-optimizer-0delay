@@ -2,22 +2,7 @@
 export const conditionals = {
   boolConditional: { sheet: 'Sunna', name: 'boolConditional', type: 'bool' },
   delusionReprise: { sheet: 'Sunna', name: 'delusionReprise', type: 'bool' },
-  etherVeil: {
-    sheet: 'Sunna',
-    name: 'etherVeil',
-    type: 'bool',
-    mindscapeRequirement: 2,
-  },
-  focusedCreation: {
-    sheet: 'Sunna',
-    name: 'focusedCreation',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
-  ult_used: {
-    sheet: 'Sunna',
-    name: 'ult_used',
-    type: 'bool',
-    mindscapeRequirement: 4,
-  },
+  etherVeil: { sheet: 'Sunna', name: 'etherVeil', type: 'bool' },
+  focusedCreation: { sheet: 'Sunna', name: 'focusedCreation', type: 'bool' },
+  ult_used: { sheet: 'Sunna', name: 'ult_used', type: 'bool' },
 } as const

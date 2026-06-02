@@ -34,19 +34,8 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { idyllic_cadenza, precise_assist_triggered } = allBoolConditionals(
-  key,
-  undefined,
-  { idyllic_cadenza: 4, precise_assist_triggered: 6 }
-)
-const { attack_hits } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m1.max_stacks,
-  undefined,
-  { attack_hits: 1 }
-)
+const { idyllic_cadenza, precise_assist_triggered } = allBoolConditionals(key)
+const { attack_hits } = allNumConditionals(key, true, 0, dm.m1.max_stacks)
 
 const m6_mv_mult = ownBuff.dmg.mv_mult_.add(
   cmpGE(

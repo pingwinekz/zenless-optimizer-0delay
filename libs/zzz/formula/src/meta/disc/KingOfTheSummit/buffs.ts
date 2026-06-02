@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'KingOfTheSummit',
       name: 'set2',
     },
-    team: false,
   },
   set4_team_launchExSpecialOrChain_crit_dmg_: {
     sheet: 'KingOfTheSummit',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'KingOfTheSummit',
       name: 'set4_team_launchExSpecialOrChain_crit_dmg_',
     },
-    team: true,
   },
 } as const

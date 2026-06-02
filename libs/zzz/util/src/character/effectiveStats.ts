@@ -15,13 +15,7 @@ type CharacterPlan = {
 // Each character explicitly maps to one of these. This keeps the data
 // maintainable while still being per-character rather than per-specialty.
 
-const DPS_EFFECTIVE: DiscSubStatKey[] = [
-  'atk_',
-  'crit_',
-  'crit_dmg_',
-  'atk',
-  'pen',
-]
+const DPS_EFFECTIVE: DiscSubStatKey[] = ['atk_', 'crit_', 'crit_dmg_', 'atk', 'pen']
 const DPS_WEIGHTS: Partial<Record<DiscSubStatKey, number>> = {
   crit_: 1.5,
   crit_dmg_: 1.5,
@@ -256,11 +250,7 @@ const characterPlans: Record<CharacterKey, CharacterPlan> = {
   Rina: {
     effectiveStats: ['pen', 'atk_', 'atk', 'hp_'],
     substatWeights: { pen: 1.5, atk_: 1.2, atk: 1.0, hp_: 1.0 },
-    mainStats: {
-      4: ['atk_', 'hp_'],
-      5: ['pen_', 'atk_', 'hp_'],
-      6: ['enerRegen_', 'atk_'],
-    },
+    mainStats: { 4: ['atk_', 'hp_'], 5: ['pen_', 'atk_', 'hp_'], 6: ['enerRegen_', 'atk_'] },
   },
   Soukaku: {
     effectiveStats: ['atk_', 'atk', 'hp_', 'def_'],
@@ -278,22 +268,14 @@ const characterPlans: Record<CharacterKey, CharacterPlan> = {
   Caesar: {
     effectiveStats: ['hp_', 'atk_', 'def_', 'atk', 'def'],
     substatWeights: { hp_: 1.3, atk_: 1.2, def_: 1.2, atk: 1.0, def: 1.0 },
-    mainStats: {
-      4: ['hp_', 'def_', 'atk_'],
-      5: ['hp_', 'def_', 'atk_'],
-      6: ['def_', 'impact_'],
-    },
+    mainStats: { 4: ['hp_', 'def_', 'atk_'], 5: ['hp_', 'def_', 'atk_'], 6: ['def_', 'impact_'] },
   },
 
   // Seth — AP-scaling shield
   Seth: {
     effectiveStats: ['anomProf', 'atk_', 'hp_', 'atk'],
     substatWeights: { anomProf: 1.5, atk_: 1.2, hp_: 1.2, atk: 1.0 },
-    mainStats: {
-      4: ['anomProf', 'hp_', 'atk_'],
-      5: ['hp_', 'atk_', 'def_'],
-      6: ['enerRegen_', 'atk_'],
-    },
+    mainStats: { 4: ['anomProf', 'hp_', 'atk_'], 5: ['hp_', 'atk_', 'def_'], 6: ['enerRegen_', 'atk_'] },
   },
   Zhao: DEFENSE,
 
@@ -346,7 +328,10 @@ export function getAllCharacterEffectiveMainStats(): Record<
       ck as CharacterKey,
       getCharacterEffectiveMainStats(ck as CharacterKey),
     ])
-  ) as Record<CharacterKey, Partial<Record<DiscSlotKey, DiscMainStatKey[]>>>
+  ) as Record<
+    CharacterKey,
+    Partial<Record<DiscSlotKey, DiscMainStatKey[]>>
+  >
 }
 
 export function getAllCharacterSubstatWeights(): Record<

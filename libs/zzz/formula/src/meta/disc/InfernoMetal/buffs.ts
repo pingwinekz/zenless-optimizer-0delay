@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'set2',
     },
-    team: false,
   },
   set4_cond_hitting_burning_enemy: {
     sheet: 'InfernoMetal',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'InfernoMetal',
       name: 'set4_cond_hitting_burning_enemy',
     },
-    team: false,
   },
 } as const

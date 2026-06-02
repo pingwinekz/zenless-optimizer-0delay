@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'VortexHatchet',
       name: 'cond_impact_',
     },
-    team: false,
   },
 } as const

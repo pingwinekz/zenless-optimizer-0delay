@@ -10,6 +10,7 @@ import {
   percent,
   register,
   registerBuff,
+  target,
   team,
   teamBuff,
 } from '../../util'
@@ -27,15 +28,8 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { abloom, prophecy, fluttering_featherbloom_used } = allBoolConditionals(
-  key,
-  undefined,
-  {
-    prophecy: 1,
-    abloom: 2,
-    fluttering_featherbloom_used: 4,
-  }
-)
+const { abloom, prophecy, fluttering_featherbloom_used } =
+  allBoolConditionals(key)
 
 const abilityCheck = (node: NumNode | number) =>
   cmpGE(
@@ -119,8 +113,8 @@ const sheet = register(
 
   // Buffs
   registerBuff(
-    'core_ether_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.ether.addWithDmgType(
+    'core_ether_abloom',
+    teamBuff.dmg.anom_mv_mult_.ether.addWithDmgType(
       'abloom',
       abloom.ifOn(
         prod(
@@ -134,14 +128,14 @@ const sheet = register(
     true
   ),
   registerBuff(
-    'core_electric_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.electric.addWithDmgType(
+    'core_electric_abloom',
+    teamBuff.dmg.anom_mv_mult_.electric.addWithDmgType(
       'abloom',
       abloom.ifOn(
         prod(
           percent(subscript(char.core, dm.core.dmg_electric)),
           percent(1 / dm.core.anomProf_step),
-          own.final.anomProf
+          target.final.anomProf
         )
       )
     ),
@@ -149,14 +143,14 @@ const sheet = register(
     true
   ),
   registerBuff(
-    'core_fire_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.fire.addWithDmgType(
+    'core_fire_abloom',
+    teamBuff.dmg.anom_mv_mult_.fire.addWithDmgType(
       'abloom',
       abloom.ifOn(
         prod(
           percent(subscript(char.core, dm.core.dmg_fire)),
           percent(1 / dm.core.anomProf_step),
-          own.final.anomProf
+          target.final.anomProf
         )
       )
     ),
@@ -164,14 +158,14 @@ const sheet = register(
     true
   ),
   registerBuff(
-    'core_physical_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.physical.addWithDmgType(
+    'core_physical_abloom',
+    teamBuff.dmg.anom_mv_mult_.physical.addWithDmgType(
       'abloom',
       abloom.ifOn(
         prod(
           percent(subscript(char.core, dm.core.dmg_physical)),
           percent(1 / dm.core.anomProf_step),
-          own.final.anomProf
+          target.final.anomProf
         )
       )
     ),
@@ -179,14 +173,14 @@ const sheet = register(
     true
   ),
   registerBuff(
-    'core_ice_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.ice.addWithDmgType(
+    'core_ice_abloom',
+    teamBuff.dmg.anom_mv_mult_.ice.addWithDmgType(
       'abloom',
       abloom.ifOn(
         prod(
           percent(subscript(char.core, dm.core.dmg_ice)),
           percent(1 / dm.core.anomProf_step),
-          own.final.anomProf
+          target.final.anomProf
         )
       )
     ),
@@ -237,8 +231,7 @@ const sheet = register(
   ),
   registerBuff(
     'm2_anom_mv_mult_',
-    teamBuff.combat.anom_mv_mult_.addWithDmgType(
-      'abloom',
+    teamBuff.dmg.anom_mv_mult_.add(
       cmpGE(char.mindscape, 2, abloom.ifOn(dm.m2.abloom_bonus))
     ),
     undefined,

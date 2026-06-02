@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'YunkuiTales',
       name: 'set2',
     },
-    team: false,
   },
   set4_crit_: {
     sheet: 'YunkuiTales',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'YunkuiTales',
       name: 'set4_crit_',
     },
-    team: false,
   },
   set4_sheer_dmg_: {
     sheet: 'YunkuiTales',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'YunkuiTales',
       name: 'set4_sheer_dmg_',
     },
-    team: false,
   },
 } as const

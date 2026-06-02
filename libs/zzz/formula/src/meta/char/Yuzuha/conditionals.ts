@@ -4,7 +4,6 @@ export const conditionals = {
     sheet: 'Yuzuha',
     name: 'exSpecial_ult_hit',
     type: 'bool',
-    mindscapeRequirement: 2,
   },
   powerful_shell_hits: {
     sheet: 'Yuzuha',
@@ -13,13 +12,7 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 3,
-    mindscapeRequirement: 6,
   },
-  sweet_scare: {
-    sheet: 'Yuzuha',
-    name: 'sweet_scare',
-    type: 'bool',
-    mindscapeRequirement: 1,
-  },
+  sweet_scare: { sheet: 'Yuzuha', name: 'sweet_scare', type: 'bool' },
   tanuki_wish: { sheet: 'Yuzuha', name: 'tanuki_wish', type: 'bool' },
 } as const

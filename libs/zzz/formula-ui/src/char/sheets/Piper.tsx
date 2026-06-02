@@ -14,8 +14,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          'Increases Physical Anomaly Buildup while Piper has stacks of Power.',
         metadata: cond.power,
         fields: [fieldForBuff(buff.core_physical_anomBuildup_)],
       },
@@ -26,7 +24,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description: "Increases Piper's damage while she has stacks of Power.",
         metadata: cond.power,
         fields: [fieldForBuff(buff.ability_common_dmg_)],
       },
@@ -37,8 +34,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          'Increases Downward Smash damage while Piper has stacks of Power.',
         metadata: cond.power,
         fields: [
           {

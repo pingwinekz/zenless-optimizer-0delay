@@ -17,8 +17,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('cheerOnCond'),
-            description:
-              'After landing an EX Special Attack, Lucy applies the "Cheer On!" status to all squad members for 10 seconds (15 seconds while in Aftershock). While "Cheer On!" is active, increases the ATK of all squad members based on a portion of Lucy\'s initial ATK plus a flat bonus, up to 600 ATK. The guard boars summoned by Lucy\'s Core Passive also receive this ATK bonus.',
             metadata: cond.cheerOn,
             fields: [fieldForBuff(buff.exSpecial_atk)],
           },
@@ -50,8 +48,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('cheerOnCond'),
-        description:
-          'M4: While the "Cheer On!" status is active, increases the CRIT DMG of all squad members by a flat amount.',
         metadata: cond.cheerOn,
         fields: [fieldForBuff(buff.m4_crit_dmg_)],
       },

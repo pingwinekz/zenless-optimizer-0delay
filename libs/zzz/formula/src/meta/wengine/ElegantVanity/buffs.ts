@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'ElegantVanity',
       name: 'common_dmg_',
     },
-    team: true,
   },
 } as const

@@ -43,10 +43,7 @@ export function EquipGrid({
     <SimpleGrid cols={columns} spacing="xs">
       <div key={wengine?.id}>
         <Stack>
-          <CompactWengineCard
-            wengineId={wengine?.id ?? wengineKey}
-            onClick={onClick}
-          />
+          <CompactWengineCard wengineId={wengine?.id ?? wengineKey} onClick={onClick} />
           <DiscSetCardCompact discs={discs} />
         </Stack>
       </div>

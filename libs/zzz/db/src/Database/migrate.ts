@@ -73,9 +73,7 @@ export function migrateZOOD(
 
   // Migrate equippedWengine → wengineKey/wenginePhase
   migrateVersion(3, () => {
-    const chars = zood['characters'] as (ICharacter & {
-      equippedWengine?: string
-    })[]
+    const chars = zood['characters'] as (ICharacter & { equippedWengine?: string })[]
     if (chars) {
       for (const char of chars) {
         // 'equippedWengine' was a string ID; we can't resolve key from ID

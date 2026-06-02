@@ -24,9 +24,7 @@ import type { ZzzDatabase } from '../..'
 import { DataManager } from '../DataManager'
 import type { GeneratedBuildList } from './GeneratedBuildListDataManager'
 
-export const maxBuildsToShowList = [
-  1, 2, 3, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000,
-] as const
+export const maxBuildsToShowList = [1, 2, 3, 5, 10] as const
 export const maxBuildsToShowDefault = 5
 
 export const statFilterStatKeys = [
@@ -86,15 +84,15 @@ const optConfigSchema = z.object({
 
   levelLow: z.number().int().min(0).max(15).catch(discMaxLevel['S']),
   levelHigh: z.number().int().min(0).max(15).catch(discMaxLevel['S']),
-  slot4: zodFilteredArray(discSlotToMainStatKeys['4'], []) as z.ZodType<
-    DiscMainStatKey[]
-  >,
-  slot5: zodFilteredArray(discSlotToMainStatKeys['5'], []) as z.ZodType<
-    DiscMainStatKey[]
-  >,
-  slot6: zodFilteredArray(discSlotToMainStatKeys['6'], []) as z.ZodType<
-    DiscMainStatKey[]
-  >,
+  slot4: zodFilteredArray(discSlotToMainStatKeys['4'], [
+    ...discSlotToMainStatKeys['4'],
+  ]) as z.ZodType<DiscMainStatKey[]>,
+  slot5: zodFilteredArray(discSlotToMainStatKeys['5'], [
+    ...discSlotToMainStatKeys['5'],
+  ]) as z.ZodType<DiscMainStatKey[]>,
+  slot6: zodFilteredArray(discSlotToMainStatKeys['6'], [
+    ...discSlotToMainStatKeys['6'],
+  ]) as z.ZodType<DiscMainStatKey[]>,
   setFilter2: zodFilteredArray(allDiscSetKeys, []) as z.ZodType<DiscSetKey[]>,
   setFilter4: zodFilteredArray(allDiscSetKeys, []) as z.ZodType<DiscSetKey[]>,
   useEquipped: zodBoolean(),

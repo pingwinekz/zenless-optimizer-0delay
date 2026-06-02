@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Metanukimorphosis',
       name: 'physical_exSpecial_ult_anomMas',
     },
-    team: false,
   },
   aftershock_team_anomProf: {
     sheet: 'Metanukimorphosis',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'Metanukimorphosis',
       name: 'aftershock_team_anomProf',
     },
-    team: true,
   },
 } as const

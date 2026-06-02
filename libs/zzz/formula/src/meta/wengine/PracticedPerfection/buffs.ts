@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'PracticedPerfection',
       name: 'anomMas',
     },
-    team: false,
   },
   stacks_phys_dmg_: {
     sheet: 'PracticedPerfection',
@@ -23,6 +22,5 @@ export const buffs = {
       attribute: 'physical',
       name: 'stacks_phys_dmg_',
     },
-    team: false,
   },
 } as const

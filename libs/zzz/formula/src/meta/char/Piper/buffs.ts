@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'core_physical_anomBuildup_',
     },
-    team: false,
   },
   ability_common_dmg_: {
     sheet: 'Piper',
@@ -23,7 +22,6 @@ export const buffs = {
       sheet: 'Piper',
       name: 'ability_common_dmg_',
     },
-    team: true,
   },
   m2_physical_dmg_: {
     sheet: 'Piper',
@@ -36,6 +34,5 @@ export const buffs = {
       attribute: 'physical',
       name: 'm2_physical_dmg_',
     },
-    team: false,
   },
 } as const

@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'core_hpSheerForce',
     },
-    team: false,
   },
   core_exSpecial_dmg_: {
     sheet: 'Yixuan',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'core_exSpecial_dmg_',
     },
-    team: false,
   },
   core_assistFollowUp_dmg_: {
     sheet: 'Yixuan',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'core_assistFollowUp_dmg_',
     },
-    team: false,
   },
   core_chain_dmg_: {
     sheet: 'Yixuan',
@@ -49,7 +46,6 @@ export const buffs = {
       damageType1: 'chain',
       name: 'core_chain_dmg_',
     },
-    team: false,
   },
   core_ult_dmg_: {
     sheet: 'Yixuan',
@@ -62,7 +58,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_dmg_',
     },
-    team: false,
   },
   core_dmg_: {
     sheet: 'Yixuan',
@@ -74,7 +69,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'core_dmg_',
     },
-    team: false,
   },
   ability_dmg_: {
     sheet: 'Yixuan',
@@ -86,7 +80,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'ability_dmg_',
     },
-    team: false,
   },
   ability_crit_dmg_: {
     sheet: 'Yixuan',
@@ -98,7 +91,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'ability_crit_dmg_',
     },
-    team: false,
   },
   m1_crit_: {
     sheet: 'Yixuan',
@@ -110,7 +102,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'm1_crit_',
     },
-    team: false,
   },
   m2_ult_ether_resIgn_: {
     sheet: 'Yixuan',
@@ -124,7 +115,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm2_ult_ether_resIgn_',
     },
-    team: false,
   },
   m2_exSpecial_ether_resIgn_: {
     sheet: 'Yixuan',
@@ -138,7 +128,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm2_exSpecial_ether_resIgn_',
     },
-    team: false,
   },
   m4_dmg_: {
     sheet: 'Yixuan',
@@ -150,7 +139,6 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'm4_dmg_',
     },
-    team: false,
   },
   m6_sheer_dmg_: {
     sheet: 'Yixuan',
@@ -162,6 +150,5 @@ export const buffs = {
       sheet: 'Yixuan',
       name: 'm6_sheer_dmg_',
     },
-    team: false,
   },
 } as const

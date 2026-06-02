@@ -29,14 +29,7 @@ const { char } = own
 
 const { exSpecial_assistFollowUp_hit, stunned_enemy_hit } =
   allBoolConditionals(key)
-const { charged_hits } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m6.stacks,
-  undefined,
-  { charged_hits: 6 }
-)
+const { charged_hits } = allNumConditionals(key, true, 0, dm.m6.stacks)
 const { durationLeft } = allNumConditionals(
   key,
   true,

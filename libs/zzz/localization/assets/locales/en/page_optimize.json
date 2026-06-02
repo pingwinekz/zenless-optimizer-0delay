@@ -19,9 +19,6 @@
   "worker_one": "{{count}} Worker",
   "worker_other": "{{count}} Workers",
   "removeTeammate": "Remove Teammate",
-  "TeammateRow": {
-    "Header": "Teammates"
-  },
   "buildsSection": {
     "title": "Build Management",
     "save": "Save",

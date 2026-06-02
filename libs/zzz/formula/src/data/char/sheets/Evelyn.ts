@@ -26,14 +26,7 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { binding_seal, enemy_bound, m4_shield_exists } = allBoolConditionals(
-  key,
-  undefined,
-  {
-    enemy_bound: 1,
-    m4_shield_exists: 4,
-  }
-)
+const { binding_seal, enemy_bound, m4_shield_exists } = allBoolConditionals(key)
 
 const sheet = register(
   key,
@@ -93,7 +86,7 @@ const sheet = register(
   ),
   ...customDmg(
     'm6_follow_up_dmg_',
-    { ...baseTag, skillType1: 'chainSkill' },
+    { ...baseTag, skillType: 'chainSkill' },
     cmpGE(char.mindscape, 6, prod(own.final.atk, percent(dm.m6.dmg))),
     { cond: cmpGE(char.mindscape, 6, 'infer', '') }
   ),
@@ -107,8 +100,7 @@ const sheet = register(
   ),
   registerBuff(
     'ability_chain_ult_dmg_',
-    ownBuff.combat.dmg_.addWithSkillType(
-      'chainSkill',
+    ownBuff.combat.dmg_.chainSkill.add(
       cmpGE(
         sum(
           team.common.count.withSpecialty('stun'),
@@ -121,8 +113,7 @@ const sheet = register(
   ),
   registerBuff(
     'ability_chainSkill_mv_mult',
-    ownBuff.dmg.mv_mult_.addWithSkillType(
-      'chainSkill',
+    ownBuff.dmg.mv_mult_.chainSkill.add(
       cmpGE(
         sum(
           team.common.count.withSpecialty('stun'),

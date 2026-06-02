@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'ether',
       name: 'set2',
     },
-    team: false,
   },
   set4_anomProf: {
     sheet: 'ShiningAria',
@@ -23,7 +22,6 @@ export const buffs = {
       sheet: 'ShiningAria',
       name: 'set4_anomProf',
     },
-    team: false,
   },
   set4_common_dmg_: {
     sheet: 'ShiningAria',
@@ -35,6 +33,5 @@ export const buffs = {
       sheet: 'ShiningAria',
       name: 'set4_common_dmg_',
     },
-    team: false,
   },
 } as const

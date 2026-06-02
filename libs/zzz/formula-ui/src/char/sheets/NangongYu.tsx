@@ -18,8 +18,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('etherVeil'),
-            description:
-              'Grants bonus ATK to the entire squad after using Ultimate: Meteor Shower.',
             metadata: cond.etherVeil,
             fields: [fieldForBuff(buff.core_etherVeil_atk)],
           },

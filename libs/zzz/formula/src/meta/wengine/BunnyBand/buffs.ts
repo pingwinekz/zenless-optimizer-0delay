@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'BunnyBand',
       name: 'passive_hp_',
     },
-    team: false,
   },
   atk_: {
     sheet: 'BunnyBand',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'BunnyBand',
       name: 'atk_',
     },
-    team: false,
   },
 } as const

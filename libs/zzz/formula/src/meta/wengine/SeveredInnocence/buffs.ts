@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'SeveredInnocence',
       name: 'passive_crit_dmg_',
     },
-    team: false,
   },
   crit_dmg_: {
     sheet: 'SeveredInnocence',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'SeveredInnocence',
       name: 'crit_dmg_',
     },
-    team: false,
   },
   electric_dmg_: {
     sheet: 'SeveredInnocence',
@@ -35,6 +33,5 @@ export const buffs = {
       attribute: 'electric',
       name: 'electric_dmg_',
     },
-    team: false,
   },
 } as const

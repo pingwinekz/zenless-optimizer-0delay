@@ -12,7 +12,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 6,
-    mindscapeRequirement: 1,
   },
   frostburn: { sheet: 'Miyabi', name: 'frostburn', type: 'bool' },
   icefire: { sheet: 'Miyabi', name: 'icefire', type: 'bool' },
@@ -20,13 +19,7 @@ export const conditionals = {
     sheet: 'Miyabi',
     name: 'level_3_charge_hit',
     type: 'bool',
-    mindscapeRequirement: 1,
   },
-  polar: {
-    sheet: 'Miyabi',
-    name: 'polar',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
+  polar: { sheet: 'Miyabi', name: 'polar', type: 'bool' },
   ult_used: { sheet: 'Miyabi', name: 'ult_used', type: 'bool' },
 } as const

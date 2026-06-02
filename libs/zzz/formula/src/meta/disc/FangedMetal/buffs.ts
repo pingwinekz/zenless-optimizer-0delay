@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'set2',
     },
-    team: false,
   },
   set4_cond_inflict_assault: {
     sheet: 'FangedMetal',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'FangedMetal',
       name: 'set4_cond_inflict_assault',
     },
-    team: false,
   },
 } as const

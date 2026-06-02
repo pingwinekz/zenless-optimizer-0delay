@@ -53,8 +53,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
-        description:
-          "While Ben's Guardian shield is active, he gains increased CRIT Rate.",
         metadata: cond.shieldOn,
         fields: [fieldForBuff(buff.ability_crit_)],
       },
@@ -65,8 +63,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'When successfully blocking an enemy, Ben reduces incoming damage.',
         metadata: cond.enemyBlocked,
         fields: [fieldForBuff(buff.m1_dmg_red_)],
       },
@@ -88,8 +84,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'When successfully blocking an enemy, Ben gains increased Counter DMG.',
         metadata: cond.enemyBlocked,
         fields: [
           {
@@ -105,8 +99,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'After launching an attack during EX Special Attack, Ben gains increased Daze from subsequent attacks.',
         metadata: cond.attackLaunched,
         fields: [
           fieldForBuff(buff.m6_basic_dazeInc_),

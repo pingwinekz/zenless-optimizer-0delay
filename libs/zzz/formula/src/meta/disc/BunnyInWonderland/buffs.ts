@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'BunnyInWonderland',
       name: 'set2',
     },
-    team: false,
   },
   set4_dmg_: {
     sheet: 'BunnyInWonderland',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'BunnyInWonderland',
       name: 'set4_dmg_',
     },
-    team: true,
   },
 } as const

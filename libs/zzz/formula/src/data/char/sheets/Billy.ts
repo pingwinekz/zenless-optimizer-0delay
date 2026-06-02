@@ -27,20 +27,9 @@ const { distance } = allNumConditionals(
   key,
   true,
   0,
-  dm.m4.exSpecial_crit_ * 100,
-  undefined,
-  { distance: 4 }
+  dm.m4.exSpecial_crit_ * 100
 )
-const { m6_stacks } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m6.stacks,
-  undefined,
-  {
-    m6_stacks: 6,
-  }
-)
+const { m6_stacks } = allNumConditionals(key, true, 0, dm.m6.stacks)
 
 const core_dmg_ = ownBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.common_dmg_))

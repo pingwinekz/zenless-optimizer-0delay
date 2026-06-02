@@ -17,7 +17,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: st('uponLaunch.1', { val1: '$t(skills.ult)' }),
-            description: 'Increases Ice DMG after using the Ultimate.',
             metadata: cond.ult_used,
             fields: [fieldForBuff(buff.ult_ice_dmg_)],
           },
@@ -30,8 +29,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreIcefireCond'),
-        description:
-          'Increases Frost Anomaly Buildup against enemies affected by Icefire.',
         metadata: cond.icefire,
         fields: [fieldForBuff(buff.core_frost_anomBuildup_)],
       },
@@ -49,8 +46,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreFrostburnCond'),
-        description:
-          'Increases Anomaly Buildup against enemies under the Frostburn state.',
         metadata: cond.frostburn,
         fields: [fieldForBuff(buff.core_anomBuildup_)],
       },
@@ -70,8 +65,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
-        description:
-          'Ignores enemy Ice RES when any squad member triggers Disorder.',
         metadata: cond.disorder_triggered,
         fields: [
           {
@@ -87,8 +80,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'Ignores enemy DEF based on Fallen Frost consumed in Shimotsuki Stance.',
         metadata: cond.fallen_frost,
         fields: [
           {
@@ -102,8 +93,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond2'),
-        description:
-          'Increases Anomaly Buildup when a level 3 charged slash hits an enemy under Frostburn.',
         metadata: cond.level_3_charge_hit,
         fields: [fieldForBuff(buff.m1_anomBuildup_)],
       },
@@ -138,8 +127,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'Increases Basic Attack: Shimotsuki DMG while in the Polar state.',
         metadata: cond.polar,
         fields: [
           {

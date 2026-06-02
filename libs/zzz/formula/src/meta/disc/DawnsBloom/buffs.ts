@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'set2_basic_dmg_',
     },
-    team: false,
   },
   set4_basic_dmg_: {
     sheet: 'DawnsBloom',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'set4_basic_dmg_',
     },
-    team: false,
   },
   set4_extra_basic_dmg_: {
     sheet: 'DawnsBloom',
@@ -37,6 +35,5 @@ export const buffs = {
       damageType1: 'basic',
       name: 'set4_extra_basic_dmg_',
     },
-    team: false,
   },
 } as const

@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'BellicoseBlaze',
       name: 'passive_crit_',
     },
-    team: false,
   },
   cond_fire_aftershock_defIgn_: {
     sheet: 'BellicoseBlaze',
@@ -24,6 +23,5 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'cond_fire_aftershock_defIgn_',
     },
-    team: false,
   },
 } as const

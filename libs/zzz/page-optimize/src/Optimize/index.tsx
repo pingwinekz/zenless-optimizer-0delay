@@ -21,7 +21,6 @@ import {
   type GeneratedBuild,
   getTeamFrame0,
   targetTag,
-  type maxBuildsToShowList,
 } from '@genshin-optimizer/zzz/db'
 import {
   hasHigherPriority,
@@ -43,6 +42,7 @@ import {
   useDiscEditorModalStore,
 } from '@genshin-optimizer/zzz/ui'
 import { ShowcaseDiscCard } from '@genshin-optimizer/zzz/page-characters'
+import { BuildsSelector, WorkerSelector } from '@genshin-optimizer/zzz/ui'
 import { Box, Flex, Stack, Text, Loader } from '@mantine/core'
 import type { MouseEvent } from 'react'
 import {
@@ -160,10 +160,10 @@ function OptimizeWrapper() {
   const { database } = useDatabaseContext()
   const calc = useZzzCalcContext()
   const character = useCharacterContext()!
-  const { key: characterKey, wenginePhase } = character
+  const { key: characterKey } = character
   const team = useTeam(characterKey)!
   const { tag: target } = getTeamFrame0(team)
-  const [numWorkers] = useState(8)
+  const [numWorkers, setNumWorkers] = useState(8)
   const [progress, setProgress] = useState<SolverProgress | undefined>(
     undefined
   )
@@ -223,11 +223,8 @@ function OptimizeWrapper() {
           }
         }
 
-        // When no main stat is selected for a slot (empty array),
-        // behave as if all main stats are allowed.
         if (
           isFilteredSlot(slotKey) &&
-          slotKeyMap[slotKey].length > 0 &&
           !slotKeyMap[slotKey].includes(mainStatKey)
         )
           return discsBySlot
@@ -267,86 +264,34 @@ function OptimizeWrapper() {
       })
       .map(({ key }) => key)
   }, [
+    characterKey,
     character.wengineKey,
     allWengineData,
     optConfig.optWengine,
     optConfig.wEngineTypes,
   ])
 
-  // Compute filtered discs per slot based on active set filters.
-  // When set filters are active, only discs from the selected sets
-  // contribute to the permutation estimate shown to the user.
-  const filteredDiscsBySlot = useMemo(() => {
-    const activeSetKeys = new Set([
-      ...(optConfig.setFilter2 ?? []),
-      ...(optConfig.setFilter4 ?? []),
-    ])
-    if (!activeSetKeys.size) return discsBySlot
-    return Object.fromEntries(
-      Object.entries(discsBySlot).map(([slot, discs]) => [
-        slot,
-        discs.filter((d) => activeSetKeys.has(d.setKey)),
-      ])
-    ) as Record<DiscSlotKey, ICachedDisc[]>
-  }, [discsBySlot, optConfig.setFilter2, optConfig.setFilter4])
-
-  // Total permutations (unfiltered, used for progress calculation only).
-  // The solver searches the full disc space; progress tracks actual builds
-  // searched against this total, NOT against the filtered count.
   const totalPermutations = useMemo(
     () => buildCount(Object.values(discsBySlot)) * filteredWengineKeys.length,
     [filteredWengineKeys.length, discsBySlot]
   )
 
-  // Filtered permutation count (displayed in sidebar — reflects set filters).
-  // This gives a lower-bound estimate of how many builds satisfy the filters.
-  const filteredPermutations = useMemo(
-    () =>
-      buildCount(Object.values(filteredDiscsBySlot)) *
-      filteredWengineKeys.length,
-    [filteredWengineKeys.length, filteredDiscsBySlot]
-  )
-
-  // Update sidebar permutation details:
-  // - count: number of discs per slot AFTER all active filters (filteredDiscsBySlot)
-  // - total: number of discs per slot BEFORE any filters (raw from all discs)
-  // This way the PermutationDisplay shows the filter reduction ratio
-  // (e.g. slot 5 with Pen Ratio filter might show 1/13 - 8%).
+  // Update sidebar permutation details
   useEffect(() => {
-    // Compute raw per-slot counts from all discs (no filters applied)
-    const rawCounts: Record<string, number> = {}
-    for (const disc of discs) {
-      rawCounts[disc.slotKey] = (rawCounts[disc.slotKey] ?? 0) + 1
-    }
     const details: Record<string, { count: number; total: number }> = {}
-    for (const [slot, slotDiscs] of Object.entries(filteredDiscsBySlot)) {
+    for (const [slot, slotDiscs] of Object.entries(discsBySlot)) {
       details[slot] = {
         count: slotDiscs.length,
-        total: rawCounts[slot] ?? 0,
+        total: slotDiscs.length,
       }
     }
     setPermutationDetails(details)
-    setPermutations(filteredPermutations)
-  }, [
-    discs,
-    filteredDiscsBySlot,
-    filteredPermutations,
-    setPermutationDetails,
-    setPermutations,
-  ])
+    setPermutations(totalPermutations)
+  }, [discsBySlot, totalPermutations, setPermutationDetails, setPermutations])
 
   const [optimizing, setOptimizing] = useState(false)
   const [sortByKey, setSortByKey] = useState<string | undefined>(undefined)
-  const [sortTrigger, setSortTrigger] = useState(0)
-
-  const onResultLimitChange = useCallback(
-    (limit: number) => {
-      database.optConfigs.set(optConfigId, {
-        maxBuildsToShow: limit as (typeof maxBuildsToShowList)[number],
-      })
-    },
-    [database.optConfigs, optConfigId]
-  )
+  const [resultLimit, setResultLimit] = useState(5)
 
   const cancelToken = useRef(() => {})
   useEffect(() => () => cancelToken.current(), [])
@@ -398,7 +343,7 @@ function OptimizeWrapper() {
         optConfig.setFilter2,
         optConfig.setFilter4,
         filteredWengineKeys,
-        wenginePhase as PhaseKey,
+        character.wenginePhase as PhaseKey,
         discsBySlot,
         numWorkers,
         optConfig.maxBuildsToShow,
@@ -428,8 +373,8 @@ function OptimizeWrapper() {
         setOptimizerEndTime(Date.now())
         if (progress) {
           setOptimizerProgress(1)
-          setPermutationsSearched(progress.computed)
-          setPermutationsResults(progress.computed)
+          setPermutationsSearched(progress.computed + progress.remaining)
+          setPermutationsResults(progress.computed + progress.remaining)
         }
       }
       database.optConfigs.newOrSetGeneratedBuildList(optConfigId, {
@@ -441,7 +386,6 @@ function OptimizeWrapper() {
         buildDate: Date.now(),
       })
       setPermutationsResults(results.length)
-      setSortTrigger((g) => g + 1)
     },
     [
       calc,
@@ -451,7 +395,6 @@ function OptimizeWrapper() {
       optConfig.setFilter4,
       optConfig.maxBuildsToShow,
       characterKey,
-      wenginePhase,
       filteredWengineKeys,
       discsBySlot,
       numWorkers,
@@ -463,7 +406,6 @@ function OptimizeWrapper() {
       setOptimizerProgress,
       setPermutationsSearched,
       setPermutationsResults,
-      setSortTrigger,
       progress,
     ]
   )
@@ -519,11 +461,11 @@ function OptimizeWrapper() {
   // Update progress in sidebar
   useEffect(() => {
     if (progress) {
-      setPermutationsSearched(progress.computed)
-      setPermutationsResults(progress.computed)
+      setPermutationsSearched(progress.computed + progress.remaining)
+      setPermutationsResults(progress.computed + progress.remaining)
       if (totalPermutations > 0) {
         setOptimizerProgress(
-          progress.computed / (progress.computed + progress.remaining || 1)
+          (progress.computed + progress.remaining) / totalPermutations
         )
       }
     }
@@ -580,7 +522,7 @@ function OptimizeWrapper() {
     const { tag: target } = getTeamFrame0(team)
     const formulaTag = target?.rotation
       ? target.rotation.map(({ sheet, name }) => targetTag({ sheet, name }))
-      : target
+        : target
         ? targetTag(target)
         : undefined
 
@@ -594,8 +536,7 @@ function OptimizeWrapper() {
       team,
       // Optional progress tracking
       undefined,
-      formulaTag,
-      (key) => database.chars.get(key) ?? undefined
+      formulaTag
     ).then((enriched) => {
       if (!cancelled) {
         setEnrichedBuilds(enriched)
@@ -629,13 +570,26 @@ function OptimizeWrapper() {
             character={character}
             team={team}
             discsBySlot={discsBySlot}
+            wengines={filteredWengineKeys}
             sortByKey={sortByKey}
-            resultLimit={optConfig.maxBuildsToShow}
+            resultLimit={resultLimit}
             onCharacterChange={onCharacterChange}
             onWengineChange={onWengineChange}
             onSortByChange={setSortByKey}
-            onResultLimitChange={onResultLimitChange}
+            onResultLimitChange={setResultLimit}
           />
+
+          {/* Worker/Builds selectors below form */}
+          <Flex gap="sm" wrap="wrap">
+            <BuildsSelector
+              maxBuildsToShow={optConfig.maxBuildsToShow}
+              optConfigId={optConfigId}
+            />
+            <WorkerSelector
+              numWorkers={numWorkers}
+              setNumWorkers={setNumWorkers}
+            />
+          </Flex>
 
           {/* Results Grid */}
           <DeferCreate>
@@ -662,9 +616,6 @@ function OptimizeWrapper() {
                 enrichedBuilds={enrichedBuilds}
                 pinnedBuild={equippedBuild}
                 statDisplay={statDisplay}
-                sortByKey={sortByKey}
-                sortTrigger={sortTrigger}
-                specialityKey={getCharStat(characterKey).specialty}
                 onBuildSelect={(build) => {
                   setSelectedBuild(build)
                 }}
@@ -735,10 +686,7 @@ function OptimizeWrapper() {
                     onClearPins={onClearPins}
                   />
                   <PinnedBuildsSection />
-                  <BuildsSection
-                    selectedBuild={selectedBuild}
-                    characterKey={characterKey}
-                  />
+                  <BuildsSection />
                 </Stack>
               </Box>
             </Box>

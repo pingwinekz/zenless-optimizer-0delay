@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'core_basic_crit_dmg_',
     },
-    team: false,
   },
   core_dash_crit_dmg_: {
     sheet: 'Ellen',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'core_dash_crit_dmg_',
     },
-    team: false,
   },
   core_chain_crit_dmg_: {
     sheet: 'Ellen',
@@ -37,7 +35,6 @@ export const buffs = {
       damageType1: 'chain',
       name: 'core_chain_crit_dmg_',
     },
-    team: false,
   },
   core_ult_crit_dmg_: {
     sheet: 'Ellen',
@@ -50,7 +47,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_crit_dmg_',
     },
-    team: false,
   },
   ability_ice_dmg_: {
     sheet: 'Ellen',
@@ -63,7 +59,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ability_ice_dmg_',
     },
-    team: false,
   },
   m1_crit_: {
     sheet: 'Ellen',
@@ -75,7 +70,6 @@ export const buffs = {
       sheet: 'Ellen',
       name: 'm1_crit_',
     },
-    team: false,
   },
   m2_exSpecial_crit_dmg_: {
     sheet: 'Ellen',
@@ -88,7 +82,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm2_exSpecial_crit_dmg_',
     },
-    team: false,
   },
   m6_pen_: {
     sheet: 'Ellen',
@@ -100,7 +93,6 @@ export const buffs = {
       sheet: 'Ellen',
       name: 'm6_pen_',
     },
-    team: false,
   },
   m6_dash_mv_mult_: {
     sheet: 'Ellen',
@@ -113,6 +105,5 @@ export const buffs = {
       damageType1: 'dash',
       name: 'm6_dash_mv_mult_',
     },
-    team: false,
   },
 } as const

@@ -1,12 +1,6 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  abloom: { sheet: 'Grace', name: 'abloom', type: 'bool' },
-  chargeConsumed: {
-    sheet: 'Grace',
-    name: 'chargeConsumed',
-    type: 'bool',
-    mindscapeRequirement: 4,
-  },
+  chargeConsumed: { sheet: 'Grace', name: 'chargeConsumed', type: 'bool' },
   exSpecialHit: {
     sheet: 'Grace',
     name: 'exSpecialHit',
@@ -15,17 +9,6 @@ export const conditionals = {
     min: 0,
     max: 2,
   },
-  fullZap: {
-    sheet: 'Grace',
-    name: 'fullZap',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
-  grenadeHit: {
-    sheet: 'Grace',
-    name: 'grenadeHit',
-    type: 'bool',
-    mindscapeRequirement: 2,
-  },
-  zapConsumed: { sheet: 'Grace', name: 'zapConsumed', type: 'bool' },
+  fullZap: { sheet: 'Grace', name: 'fullZap', type: 'bool' },
+  grenadeHit: { sheet: 'Grace', name: 'grenadeHit', type: 'bool' },
 } as const

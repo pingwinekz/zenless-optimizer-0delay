@@ -1,5 +1,4 @@
 import { Button, ColorInput, Flex, SegmentedControl, Text } from '@mantine/core'
-import { CharacterBuildPanel } from './CharacterBuildPanel'
 import {
   IconCamera,
   IconCircleHalf2,
@@ -73,7 +72,6 @@ export function ShowcaseCustomizationSidebar({
         onDarkModeChange={onDarkModeChange}
         onPresetChange={onPresetChange}
       />
-      <CharacterBuildPanel characterKey={_characterKey} />
     </Flex>
   )
 }

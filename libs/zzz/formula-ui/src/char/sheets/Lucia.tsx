@@ -17,7 +17,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('exSpecialCond'),
-            description: 'Grants Sheer Force while in the Darkbreaker state.',
             metadata: cond.darkbreaker,
             fields: [fieldForBuff(buff.exSpecial_sheerForce)],
           },
@@ -52,7 +51,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.etherVeil'),
-        description: 'Increases HP while Ether Veil: Wellspring is active.',
         metadata: cond.etherVeil,
         fields: [fieldForBuff(buff.core_hp_)],
       },
@@ -61,8 +59,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.dreamersNurseryRhyme'),
-        description:
-          "Increases all DMG while in the Dreamer's Nursery Rhyme state.",
         metadata: cond.dreamersNurseryRhyme,
         fields: [fieldForBuff(buff.core_common_dmg_)],
       },
@@ -73,7 +69,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('exSpecialCond'),
-        description: 'Increases CRIT DMG while in the Darkbreaker state.',
         metadata: cond.darkbreaker,
         fields: [fieldForBuff(buff.ability_crit_dmg_)],
       },
@@ -84,8 +79,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.dreamersNurseryRhyme'),
-        description:
-          "Ignores enemy RES while in the Dreamer's Nursery Rhyme state.",
         metadata: cond.dreamersNurseryRhyme,
         fields: [fieldForBuff(buff.m1_resIgn_)],
       },
@@ -96,7 +89,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.etherVeil'),
-        description: 'Increases Harmony DMG while Ether Veil is active.',
         metadata: cond.etherVeil,
         fields: [
           {
@@ -110,7 +102,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('exSpecialCond'),
-        description: 'Increases Sheer DMG while in the Darkbreaker state.',
         metadata: cond.darkbreaker,
         fields: [fieldForBuff(buff.m2_sheer_dmg_)],
       },
@@ -121,8 +112,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.etherVeil'),
-        description:
-          'Boosts ATK and Harmony CRIT stats while Ether Veil is active.',
         metadata: cond.etherVeil,
         fields: [
           fieldForBuff(buff.m6_atk_),

@@ -1,11 +1,6 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  meditation: {
-    sheet: 'Yixuan',
-    name: 'meditation',
-    type: 'bool',
-    mindscapeRequirement: 6,
-  },
+  meditation: { sheet: 'Yixuan', name: 'meditation', type: 'bool' },
   tranquility: {
     sheet: 'Yixuan',
     name: 'tranquility',
@@ -13,6 +8,5 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 2,
-    mindscapeRequirement: 4,
   },
 } as const

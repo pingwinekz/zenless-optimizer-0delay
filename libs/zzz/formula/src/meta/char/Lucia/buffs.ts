@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'exSpecial_sheerForce',
     },
-    team: true,
   },
   exSpecial_harmony_dmg_: {
     sheet: 'Lucia',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'exSpecial_harmony_dmg_',
     },
-    team: false,
   },
   core_hp_: {
     sheet: 'Lucia',
@@ -34,7 +32,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'core_hp_',
     },
-    team: true,
   },
   core_common_dmg_: {
     sheet: 'Lucia',
@@ -46,7 +43,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'core_common_dmg_',
     },
-    team: false,
   },
   ability_crit_dmg_: {
     sheet: 'Lucia',
@@ -58,7 +54,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'ability_crit_dmg_',
     },
-    team: true,
   },
   m1_resIgn_: {
     sheet: 'Lucia',
@@ -70,7 +65,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm1_resIgn_',
     },
-    team: true,
   },
   m2_harmony_dmg_: {
     sheet: 'Lucia',
@@ -82,7 +76,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm2_harmony_dmg_',
     },
-    team: false,
   },
   m2_sheer_dmg_: {
     sheet: 'Lucia',
@@ -94,7 +87,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm2_sheer_dmg_',
     },
-    team: true,
   },
   m6_atk_: {
     sheet: 'Lucia',
@@ -106,7 +98,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm6_atk_',
     },
-    team: false,
   },
   m6_harmony_crit_: {
     sheet: 'Lucia',
@@ -118,7 +109,6 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm6_harmony_crit_',
     },
-    team: false,
   },
   m6_harmony_crit_dmg_: {
     sheet: 'Lucia',
@@ -130,6 +120,5 @@ export const buffs = {
       sheet: 'Lucia',
       name: 'm6_harmony_crit_dmg_',
     },
-    team: false,
   },
 } as const

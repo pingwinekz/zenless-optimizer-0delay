@@ -26,7 +26,11 @@ import {
   TextInput,
 } from '@mantine/core'
 import type { ChangeEvent } from 'react'
-import { useDeferredValue, useMemo, useState } from 'react'
+import {
+  useDeferredValue,
+  useMemo,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import WengineFilter from './WengineFilter'
 
@@ -41,7 +45,12 @@ export default function PageWengine() {
   const [searchTerm, setSearchTerm] = useState('')
   const deferredSearchTerm = useDeferredValue(searchTerm)
 
-  const { sortType, ascending, speciality, rarity } = displayWengine
+  const {
+    sortType,
+    ascending,
+    speciality,
+    rarity,
+  } = displayWengine
 
   const allWegines = useDataManagerValues(database.wengines)
   const totalWengineNum = allWegines.length
@@ -66,7 +75,14 @@ export default function PageWengine() {
           )
         )
         .map((key) => key.id),
-    [allWegines, speciality, rarity, deferredSearchTerm, sortType, ascending]
+    [
+      allWegines,
+      speciality,
+      rarity,
+      deferredSearchTerm,
+      sortType,
+      ascending,
+    ]
   )
 
   const brPt = useMediaQueryUp()
@@ -133,7 +149,10 @@ export default function PageWengine() {
       <Box>
         <SimpleGrid cols={columns} spacing={1}>
           {wenginesIdsToShow.map((wengineId) => (
-            <WengineCard key={wengineId} wengineId={wengineId} />
+            <WengineCard
+              key={wengineId}
+              wengineId={wengineId}
+            />
           ))}
         </SimpleGrid>
       </Box>

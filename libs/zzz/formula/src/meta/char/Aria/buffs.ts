@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Aria',
       name: 'core_anomProf',
     },
-    team: false,
   },
   m1_abloom: {
     sheet: 'Aria',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Aria',
       name: 'm1_abloom',
     },
-    team: false,
   },
   m1_abloom_crit_dmg: {
     sheet: 'Aria',
@@ -34,7 +32,6 @@ export const buffs = {
       sheet: 'Aria',
       name: 'm1_abloom_crit_dmg',
     },
-    team: false,
   },
   m2_defIgn: {
     sheet: 'Aria',
@@ -46,7 +43,6 @@ export const buffs = {
       sheet: 'Aria',
       name: 'm2_defIgn',
     },
-    team: false,
   },
   m6_enhanced_dmg: {
     sheet: 'Aria',
@@ -59,6 +55,5 @@ export const buffs = {
       attribute: 'ether',
       name: 'm6_enhanced_dmg',
     },
-    team: false,
   },
 } as const

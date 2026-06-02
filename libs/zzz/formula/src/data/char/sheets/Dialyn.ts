@@ -37,11 +37,8 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { malicious_complaint, overwhelmingly_positive } = allBoolConditionals(
-  key,
-  undefined,
-  { overwhelmingly_positive: 1, malicious_complaint: 2 }
-)
+const { malicious_complaint, overwhelmingly_positive } =
+  allBoolConditionals(key)
 // TODO: fix this cond to use actual previous member stats
 const { atk_sheerForce } = allNumConditionals(key, true, 0, 5000)
 const { prevMember } = allListConditionals(key, ['attack', 'rupture'])

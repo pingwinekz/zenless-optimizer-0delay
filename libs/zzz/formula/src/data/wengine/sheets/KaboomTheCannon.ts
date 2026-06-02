@@ -29,8 +29,7 @@ const sheet = registerWengine(
         prod(allyHitsEnemy, subscript(phase, dm.atk_))
       )
     ),
-    showSpecialtyAndEquipped(key),
-    true
+    showSpecialtyAndEquipped(key)
   )
 )
 export default sheet

@@ -58,7 +58,11 @@ export const WengineCard = memo(function WengineCard({
   )
   if (!wengine) return null
   return (
-    <WengineCardObj wengine={wengine} onEdit={onEditCB} onClick={onClick} />
+    <WengineCardObj
+      wengine={wengine}
+      onEdit={onEditCB}
+      onClick={onClick}
+    />
   )
 })
 export function WengineCardObj({

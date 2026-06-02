@@ -7,13 +7,11 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 25,
-    mindscapeRequirement: 1,
   },
   moonlit_blossoms_hit: {
     sheet: 'Qingyi',
     name: 'moonlit_blossoms_hit',
     type: 'bool',
-    mindscapeRequirement: 6,
   },
   subjugation: {
     sheet: 'Qingyi',
@@ -22,6 +20,5 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 20,
-    mindscapeRequirement: 2,
   },
 } as const

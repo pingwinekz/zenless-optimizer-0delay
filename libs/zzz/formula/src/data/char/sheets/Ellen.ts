@@ -26,22 +26,9 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { ice_attacks } = allNumConditionals(key, true, 0, dm.ability.stacks)
-const { exSpecial_chain_quickCharge, feast_begins } = allBoolConditionals(
-  key,
-  undefined,
-  { feast_begins: 6, exSpecial_chain_quickCharge: 6 }
-)
-const { flash_freeze_consumed } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m1.stacks,
-  undefined,
-  { flash_freeze_consumed: 1 }
-)
-const { flash_freeze } = allNumConditionals(key, true, 0, 3, undefined, {
-  flash_freeze: 2,
-})
+const { exSpecial_chain_quickCharge, feast_begins } = allBoolConditionals(key)
+const { flash_freeze_consumed } = allNumConditionals(key, true, 0, dm.m1.stacks)
+const { flash_freeze } = allNumConditionals(key, true, 0, 3)
 
 const core_basic_crit_dmg_ = ownBuff.combat.crit_dmg_.addWithDmgType(
   'basic',

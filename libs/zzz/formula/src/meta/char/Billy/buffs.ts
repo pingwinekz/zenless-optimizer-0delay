@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Billy',
       name: 'core_common_dmg_',
     },
-    team: false,
   },
   ability_ult_dmg_: {
     sheet: 'Billy',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ability_ult_dmg_',
     },
-    team: false,
   },
   m2_dodgeCounter_dmg_: {
     sheet: 'Billy',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'm2_dodgeCounter_dmg_',
     },
-    team: false,
   },
   m4_exSpecial_crit_: {
     sheet: 'Billy',
@@ -49,7 +46,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm4_exSpecial_crit_',
     },
-    team: false,
   },
   m6_common_dmg_: {
     sheet: 'Billy',
@@ -61,6 +57,5 @@ export const buffs = {
       sheet: 'Billy',
       name: 'm6_common_dmg_',
     },
-    team: false,
   },
 } as const

@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'BigCylinder',
       name: 'passive_dmg_red_',
     },
-    team: false,
   },
 } as const

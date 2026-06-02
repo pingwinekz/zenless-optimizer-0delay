@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'ShockstarDisco',
       name: 'set2',
     },
-    team: false,
   },
   set4_basic_daze_: {
     sheet: 'ShockstarDisco',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'set4_basic_daze_',
     },
-    team: false,
   },
   set4_dash_daze_: {
     sheet: 'ShockstarDisco',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'set4_dash_daze_',
     },
-    team: false,
   },
   set4_dodgeCounter_daze_: {
     sheet: 'ShockstarDisco',
@@ -49,6 +46,5 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'set4_dodgeCounter_daze_',
     },
-    team: false,
   },
 } as const

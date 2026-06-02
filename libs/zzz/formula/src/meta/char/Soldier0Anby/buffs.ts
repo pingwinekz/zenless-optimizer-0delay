@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Soldier0Anby',
       name: 'core_common_dmg_',
     },
-    team: false,
   },
   core_markedWithSilverStar_crit_dmg_: {
     sheet: 'Soldier0Anby',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'core_markedWithSilverStar_crit_dmg_',
     },
-    team: true,
   },
   ability_crit_: {
     sheet: 'Soldier0Anby',
@@ -35,7 +33,6 @@ export const buffs = {
       sheet: 'Soldier0Anby',
       name: 'ability_crit_',
     },
-    team: false,
   },
   ability_aftershock_dmg_: {
     sheet: 'Soldier0Anby',
@@ -48,7 +45,6 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'ability_aftershock_dmg_',
     },
-    team: true,
   },
   m2_crit_: {
     sheet: 'Soldier0Anby',
@@ -60,7 +56,6 @@ export const buffs = {
       sheet: 'Soldier0Anby',
       name: 'm2_crit_',
     },
-    team: false,
   },
   m4_electric_resIgn_: {
     sheet: 'Soldier0Anby',
@@ -73,6 +68,5 @@ export const buffs = {
       attribute: 'electric',
       name: 'm4_electric_resIgn_',
     },
-    team: false,
   },
 } as const

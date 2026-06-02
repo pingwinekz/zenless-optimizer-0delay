@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'core_atk',
     },
-    team: true,
   },
   ability_stun_: {
     sheet: 'Sunna',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'ability_stun_',
     },
-    team: true,
   },
   m2_etherVeil_atk: {
     sheet: 'Sunna',
@@ -34,7 +32,6 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'm2_etherVeil_atk',
     },
-    team: true,
   },
   m4_dmg_: {
     sheet: 'Sunna',
@@ -46,7 +43,6 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'm4_dmg_',
     },
-    team: true,
   },
   m6_crit_: {
     sheet: 'Sunna',
@@ -58,7 +54,6 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'm6_crit_',
     },
-    team: true,
   },
   m6_crit_dmg_: {
     sheet: 'Sunna',
@@ -70,6 +65,5 @@ export const buffs = {
       sheet: 'Sunna',
       name: 'm6_crit_dmg_',
     },
-    team: true,
   },
 } as const

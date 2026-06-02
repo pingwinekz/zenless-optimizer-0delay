@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'RoaringRide',
       name: 'atk_',
     },
-    team: false,
   },
   anomProf: {
     sheet: 'RoaringRide',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'RoaringRide',
       name: 'anomProf',
     },
-    team: false,
   },
   anomBuildup_: {
     sheet: 'RoaringRide',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'RoaringRide',
       name: 'anomBuildup_',
     },
-    team: false,
   },
 } as const

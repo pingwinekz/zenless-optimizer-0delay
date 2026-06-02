@@ -44,7 +44,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('meditationCond'),
-        description: 'While in Meditation state, CRIT DMG is increased.',
         metadata: cond.meditation,
         fields: [fieldForBuff(buff.ability_crit_dmg_)],
       },
@@ -80,8 +79,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
-        description:
-          'With Tranquility stacks, EX Special Attack DMG is increased.',
         metadata: cond.tranquility,
         fields: [
           {

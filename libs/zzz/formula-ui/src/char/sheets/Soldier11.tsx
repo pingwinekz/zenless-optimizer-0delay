@@ -31,8 +31,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
-        description:
-          'Grants stacks of bonus Common DMG and Dodge Counter DMG for each Fire Suppression triggered.',
         metadata: cond.m2_stacks,
         fields: [
           {
@@ -49,8 +47,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
-        description:
-          'Reduces incoming DMG when Fire Suppression is triggered during the first three hits of a Basic Attack or Dash Attack.',
         metadata: cond.fireSuppression_triggered,
         fields: [fieldForBuff(buff.m4_dmg_red_)],
       },
@@ -59,8 +55,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond2'),
-        description:
-          'Triggers additional effects when Fire Suppression is activated during the fourth hit of a Basic Attack.',
         metadata: cond.fireSuppression_4th_hit,
       },
     },
@@ -74,8 +68,6 @@ const sheet = createBaseSheet(key, {
           val2: '$t(skills.chain)',
           val3: '$t(skills.ult)',
         }),
-        description:
-          "Ignores a portion of the enemy's Fire RES after consuming a charge with an EX Special Attack, Chain Attack, or Ultimate.",
         metadata: cond.charge_consumed,
         fields: [
           {

@@ -4,7 +4,6 @@ export const conditionals = {
     sheet: 'Alice',
     name: 'assault_triggered',
     type: 'bool',
-    mindscapeRequirement: 1,
   },
   physical_anomaly_inflicted: {
     sheet: 'Alice',

@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'CordisGermina',
       name: 'passive_crit_',
     },
-    team: false,
   },
   cond_electric_dmg_: {
     sheet: 'CordisGermina',
@@ -23,7 +22,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'cond_electric_dmg_',
     },
-    team: false,
   },
   cond_basic_defIgn_: {
     sheet: 'CordisGermina',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'cond_basic_defIgn_',
     },
-    team: false,
   },
   cond_ult_defIgn_: {
     sheet: 'CordisGermina',
@@ -49,6 +46,5 @@ export const buffs = {
       damageType1: 'ult',
       name: 'cond_ult_defIgn_',
     },
-    team: false,
   },
 } as const

@@ -19,8 +19,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('flashConnectCond'),
-            description:
-              'Increases DMG and Daze when Flash Connect is consumed at over 75%.',
             metadata: cond.flash_connect_consumed,
             fields: [
               fieldForBuff(buff.flash_connect_dmg_),
@@ -44,7 +42,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('subjugationCond'),
-        description: 'Increases Stun multiplier based on Subjugation stacks.',
         metadata: cond.subjugation,
         fields: [fieldForBuff(buff.core_stun_)],
       },
@@ -98,8 +95,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'Reduces enemy RES when Qingyi hits with Basic Attack: Enchanted Moonlit Blossoms.',
         metadata: cond.moonlit_blossoms_hit,
         fields: [fieldForBuff(buff.m6_resRed_)],
       },

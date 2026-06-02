@@ -24,9 +24,7 @@ export const characterSchema = z
     special: z.number().catch(1),
     assist: z.number().catch(1),
     potential: zodBoundedNumber(0, 6, 0),
-    wengineKey: zodEnum(allWengineKeys)
-      .or(z.literal(''))
-      .catch('' as WengineKey),
+    wengineKey: zodEnum(allWengineKeys).or(z.literal('')).catch('' as WengineKey),
     wenginePhase: zodBoundedNumber(1, 5, 1),
   })
   .transform((data) => {

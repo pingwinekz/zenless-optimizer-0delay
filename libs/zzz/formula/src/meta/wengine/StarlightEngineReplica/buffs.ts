@@ -11,6 +11,5 @@ export const buffs = {
       attribute: 'physical',
       name: 'cond_dmg_',
     },
-    team: false,
   },
 } as const

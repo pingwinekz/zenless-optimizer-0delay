@@ -25,7 +25,10 @@ import {
   getDiscSubStatBaseVal,
 } from '@genshin-optimizer/zzz/consts'
 import type { StatFilter } from '@genshin-optimizer/zzz/db'
-import { type ICachedDisc, StatFilterTagToTag } from '@genshin-optimizer/zzz/db'
+import {
+  type ICachedDisc,
+  StatFilterTagToTag,
+} from '@genshin-optimizer/zzz/db'
 import { type Calculator, Read, type Tag } from '@genshin-optimizer/zzz/formula'
 
 const EPSILON = 1e-7
@@ -111,11 +114,6 @@ export function createSolverConfig(
     return undefined
   })
 
-  // Partition sets into non-overlapping (exclusive to one filter) and overlapping (in both)
-  const only2 = setFilter2.filter((q) => !setFilter4.includes(q))
-  const only4 = setFilter4.filter((q) => !setFilter2.includes(q))
-  const both = setFilter2.filter((q) => setFilter4.includes(q))
-
   nodes.push(
     // filter2: if not empty, at least one >= 2
     setFilter2.length
@@ -124,15 +122,6 @@ export function createSolverConfig(
     // filter4: if not empty, at least one >= 4
     setFilter4.length
       ? max(...setFilter4.map((q) => read({ q }, 'sum')))
-      : constant(Infinity),
-    // Combined overlap constraint: when the same set(s) appear in both filters
-    // AND there are no non-overlapping alternatives in either filter, the
-    // solver must use overlapping sets for BOTH bonuses. Without this constraint,
-    // the solver could satisfy both >=2 and >=4 with just 4 discs of the same
-    // set (e.g. 4 FangedMetal + 2 random). The sum of all overlapping set
-    // counts must be >= 6 to ensure enough distinct discs for both bonuses.
-    !only2.length && !only4.length && both.length
-      ? sum(...both.map((q) => read({ q }, 'sum')))
       : constant(Infinity)
     // other calcs (graph, etc)
   )
@@ -157,7 +146,6 @@ export function createSolverConfig(
       }),
       2, // setFilter2
       4, // setFilter4
-      !only2.length && !only4.length && both.length ? 6 : Infinity, // combined overlap (4 for 4p + 2 for 2p = 6)
     ],
     numWorkers,
     topN: numOfBuilds,

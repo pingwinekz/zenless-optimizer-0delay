@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'IdentityBase',
       name: 'def_',
     },
-    team: false,
   },
 } as const

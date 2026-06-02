@@ -36,8 +36,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          'Grants Sheer Force stacks when EX Special Attack hits an enemy and triggers Quick Assist.',
         metadata: cond.meridian_flow,
         fields: [fieldForBuff(buff.core_sheerForce)],
       },
@@ -48,8 +46,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
-        description:
-          'Increases damage dealt when hitting an enemy with Special Attack: Touch of Death.',
         metadata: cond.depleted_qi,
         fields: [fieldForBuff(buff.ability_dmgInc_)],
       },

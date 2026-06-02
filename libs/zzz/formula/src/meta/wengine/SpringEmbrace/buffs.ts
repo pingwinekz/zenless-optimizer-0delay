@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'SpringEmbrace',
       name: 'passive_dmg_red_',
     },
-    team: false,
   },
   cond_enerRegen_: {
     sheet: 'SpringEmbrace',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'SpringEmbrace',
       name: 'cond_enerRegen_',
     },
-    team: true,
   },
 } as const

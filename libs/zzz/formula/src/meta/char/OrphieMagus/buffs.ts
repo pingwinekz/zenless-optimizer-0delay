@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'OrphieMagus',
       name: 'core_crit_',
     },
-    team: false,
   },
   core_aftershock_dmg_: {
     sheet: 'OrphieMagus',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'core_aftershock_dmg_',
     },
-    team: false,
   },
   core_atk: {
     sheet: 'OrphieMagus',
@@ -35,7 +33,6 @@ export const buffs = {
       sheet: 'OrphieMagus',
       name: 'core_atk',
     },
-    team: true,
   },
   ability_aftershock_defIgn_: {
     sheet: 'OrphieMagus',
@@ -48,7 +45,6 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'ability_aftershock_defIgn_',
     },
-    team: true,
   },
   m1_fire_resIgn_: {
     sheet: 'OrphieMagus',
@@ -61,7 +57,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'm1_fire_resIgn_',
     },
-    team: false,
   },
   m1_common_dmg_: {
     sheet: 'OrphieMagus',
@@ -73,7 +68,6 @@ export const buffs = {
       sheet: 'OrphieMagus',
       name: 'm1_common_dmg_',
     },
-    team: true,
   },
   m2_atk_: {
     sheet: 'OrphieMagus',
@@ -85,7 +79,6 @@ export const buffs = {
       sheet: 'OrphieMagus',
       name: 'm2_atk_',
     },
-    team: false,
   },
   m4_common_dmg_: {
     sheet: 'OrphieMagus',
@@ -97,6 +90,5 @@ export const buffs = {
       sheet: 'OrphieMagus',
       name: 'm4_common_dmg_',
     },
-    team: false,
   },
 } as const

@@ -1,5 +1,4 @@
 export * from './useCharacter'
-export * from './useCharacterBuilds'
 export * from './useTeam'
 export * from './useDisc'
 export * from './useDiscDisplay'

@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'ZanshinHerbCase',
       name: 'passive_crit_',
     },
-    team: false,
   },
   passive_electric_dmg_: {
     sheet: 'ZanshinHerbCase',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'passive_electric_dmg_',
     },
-    team: false,
   },
   cond_crit_: {
     sheet: 'ZanshinHerbCase',
@@ -36,6 +34,5 @@ export const buffs = {
       sheet: 'ZanshinHerbCase',
       name: 'cond_crit_',
     },
-    team: false,
   },
 } as const

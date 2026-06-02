@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'BranchBladeSong',
       name: 'set2',
     },
-    team: false,
   },
   set4_passive: {
     sheet: 'BranchBladeSong',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'BranchBladeSong',
       name: 'set4_passive',
     },
-    team: false,
   },
   set4_cond: {
     sheet: 'BranchBladeSong',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'BranchBladeSong',
       name: 'set4_cond',
     },
-    team: false,
   },
 } as const

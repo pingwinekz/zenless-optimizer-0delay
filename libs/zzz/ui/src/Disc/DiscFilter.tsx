@@ -1,15 +1,15 @@
+import { CardThemed } from '@genshin-optimizer/common/ui'
 import {
   useDatabaseContext,
   useDisplayDisc,
 } from '@genshin-optimizer/zzz/db-ui'
 import type { DiscFilterOption } from '@genshin-optimizer/zzz/util'
 import { IconRefresh } from '@tabler/icons-react'
-import { Box, Button, Flex, Skeleton, Text } from '@mantine/core'
+import { Box, Button, Group, Skeleton, Text } from '@mantine/core'
 import { t } from 'i18next'
 import { Suspense, useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { DiscFilterDisplay } from './DiscFilterDisplay'
-import discFilterClasses from './DiscFilter.module.css'
 
 export default function DiscFilter({
   numShowing,
@@ -34,27 +34,23 @@ export default function DiscFilter({
   )
   return (
     <Suspense fallback={<Skeleton width="100%" height={300} />}>
-      <Box className={discFilterClasses.card}>
-        <Flex className={discFilterClasses.cardHeader}>
-          <Text size="sm" fw={700}>
-            {t('discFilter')}
-          </Text>
-          <Flex align="center" gap={8}>
-            <Text size="xs" c="dimmed">
+      <CardThemed>
+        <Box p="sm">
+          <Group justify="space-between" mb="sm">
+            <Text fw={700}>{t('discFilter')}</Text>
+            <Text>
               <strong>{numShowing}</strong> / {total}
             </Text>
             <Button
-              size="xs"
+              size="sm"
               color="red"
               onClick={() => database.displayDisc.set({ action: 'reset' })}
-              leftSection={<IconRefresh size={14} />}
+              leftSection={<IconRefresh size={16} />}
               variant="default"
             >
               <Trans t={t} i18nKey="ui:reset" />
             </Button>
-          </Flex>
-        </Flex>
-        <Box className={discFilterClasses.cardBody}>
+          </Group>
           <Suspense fallback={<Skeleton width="100%" height={400} />}>
             <DiscFilterDisplay
               filterOption={filterOption}
@@ -63,7 +59,7 @@ export default function DiscFilter({
             />
           </Suspense>
         </Box>
-      </Box>
+      </CardThemed>
     </Suspense>
   )
 }

@@ -7,7 +7,10 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
-import { WengineRarityToggle, WengineToggle } from '@genshin-optimizer/zzz/ui'
+import {
+  WengineRarityToggle,
+  WengineToggle,
+} from '@genshin-optimizer/zzz/ui'
 import { IconRecycle } from '@tabler/icons-react'
 import {
   Box,

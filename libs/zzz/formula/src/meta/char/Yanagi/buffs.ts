@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'basic_electric_dmg_',
     },
-    team: false,
   },
   basic_pen_: {
     sheet: 'Yanagi',
@@ -23,7 +22,6 @@ export const buffs = {
       sheet: 'Yanagi',
       name: 'basic_pen_',
     },
-    team: false,
   },
   exSpecial_anom_base_: {
     sheet: 'Yanagi',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'exSpecial_anom_base_',
     },
-    team: true,
   },
   ult_anom_base_: {
     sheet: 'Yanagi',
@@ -49,7 +46,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'ult_anom_base_',
     },
-    team: true,
   },
   exSpecial_anom_flat_dmg: {
     sheet: 'Yanagi',
@@ -62,7 +58,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'exSpecial_anom_flat_dmg',
     },
-    team: true,
   },
   ult_anom_flat_dmg: {
     sheet: 'Yanagi',
@@ -75,7 +70,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'ult_anom_flat_dmg',
     },
-    team: true,
   },
   core_addl_disorder_: {
     sheet: 'Yanagi',
@@ -87,7 +81,6 @@ export const buffs = {
       sheet: 'Yanagi',
       name: 'core_addl_disorder_',
     },
-    team: true,
   },
   core_electric_dmg_: {
     sheet: 'Yanagi',
@@ -100,7 +93,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'core_electric_dmg_',
     },
-    team: false,
   },
   ability_electric_anomBuildup_: {
     sheet: 'Yanagi',
@@ -113,7 +105,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'ability_electric_anomBuildup_',
     },
-    team: true,
   },
   m1_anomProf: {
     sheet: 'Yanagi',
@@ -125,7 +116,6 @@ export const buffs = {
       sheet: 'Yanagi',
       name: 'm1_anomProf',
     },
-    team: false,
   },
   m2_electric_anomBuildup_: {
     sheet: 'Yanagi',
@@ -139,7 +129,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm2_electric_anomBuildup_',
     },
-    team: false,
   },
   m4_pen_: {
     sheet: 'Yanagi',
@@ -151,7 +140,6 @@ export const buffs = {
       sheet: 'Yanagi',
       name: 'm4_pen_',
     },
-    team: true,
   },
   m6_exSpecial_dmg_: {
     sheet: 'Yanagi',
@@ -164,6 +152,5 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm6_exSpecial_dmg_',
     },
-    team: false,
   },
 } as const

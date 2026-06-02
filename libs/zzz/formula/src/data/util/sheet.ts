@@ -17,10 +17,7 @@ export type FormulaArg = {
 }
 
 export type DmgTag = Partial<
-  Pick<
-    Tag,
-    'damageType1' | 'damageType2' | 'attribute' | 'skillType1' | 'skillType2'
-  >
+  Pick<Tag, 'damageType1' | 'damageType2' | 'attribute' | 'skillType'>
 >
 
 export function register(

@@ -34,18 +34,12 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { tanuki_wish, sweet_scare, exSpecial_ult_hit } = allBoolConditionals(
-  key,
-  undefined,
-  { sweet_scare: 1, exSpecial_ult_hit: 2 }
-)
+const { tanuki_wish, sweet_scare, exSpecial_ult_hit } = allBoolConditionals(key)
 const { powerful_shell_hits } = allNumConditionals(
   key,
   true,
   0,
-  dm.m6.max_stacks,
-  undefined,
-  { powerful_shell_hits: 6 }
+  dm.m6.max_stacks
 )
 
 const ability_check = (node: NumNode) =>

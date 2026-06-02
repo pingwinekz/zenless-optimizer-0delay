@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'ZhuYuan',
       name: 'core_dmg_',
     },
-    team: false,
   },
   ability_crit_: {
     sheet: 'ZhuYuan',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'ZhuYuan',
       name: 'ability_crit_',
     },
-    team: false,
   },
   m2_dmg_red_: {
     sheet: 'ZhuYuan',
@@ -34,7 +32,6 @@ export const buffs = {
       sheet: 'ZhuYuan',
       name: 'm2_dmg_red_',
     },
-    team: false,
   },
   m2_basic_dash_ether_dmg_: {
     sheet: 'ZhuYuan',
@@ -47,7 +44,6 @@ export const buffs = {
       attribute: 'ether',
       name: 'm2_basic_dash_ether_dmg_',
     },
-    team: false,
   },
   m4_basic_dash_ether_res_ign_: {
     sheet: 'ZhuYuan',
@@ -60,6 +56,5 @@ export const buffs = {
       attribute: 'ether',
       name: 'm4_basic_dash_ether_res_ign_',
     },
-    team: false,
   },
 } as const

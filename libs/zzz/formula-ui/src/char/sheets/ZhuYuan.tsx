@@ -30,8 +30,6 @@ const sheet = createBaseSheet(key, {
           val2: '$t(skills.chain)',
           val3: '$t(skills.ult)',
         }),
-        description:
-          'Upon launching EX Special Attack, Chain Attack, or Ultimate, CRIT Rate is increased.',
         metadata: cond.ex_chain_ult_used,
         fields: [fieldForBuff(buff.ability_crit_)],
       },
@@ -42,7 +40,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2SuppresiveModeCond'),
-        description: 'While in Suppressive Mode, DMG reduction is increased.',
         metadata: cond.suppresive_mode,
         fields: [fieldForBuff(buff.m2_dmg_red_)],
       },
@@ -51,8 +48,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2BasicDashEtherCond'),
-        description:
-          'Upon hitting enemies with Enhanced Shotshells, Ether DMG is increased.',
         metadata: cond.shotshells_hit,
         fields: [
           {

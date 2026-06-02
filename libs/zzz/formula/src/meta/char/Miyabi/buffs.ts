@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ult_ice_dmg_',
     },
-    team: false,
   },
   core_frost_anomBuildup_: {
     sheet: 'Miyabi',
@@ -24,7 +23,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'core_frost_anomBuildup_',
     },
-    team: false,
   },
   core_anomBuildup_: {
     sheet: 'Miyabi',
@@ -36,7 +34,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'core_anomBuildup_',
     },
-    team: true,
   },
   ability_dmg_: {
     sheet: 'Miyabi',
@@ -48,7 +45,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'ability_dmg_',
     },
-    team: false,
   },
   ability_ice_resIgn_: {
     sheet: 'Miyabi',
@@ -61,7 +57,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ability_ice_resIgn_',
     },
-    team: false,
   },
   m1_defIgn_: {
     sheet: 'Miyabi',
@@ -73,7 +68,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm1_defIgn_',
     },
-    team: false,
   },
   m1_anomBuildup_: {
     sheet: 'Miyabi',
@@ -85,7 +79,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm1_anomBuildup_',
     },
-    team: true,
   },
   m2_dmg_: {
     sheet: 'Miyabi',
@@ -97,7 +90,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm2_dmg_',
     },
-    team: false,
   },
   m2_dodgeCounter_dmg_: {
     sheet: 'Miyabi',
@@ -110,7 +102,6 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'm2_dodgeCounter_dmg_',
     },
-    team: false,
   },
   m2_crit_: {
     sheet: 'Miyabi',
@@ -122,7 +113,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm2_crit_',
     },
-    team: false,
   },
   m4_frostburnBreak_dmg_: {
     sheet: 'Miyabi',
@@ -134,7 +124,6 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm4_frostburnBreak_dmg_',
     },
-    team: false,
   },
   m6_dmg_: {
     sheet: 'Miyabi',
@@ -146,6 +135,5 @@ export const buffs = {
       sheet: 'Miyabi',
       name: 'm6_dmg_',
     },
-    team: false,
   },
 } as const

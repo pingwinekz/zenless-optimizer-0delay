@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'FusionCompiler',
       name: 'passive_atk_',
     },
-    team: false,
   },
   anomProf: {
     sheet: 'FusionCompiler',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'FusionCompiler',
       name: 'anomProf',
     },
-    team: false,
   },
 } as const

@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'RadiowaveJourney',
       name: 'launchingChainOrUlt_sheerForce',
     },
-    team: false,
   },
 } as const

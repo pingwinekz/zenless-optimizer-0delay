@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'GildedBlossom',
       name: 'passive_atk_',
     },
-    team: false,
   },
   passive_exSpecial_dmg_: {
     sheet: 'GildedBlossom',
@@ -23,6 +22,5 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'passive_exSpecial_dmg_',
     },
-    team: false,
   },
 } as const

@@ -20,7 +20,15 @@ import {
 } from '@genshin-optimizer/zzz/ui'
 import { CharacterEditModal } from './CharacterEditModal'
 import { CharacterPreview } from './CharacterPreview'
+export { ShowcaseDiscPanel, ShowcaseDiscCard } from './card/ShowcaseDiscPanel'
+import { FilterBar } from './FilterBar'
+import { cardTotalW, defaultGap, parentH } from './constantsUi'
+import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
+import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
+import { oklchCharacterListColor } from './color/colorUtilsOklch'
 import {
+  closestCenter,
+  defaultDropAnimationSideEffects,
   DndContext,
   type DragEndEvent,
   DragOverlay,
@@ -28,8 +36,6 @@ import {
   type DropAnimation,
   PointerSensor,
   TouchSensor,
-  closestCenter,
-  defaultDropAnimationSideEffects,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -49,6 +55,7 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import {
   Suspense,
   memo,
+  startTransition,
   useCallback,
   useDeferredValue,
   useEffect,
@@ -57,12 +64,6 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FilterBar } from './FilterBar'
-import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
-import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
-import { oklchCharacterListColor } from './color/colorUtilsOklch'
-import { cardTotalW, defaultGap, parentH } from './constantsUi'
-export { ShowcaseDiscPanel, ShowcaseDiscCard } from './card/ShowcaseDiscPanel'
 
 const dropAnimationDuration = 200
 
@@ -267,7 +268,7 @@ export default function PageCharacter() {
       </Suspense>
 
       {/* Root flex: fixed-width row matching HSR CharacterTab */}
-      <Flex style={{ width: 1640, height: '100%' }} gap={defaultGap}>
+      <Flex style={{ width: 1593, height: '100%' }} gap={defaultGap}>
         {/* Left: CharacterMenu + Grid + Density */}
         <Box
           miw={300}
@@ -338,7 +339,7 @@ export default function PageCharacter() {
                       rank={rankMap.get(charKey) ?? 0}
                       onClick={() => {
                         setLocalFocus(charKey)
-                        setFocusCharacter(charKey)
+                        startTransition(() => setFocusCharacter(charKey))
                       }}
                       onDoubleClick={() => {
                         setFocusCharacter(charKey)

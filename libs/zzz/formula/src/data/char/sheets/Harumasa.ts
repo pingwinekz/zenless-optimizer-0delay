@@ -27,11 +27,7 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { enemy_anomaly, electro_blitz, haOtoNoYa } = allBoolConditionals(
-  key,
-  undefined,
-  { electro_blitz: 2, haOtoNoYa: 6 }
-)
+const { enemy_anomaly, electro_blitz, haOtoNoYa } = allBoolConditionals(key)
 const { gleaming_edge } = allNumConditionals(key, true, 0, dm.core.max_stacks)
 
 const core_dash_crit_ = ownBuff.combat.crit_.addWithDmgType(

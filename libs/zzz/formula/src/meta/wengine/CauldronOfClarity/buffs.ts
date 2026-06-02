@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'CauldronOfClarity',
       name: 'cond_common_dmg_',
     },
-    team: false,
   },
   cond_crit_: {
     sheet: 'CauldronOfClarity',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'CauldronOfClarity',
       name: 'cond_crit_',
     },
-    team: false,
   },
 } as const

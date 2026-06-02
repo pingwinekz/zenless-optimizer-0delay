@@ -29,8 +29,7 @@ const sheet = registerWengine(
         chainOrUltUsed.ifOn(subscript(phase, dm.atk_))
       )
     ),
-    showSpecialtyAndEquipped(key),
-    true
+    showSpecialtyAndEquipped(key)
   )
 )
 export default sheet

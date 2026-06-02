@@ -15,7 +15,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 3,
-    mindscapeRequirement: 6,
   },
   dodgeCounter_quickAssist_hit: {
     sheet: 'Nekomata',
@@ -29,18 +28,11 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 2,
-    mindscapeRequirement: 4,
   },
-  from_behind: {
-    sheet: 'Nekomata',
-    name: 'from_behind',
-    type: 'bool',
-    mindscapeRequirement: 1,
-  },
+  from_behind: { sheet: 'Nekomata', name: 'from_behind', type: 'bool' },
   one_enemy_onField: {
     sheet: 'Nekomata',
     name: 'one_enemy_onField',
     type: 'bool',
-    mindscapeRequirement: 2,
   },
 } as const

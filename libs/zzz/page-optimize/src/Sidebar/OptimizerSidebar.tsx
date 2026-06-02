@@ -120,7 +120,7 @@ export function OptimizerSidebar({
               onClearPins={onClearPins}
             />
             <Divider />
-            <BuildsSection selectedBuild={null} characterKey={null} />
+            <BuildsSection />
             <Divider />
             <PinnedBuildsSection />
           </Flex>

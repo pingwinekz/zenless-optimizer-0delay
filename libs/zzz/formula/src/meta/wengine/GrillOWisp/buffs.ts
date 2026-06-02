@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'fire_dmg_',
     },
-    team: false,
   },
   crit_: {
     sheet: 'GrillOWisp',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'GrillOWisp',
       name: 'crit_',
     },
-    team: false,
   },
 } as const

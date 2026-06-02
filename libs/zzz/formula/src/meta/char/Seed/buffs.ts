@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'core_atk',
     },
-    team: false,
   },
   core_crit_dmg_: {
     sheet: 'Seed',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'core_crit_dmg_',
     },
-    team: false,
   },
   core_vanguard_atk: {
     sheet: 'Seed',
@@ -34,7 +32,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'core_vanguard_atk',
     },
-    team: true,
   },
   core_vanguard_crit_dmg_: {
     sheet: 'Seed',
@@ -46,7 +43,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'core_vanguard_crit_dmg_',
     },
-    team: true,
   },
   core_dmg_: {
     sheet: 'Seed',
@@ -58,7 +54,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'core_dmg_',
     },
-    team: true,
   },
   ability_basic_dmg_: {
     sheet: 'Seed',
@@ -71,7 +66,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'ability_basic_dmg_',
     },
-    team: false,
   },
   ability_basic_electric_resIgn_: {
     sheet: 'Seed',
@@ -85,7 +79,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'ability_basic_electric_resIgn_',
     },
-    team: false,
   },
   ability_ult_dmg_: {
     sheet: 'Seed',
@@ -98,7 +91,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ability_ult_dmg_',
     },
-    team: false,
   },
   ability_ult_electric_resIgn_: {
     sheet: 'Seed',
@@ -112,7 +104,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ability_ult_electric_resIgn_',
     },
-    team: false,
   },
   m1_basic_crit_dmg_: {
     sheet: 'Seed',
@@ -125,7 +116,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm1_basic_crit_dmg_',
     },
-    team: false,
   },
   m2_defIgn_: {
     sheet: 'Seed',
@@ -137,7 +127,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'm2_defIgn_',
     },
-    team: false,
   },
   m2_vanguard_defIgn_: {
     sheet: 'Seed',
@@ -149,7 +138,6 @@ export const buffs = {
       sheet: 'Seed',
       name: 'm2_vanguard_defIgn_',
     },
-    team: true,
   },
   m2_basic_dmg_: {
     sheet: 'Seed',
@@ -162,7 +150,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm2_basic_dmg_',
     },
-    team: false,
   },
   m4_ult_dmg_: {
     sheet: 'Seed',
@@ -175,7 +162,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm4_ult_dmg_',
     },
-    team: false,
   },
   m6_crit_dmg_: {
     sheet: 'Seed',
@@ -187,6 +173,5 @@ export const buffs = {
       sheet: 'Seed',
       name: 'm6_crit_dmg_',
     },
-    team: false,
   },
 } as const

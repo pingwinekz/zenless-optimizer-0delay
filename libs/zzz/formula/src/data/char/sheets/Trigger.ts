@@ -35,17 +35,8 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { aftershock_hit } = allBoolConditionals(key, undefined, {
-  aftershock_hit: 1,
-})
-const { hunters_gaze } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m2.stacks,
-  undefined,
-  { hunters_gaze: 2 }
-)
+const { aftershock_hit } = allBoolConditionals(key)
+const { hunters_gaze } = allNumConditionals(key, true, 0, dm.m2.stacks)
 
 const m6_armor_break_rounds_dmg_ = ownBuff.combat.common_dmg_.add(
   cmpGE(char.mindscape, 6, dm.m6.round_dmg_)

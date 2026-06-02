@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'ProtoPunk',
       name: 'set2',
     },
-    team: false,
   },
   set4_cond_def_assist_or_evasive_assist_dmg_: {
     sheet: 'ProtoPunk',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'ProtoPunk',
       name: 'set4_cond_def_assist_or_evasive_assist_dmg_',
     },
-    team: true,
   },
 } as const

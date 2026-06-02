@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_dmg_',
     },
-    team: false,
   },
   dash_dmg_: {
     sheet: 'LunarPleniluna',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'dash_dmg_',
     },
-    team: false,
   },
   dodgeCounter_dmg_: {
     sheet: 'LunarPleniluna',
@@ -37,6 +35,5 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'dodgeCounter_dmg_',
     },
-    team: false,
   },
 } as const

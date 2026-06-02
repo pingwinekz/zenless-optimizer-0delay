@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'LunarDecrescent',
       name: 'common_dmg_',
     },
-    team: false,
   },
 } as const

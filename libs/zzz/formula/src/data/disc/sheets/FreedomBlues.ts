@@ -1,8 +1,5 @@
-import { cmpEq, cmpGE, sum } from '@genshin-optimizer/pando/engine'
-import {
-  allAttributeKeys,
-  type DiscSetKey,
-} from '@genshin-optimizer/zzz/consts'
+import { cmpGE } from '@genshin-optimizer/pando/engine'
+import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { allBoolConditionals, enemyDebuff, own, registerBuff } from '../../util'
 import { entriesForDisc, registerDisc } from '../util'
 
@@ -13,15 +10,6 @@ const showCond4Set = cmpGE(discCount, 4, 'infer', '')
 
 const { exSpecialHit } = allBoolConditionals(key)
 
-// Only apply the debuff to the equipper's attribute
-// Description: "reduce the target's Anomaly Buildup RES to the equipper's Attribute"
-const debuffValue = cmpGE(discCount, 4, exSpecialHit.ifOn(-0.2))
-const conditionalDebuff = sum(
-  ...allAttributeKeys.map((attr) =>
-    cmpEq(own.char.attribute, attr, debuffValue)
-  )
-)
-
 const sheet = registerDisc(
   key,
   // Handle 2-set effects
@@ -30,9 +18,10 @@ const sheet = registerDisc(
   // Conditional buffs
   registerBuff(
     'anomBuildupRes_',
-    enemyDebuff.common.anomBuildupRes_.add(conditionalDebuff),
-    showCond4Set,
-    true // enemy debuff affects enemy, benefiting all attackers
+    enemyDebuff.common.anomBuildupRes_.add(
+      cmpGE(discCount, 4, exSpecialHit.ifOn(-0.2))
+    ),
+    showCond4Set
   )
 )
 export default sheet

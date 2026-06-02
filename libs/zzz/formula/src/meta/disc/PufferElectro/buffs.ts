@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'PufferElectro',
       name: 'set2',
     },
-    team: false,
   },
   set4_dmg_: {
     sheet: 'PufferElectro',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'set4_dmg_',
     },
-    team: false,
   },
   set4_cond_launching_ult_atk_: {
     sheet: 'PufferElectro',
@@ -35,6 +33,5 @@ export const buffs = {
       sheet: 'PufferElectro',
       name: 'set4_cond_launching_ult_atk_',
     },
-    team: false,
   },
 } as const

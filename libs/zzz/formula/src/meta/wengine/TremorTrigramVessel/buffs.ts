@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'exSpecial_dmg_',
     },
-    team: false,
   },
   ult_dmg_: {
     sheet: 'TremorTrigramVessel',
@@ -24,6 +23,5 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ult_dmg_',
     },
-    team: false,
   },
 } as const

@@ -23,16 +23,16 @@ export function ShowcasePortrait({
       }}
     >
       <OuterShadowRingWrapper>
-        <Box className={styles.portraitContainer} style={{ height: parentH }}>
+        <Box className={styles.portraitContainer}>
           <Box
             component="img"
             src={portraitUrl}
             alt=""
             style={{
               width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              objectPosition: 'center top',
+              height: parentH,
+              objectFit: 'cover',
+              objectPosition: '50% 20%',
               display: 'block',
             }}
           />

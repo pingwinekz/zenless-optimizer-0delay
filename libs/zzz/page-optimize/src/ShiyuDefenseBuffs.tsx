@@ -1,6 +1,11 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
-import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
-import type { TeamBonusStat, TeamEnemyStat } from '@genshin-optimizer/zzz/db'
+import type { AttributeKey, SpecialityKey } from '@genshin-optimizer/zzz/consts'
+import type {
+  BonusStatTag,
+  EnemyStatsTag,
+  TeamBonusStat,
+  TeamEnemyStat,
+} from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0 } from '@genshin-optimizer/zzz/db'
 import {
   useCharacterContext,
@@ -8,12 +13,101 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import { Box, CardSection, Stack, Text } from '@mantine/core'
+import { Box, CardSection, Group, Stack, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
-import { parseBuffDescription } from './parseBuffDescription'
 import seasons from './shiyuSeasons_gen.json'
 
 const BOSS_CDN = 'https://static.nanoka.cc/assets/zzz'
+
+type BuffBonusStat = {
+  tag: BonusStatTag
+  value: number
+  specialty?: SpecialityKey
+}
+type BuffEnemyStat = {
+  tag: EnemyStatsTag
+  value: number
+  specialty?: SpecialityKey
+}
+type BuffConfig = {
+  bonusStats: BuffBonusStat[]
+  enemyStats: BuffEnemyStat[]
+}
+
+const buffConfigs: Record<string, BuffConfig> = {
+  'Flowing Frost': {
+    bonusStats: [
+      { tag: { q: 'anomProf', qt: 'base' }, value: 30 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType2: 'abloom' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ice' }, value: 20 },
+    ],
+    enemyStats: [],
+  },
+  'Overwhelming Force': {
+    bonusStats: [
+      { tag: { q: 'sheer_dmg_', qt: 'combat' }, value: 35 },
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'physical' }, value: 10 },
+    ],
+    enemyStats: [{ tag: { q: 'resRed_', attribute: 'physical' }, value: 10 }],
+  },
+  Unstoppable: {
+    bonusStats: [
+      { tag: { q: 'atk_', qt: 'combat' }, value: 10 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'basic' }, value: 20 },
+      {
+        tag: { q: 'dmg_', qt: 'combat', damageType1: 'exSpecial' },
+        value: 20,
+      },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'chain' }, value: 20 },
+      { tag: { q: 'crit_dmg_', qt: 'combat' }, value: 30 },
+    ],
+    enemyStats: [],
+  },
+  'Perpetual Frigidity': {
+    bonusStats: [
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ice' }, value: 10 },
+      { tag: { q: 'anomProf', qt: 'base' }, value: 40 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType2: 'abloom' }, value: 30 },
+    ],
+    enemyStats: [],
+  },
+  'Thundering Strike': {
+    bonusStats: [
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'physical' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'electric' }, value: 20 },
+      { tag: { q: 'crit_dmg_', qt: 'combat' }, value: 30 },
+    ],
+    enemyStats: [{ tag: { q: 'defRed_' }, value: 10 }],
+  },
+  'Enigmatic Spectrum': {
+    bonusStats: [
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ether' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'anomaly' }, value: 20 },
+    ],
+    enemyStats: [{ tag: { q: 'unstun_' }, value: 20 }],
+  },
+  'Piercing Thunder Strike': {
+    bonusStats: [
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'electric' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'basic' }, value: 40 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'special' }, value: 40 },
+      {
+        tag: { q: 'dmg_', qt: 'combat', damageType1: 'exSpecial' },
+        value: 40,
+      },
+    ],
+    enemyStats: [{ tag: { q: 'defRed_' }, value: 15 }],
+  },
+  'Bullying Tactics': {
+    bonusStats: [
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ice' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ether' }, value: 20 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'basic' }, value: 50 },
+      { tag: { q: 'dmg_', qt: 'combat', damageType1: 'dash' }, value: 50 },
+    ],
+    enemyStats: [],
+  },
+}
 
 function getActiveSeason() {
   const now = Date.now()
@@ -58,10 +152,8 @@ export function ShiyuDefenseBuffs() {
       enemyDef: room.bigMonster.stats.Defence,
     })
 
-    const config = room.buff
-      ? parseBuffDescription(room.buff.desc)
-      : { bonusStats: [], enemyStats: [] }
-    if (config.bonusStats.length > 0 || config.enemyStats.length > 0) {
+    const config = room.buff ? buffConfigs[room.buff.title] : null
+    if (config) {
       const characterSpecialty = getCharStat(characterKey).specialty
       const newBonusStats: TeamBonusStat[] = config.bonusStats
         .filter(
@@ -104,103 +196,87 @@ export function ShiyuDefenseBuffs() {
 
   return (
     <CardThemed bgt="light">
-      <CardSection
-        style={{
-          padding: 12,
-          borderBottom: '1px solid var(--border-subtle)',
-        }}
-      >
-        <Text size="sm" fw={700}>
-          {`${t('sdBuffs')} - ${activeSeason.name}`}
-        </Text>
-      </CardSection>
-      <CardSection style={{ padding: 12 }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 8,
-          }}
-        >
-          {rooms.map((room) => {
-            const config = room.buff
-              ? parseBuffDescription(room.buff.desc)
-              : { bonusStats: [], enemyStats: [] }
-            const hasConfig =
-              config.bonusStats.length > 0 || config.enemyStats.length > 0
-            return (
-              <CardThemed
-                key={room.id}
-                bgt="dark"
-                style={{
-                  outline: `2px solid ${
-                    room.id === selectedRoomId
-                      ? 'var(--mantine-color-yellow-6)'
-                      : 'transparent'
-                  }`,
-                  opacity: hasConfig ? 1 : 0.5,
-                }}
-              >
-                <CardSection
-                  onClick={() => hasConfig && applyRoom(room)}
+      <CardSection>
+        <Stack gap={1.5}>
+          <Text size="sm" fw={700}>
+            {`${t('sdBuffs')} - ${activeSeason.name}`}
+          </Text>
+          <Group gap={1}>
+            {rooms.map((room) => {
+              const hasConfig = room.buff && !!buffConfigs[room.buff.title]
+              return (
+                <CardThemed
+                  key={room.id}
+                  bgt="dark"
                   style={{
-                    cursor: hasConfig ? 'pointer' : 'default',
-                    padding: 8,
+                    flex: '1 1 200px',
+                    outline: `2px solid ${
+                      room.id === selectedRoomId
+                        ? 'var(--mantine-color-yellow-6)'
+                        : 'transparent'
+                    }`,
+                    opacity: hasConfig ? 1 : 0.5,
                   }}
                 >
-                  <Stack align="center" gap={4}>
-                    <Box
-                      component="img"
-                      src={`${BOSS_CDN}/Monster_${room.bigMonster.image}.webp`}
-                      alt={room.bigMonster.name}
-                      style={{
-                        width: 96,
-                        height: 96,
-                        objectFit: 'contain',
-                      }}
-                      onError={(e) => {
-                        const el = e.target as HTMLImageElement
-                        el.style.display = 'none'
-                      }}
-                    />
-                    <Text size="xs" fw={700} style={{ textAlign: 'center' }}>
-                      {room.bigMonster.name}
-                    </Text>
-                    <Text size="xs" style={{ textAlign: 'center' }}>
-                      {room.name}
-                    </Text>
-                    {room.buff && (
-                      <Text size="xs" fw={500} style={{ textAlign: 'center' }}>
-                        {room.buff.title}
-                      </Text>
-                    )}
-                    {room.buff && (
-                      <Text
-                        size="xs"
-                        style={{ textAlign: 'center' }}
-                        dangerouslySetInnerHTML={{
-                          __html: room.buff.desc
-                            .replace(/\n/g, ' ')
-                            .replace(
-                              /<color=(#[A-Fa-f0-9]{6})>/g,
-                              '<span style="color:$1">'
-                            )
-                            .replace(/<\/color>/g, '</span>')
-                            .trim(),
+                  <CardSection
+                    onClick={() => hasConfig && applyRoom(room)}
+                    style={{ cursor: hasConfig ? 'pointer' : 'default' }}
+                  >
+                    <Stack p={4}>
+                      <Box
+                        component="img"
+                        src={`${BOSS_CDN}/Monster_${room.bigMonster.image}.webp`}
+                        alt={room.bigMonster.name}
+                        style={{
+                          width: 96,
+                          height: 96,
+                          objectFit: 'contain',
+                          margin: '0 auto',
+                        }}
+                        onError={(e) => {
+                          const el = e.target as HTMLImageElement
+                          el.style.display = 'none'
                         }}
                       />
-                    )}
-                    {!hasConfig && room.buff && (
-                      <Text size="xs" c="dimmed">
-                        No stat mapping
+                      <Text size="xs" fw={700} style={{ textAlign: 'center' }}>
+                        {room.bigMonster.name}
                       </Text>
-                    )}
-                  </Stack>
-                </CardSection>
-              </CardThemed>
-            )
-          })}
-        </div>
+                      <Text size="xs" style={{ textAlign: 'center' }}>
+                        {room.name}
+                      </Text>
+                      {room.buff && (
+                        <Text size="xs" style={{ textAlign: 'center' }}>
+                          {room.buff.title}
+                        </Text>
+                      )}
+                      {room.buff && (
+                        <Text
+                          size="xs"
+                          style={{ textAlign: 'center' }}
+                          dangerouslySetInnerHTML={{
+                            __html: room.buff.desc
+                              .replace(/\n/g, ' ')
+                              .replace(
+                                /<color=(#[A-Fa-f0-9]{6})>/g,
+                                '<span style="color:$1">'
+                              )
+                              .replace(/<\/color>/g, '</span>')
+                              .trim(),
+                          }}
+                        />
+                      )}
+                      {!hasConfig && room.buff && (
+                        <Text size="xs" style={{ textAlign: 'center' }}>
+                          No stat mapping
+                        </Text>
+                      )}
+                    </Stack>
+                  </CardSection>
+                </CardThemed>
+              )
+            })}
+          </Group>
+        </Stack>
       </CardSection>
     </CardThemed>
   )

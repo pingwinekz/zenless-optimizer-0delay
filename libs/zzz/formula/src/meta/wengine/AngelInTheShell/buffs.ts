@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'AngelInTheShell',
       name: 'passive_anomProf',
     },
-    team: false,
   },
   cond_common_dmg_: {
     sheet: 'AngelInTheShell',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'AngelInTheShell',
       name: 'cond_common_dmg_',
     },
-    team: false,
   },
   cond_anomaly_dmg_: {
     sheet: 'AngelInTheShell',
@@ -35,7 +33,6 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'cond_anomaly_dmg_',
     },
-    team: false,
   },
   cond_disorder_dmg_: {
     sheet: 'AngelInTheShell',
@@ -48,6 +45,5 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'cond_disorder_dmg_',
     },
-    team: false,
   },
 } as const

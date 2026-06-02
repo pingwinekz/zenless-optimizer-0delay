@@ -35,8 +35,7 @@ const sheet = registerDisc(
   ),
   registerBuff(
     'set4_off_field_assist_dmg_',
-    own.combat.dmg_.addWithSkillType(
-      'assistSkill',
+    own.combat.dmg_.assistSkill.add(
       cmpGE(discCount, 4, while_off_field.ifOn(percent(0.2)))
     ),
     showCond4Set

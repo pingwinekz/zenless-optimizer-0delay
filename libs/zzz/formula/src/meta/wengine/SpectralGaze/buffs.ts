@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'SpectralGaze',
       name: 'cond_defRed_',
     },
-    team: true,
   },
   cond_impact_: {
     sheet: 'SpectralGaze',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'SpectralGaze',
       name: 'cond_impact_',
     },
-    team: false,
   },
 } as const

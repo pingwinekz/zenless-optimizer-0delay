@@ -27,10 +27,7 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { exSpecialFollowUpUsed, tremor } = allBoolConditionals(key, undefined, {
-  tremor: 1,
-  exSpecialFollowUpUsed: 2,
-})
+const { exSpecialFollowUpUsed, tremor } = allBoolConditionals(key)
 const { vidyaraja } = allNumConditionals(key, true, 0, dm.ability.maxStacks)
 
 const m1_exSpecial_sheer_dmg_ = ownBuff.combat.sheer_dmg_.addWithDmgType(

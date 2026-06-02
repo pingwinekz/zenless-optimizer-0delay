@@ -1,17 +1,11 @@
 import { ActionIcon, Flex } from '@mantine/core'
 import { IconPin, IconPinned } from '@tabler/icons-react'
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'
-import type {
-  CellClickedEvent,
-  ColDef,
-  ValueFormatterParams,
-  CellClassParams,
-} from 'ag-grid-community'
+import type { CellClickedEvent, ColDef, ValueFormatterParams, CellClassParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-balham.css'
 
-import type { SpecialityKey } from '@genshin-optimizer/zzz/consts'
 import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,11 +30,7 @@ const STAT_COLORS = [
   '#38821F', // high (green)
 ]
 
-function getGradientColor(
-  value: number,
-  min: number,
-  max: number
-): string | undefined {
+function getGradientColor(value: number, min: number, max: number): string | undefined {
   if (value == null || min == null || max == null) return undefined
   if (max === min) return `#343127`
   const t = Math.max(0, Math.min(1, (value - min) / (max - min)))
@@ -56,12 +46,8 @@ function getGradientColor(
 function lerpColor(a: string, b: string, t: number): string {
   const ah = parseInt(a.replace('#', ''), 16)
   const bh = parseInt(b.replace('#', ''), 16)
-  const ar = (ah >> 16) & 0xff,
-    ag = (ah >> 8) & 0xff,
-    ab = ah & 0xff
-  const br = (bh >> 16) & 0xff,
-    bg = (bh >> 8) & 0xff,
-    bb = bh & 0xff
+  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab = ah & 0xff
+  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb = bh & 0xff
   const rr = Math.round(ar + (br - ar) * t)
   const rg = Math.round(ag + (bg - ag) * t)
   const rb = Math.round(ab + (bb - ab) * t)
@@ -75,6 +61,7 @@ const MIN_HEIGHT = 300
 const DIGITS_3 = 46
 const DIGITS_4 = 52
 const DIGITS_5 = 58
+
 
 const GRID_CONTAINER_STYLE = {
   width: GRID_WIDTH,
@@ -128,6 +115,11 @@ const formatPct = (params: ValueFormatterParams) => {
   return (params.value * 100).toFixed(1)
 }
 
+const formatPctNoDec = (params: ValueFormatterParams) => {
+  if (params.value == null) return ''
+  return (params.value * 100).toFixed(0)
+}
+
 /**
  * Build aggregated min/max for gradient coloring from the row data.
  * Updated whenever rowData changes.
@@ -143,34 +135,8 @@ function buildAggregations(
   const min: Record<string, number> = {}
   const max: Record<string, number> = {}
   const statKeys = isCombat
-    ? [
-        'value',
-        'hp',
-        'atk',
-        'def',
-        'impact',
-        'critRate',
-        'critDmg',
-        'sheerForce',
-        'pen',
-        'enerRegen',
-        'anomProf',
-        'anomMas',
-      ]
-    : [
-        'value',
-        'hp',
-        'atk',
-        'def',
-        'impact',
-        'critRate',
-        'critDmg',
-        'sheerForce',
-        'pen',
-        'enerRegen',
-        'anomProf',
-        'anomMas',
-      ]
+    ? ['value', 'hp', 'atk', 'def', 'impact', 'critRate', 'critDmg', 'penRatio', 'pen', 'enerRegen', 'anomProf', 'anomMas', 'dmgBonus', 'defIgn']
+    : ['value', 'hp', 'atk', 'def', 'impact', 'critRate', 'critDmg', 'penRatio', 'enerRegen', 'anomProf', 'anomMas']
 
   for (const key of statKeys) {
     min[key] = Infinity
@@ -197,11 +163,7 @@ function buildAggregations(
 }
 
 // ── Column gradient cell style ──
-function gradientCellStyle(
-  params: CellClassParams<EnrichedBuild, number>,
-  field: string,
-  aggregations: { min: Record<string, number>; max: Record<string, number> }
-) {
+function gradientCellStyle(params: CellClassParams<EnrichedBuild, number>, field: string, aggregations: { min: Record<string, number>; max: Record<string, number> }) {
   if (params.value == null) return undefined
   const min = aggregations.min[field]
   const max = aggregations.max[field]
@@ -214,39 +176,32 @@ function gradientCellStyle(
 // ── Stat column definitions builder ──
 function buildStatColumnDefs(
   aggregations: { min: Record<string, number>; max: Record<string, number> },
-  statDisplay: StatDisplay,
-  specialityKey?: SpecialityKey
+  statDisplay: StatDisplay
 ): ColDef<EnrichedBuild>[] {
   const isCombat = statDisplay === 'combat'
   type CombatField = keyof BuildCombatStats
 
-  const statConfigs: {
-    field: CombatField
-    formatter: (params: ValueFormatterParams) => string
-    width: number
-    baseOnly?: boolean
-  }[] = [
+  const statConfigs: { field: CombatField; formatter: (params: ValueFormatterParams) => string; width: number; baseOnly?: boolean }[] = [
     { field: 'hp', formatter: formatFloor, width: DIGITS_4 },
     { field: 'atk', formatter: formatFloor, width: DIGITS_4 },
     { field: 'def', formatter: formatFloor, width: DIGITS_4 },
     { field: 'impact', formatter: formatFloor, width: DIGITS_5 },
     { field: 'critRate', formatter: formatPct, width: DIGITS_3 },
     { field: 'critDmg', formatter: formatPct, width: DIGITS_3 },
-    { field: 'sheerForce', formatter: formatFloor, width: DIGITS_4 },
+    { field: 'penRatio', formatter: formatPct, width: DIGITS_4 },
     { field: 'pen', formatter: formatFloor, width: DIGITS_3 },
     { field: 'enerRegen', formatter: formatFlat2, width: DIGITS_3 },
     { field: 'anomProf', formatter: formatFloor, width: DIGITS_3 },
     { field: 'anomMas', formatter: formatFloor, width: DIGITS_3 },
+    { field: 'dmgBonus', formatter: formatPctNoDec, width: DIGITS_4 },
+    { field: 'defIgn', formatter: formatPct, width: DIGITS_4 },
   ]
 
   return statConfigs
-    .filter((cfg) => isCombat || !cfg.baseOnly)
+    .filter((cfg) => isCombat || (!cfg.baseOnly && cfg.field !== 'dmgBonus' && cfg.field !== 'defIgn' && cfg.field !== 'pen'))
     .map(({ field, formatter, width }) => ({
       colId: field,
-      headerName:
-        field === 'enerRegen' && specialityKey === 'rupture'
-          ? 'AAA'
-          : (STAT_LABELS[field] ?? field),
+      headerName: STAT_LABELS[field] ?? field,
       valueGetter: (params) => {
         const data = params.data
         if (!data) return undefined
@@ -265,10 +220,7 @@ function buildStatColumnDefs(
 
 // ── Memoized aggregations calculation ──
 function useAggregations(rowData: EnrichedBuild[], statDisplay: StatDisplay) {
-  return useMemo(
-    () => buildAggregations(rowData, statDisplay),
-    [rowData, statDisplay]
-  )
+  return useMemo(() => buildAggregations(rowData, statDisplay), [rowData, statDisplay])
 }
 
 export function OptimizerGrid({
@@ -276,70 +228,17 @@ export function OptimizerGrid({
   enrichedBuilds: extEnrichedBuilds,
   pinnedBuild,
   statDisplay,
-  sortByKey,
-  sortTrigger,
-  specialityKey,
   onBuildSelect,
 }: {
   builds?: GeneratedBuild[]
   enrichedBuilds?: EnrichedBuild[]
   pinnedBuild?: GeneratedBuild
   statDisplay: StatDisplay
-  sortByKey?: string
-  sortTrigger?: number
-  specialityKey?: SpecialityKey
   onBuildSelect?: (build: GeneratedBuild) => void
 }) {
   const { t } = useTranslation('page_optimize')
   const gridRef = useRef<AgGridReact>(null)
   const pinnedBuilds = useOptimizerDisplayStore((s) => s.pinnedBuilds)
-
-  // Track which sortTrigger we've already processed
-  const lastSortTrigger = useRef<number | undefined>(undefined)
-
-  // Sort when optimizer finishes and new row data is applied
-  const onRowDataUpdated = useCallback(() => {
-    const gridApi = gridRef.current?.api
-    if (
-      !gridApi ||
-      sortTrigger === undefined ||
-      sortTrigger === lastSortTrigger.current
-    )
-      return
-    lastSortTrigger.current = sortTrigger
-
-    if (sortByKey) {
-      // Map sortByKey to AG Grid column — must match grid stat column IDs
-      const columnMap: Record<string, string> = {
-        target: 'value',
-        final_atk: 'atk',
-        final_hp: 'hp',
-        final_def: 'def',
-        final_impact: 'impact',
-        final_critRate: 'critRate',
-        final_critDmg: 'critDmg',
-        final_pen: 'pen',
-        final_sheerForce: 'sheerForce',
-        final_enerRegen: 'enerRegen',
-        final_anomProf: 'anomProf',
-        final_anomMas: 'anomMas',
-      }
-
-      const columnId = columnMap[sortByKey]
-      if (columnId) {
-        gridApi.applyColumnState({
-          state: [{ colId: columnId, sort: 'desc' }],
-          defaultState: { sort: null },
-        })
-      }
-    } else {
-      // Default sort by Value (optimization target) descending
-      gridApi.applyColumnState({
-        state: [{ colId: 'value', sort: 'desc' }],
-        defaultState: { sort: null },
-      })
-    }
-  }, [sortByKey, sortTrigger])
   const addPinnedBuild = useOptimizerDisplayStore((s) => s.addPinnedBuild)
   const removePinnedBuild = useOptimizerDisplayStore((s) => s.removePinnedBuild)
 
@@ -461,15 +360,13 @@ export function OptimizerGrid({
         headerName: '#',
         field: 'index',
         width: 40,
-        valueFormatter: (params) =>
-          params.value != null ? String(params.value + 1) : '',
+        valueFormatter: (params) => (params.value != null ? String(params.value + 1) : ''),
       },
       // Value (score) - sortable with gradient
       {
         headerName: t('grid.value', 'Value'),
         field: 'value',
-        valueFormatter: (params) =>
-          params.value != null ? Math.floor(params.value).toLocaleString() : '',
+        valueFormatter: (params) => (params.value != null ? Math.floor(params.value).toLocaleString() : ''),
         cellStyle: (params) => gradientCellStyle(params, 'value', aggregations),
         minWidth: DIGITS_5,
         width: DIGITS_5,
@@ -484,20 +381,14 @@ export function OptimizerGrid({
         sortable: false,
       },
       // Stat columns with gradient
-      ...buildStatColumnDefs(aggregations, statDisplay, specialityKey),
+      ...buildStatColumnDefs(aggregations, statDisplay),
     ],
-    [PinCellRenderer, t, aggregations, statDisplay, specialityKey]
+    [PinCellRenderer, t, aggregations, statDisplay]
   )
 
   const onCellClicked = (event: CellClickedEvent<EnrichedBuild>) => {
     if (event.data && onBuildSelect) {
-      const {
-        id: _id,
-        index: _index,
-        combatStats: _cs,
-        baseStats: _bs,
-        ...build
-      } = event.data
+      const { id: _id, index: _index, combatStats: _cs, baseStats: _bs, ...build } = event.data
       // Convert back to GeneratedBuild
       onBuildSelect({
         wengineKey: build.wengineKey,
@@ -534,7 +425,6 @@ export function OptimizerGrid({
         }}
         headerHeight={36}
         onCellClicked={onCellClicked}
-        onRowDataUpdated={onRowDataUpdated}
         pinnedTopRowData={pinnedTopRowData}
         ref={gridRef}
         rowSelection={rowSelection}

@@ -18,8 +18,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('etherVeil'),
-            description:
-              'When Cissia enters Ether Veil: Cold-Blooded, the entire squad gains bonus CRIT DMG.',
             metadata: cond.etherVeil,
             fields: [fieldForBuff(buff.core_etherVeil_crit_dmg_)],
           },
@@ -32,8 +30,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('corrodeBone_crit_stacks'),
-            description:
-              'Increases CRIT Rate against enemies for each stack of Corrode Bone.',
             metadata: cond.corrodeBone_crit_stacks,
             fields: [fieldForBuff(buff.core_corrodeBone_crit_)],
           },

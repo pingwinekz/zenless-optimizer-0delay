@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'DreamlitHearth',
       name: 'enerRegen',
     },
-    team: false,
   },
   common_dmg_: {
     sheet: 'DreamlitHearth',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'DreamlitHearth',
       name: 'common_dmg_',
     },
-    team: true,
   },
   hp_: {
     sheet: 'DreamlitHearth',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'DreamlitHearth',
       name: 'hp_',
     },
-    team: true,
   },
 } as const

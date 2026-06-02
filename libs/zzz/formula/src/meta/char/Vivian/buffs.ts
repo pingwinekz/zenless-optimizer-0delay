@@ -1,74 +1,69 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
-  core_ether_anom_mv_mult_: {
+  core_ether_abloom: {
     sheet: 'Vivian',
-    name: 'core_ether_anom_mv_mult_',
+    name: 'core_ether_abloom',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
       attribute: 'ether',
       damageType1: 'abloom',
-      name: 'core_ether_anom_mv_mult_',
+      name: 'core_ether_abloom',
     },
-    team: true,
   },
-  core_electric_anom_mv_mult_: {
+  core_electric_abloom: {
     sheet: 'Vivian',
-    name: 'core_electric_anom_mv_mult_',
+    name: 'core_electric_abloom',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
       attribute: 'electric',
       damageType1: 'abloom',
-      name: 'core_electric_anom_mv_mult_',
+      name: 'core_electric_abloom',
     },
-    team: true,
   },
-  core_fire_anom_mv_mult_: {
+  core_fire_abloom: {
     sheet: 'Vivian',
-    name: 'core_fire_anom_mv_mult_',
+    name: 'core_fire_abloom',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
       attribute: 'fire',
       damageType1: 'abloom',
-      name: 'core_fire_anom_mv_mult_',
+      name: 'core_fire_abloom',
     },
-    team: true,
   },
-  core_physical_anom_mv_mult_: {
+  core_physical_abloom: {
     sheet: 'Vivian',
-    name: 'core_physical_anom_mv_mult_',
+    name: 'core_physical_abloom',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
       attribute: 'physical',
       damageType1: 'abloom',
-      name: 'core_physical_anom_mv_mult_',
+      name: 'core_physical_abloom',
     },
-    team: true,
   },
-  core_ice_anom_mv_mult_: {
+  core_ice_abloom: {
     sheet: 'Vivian',
-    name: 'core_ice_anom_mv_mult_',
+    name: 'core_ice_abloom',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
       attribute: 'ice',
       damageType1: 'abloom',
-      name: 'core_ice_anom_mv_mult_',
+      name: 'core_ice_abloom',
     },
-    team: true,
   },
   ability_corruption_dmg_: {
     sheet: 'Vivian',
@@ -82,7 +77,6 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'ability_corruption_dmg_',
     },
-    team: true,
   },
   ability_corruption_disorder_dmg_: {
     sheet: 'Vivian',
@@ -96,7 +90,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'ability_corruption_disorder_dmg_',
     },
-    team: true,
   },
   m1_anomaly_dmg_: {
     sheet: 'Vivian',
@@ -109,7 +102,6 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'm1_anomaly_dmg_',
     },
-    team: true,
   },
   m1_disorder_dmg_: {
     sheet: 'Vivian',
@@ -122,7 +114,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'm1_disorder_dmg_',
     },
-    team: true,
   },
   m2_ether_anomBuildup_: {
     sheet: 'Vivian',
@@ -135,20 +126,17 @@ export const buffs = {
       attribute: 'ether',
       name: 'm2_ether_anomBuildup_',
     },
-    team: false,
   },
   m2_anom_mv_mult_: {
     sheet: 'Vivian',
     name: 'm2_anom_mv_mult_',
     tag: {
       et: 'display',
-      qt: 'combat',
+      qt: 'dmg',
       q: 'anom_mv_mult_',
       sheet: 'Vivian',
-      damageType1: 'abloom',
       name: 'm2_anom_mv_mult_',
     },
-    team: true,
   },
   m2_resIgn_: {
     sheet: 'Vivian',
@@ -161,7 +149,6 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'm2_resIgn_',
     },
-    team: true,
   },
   m4_crit_: {
     sheet: 'Vivian',
@@ -173,7 +160,6 @@ export const buffs = {
       sheet: 'Vivian',
       name: 'm4_crit_',
     },
-    team: false,
   },
   m4_atk_: {
     sheet: 'Vivian',
@@ -185,7 +171,6 @@ export const buffs = {
       sheet: 'Vivian',
       name: 'm4_atk_',
     },
-    team: false,
   },
   m6_ether_dmg_: {
     sheet: 'Vivian',
@@ -198,6 +183,5 @@ export const buffs = {
       attribute: 'ether',
       name: 'm6_ether_dmg_',
     },
-    team: false,
   },
 } as const

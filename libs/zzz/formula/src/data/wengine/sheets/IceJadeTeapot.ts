@@ -45,8 +45,7 @@ const sheet = registerWengine(
         cmpGE(teariffic, dm.stackThreshold, subscript(phase, dm.common_dmg_))
       )
     ),
-    showSpecialtyAndEquipped(key),
-    true
+    showSpecialtyAndEquipped(key)
   )
 )
 export default sheet

@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'QingmingBirdcage',
       name: 'crit_',
     },
-    team: false,
   },
   qingmingCompanionStacks_ether_dmg_: {
     sheet: 'QingmingBirdcage',
@@ -23,7 +22,6 @@ export const buffs = {
       attribute: 'ether',
       name: 'qingmingCompanionStacks_ether_dmg_',
     },
-    team: false,
   },
   qingmingCompanionStacks_ult_ether_sheer_dmg_: {
     sheet: 'QingmingBirdcage',
@@ -37,7 +35,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'qingmingCompanionStacks_ult_ether_sheer_dmg_',
     },
-    team: false,
   },
   qingmingCompanionStacks_exSpecial_ether_sheer_dmg_: {
     sheet: 'QingmingBirdcage',
@@ -51,6 +48,5 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'qingmingCompanionStacks_exSpecial_ether_sheer_dmg_',
     },
-    team: false,
   },
 } as const

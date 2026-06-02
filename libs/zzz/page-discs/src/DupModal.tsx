@@ -1,14 +1,21 @@
 import { useDataManagerValues } from '@genshin-optimizer/common/database-ui'
-import { ModalWrapper } from '@genshin-optimizer/common/ui'
+import { CardThemed, ModalWrapper } from '@genshin-optimizer/common/ui'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { DiscCardObj } from '@genshin-optimizer/zzz/ui'
 import { IconX, IconCopy } from '@tabler/icons-react'
-import { ActionIcon, Alert, Box, Flex, Stack, Text } from '@mantine/core'
+import {
+  ActionIcon,
+  Alert,
+  Box,
+  Card,
+  Divider,
+  Group,
+  Stack,
+  Text,
+} from '@mantine/core'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import classes from './DupModal.module.css'
-
 export default function DupModal({
   setDiscToEdit,
   show,
@@ -21,24 +28,24 @@ export default function DupModal({
   const { t } = useTranslation('disc')
   return (
     <ModalWrapper opened={show} onClose={onHide}>
-      <Box className={classes.card}>
-        <Flex className={classes.cardHeader}>
-          <Flex align="center" gap={8}>
-            <IconCopy size={18} />
+      <CardThemed>
+        <Group p="sm" style={{ position: 'relative' }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <IconCopy />
             <Text fw={700}>{t('showDupes')}</Text>
-          </Flex>
-          <ActionIcon onClick={onHide} size="sm">
+          </Box>
+          <ActionIcon onClick={onHide} style={{ marginLeft: 'auto' }}>
             <IconX />
           </ActionIcon>
-        </Flex>
-        <Box className={classes.cardBody}>
+        </Group>
+        <Divider />
+        <Card.Section p="sm">
           <DupContent setDiscToEdit={setDiscToEdit} />
-        </Box>
-      </Box>
+        </Card.Section>
+      </CardThemed>
     </ModalWrapper>
   )
 }
-
 function DupContent({
   setDiscToEdit,
 }: {
@@ -71,8 +78,8 @@ function DupContent({
   return (
     <Stack gap={2}>
       {dupList.map((dups) => (
-        <Box key={dups.join()} className={classes.dupGroup}>
-          <Flex gap={1} style={{ overflowX: 'auto' }}>
+        <CardThemed key={dups.join()} style={{ overflowX: 'scroll' }}>
+          <Card.Section style={{ display: 'flex', gap: 1 }}>
             {dups.map((dupDisc) => (
               <Box key={dupDisc.id} style={{ minWidth: 300 }}>
                 <DiscCardObj
@@ -90,8 +97,8 @@ function DupContent({
                 />
               </Box>
             ))}
-          </Flex>
-        </Box>
+          </Card.Section>
+        </CardThemed>
       ))}
       {!dupList.length && (
         <Alert variant="light" color="green">

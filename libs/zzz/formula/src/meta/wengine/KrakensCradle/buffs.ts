@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ice_sheer_dmg_',
     },
-    team: false,
   },
   crit_: {
     sheet: 'KrakensCradle',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'KrakensCradle',
       name: 'crit_',
     },
-    team: false,
   },
 } as const

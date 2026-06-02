@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'ReverbMarkII',
       name: 'anomMas',
     },
-    team: true,
   },
   anomProf: {
     sheet: 'ReverbMarkII',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'ReverbMarkII',
       name: 'anomProf',
     },
-    team: true,
   },
 } as const

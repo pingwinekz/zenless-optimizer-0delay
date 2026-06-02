@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'passive_electric_dmg_',
     },
-    team: false,
   },
   enerRegen_: {
     sheet: 'DemaraBatteryMarkII',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'DemaraBatteryMarkII',
       name: 'enerRegen_',
     },
-    team: false,
   },
 } as const

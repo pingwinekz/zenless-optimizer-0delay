@@ -22,7 +22,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description: 'OrphieMagus gains bonus ATK while Zeroed In on a target.',
         metadata: cond.zeroedIn,
         fields: [fieldForBuff(buff.core_atk)],
       },
@@ -33,8 +32,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "Aftershocks ignore a portion of the target's DEF while OrphieMagus is Zeroed In.",
         metadata: cond.zeroedIn,
         fields: [fieldForBuff(buff.ability_aftershock_defIgn_)],
       },
@@ -49,8 +46,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "Increases OrphieMagus's damage against the Zeroed In target.",
         metadata: cond.zeroedIn,
         fields: [fieldForBuff(buff.m1_common_dmg_)],
       },
@@ -61,7 +56,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.ult)' }),
-        description: 'Increases ATK after using an Ultimate.',
         metadata: cond.ultUsed,
         fields: [fieldForBuff(buff.m2_atk_)],
       },

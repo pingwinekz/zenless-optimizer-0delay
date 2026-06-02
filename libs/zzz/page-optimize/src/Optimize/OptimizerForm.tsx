@@ -1,69 +1,59 @@
-import { CardThemed } from '@genshin-optimizer/common/ui'
-import type {
-  CharacterKey,
-  DiscSlotKey,
-  WengineKey,
-} from '@genshin-optimizer/zzz/consts'
+import { FilterContainer, FormCard, FormRow, HeaderText } from '../layout'
+import { OptimizerMenuIds } from '../layout/optimizerMenuIds'
+import { CharacterSelectorDisplay } from '../CharacterSelectorDisplay'
+import { CharacterPreviewPanel } from '../CharacterPreviewPanel'
+import { OptTargetSelector } from '../OptTargetSelector'
+import { CritModeSelector } from '../OptTargetRow/CritModeSelector'
+import { SpecificDmgTypeSelector } from '../OptTargetRow/SpecificDmgTypeSelector'
+import { AfterShockToggleButton } from '../AfterShockToggleButton'
+import { CharacterConditionalsDisplay } from './CharacterConditionalsDisplay'
+import { WEngineConditionalsDisplay } from './WEngineConditionalsDisplay'
+import { MinMaxStatFilters } from './MinMaxStatFilters'
+import { DiscMainSetFilters } from './DiscMainSetFilters'
+import {
+  StatSimulationDisplay,
+  SimulationInputs,
+  SimulationManager,
+} from '../Simulation'
+import { EnemyStatsSection } from '../EnemyStats'
+import { AnomalySection } from '../Anomaly'
+import { DeadlyAssaultBuffs } from '../DeadlyAssaultBuffs'
+import { ShiyuDefenseBuffs } from '../ShiyuDefenseBuffs'
 import type {
   ICachedCharacter,
-  ICachedDisc,
   Team,
+  ICachedDisc,
 } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0 } from '@genshin-optimizer/zzz/db'
 import {
   OptConfigContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
+import type {
+  DiscSlotKey,
+  CharacterKey,
+  WengineKey,
+} from '@genshin-optimizer/zzz/consts'
+import { TeammatesSection } from './TeammatesSection'
 import {
   Button,
-  CardSection,
+  Divider,
   Drawer,
   Flex,
-  ScrollArea,
+  HoverCard,
   Select,
-  Stack,
   Switch,
   Text,
 } from '@mantine/core'
-import { IconBolt, IconSettings, IconTarget } from '@tabler/icons-react'
-import { useCallback, useContext, useMemo, useState } from 'react'
-import { AfterShockToggleButton } from '../AfterShockToggleButton'
-import { AppliedBuffStats } from '../AppliedBuffStats'
-import { CharacterPreviewPanel } from '../CharacterPreviewPanel'
-import { CharacterSelectorDisplay } from '../CharacterSelectorDisplay'
-import { DeadlyAssaultBuffs } from '../DeadlyAssaultBuffs'
-import { EnemyStatsSection } from '../EnemyStats'
-import { CritModeSelector } from '../OptTargetRow/CritModeSelector'
-import { SpecificDmgTypeSelector } from '../OptTargetRow/SpecificDmgTypeSelector'
-import { OptTargetSelector } from '../OptTargetSelector'
-import { ShiyuDefenseBuffs } from '../ShiyuDefenseBuffs'
-import {
-  SimulationInputs,
-  SimulationManager,
-  StatSimulationDisplay,
-} from '../Simulation'
-import {
-  FilterContainer,
-  FormCard,
-  FormRow,
-  HeaderText,
-  TeammateFormRow,
-} from '../layout'
-import { OptimizerMenuIds } from '../layout/optimizerMenuIds'
-import { charSheets } from '@genshin-optimizer/zzz/formula-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { ReactNode } from 'react'
-import { CharacterConditionalsDisplay } from './CharacterConditionalsDisplay'
-import { DiscMainSetFilters } from './DiscMainSetFilters'
-import { MinMaxStatFilters } from './MinMaxStatFilters'
-import { TeammatesSection } from './TeammatesSection'
-import { WEngineConditionalsDisplay } from './WEngineConditionalsDisplay'
+import { IconHelp, IconSettings } from '@tabler/icons-react'
+import { useCallback, useContext, useState } from 'react'
 
 export function OptimizerForm({
   characterKey,
   character,
   team,
   discsBySlot,
+  wengines,
   disabled,
   sortByKey,
   resultLimit,
@@ -76,6 +66,7 @@ export function OptimizerForm({
   character: ICachedCharacter
   team: Team
   discsBySlot: Record<DiscSlotKey, ICachedDisc[]>
+  wengines: WengineKey[]
   disabled?: boolean
   sortByKey?: string
   resultLimit?: number
@@ -108,65 +99,6 @@ export function OptimizerForm({
 
   const wengineKey: WengineKey | '' = character.wengineKey || ''
 
-  // Build conditional → fields map from formula-ui sheet
-  const conditionalFields = useMemo(() => {
-    const sheet = charSheets[characterKey]
-    if (!sheet) return undefined
-    const result: Record<string, Field[]> = {}
-    Object.values(sheet).forEach((section) => {
-      section.documents.forEach((doc) => {
-        if (
-          doc.type === 'conditional' &&
-          doc.conditional?.fields &&
-          doc.conditional.fields.length > 0
-        ) {
-          const condName = doc.conditional.metadata.name
-          if (!result[condName]) result[condName] = []
-          // Deduplicate fields by stat key (q) so same stat from multiple
-          // sources (e.g. exSpecial_atk + core_atk both → q: 'atk') shows once
-          const seenQs = new Set(
-            result[condName]
-              .map((f) => ('fieldRef' in f ? f.fieldRef?.q : undefined))
-              .filter(Boolean)
-          )
-          for (const field of doc.conditional.fields) {
-            const q = 'fieldRef' in field ? field.fieldRef?.q : undefined
-            if (!q || !seenQs.has(q)) {
-              if (q) seenQs.add(q)
-              result[condName].push(field)
-            }
-          }
-        }
-      })
-    })
-    return Object.keys(result).length > 0 ? result : undefined
-  }, [characterKey])
-
-  // Build conditional → description map from formula-ui sheet.
-  // Multiple sheet entries may share the same condName — concatenate their
-  // descriptions rather than overwriting, so users see all relevant info.
-  const conditionalDescriptions = useMemo(() => {
-    const sheet = charSheets[characterKey]
-    if (!sheet) return undefined
-    const result: Record<string, ReactNode> = {}
-    Object.values(sheet).forEach((section) => {
-      section.documents.forEach((doc) => {
-        if (doc.type === 'conditional' && doc.conditional?.description) {
-          const condName = doc.conditional.metadata.name
-          const desc = doc.conditional.description
-          if (typeof desc === 'function') return
-          if (result[condName]) {
-            // Append with a line break separator (always strings)
-            result[condName] = `${result[condName]}\n\n${desc}`
-          } else {
-            result[condName] = desc
-          }
-        }
-      })
-    })
-    return Object.keys(result).length > 0 ? result : undefined
-  }, [characterKey])
-
   return (
     <FilterContainer>
       {/* ── Character options (5-card layout matching fribbels) ── */}
@@ -194,18 +126,26 @@ export function OptimizerForm({
 
         {/* Card 3: Character conditionals */}
         <FormCard>
-          <CharacterConditionalsDisplay
-            characterKey={characterKey}
-            conditionalFields={conditionalFields}
-            conditionalDescriptions={conditionalDescriptions}
-          />
+          <CharacterConditionalsDisplay characterKey={characterKey} />
         </FormCard>
 
         {/* Card 4: W-Engine conditionals + Advanced Options */}
         <FormCard justify="space-between">
-          <WEngineConditionalsDisplay wengineKey={wengineKey} />
+          {wengineKey && (
+            <>
+              <WEngineConditionalsDisplay wengineKey={wengineKey} />
+              <Divider my="xs" />
+            </>
+          )}
           <Flex direction="column" gap={5}>
             <HeaderText style={{ marginTop: 25 }}>Advanced options</HeaderText>
+            <Button
+              variant="default"
+              leftSection={<IconSettings size={16} />}
+              onClick={() => setActiveDrawer('damage')}
+            >
+              Damage Configuration
+            </Button>
             <Button
               variant="default"
               leftSection={<IconSettings size={16} />}
@@ -238,7 +178,11 @@ export function OptimizerForm({
 
         {/* Disc main set filters + set conditionals */}
         <FormCard size="small">
-          <DiscMainSetFilters discsBySlot={discsBySlot} disabled={disabled} />
+          <DiscMainSetFilters
+            discsBySlot={discsBySlot}
+            wengines={wengines}
+            disabled={disabled}
+          />
         </FormCard>
 
         {/* Stat min/max filters */}
@@ -248,9 +192,11 @@ export function OptimizerForm({
       </FormRow>
 
       {/* ── Teammates ── */}
-      <TeammateFormRow id={OptimizerMenuIds.teammates}>
-        <TeammatesSection />
-      </TeammateFormRow>
+      <FormRow id={OptimizerMenuIds.teammates}>
+        <FormCard size="large" style={{ padding: 16 }}>
+          <TeammatesSection />
+        </FormCard>
+      </FormRow>
 
       {/* ── Advanced Options Drawers ── */}
       <Drawer
@@ -285,82 +231,27 @@ export function OptimizerForm({
       <Drawer
         opened={activeDrawer === 'enemy'}
         onClose={() => setActiveDrawer(null)}
-        title={
-          <Flex align="center" gap="xs">
-            <IconTarget size={20} />
-            <Text>Enemy Configurations</Text>
-          </Flex>
-        }
+        title="Enemy Configurations"
         position="right"
-        size={500}
-        padding="md"
+        size={900}
       >
-        <ScrollArea style={{ height: 'calc(100vh - 100px)' }} offsetScrollbars>
-          <Stack gap="md">
-            <CardThemed bgt="light">
-              <CardSection
-                style={{
-                  padding: 12,
-                  borderBottom: '1px solid var(--border-subtle)',
-                }}
-              >
-                <Flex align="center" gap="xs" mb={4}>
-                  <IconTarget size={18} opacity={0.7} />
-                  <Text size="sm" fw={700}>
-                    Enemy Stats & Resistances
-                  </Text>
-                </Flex>
-                <Text size="xs" c="dimmed">
-                  Configure enemy level, DEF, stun multiplier, elemental
-                  resistances, and weaknesses for accurate damage calculations.
-                </Text>
-              </CardSection>
-            </CardThemed>
-            <EnemyStatsSection />
-          </Stack>
-        </ScrollArea>
+        <EnemyStatsSection />
       </Drawer>
 
       <Drawer
         opened={activeDrawer === 'buffs'}
         onClose={() => setActiveDrawer(null)}
-        title={
-          <Flex align="center" gap="xs">
-            <IconBolt size={20} />
-            <Text>Extra Combat Buffs</Text>
-          </Flex>
-        }
+        title="Extra Combat Buffs"
         position="right"
-        size={650}
-        padding="md"
+        size={900}
       >
-        <ScrollArea style={{ height: 'calc(100vh - 100px)' }} offsetScrollbars>
-          <Stack gap="md">
-            <CardThemed bgt="light">
-              <CardSection
-                style={{
-                  padding: 12,
-                  borderBottom: '1px solid var(--border-subtle)',
-                }}
-              >
-                <Flex align="center" gap="xs" mb={4}>
-                  <IconBolt size={18} opacity={0.7} />
-                  <Text size="sm" fw={700}>
-                    Combat Buffs Configuration
-                  </Text>
-                </Flex>
-                <Text size="xs" c="dimmed">
-                  Configure bonus stats that apply during combat, such as Deadly
-                  Assault buffs and Shiyu Defense buffs.
-                </Text>
-              </CardSection>
-            </CardThemed>
-
-            <DeadlyAssaultBuffs />
-            <ShiyuDefenseBuffs />
-            <AppliedBuffStats />
-          </Stack>
-        </ScrollArea>
+        <Flex direction="column" gap="xs">
+          <AnomalySection />
+          <Divider />
+          <DeadlyAssaultBuffs />
+          <Divider />
+          <ShiyuDefenseBuffs />
+        </Flex>
       </Drawer>
 
       {/* ── Character custom stats simulation ── */}
@@ -379,6 +270,7 @@ export function OptimizerForm({
   )
 }
 
+/** Fribbels-style Optimizer Options section */
 function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   const { database } = useDatabaseContext()
@@ -404,9 +296,27 @@ function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
 
   return (
     <Flex direction="column" gap={5}>
-      <HeaderText>Optimizer options</HeaderText>
+      <Flex justify="space-between" align="center">
+        <HeaderText>Optimizer options</HeaderText>
+        <HoverCard
+          width={400}
+          position="left"
+          withArrow
+          openDelay={300}
+          closeDelay={200}
+        >
+          <HoverCard.Target>
+            <IconHelp size={16} style={{ cursor: 'pointer', opacity: 0.6 }} />
+          </HoverCard.Target>
+          <HoverCard.Dropdown>
+            <Text size="sm">
+              Configure which discs and W-Engines the optimizer considers.
+            </Text>
+          </HoverCard.Dropdown>
+        </HoverCard>
+      </Flex>
 
-      <Flex align="center" gap={5}>
+      <Flex align="center">
         <Switch
           checked={!!optConfig.useEquipped}
           onChange={(e) => setOption('useEquipped', e.currentTarget.checked)}
@@ -417,7 +327,7 @@ function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
       </Flex>
 
       {optConfig.useEquipped && (
-        <Flex align="center" gap={5}>
+        <Flex align="center">
           <Switch
             checked={!!optConfig.useCharacterPriority}
             onChange={(e) =>
@@ -430,21 +340,57 @@ function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
         </Flex>
       )}
 
-      <Flex align="center" gap={5}>
-        <Text size="xs">Min enhance</Text>
-        <Select
-          data={minEnhanceOptions}
-          value={String(optConfig.levelLow)}
-          onChange={(val) => {
-            if (val == null) return
-            const v = Number(val)
-            setOption('levelLow', v)
-            if (optConfig.levelHigh < v) setOption('levelHigh', v)
-          }}
-          size="xs"
+      <Flex align="center">
+        <Switch
+          checked={!!optConfig.includeOffsets}
+          onChange={(e) => setOption('includeOffsets', e.currentTarget.checked)}
           disabled={disabled}
-          style={{ width: 70 }}
+          size="xs"
         />
+        <Text size="xs">Include Offsets</Text>
+      </Flex>
+
+      <Flex align="center">
+        <Switch
+          checked={!!optConfig.optWengine}
+          onChange={(e) => setOption('optWengine', e.currentTarget.checked)}
+          disabled={disabled}
+          size="xs"
+        />
+        <Text size="xs">Optimize W-Engine</Text>
+      </Flex>
+
+      {optConfig.optWengine && (
+        <Flex align="center">
+          <Switch
+            checked={!!optConfig.useEquippedWengine}
+            onChange={(e) =>
+              setOption('useEquippedWengine', e.currentTarget.checked)
+            }
+            disabled={disabled}
+            size="xs"
+          />
+          <Text size="xs">Use Equipped W-Engine</Text>
+        </Flex>
+      )}
+
+      <Flex justify="space-between">
+        <Flex direction="column" gap={2}>
+          <HeaderText>Min enhance</HeaderText>
+          <Select
+            data={minEnhanceOptions}
+            value={String(optConfig.levelLow)}
+            onChange={(val) => {
+              if (val == null) return
+              const v = Number(val)
+              setOption('levelLow', v)
+              if (optConfig.levelHigh < v) setOption('levelHigh', v)
+            }}
+            size="xs"
+            disabled={disabled}
+            style={{ width: 90 }}
+          />
+        </Flex>
       </Flex>
     </Flex>
   )

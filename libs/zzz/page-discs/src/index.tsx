@@ -1,48 +1,50 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
+import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import {
-  DiscEditorModal,
-  DiscInventory,
-  useDiscEditorModalStore,
-} from '@genshin-optimizer/zzz/ui'
+import { DiscEditor, DiscInventory } from '@genshin-optimizer/zzz/ui'
+import { Box } from '@mantine/core'
 
-import { Suspense, useCallback } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import DupModal from './DupModal'
-import classes from './pageDiscs.module.css'
 
 export default function PageDiscs() {
+  const [disc, setDisc] = useState<Partial<ICachedDisc>>({})
+  const [show, onOpen, onClose] = useBoolState()
   const [showDup, onShowDup, onHideDup] = useBoolState(false)
   const { database } = useDatabaseContext()
-  const openEditorModal = useDiscEditorModalStore((s) => s.openOverlay)
-
   const onAddNew = useCallback(() => {
-    openEditorModal({
-      selectedDisc: null,
-      onOk: () => {},
-    })
-  }, [openEditorModal])
-
+    setDisc({})
+    onOpen()
+  }, [onOpen])
   const onEdit = useCallback(
     (id: string) => {
       const disc = database.discs.get(id)
       if (disc) {
-        openEditorModal({
-          selectedDisc: disc,
-          onOk: () => {},
-        })
+        setDisc(disc)
+        onOpen()
       }
     },
-    [database.discs, openEditorModal]
+    [database.discs, onOpen]
   )
 
   return (
-    <div className={classes.container}>
-      <DiscEditorModal />
+    <Box display="flex" style={{ flexDirection: 'column', gap: 1 }}>
+      <Suspense fallback={false}>
+        <DiscEditor
+          disc={disc}
+          allowEmpty
+          allowUpload
+          show={show}
+          onClose={onClose}
+          onShow={onOpen}
+          cancelEdit={() => setDisc({})}
+        />
+      </Suspense>
 
       <Suspense fallback={false}>
         <DupModal show={showDup} onHide={onHideDup} setDiscToEdit={onEdit} />
       </Suspense>
       <DiscInventory onAdd={onAddNew} onEdit={onEdit} onShowDup={onShowDup} />
-    </div>
+    </Box>
   )
 }

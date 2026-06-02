@@ -20,8 +20,8 @@ import {
 } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CalcResult } from '@genshin-optimizer/pando/engine'
 import { constant } from '@genshin-optimizer/pando/engine'
-import type { CharacterKey, PhaseKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSetKeys, allWengineKeys } from '@genshin-optimizer/zzz/consts'
+import type { PhaseKey } from '@genshin-optimizer/zzz/consts'
 import type {
   DiscIds,
   ICachedCharacter,
@@ -29,8 +29,7 @@ import type {
   TeamConditional,
 } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0, teamCharacterKeys } from '@genshin-optimizer/zzz/db'
-import { useCharacter, useDiscs } from '@genshin-optimizer/zzz/db-ui'
-import type { TagMapNodeEntries } from '@genshin-optimizer/zzz/formula'
+import { useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import {
   charTagMapNodeEntries,
   conditionalEntries,
@@ -46,6 +45,7 @@ import {
   withPreset,
   zzzCalculatorWithEntries,
 } from '@genshin-optimizer/zzz/formula'
+import { allStats } from '@genshin-optimizer/zzz/stats'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { FullTagDisplay, TagDisplay } from '../components'
@@ -63,32 +63,12 @@ export function CharCalcProvider({
   children: ReactNode
 }) {
   const member0 = useCharacterAndEquipment(character, discIds)
-  const teammate1Key = team.teammates[1]?.characterKey
-  const teammate2Key = team.teammates[2]?.characterKey
-  const teammate1Phase = team.teammates[1]?.wenginePhase
-  const teammate2Phase = team.teammates[2]?.wenginePhase
-  const teammate1Mindscape = team.teammates[1]?.mindscape
-  const teammate2Mindscape = team.teammates[2]?.mindscape
-  const teammate1Entries = useTeammateMemberEntries(
-    teammate1Key,
-    character.key,
-    teammate1Phase,
-    teammate1Mindscape
-  )
-  const teammate2Entries = useTeammateMemberEntries(
-    teammate2Key,
-    character.key,
-    teammate2Phase,
-    teammate2Mindscape
-  )
 
   const calc = useMemo(() => {
     const frames = team.frames.length > 0 ? team.frames : [getTeamFrame0(team)]
     return zzzCalculatorWithEntries([
       ...teamData(teamCharacterKeys(team)),
       ...member0,
-      ...teammate1Entries,
-      ...teammate2Entries,
       enemy.common.lvl.add(team.enemyLvl),
       enemy.common.def.add(team.enemyDef),
       enemy.common.stun_.add(team.enemyStunMultiplier / 100),
@@ -121,8 +101,22 @@ export function CharCalcProvider({
           ),
         ]
       }),
+      // Non-main teammates only; main counts come from charTagMapNodeEntries in member0.
+      ...team.teammates
+        .filter((t) => t.characterKey !== character.key)
+        .flatMap(({ characterKey: charKey }) => [
+          ownBuff.common.count
+            .withSpecialty(allStats.char[charKey].specialty)
+            .add(1),
+          ownBuff.common.count
+            .withFaction(allStats.char[charKey].faction)
+            .add(1),
+          ownBuff.common.count
+            .withTag({ attribute: allStats.char[charKey].attribute })
+            .add(1),
+        ]),
     ])
-  }, [member0, teammate1Entries, teammate2Entries, team, character.key])
+  }, [member0, team, character.key])
   // New map per calc so formula tooltips do not reuse stale nodes after gear/opt changes.
   const formulaTextCache = useMemo(() => calc && new Map(), [calc])
 
@@ -183,79 +177,14 @@ function useCharacterAndEquipment(
   return useMemo(
     () =>
       character
-        ? memberAndEquipmentEntries(
-            character,
-            wengineTagEntries,
-            discTagEntries
+        ? withMember(
+            character.key,
+            ...charTagMapNodeEntries(character),
+            ...wengineTagEntries,
+            ...discTagEntries
           )
         : [],
     [character, wengineTagEntries, discTagEntries]
-  )
-}
-
-function useTeammateMemberEntries(
-  teammateKey: CharacterKey | undefined,
-  mainCharacterKey: CharacterKey,
-  wenginePhaseOverride?: number,
-  mindscapeOverride?: number
-) {
-  const character = useCharacter(teammateKey)
-  const discs = useDiscs(character?.equippedDiscs)
-  const phase = (wenginePhaseOverride ??
-    character?.wenginePhase ??
-    1) as PhaseKey
-  const wengineTagEntries = useMemo(
-    () =>
-      wengineTagMapNodeEntries(
-        character?.wengineKey
-          ? {
-              key: character.wengineKey,
-              level: 60,
-              modification: 5,
-              phase,
-            }
-          : undefined
-      ),
-    [character?.wengineKey, phase]
-  )
-  const discTagEntries = useMemo(
-    () => discsToTagMapNodeEntries(Object.values(discs).filter(notEmpty)),
-    [discs]
-  )
-  return useMemo(() => {
-    if (!character || !teammateKey || teammateKey === mainCharacterKey)
-      return []
-    // Apply mindscape override: if the user set a team-level mindscape
-    // (via the teammate card UI), use that instead of the roster mindscape.
-    const effectiveChar =
-      mindscapeOverride !== undefined
-        ? { ...character, mindscape: mindscapeOverride }
-        : character
-    return memberAndEquipmentEntries(
-      effectiveChar,
-      wengineTagEntries,
-      discTagEntries
-    )
-  }, [
-    character,
-    teammateKey,
-    mainCharacterKey,
-    wengineTagEntries,
-    discTagEntries,
-    mindscapeOverride,
-  ])
-}
-
-function memberAndEquipmentEntries(
-  character: ICachedCharacter,
-  wengineTagEntries: TagMapNodeEntries,
-  discTagEntries: TagMapNodeEntries
-): TagMapNodeEntries {
-  return withMember(
-    character.key,
-    ...charTagMapNodeEntries(character),
-    ...wengineTagEntries,
-    ...discTagEntries
   )
 }
 

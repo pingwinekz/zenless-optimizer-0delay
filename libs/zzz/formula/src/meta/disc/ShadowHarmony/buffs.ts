@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'set2_dash',
     },
-    team: false,
   },
   set2_aftershock: {
     sheet: 'ShadowHarmony',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'set2_aftershock',
     },
-    team: false,
   },
   set4_stack_atk_: {
     sheet: 'ShadowHarmony',
@@ -36,7 +34,6 @@ export const buffs = {
       sheet: 'ShadowHarmony',
       name: 'set4_stack_atk_',
     },
-    team: false,
   },
   set4_stack_crit_: {
     sheet: 'ShadowHarmony',
@@ -48,6 +45,5 @@ export const buffs = {
       sheet: 'ShadowHarmony',
       name: 'set4_stack_crit_',
     },
-    team: false,
   },
 } as const

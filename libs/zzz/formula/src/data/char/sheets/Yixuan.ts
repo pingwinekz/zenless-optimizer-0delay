@@ -28,15 +28,8 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { meditation } = allBoolConditionals(key, undefined, { meditation: 6 })
-const { tranquility } = allNumConditionals(
-  key,
-  true,
-  0,
-  dm.m4.max_stacks,
-  undefined,
-  { tranquility: 4 }
-)
+const { meditation } = allBoolConditionals(key)
+const { tranquility } = allNumConditionals(key, true, 0, dm.m4.max_stacks)
 
 const core_dmg_ = ownBuff.combat.common_dmg_.add(
   subscript(char.core, dm.core.dmg_)

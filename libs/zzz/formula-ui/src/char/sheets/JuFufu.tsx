@@ -15,8 +15,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "Boosts CRIT DMG, Chain Attack DMG, Ultimate DMG, and Impact in Tiger's Roar state.",
         metadata: cond.tigers_roar,
         fields: [
           fieldForBuff(buff.core_crit_dmg_),
@@ -36,7 +34,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.chain)' }),
-        description: 'Increases Daze dealt by Chain Attacks.',
         metadata: cond.chain_hit,
         fields: [fieldForBuff(buff.m1_stun_)],
       },
@@ -47,7 +44,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description: "Grants additional CRIT DMG in Tiger's Roar state.",
         metadata: cond.tigers_roar,
         fields: [fieldForBuff(buff.m2_crit_dmg_)],
       },
@@ -58,7 +54,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description: "Grants further CRIT DMG in Tiger's Roar state.",
         metadata: cond.tigers_roar,
         fields: [fieldForBuff(buff.m4_crit_dmg_)],
       },

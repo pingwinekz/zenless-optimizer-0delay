@@ -24,9 +24,7 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { hunters_gait, binding_trap } = allBoolConditionals(key, undefined, {
-  hunters_gait: 2,
-})
+const { hunters_gait, binding_trap } = allBoolConditionals(key)
 
 const abilityCheck = (node: NumNode | number) =>
   cmpGE(
@@ -119,7 +117,7 @@ const sheet = register(
       cmpGE(
         char.mindscape,
         6,
-        abilityCheck(binding_trap.ifOn(percent(dm.ability.aftershock_dmg_)))
+        abilityCheck(percent(dm.ability.aftershock_dmg_))
       )
     ),
     undefined,

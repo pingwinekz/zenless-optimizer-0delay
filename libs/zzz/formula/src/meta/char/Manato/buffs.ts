@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'Manato',
       name: 'core_hpSheerForce',
     },
-    team: false,
   },
   core_basic_crit_dmg_: {
     sheet: 'Manato',
@@ -23,7 +22,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'core_basic_crit_dmg_',
     },
-    team: false,
   },
   core_assistFollowUp_crit_dmg_: {
     sheet: 'Manato',
@@ -36,7 +34,6 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'core_assistFollowUp_crit_dmg_',
     },
-    team: false,
   },
   core_crit_: {
     sheet: 'Manato',
@@ -48,7 +45,6 @@ export const buffs = {
       sheet: 'Manato',
       name: 'core_crit_',
     },
-    team: false,
   },
   core_fire_dmg_: {
     sheet: 'Manato',
@@ -61,7 +57,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'core_fire_dmg_',
     },
-    team: false,
   },
   m1_assistFollowUp_fire_dmg_: {
     sheet: 'Manato',
@@ -75,7 +70,6 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'm1_assistFollowUp_fire_dmg_',
     },
-    team: false,
   },
   m1_basic_fire_dmg_: {
     sheet: 'Manato',
@@ -89,7 +83,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm1_basic_fire_dmg_',
     },
-    team: false,
   },
   m2_fire_resIgn_: {
     sheet: 'Manato',
@@ -102,7 +95,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'm2_fire_resIgn_',
     },
-    team: false,
   },
   m4_hp_: {
     sheet: 'Manato',
@@ -114,7 +106,6 @@ export const buffs = {
       sheet: 'Manato',
       name: 'm4_hp_',
     },
-    team: false,
   },
   m6_fire_dmg_: {
     sheet: 'Manato',
@@ -127,6 +118,5 @@ export const buffs = {
       attribute: 'fire',
       name: 'm6_fire_dmg_',
     },
-    team: false,
   },
 } as const

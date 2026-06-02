@@ -38,7 +38,6 @@ export function FormRow({
           control: { fontSize: 20, alignItems: 'baseline' },
           content: { paddingBlock: 0, paddingBottom: 10 },
           chevron: { paddingInlineStart: 12 },
-          item: { borderBottom: 'none' },
         }}
       >
         <Accordion.Item value={id}>
@@ -49,21 +48,5 @@ export function FormRow({
         </Accordion.Item>
       </Accordion>
     </Flex>
-  )
-}
-
-export function TeammateFormRow({
-  id,
-  children,
-}: {
-  id: string
-  children: ReactNode
-}) {
-  const { t } = useTranslation('page_optimize', { keyPrefix: 'TeammateRow' })
-
-  return (
-    <FormRow id={id} label={t('Header')}>
-      {children}
-    </FormRow>
   )
 }

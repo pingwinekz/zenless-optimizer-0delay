@@ -4,7 +4,6 @@ export const conditionals = {
     sheet: 'Soldier11',
     name: 'charge_consumed',
     type: 'bool',
-    mindscapeRequirement: 6,
   },
   fireSuppression_4th_hit: {
     sheet: 'Soldier11',
@@ -23,6 +22,5 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 12,
-    mindscapeRequirement: 2,
   },
 } as const

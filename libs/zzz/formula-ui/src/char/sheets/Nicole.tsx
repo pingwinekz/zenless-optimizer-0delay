@@ -14,8 +14,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
-        description:
-          "Reduces the enemy's DEF when hit by Nicole's enhanced bullets or Energy Field.",
         metadata: cond.bulletsOrFieldHit,
         fields: [fieldForBuff(buff.core_defRed_)],
       },
@@ -44,8 +42,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          "Increases CRIT Rate when Nicole's Energy Fields deal DMG to enemies.",
         metadata: cond.fieldHitsEnemy,
         fields: [fieldForBuff(buff.m6_crit_)],
       },

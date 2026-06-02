@@ -31,11 +31,7 @@ const {
   etherVeil,
   focusedCreation,
   ult_used,
-} = allBoolConditionals(key, undefined, {
-  etherVeil: 2,
-  ult_used: 4,
-  focusedCreation: 6,
-})
+} = allBoolConditionals(key)
 
 const m6_crit_ = ownBuff.combat.crit_.add(
   cmpGE(char.mindscape, 6, focusedCreation.ifOn(1))

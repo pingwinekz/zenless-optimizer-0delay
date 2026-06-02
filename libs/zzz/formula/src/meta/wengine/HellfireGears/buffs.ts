@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'HellfireGears',
       name: 'enerRegen',
     },
-    team: false,
   },
   impact_: {
     sheet: 'HellfireGears',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'HellfireGears',
       name: 'impact_',
     },
-    team: false,
   },
 } as const

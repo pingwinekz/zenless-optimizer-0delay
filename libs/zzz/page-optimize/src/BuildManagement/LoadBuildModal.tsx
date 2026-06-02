@@ -1,8 +1,4 @@
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
-import {
-  OptConfigContext,
-  useDatabaseContext,
-} from '@genshin-optimizer/zzz/db-ui'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import {
   Button,
   Card,
@@ -14,21 +10,18 @@ import {
   TextInput,
 } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const LoadBuildModal = memo(function LoadBuildModal({
   opened,
   onClose,
-  characterKey,
 }: {
   opened: boolean
   onClose: () => void
-  characterKey: CharacterKey | null
 }) {
   const { t } = useTranslation('page_optimize')
   const { database } = useDatabaseContext()
-  const { optConfigId } = useContext(OptConfigContext)
   const [search, setSearch] = useState('')
 
   // Get all saved builds - we use the data manager's keys to access entries
@@ -56,44 +49,12 @@ export const LoadBuildModal = memo(function LoadBuildModal({
   )
 
   const handleLoad = useCallback(
-    (buildId: string) => {
-      const savedBuild = database.savedBuilds.get(buildId)
-      if (!savedBuild || !characterKey) return
-
-      // 1. Restore optimizer settings (filters, slots, set filters, wengine options, etc.)
-      if (savedBuild.optimizerSettings) {
-        database.optConfigs.set(optConfigId, {
-          ...savedBuild.optimizerSettings,
-        })
-      }
-
-      // 2. Restore team snapshot (teammates with overrides, frames, enemy stats)
-      if (savedBuild.teamSnapshot) {
-        database.teams.set(characterKey, {
-          teammates: savedBuild.teamSnapshot.teammates ?? [{ characterKey }],
-          frames: savedBuild.teamSnapshot.frames ?? [],
-          enemyLvl: savedBuild.teamSnapshot.enemyLvl ?? 80,
-          enemyDef: savedBuild.teamSnapshot.enemyDef ?? 953,
-          enemyStunMultiplier:
-            savedBuild.teamSnapshot.enemyStunMultiplier ?? 150,
-        })
-      }
-
-      // 3. Create a generated build list from the saved build and link it to the optConfig
-      database.optConfigs.newOrSetGeneratedBuildList(optConfigId, {
-        builds: [
-          {
-            wengineKey: savedBuild.wengineKey,
-            discIds: savedBuild.discIds,
-            value: savedBuild.value,
-          },
-        ],
-        buildDate: Date.now(),
-      })
-
+    (_buildId: string) => {
+      // TODO: Load the selected build into the current optConfig's generatedBuildList
+      // This requires updating the optConfig with the selected saved build's data
       onClose()
     },
-    [database, characterKey, optConfigId, onClose]
+    [onClose]
   )
 
   const handleDelete = useCallback(

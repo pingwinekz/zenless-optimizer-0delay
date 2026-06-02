@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'set2',
     },
-    team: false,
   },
   set4_basic_dmg_: {
     sheet: 'PolarMetal',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'set4_basic_dmg_',
     },
-    team: false,
   },
   set4_dash_dmg_: {
     sheet: 'PolarMetal',
@@ -37,6 +35,5 @@ export const buffs = {
       damageType1: 'dash',
       name: 'set4_dash_dmg_',
     },
-    team: false,
   },
 } as const

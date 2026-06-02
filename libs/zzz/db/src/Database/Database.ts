@@ -7,7 +7,6 @@ import { DisplayCharacterEntry } from './DataEntries/DisplayCharacterEntry'
 import { DisplayWengineEntry } from './DataEntries/DisplayWengineEntry'
 import { CharMetaDataManager, DiscDataManager } from './DataManagers/'
 import { CharacterDataManager } from './DataManagers/CharacterDataManager'
-import { CharacterBuildDataManager } from './DataManagers/CharacterBuildDataManager'
 import { GeneratedBuildListDataManager } from './DataManagers/GeneratedBuildListDataManager'
 import { OptConfigDataManager } from './DataManagers/OptConfigDataManager'
 import { SavedBuildDataManager } from './DataManagers/SavedBuildDataManager'
@@ -28,7 +27,6 @@ export class ZzzDatabase extends Database {
   displayCharacter: DisplayCharacterEntry
   displayWengine: DisplayWengineEntry
   generatedBuildList: GeneratedBuildListDataManager
-  characterBuilds: CharacterBuildDataManager
   savedBuilds: SavedBuildDataManager
   dbIndex: 1 | 2 | 3 | 4
   dbVer: number
@@ -57,9 +55,6 @@ export class ZzzDatabase extends Database {
 
     // Depends on discs and characters
     this.optConfigs = new OptConfigDataManager(this)
-
-    // Character build loadouts manager
-    this.characterBuilds = new CharacterBuildDataManager(this)
 
     // Depends on discs and wengines (references existing database items)
     this.savedBuilds = new SavedBuildDataManager(this)
@@ -99,7 +94,6 @@ export class ZzzDatabase extends Database {
       this.chars,
       this.discs,
       this.wengines,
-      this.characterBuilds,
       this.charMeta,
       this.generatedBuildList,
       this.optConfigs,

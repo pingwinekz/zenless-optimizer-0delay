@@ -11,7 +11,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_dmg_',
     },
-    team: false,
   },
   basic_daze_: {
     sheet: 'TheRestrained',
@@ -24,6 +23,5 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_daze_',
     },
-    team: false,
   },
 } as const

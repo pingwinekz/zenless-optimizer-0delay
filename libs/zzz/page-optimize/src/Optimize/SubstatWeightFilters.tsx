@@ -1,7 +1,8 @@
 import { allDiscSubStatKeys } from '@genshin-optimizer/zzz/consts'
 import type { DiscSubStatKey } from '@genshin-optimizer/zzz/consts'
 import { StatDisplay } from '@genshin-optimizer/zzz/ui'
-import { Button, Flex, Group, Slider, Text } from '@mantine/core'
+import { Button, Flex, Group, HoverCard, Slider, Text } from '@mantine/core'
+import { IconHelp } from '@tabler/icons-react'
 import { Fragment, useState } from 'react'
 import { HeaderText } from '../layout'
 
@@ -90,7 +91,24 @@ export function SubstatWeightFilters() {
 
   return (
     <Flex direction="column" gap={5}>
-      <HeaderText>Substat weight filter</HeaderText>
+      <Flex justify="space-between" align="center">
+        <HeaderText>Substat weight filter</HeaderText>
+        <HoverCard width={300} openDelay={200} closeDelay={100}>
+          <HoverCard.Target>
+            <IconHelp size={16} style={{ cursor: 'pointer', opacity: 0.6 }} />
+          </HoverCard.Target>
+          <HoverCard.Dropdown>
+            <Text fw={600} mb={4}>
+              Substat Weight Filter
+            </Text>
+            <Text size="sm">
+              Assign weights to substats to prioritize certain stats during
+              optimization. Higher weights mean the optimizer will favor builds
+              with those stats.
+            </Text>
+          </HoverCard.Dropdown>
+        </HoverCard>
+      </Flex>
 
       <div
         style={{

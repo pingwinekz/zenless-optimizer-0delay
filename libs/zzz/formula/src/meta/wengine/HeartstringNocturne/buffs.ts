@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'HeartstringNocturne',
       name: 'passive_crit_dmg_',
     },
-    team: false,
   },
   chain_resIgn_fire_: {
     sheet: 'HeartstringNocturne',
@@ -24,7 +23,6 @@ export const buffs = {
       damageType1: 'chain',
       name: 'chain_resIgn_fire_',
     },
-    team: false,
   },
   ult_resIgn_fire_: {
     sheet: 'HeartstringNocturne',
@@ -38,6 +36,5 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ult_resIgn_fire_',
     },
-    team: false,
   },
 } as const

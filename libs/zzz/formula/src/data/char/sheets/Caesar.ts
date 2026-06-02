@@ -32,10 +32,7 @@ const {
   can_defensive_assist,
   ability_debuff,
   exSpecial_assistFollowup_used,
-} = allBoolConditionals(key, undefined, {
-  radiant_aegis: 1,
-  exSpecial_assistFollowup_used: 6,
-})
+} = allBoolConditionals(key)
 
 const m6_exSpecial_assistFollowup_crit_ = ownBuff.combat.crit_.add(
   cmpGE(char.mindscape, 6, percent(1))

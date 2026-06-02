@@ -1,6 +1,5 @@
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { allWengineKeys } from '@genshin-optimizer/zzz/consts'
-import { parseWengine } from '@genshin-optimizer/zzz/schema'
 import type { ICachedWengine } from '../../Interfaces/IDbWengine'
 import { DataManager } from '../DataManager'
 import type { ZzzDatabase } from '../Database'
@@ -30,12 +29,23 @@ export class WengineDataManager extends DataManager<
   }
 
   override validate(obj: unknown): ICachedWengine | undefined {
-    const parsed = parseWengine(obj)
-    if (!parsed) return undefined
-    return parsed as ICachedWengine
+    if (
+      obj &&
+      typeof obj === 'object' &&
+      'key' in obj &&
+      'level' in obj &&
+      'modification' in obj &&
+      'phase' in obj
+    ) {
+      return obj as ICachedWengine
+    }
+    return undefined
   }
 
-  override toCache(storageObj: ICachedWengine, id: string): ICachedWengine {
+  override toCache(
+    storageObj: ICachedWengine,
+    id: string
+  ): ICachedWengine {
     return { ...storageObj, id }
   }
 

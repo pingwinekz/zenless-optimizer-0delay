@@ -29,8 +29,7 @@ const sheet = registerWengine(
         prod(consumed25Energy, subscript(phase, dm.common_dmg_))
       )
     ),
-    showSpecialtyAndEquipped(key),
-    true
+    showSpecialtyAndEquipped(key)
   )
 )
 export default sheet

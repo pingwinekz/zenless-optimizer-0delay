@@ -35,11 +35,7 @@ const {
   passion,
   gnawed,
   assault_or_disorder_triggered,
-} = allBoolConditionals(key, undefined, {
-  passion: 1,
-  gnawed: 2,
-  assault_or_disorder_triggered: 4,
-})
+} = allBoolConditionals(key)
 
 const sheet = register(
   key,

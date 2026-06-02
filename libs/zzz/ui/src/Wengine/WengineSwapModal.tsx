@@ -52,10 +52,11 @@ export function WengineSwapModal({
   const deferredSearchTerm = useDeferredValue(searchTerm)
 
   const filteredKeys = useMemo(() => {
-    let keys = allWengineKeys.filter((k) => {
-      const stat = getWengineStat(k)
-      return stat.type === wengineTypeKey
-    })
+    let keys = allWengineKeys
+      .filter((k) => {
+        const stat = getWengineStat(k)
+        return stat.type === wengineTypeKey
+      })
     if (deferredSearchTerm) {
       const term = deferredSearchTerm.toLowerCase()
       keys = keys.filter((k) => k.toLowerCase().includes(term))
@@ -160,7 +161,9 @@ export function WengineSwapModal({
                       key={key}
                       wengineId={key}
                       onClick={
-                        wengineKey === key ? undefined : () => selectKey(key)
+                        wengineKey === key
+                          ? undefined
+                          : () => selectKey(key)
                       }
                     />
                   </Box>

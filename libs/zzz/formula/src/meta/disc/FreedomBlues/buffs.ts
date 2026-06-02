@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'FreedomBlues',
       name: 'set2',
     },
-    team: false,
   },
   anomBuildupRes_: {
     sheet: 'FreedomBlues',
@@ -22,6 +21,5 @@ export const buffs = {
       sheet: 'FreedomBlues',
       name: 'anomBuildupRes_',
     },
-    team: true,
   },
 } as const

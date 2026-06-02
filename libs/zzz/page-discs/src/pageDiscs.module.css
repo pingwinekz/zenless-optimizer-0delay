@@ -1,7 +1,0 @@
-/* Fribbels-style layout tokens for the discs page */
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 100px;
-}

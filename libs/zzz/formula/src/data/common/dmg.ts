@@ -1,8 +1,6 @@
 import {
-  cmpGT,
   lookup,
   max,
-  min,
   prod,
   subscript,
   sum,
@@ -72,12 +70,7 @@ const data: TagMapNodeEntries = [
   ),
   // Stunned Multiplier
   ownBuff.dmg.stunned_mult_.add(
-    cmpGT(
-      own.final.veilVulnerabilityCap_,
-      0,
-      min(sum(percent(1), own.final.veilVulnerabilityCap_), enemy.common.stun_),
-      isStunned.ifOn(enemy.common.stun_, enemy.common.unstun_)
-    )
+    isStunned.ifOn(enemy.common.stun_, enemy.common.unstun_)
   ),
 
   // Standard dmg Crit Multiplier

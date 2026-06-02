@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'KaboomTheCannon',
       name: 'atk_',
     },
-    team: true,
   },
 } as const

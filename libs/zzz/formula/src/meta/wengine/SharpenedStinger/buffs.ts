@@ -11,7 +11,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'physical_dmg_',
     },
-    team: false,
   },
   anomBuildup_: {
     sheet: 'SharpenedStinger',
@@ -23,6 +22,5 @@ export const buffs = {
       sheet: 'SharpenedStinger',
       name: 'anomBuildup_',
     },
-    team: false,
   },
 } as const

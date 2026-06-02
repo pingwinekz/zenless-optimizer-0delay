@@ -30,9 +30,7 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { boolConditional } = allBoolConditionals(key, undefined, {
-  boolConditional: 6,
-})
+const { boolConditional } = allBoolConditionals(key)
 
 const m6_perfectPitch_dmg_ = ownBuff.combat.dmg_.ether.add(
   cmpGE(char.mindscape, 6, boolConditional.ifOn(percent(dm.m6.enhancedDmg)))

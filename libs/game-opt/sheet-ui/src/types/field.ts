@@ -7,7 +7,6 @@ export type TagField = {
   subtitle?: ReactNode // appears after title
   icon?: ReactNode
   multi?: number // for multi-hits, displayed before a number, e.g. 3x100
-  team?: boolean // true if buff affects whole team
 }
 
 export type TextField = {

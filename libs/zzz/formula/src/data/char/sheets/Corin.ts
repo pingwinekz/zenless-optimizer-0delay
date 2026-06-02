@@ -26,20 +26,14 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { chain_ult_hit } = allBoolConditionals(key, undefined, {
-  chain_ult_hit: 1,
-})
+const { chain_ult_hit } = allBoolConditionals(key)
 const { exSpecial_chain_ult_hits } = allNumConditionals(
   key,
   true,
   0,
-  dm.m2.stacks,
-  undefined,
-  { exSpecial_chain_ult_hits: 2 }
+  dm.m2.stacks
 )
-const { charge } = allNumConditionals(key, true, 0, dm.m6.stacks, undefined, {
-  charge: 6,
-})
+const { charge } = allNumConditionals(key, true, 0, dm.m6.stacks)
 
 const core_common_dmg_ = ownBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.extended_slash_dmg_))

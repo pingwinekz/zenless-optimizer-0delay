@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'FlamemakerShaker',
       name: 'enerRegen',
     },
-    team: false,
   },
   common_dmg_: {
     sheet: 'FlamemakerShaker',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'FlamemakerShaker',
       name: 'common_dmg_',
     },
-    team: false,
   },
   anomProf: {
     sheet: 'FlamemakerShaker',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'FlamemakerShaker',
       name: 'anomProf',
     },
-    team: false,
   },
 } as const

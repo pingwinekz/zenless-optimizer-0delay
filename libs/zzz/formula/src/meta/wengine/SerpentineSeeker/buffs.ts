@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'SerpentineSeeker',
       name: 'critRate_',
     },
-    team: false,
   },
   electric_defIgn_: {
     sheet: 'SerpentineSeeker',
@@ -23,6 +22,5 @@ export const buffs = {
       attribute: 'electric',
       name: 'electric_defIgn_',
     },
-    team: false,
   },
 } as const

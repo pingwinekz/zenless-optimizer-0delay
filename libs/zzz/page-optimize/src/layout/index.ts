@@ -1,6 +1,6 @@
 export { HeaderText } from './HeaderText'
 export { FilterContainer } from './FilterContainer'
-export { FormRow, TeammateFormRow } from './FormRow'
+export { FormRow } from './FormRow'
 export { FormCard } from './FormCard'
 export { FilterRow } from './FilterRow'
 export { InputNumberStyled } from './InputNumberStyled'

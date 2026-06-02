@@ -12,28 +12,6 @@ const formula = Burnice.formulas
 const dm = mappedStats.char[key]
 
 const sheet = createBaseSheet(key, {
-  perSkillAbility: {
-    special: {
-      EXSpecialAttackIntenseHeatTossingMethod: [
-        {
-          type: 'conditional',
-          conditional: {
-            label: ch('abloom'),
-            description:
-              'While in the Abloom state from EX Special Attack, Burnice increases Anomaly Multiplier for all elements.',
-            metadata: cond.abloom,
-            fields: [
-              fieldForBuff(buff.exSpecial_ether_anom_mv_mult_),
-              fieldForBuff(buff.exSpecial_electric_anom_mv_mult_),
-              fieldForBuff(buff.exSpecial_fire_anom_mv_mult_),
-              fieldForBuff(buff.exSpecial_physical_anom_mv_mult_),
-              fieldForBuff(buff.exSpecial_ice_anom_mv_mult_),
-            ],
-          },
-        },
-      ],
-    },
-  },
   core: [
     {
       type: 'fields',
@@ -60,15 +38,6 @@ const sheet = createBaseSheet(key, {
       fields: [fieldForBuff(buff.ability_fire_anomBuildup_)],
     },
   ],
-  potential: [
-    {
-      type: 'fields',
-      fields: [
-        fieldForBuff(buff.potential_anomMas),
-        fieldForBuff(buff.potential_common_dmg_),
-      ],
-    },
-  ],
   m1: [
     {
       type: 'fields',
@@ -91,8 +60,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
-        description:
-          'When triggering the Afterburn effect, Burnice gains increased PEN Ratio.',
         metadata: cond.thermal_penetration,
         fields: [fieldForBuff(buff.m2_pen_)],
       },
@@ -127,8 +94,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'After hitting an enemy with EX Special Attack Double Shot, Burnice ignores a portion of enemy Fire RES.',
         metadata: cond.exSpecial_active,
         fields: [
           fieldForBuff(buff.m6_burn_fire_resIgn_),
@@ -143,8 +108,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6CondBurn'),
-        description:
-          'When Additional Burn is active, Burnice increases her Fire Anomaly Multiplier.',
         metadata: cond.additional_burn,
         fields: [fieldForBuff(buff.m6_fire_anom_mv_mult_)],
       },

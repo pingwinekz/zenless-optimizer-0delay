@@ -10,6 +10,5 @@ export const buffs = {
       sheet: 'RainforestGourmet',
       name: 'atk_',
     },
-    team: false,
   },
 } as const

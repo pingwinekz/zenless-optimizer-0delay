@@ -1,5 +1,4 @@
 import {
-  Box,
   Flex,
   HoverCard,
   NumberInput,
@@ -8,6 +7,7 @@ import {
   Switch,
   Text,
 } from '@mantine/core'
+import { IconHelp } from '@tabler/icons-react'
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
@@ -16,37 +16,9 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
-import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
-import { memo, useContext, useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HeaderText } from '../layout'
-
-// ColorizeNumbers - wraps numbers and Mindscape labels in gold spans
-// matching the fribbels ColorizeNumbers pattern (#ebb434 gold)
-const COND_GOLD = '#ebb434'
-
-function colorizeNumbers(text: string): ReactNode {
-  // Match M1-M6, numbers (int/dec with optional %)
-  const parts = text.split(/(M[1-6]|\d+(?:\.\d+)?(?:%)?)/g)
-  return parts.map((part, i) => {
-    if (/^(M[1-6]|\d+(?:\.\d+)?(?:%)?)$/.test(part)) {
-      return (
-        <span key={i} style={{ color: COND_GOLD }}>
-          {part}
-        </span>
-      )
-    }
-    return part
-  })
-}
-
-function renderDescription(desc: ReactNode): ReactNode {
-  if (typeof desc === 'string') return colorizeNumbers(desc)
-  return desc
-}
 
 const inputWidth = 61
 const numberWidth = 55
@@ -69,14 +41,6 @@ function condLabel(key: string): string {
   return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-function getMindscapeRequirement(condName: string): number | null {
-  const match = condName.match(/^m([1-6])/i)
-  if (match) {
-    return parseInt(match[1], 10)
-  }
-  return null
-}
-
 function precisionRound(number: number): number {
   if (number < 1) return Math.round(number * 1000) / 1000
   return Math.round(number * 10) / 10
@@ -84,22 +48,13 @@ function precisionRound(number: number): number {
 
 export function CharacterConditionalsDisplay({
   characterKey,
-  mindscapeOverride,
-  conditionalFields,
-  conditionalDescriptions,
-  showZeroFields = false,
 }: {
   characterKey: CharacterKey
-  mindscapeOverride?: number
-  conditionalFields?: Record<string, Field[]>
-  conditionalDescriptions?: Record<string, ReactNode>
-  showZeroFields?: boolean
 }) {
   const { t } = useTranslation('charNames_gen')
   const mainChar = useCharacterContext()!
   const { database } = useDatabaseContext()
   const team = useTeam(mainChar.key)
-  const effectiveMindscape = mindscapeOverride ?? mainChar.mindscape
 
   const allConditionals = conditionals as Record<string, unknown>
   const charConditionals = allConditionals[characterKey] as
@@ -120,11 +75,7 @@ export function CharacterConditionalsDisplay({
     )
   }
 
-  const condEntries = Object.entries(charConditionals).sort(([, a], [, b]) => {
-    const aReq = (a as IConditionalData).mindscapeRequirement ?? 0
-    const bReq = (b as IConditionalData).mindscapeRequirement ?? 0
-    return aReq - bReq
-  })
+  const condEntries = Object.entries(charConditionals)
   if (condEntries.length === 0) {
     return (
       <Text size="xs" c="dimmed">
@@ -135,29 +86,37 @@ export function CharacterConditionalsDisplay({
 
   return (
     <Flex direction="column" gap={5}>
-      <HeaderText>{t(characterKey)} Conditionals</HeaderText>
-      {condEntries
-        .filter(([condName]) => {
-          // If conditionalFields is provided and this condName has no entry,
-          // all its fields were self-buffs — skip the entire conditional
-          if (conditionalFields && !conditionalFields[condName]) return false
-          return true
-        })
-        .map(([condName, condData]) => (
-          <CharacterConditionalRow
-            key={condName}
-            characterKey={characterKey}
-            condName={condName}
-            condData={condData}
-            team={team}
-            database={database}
-            mainCharKey={mainChar.key}
-            mindscape={effectiveMindscape}
-            fields={conditionalFields?.[condName]}
-            description={conditionalDescriptions?.[condName]}
-            showZeroFields={showZeroFields}
-          />
-        ))}
+      <Flex justify="space-between" align="center">
+        <HeaderText>{t(characterKey)} Conditionals</HeaderText>
+        <HoverCard
+          width={400}
+          position="left"
+          withArrow
+          openDelay={300}
+          closeDelay={200}
+        >
+          <HoverCard.Target>
+            <IconHelp size={16} style={{ cursor: 'pointer', opacity: 0.6 }} />
+          </HoverCard.Target>
+          <HoverCard.Dropdown>
+            <Text size="sm">
+              Configure conditional buffs for {t(characterKey)}. These affect
+              the optimizer's damage calculations when the conditions are met.
+            </Text>
+          </HoverCard.Dropdown>
+        </HoverCard>
+      </Flex>
+      {condEntries.map(([condName, condData]) => (
+        <CharacterConditionalRow
+          key={condName}
+          characterKey={characterKey}
+          condName={condName}
+          condData={condData}
+          team={team}
+          database={database}
+          mainCharKey={mainChar.key}
+        />
+      ))}
     </Flex>
   )
 }
@@ -169,10 +128,6 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
   team,
   database,
   mainCharKey,
-  mindscape,
-  fields,
-  description,
-  showZeroFields = false,
 }: {
   characterKey: CharacterKey
   condName: string
@@ -180,50 +135,13 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
   team: ReturnType<typeof useTeam>
   database: ReturnType<typeof useDatabaseContext>['database']
   mainCharKey: CharacterKey
-  mindscape: number
-  fields?: Field[]
-  description?: ReactNode
-  showZeroFields?: boolean
 }) {
-  const outerTag = useContext(TagContext)
-  const tagForFields = useMemo(
-    () => ({ ...outerTag, src: characterKey }),
-    [outerTag, characterKey]
-  )
   const currentCond = team?.frames[0]?.conditionals?.find(
     (c) => c.sheet === characterKey && c.condKey === condName
   )
   const currentValue = currentCond?.condValue ?? 0
 
-  const mindscapeRequirement =
-    condData.mindscapeRequirement ?? getMindscapeRequirement(condName)
-  const isMindscapeDisabled =
-    mindscapeRequirement !== null && mindscape < mindscapeRequirement
-
-  // When mindscape drops below the requirement, auto-reset the conditional
-  useEffect(() => {
-    if (isMindscapeDisabled && currentValue > 0) {
-      database.teams.setFrameConditional(
-        mainCharKey,
-        0,
-        characterKey as any,
-        condName,
-        characterKey as any,
-        null,
-        0
-      )
-    }
-  }, [
-    isMindscapeDisabled,
-    currentValue,
-    database.teams,
-    mainCharKey,
-    characterKey,
-    condName,
-  ])
-
   const setValue = (condValue: number) => {
-    if (isMindscapeDisabled) return
     database.teams.setFrameConditional(
       mainCharKey,
       0,
@@ -237,156 +155,61 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
 
   const label = condLabel(condName)
 
-  const rowContent = (
-    <>
-      {condData.type === 'bool' && (
-        <Flex justify={conditionalJustify} align={conditionalAlign}>
-          <Switch
-            style={{ marginRight: 5 }}
-            checked={currentValue > 0}
-            onChange={(e) => setValue(e.currentTarget.checked ? 1 : 0)}
-            size="xs"
-            disabled={isMindscapeDisabled}
-          />
-          <ConditionalText
-            style={isMindscapeDisabled ? { opacity: 0.5 } : undefined}
-          >
-            {label}
-            {isMindscapeDisabled && ` (Requires M${mindscapeRequirement})`}
-          </ConditionalText>
-        </Flex>
-      )}
-      {condData.type === 'num' && (
-        <NumConditionalRow
-          label={label}
-          value={isMindscapeDisabled ? 0 : currentValue}
-          min={condData.min ?? 0}
-          max={condData.max ?? 10}
-          step={condData.int_only ? 1 : 0.1}
-          onChange={setValue}
-          disabled={isMindscapeDisabled}
-          mindscapeRequirement={mindscapeRequirement}
+  if (condData.type === 'bool') {
+    return (
+      <Flex justify={conditionalJustify} align={conditionalAlign}>
+        <Switch
+          style={{ marginRight: 5 }}
+          checked={currentValue > 0}
+          onChange={(e) => setValue(e.currentTarget.checked ? 1 : 0)}
+          size="xs"
         />
-      )}
-      {condData.type === 'list' && (
-        <Flex justify={conditionalJustify} align={conditionalAlign}>
-          <Select
-            style={{ minWidth: 80, width: 80, marginRight: 5 }}
-            maxDropdownHeight={500}
-            comboboxProps={{ keepMounted: false }}
-            data={condData.list.map((item, index) => ({
-              label: item,
-              value: String(index),
-            }))}
-            value={String(isMindscapeDisabled ? 0 : currentValue)}
-            onChange={(v) => setValue(Number(v) || 0)}
-            size="xs"
-            disabled={isMindscapeDisabled}
-          />
-          <ConditionalText
-            style={isMindscapeDisabled ? { opacity: 0.5 } : undefined}
-          >
-            {label}
-            {isMindscapeDisabled && ` (Requires M${mindscapeRequirement})`}
-          </ConditionalText>
-        </Flex>
-      )}
-      {condData.type !== 'bool' &&
-        condData.type !== 'num' &&
-        condData.type !== 'list' && (
-          <Text size="xs" c="dimmed">
-            {label}: unsupported type
-          </Text>
-        )}
-    </>
-  )
+        <ConditionalText>{label}</ConditionalText>
+      </Flex>
+    )
+  }
+
+  if (condData.type === 'num') {
+    const min = condData.min ?? 0
+    const max = condData.max ?? 10
+    const step = condData.int_only ? 1 : 0.1
+
+    return (
+      <NumConditionalRow
+        label={label}
+        value={currentValue}
+        min={min}
+        max={max}
+        step={step}
+        onChange={setValue}
+      />
+    )
+  }
+
+  if (condData.type === 'list') {
+    return (
+      <Flex justify={conditionalJustify} align={conditionalAlign}>
+        <Select
+          style={{ minWidth: 80, width: 80, marginRight: 5 }}
+          maxDropdownHeight={500}
+          comboboxProps={{ keepMounted: false }}
+          data={condData.list.map((item, index) => ({
+            label: item,
+            value: String(index),
+          }))}
+          value={String(currentValue)}
+          onChange={(v) => setValue(Number(v) || 0)}
+          size="xs"
+        />
+        <ConditionalText>{label}</ConditionalText>
+      </Flex>
+    )
+  }
 
   return (
-    <HoverCard
-      width={400}
-      position="left"
-      withArrow
-      openDelay={300}
-      closeDelay={200}
-    >
-      <HoverCard.Target>
-        <Box
-          style={{
-            cursor: 'default',
-            borderRadius: 'var(--mantine-radius-sm)',
-            border: '1px solid var(--mantine-color-default-border)',
-            padding: '4px 6px',
-            transition: 'border-color 0.15s',
-          }}
-        >
-          {rowContent}
-          {fields && fields.length > 0 && (
-            <Box
-              style={{
-                marginTop: 4,
-                borderTop: '1px solid var(--mantine-color-default-border)',
-                paddingTop: 4,
-                paddingLeft: 4,
-                fontSize: 11,
-                lineHeight: '16px',
-              }}
-            >
-              <TagContext.Provider value={tagForFields as any}>
-                {fields.map(
-                  (field, i) =>
-                    'fieldRef' in field && (
-                      <TagFieldDisplay
-                        key={i}
-                        field={field}
-                        showZero={showZeroFields}
-                        rowSx={{
-                          paddingTop: 1,
-                          paddingBottom: 1,
-                          gap: 6,
-                        }}
-                      />
-                    )
-                )}
-              </TagContext.Provider>
-            </Box>
-          )}
-        </Box>
-      </HoverCard.Target>
-      <HoverCard.Dropdown style={{ fontSize: 13 }}>
-        <Text fw={600} mb={4} size="sm">
-          {label}
-        </Text>
-        {description && (
-          <Text size="sm" mb={8} style={{ whiteSpace: 'pre-wrap' }}>
-            {renderDescription(description)}
-          </Text>
-        )}
-        {fields && fields.length > 0 && (
-          <>
-            <hr />
-            <Box mt={4}>
-              <TagContext.Provider value={tagForFields as any}>
-                {fields.map(
-                  (field, i) =>
-                    'fieldRef' in field && (
-                      <TagFieldDisplay
-                        key={i}
-                        field={field}
-                        showZero={showZeroFields}
-                        rowSx={{
-                          paddingTop: 1,
-                          paddingBottom: 1,
-                          gap: 6,
-                        }}
-                      />
-                    )
-                )}
-              </TagContext.Provider>
-            </Box>
-          </>
-        )}
-      </HoverCard.Dropdown>
-    </HoverCard>
+    <Text size="xs" c="dimmed">
+      {label}: unsupported type
+    </Text>
   )
 })
 
@@ -397,8 +220,6 @@ const NumConditionalRow = memo(function NumConditionalRow({
   max,
   step,
   onChange,
-  disabled,
-  mindscapeRequirement,
 }: {
   label: string
   value: number
@@ -406,8 +227,6 @@ const NumConditionalRow = memo(function NumConditionalRow({
   max: number
   step: number
   onChange: (val: number) => void
-  disabled?: boolean
-  mindscapeRequirement?: number | null
 }) {
   const [dragState, setDragState] = useState<number | undefined>(undefined)
   const displayValue = dragState ?? value
@@ -428,19 +247,10 @@ const NumConditionalRow = memo(function NumConditionalRow({
               }
             }}
             value={precisionRound(displayValue)}
-            disabled={disabled}
           />
         </div>
-        <ConditionalText
-          style={{
-            lineHeight: '16px',
-            opacity: disabled ? 0.5 : undefined,
-          }}
-        >
+        <ConditionalText style={{ lineHeight: '16px' }}>
           {label}
-          {disabled &&
-            mindscapeRequirement &&
-            ` (Requires M${mindscapeRequirement})`}
         </ConditionalText>
       </Flex>
 
@@ -464,7 +274,6 @@ const NumConditionalRow = memo(function NumConditionalRow({
             onChange(newValue)
           }}
           value={(displayValue ?? min) as number}
-          disabled={disabled}
         />
         <ConditionalText
           style={{

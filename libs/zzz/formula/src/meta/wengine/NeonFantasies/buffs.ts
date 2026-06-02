@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'NeonFantasies',
       name: 'squadDmg_',
     },
-    team: true,
   },
   anomalyProf: {
     sheet: 'NeonFantasies',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'NeonFantasies',
       name: 'anomalyProf',
     },
-    team: false,
   },
   maxStacks_anomalyProf: {
     sheet: 'NeonFantasies',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'NeonFantasies',
       name: 'maxStacks_anomalyProf',
     },
-    team: false,
   },
 } as const

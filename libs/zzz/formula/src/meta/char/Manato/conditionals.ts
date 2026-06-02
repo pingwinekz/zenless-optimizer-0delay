@@ -21,10 +21,5 @@ export const conditionals = {
     min: 0,
     max: 50,
   },
-  moltenEdge: {
-    sheet: 'Manato',
-    name: 'moltenEdge',
-    type: 'bool',
-    mindscapeRequirement: 2,
-  },
+  moltenEdge: { sheet: 'Manato', name: 'moltenEdge', type: 'bool' },
 } as const

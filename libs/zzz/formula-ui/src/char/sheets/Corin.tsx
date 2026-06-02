@@ -36,8 +36,6 @@ const sheet = createBaseSheet(key, {
           val1: '$t(skills.chain)',
           val2: '$t(skills.ult)',
         }),
-        description:
-          'Increases Corin DMG after hitting an enemy with Chain Attack or Ultimate.',
         metadata: cond.chain_ult_hit,
         fields: [fieldForBuff(buff.m1_common_dmg_)],
       },
@@ -52,8 +50,6 @@ const sheet = createBaseSheet(key, {
           val2: '$t(skills.chain)',
           val3: '$t(skills.ult)',
         }),
-        description:
-          'Reduces enemy Physical RES after hitting with EX Special Attack, Chain Attack, or Ultimate.',
         metadata: cond.exSpecial_chain_ult_hits,
         fields: [fieldForBuff(buff.m2_physical_resRed_)],
       },
@@ -64,8 +60,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'Deals additional DMG when Corin extended slash hits an enemy.',
         metadata: cond.charge,
         fields: [
           {

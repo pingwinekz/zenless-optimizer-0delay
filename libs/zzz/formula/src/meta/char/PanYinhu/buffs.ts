@@ -10,7 +10,6 @@ export const buffs = {
       sheet: 'PanYinhu',
       name: 'core_sheerForce',
     },
-    team: true,
   },
   ability_dmgInc_: {
     sheet: 'PanYinhu',
@@ -22,7 +21,6 @@ export const buffs = {
       sheet: 'PanYinhu',
       name: 'ability_dmgInc_',
     },
-    team: false,
   },
   m1_dmgInc_: {
     sheet: 'PanYinhu',
@@ -34,6 +32,5 @@ export const buffs = {
       sheet: 'PanYinhu',
       name: 'm1_dmgInc_',
     },
-    team: false,
   },
 } as const

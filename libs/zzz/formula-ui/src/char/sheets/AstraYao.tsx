@@ -19,8 +19,6 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('idyllic_cadenzaCond'),
-            description:
-              'While in Idyllic Cadenza State, the entire squad gains increased DMG and CRIT DMG.',
             metadata: cond.idyllic_cadenza,
             fields: [
               fieldForBuff(buff.common_dmg_),
@@ -52,8 +50,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'When Astra Yao attacks hit an enemy, she reduces their RES.',
         metadata: cond.attack_hits,
         fields: [fieldForBuff(buff.m1_resRed_)],
       },
@@ -103,8 +99,6 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'When triggering a Precise Assist, Astra Yao gains increased CRIT Rate on charged Basic Attack Capriccio.',
         metadata: cond.precise_assist_triggered,
         fields: [
           {

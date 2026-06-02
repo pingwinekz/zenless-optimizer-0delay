@@ -7,7 +7,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 32,
-    mindscapeRequirement: 4,
   },
   m6_stacks: {
     sheet: 'Billy',
@@ -16,7 +15,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 5,
-    mindscapeRequirement: 6,
   },
   ult_dmg_stacks: {
     sheet: 'Billy',
