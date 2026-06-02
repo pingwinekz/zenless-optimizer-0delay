@@ -11,6 +11,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'exSpecial_dazeInc_',
     },
+    team: false,
   },
   chain_dazeInc_: {
     sheet: 'RoaringFurnace',
@@ -23,6 +24,7 @@ export const buffs = {
       damageType1: 'chain',
       name: 'chain_dazeInc_',
     },
+    team: false,
   },
   ult_dazeInc_: {
     sheet: 'RoaringFurnace',
@@ -35,6 +37,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ult_dazeInc_',
     },
+    team: false,
   },
   team_chainOrUlt_fire_dmg_: {
     sheet: 'RoaringFurnace',
@@ -47,5 +50,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'team_chainOrUlt_fire_dmg_',
     },
+    team: true,
   },
 } as const

@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'WeepingGemini',
       name: 'anomProf',
     },
+    team: false,
   },
 } as const

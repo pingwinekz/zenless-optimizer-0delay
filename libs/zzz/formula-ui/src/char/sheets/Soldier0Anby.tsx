@@ -15,6 +15,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'Increases common DMG and Aftershock CRIT DMG against enemies marked with Silver Star.',
         metadata: cond.markedWithSilverStar,
         fields: [
           fieldForBuff(buff.core_common_dmg_),
@@ -37,6 +39,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          "Increases Soldier 0 Anby's CRIT Rate against enemies marked with Silver Star.",
         metadata: cond.markedWithSilverStar,
         fields: [fieldForBuff(buff.m2_crit_)],
       },
@@ -47,6 +51,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          "Ignores a portion of the enemy's Electric RES when attacking enemies marked with Silver Star.",
         metadata: cond.markedWithSilverStar,
         fields: [fieldForBuff(buff.m4_electric_resIgn_)],
       },

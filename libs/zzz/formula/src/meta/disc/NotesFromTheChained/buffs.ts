@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'set2',
     },
+    team: false,
   },
   set4_abloom_anomProf: {
     sheet: 'NotesFromTheChained',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'NotesFromTheChained',
       name: 'set4_abloom_anomProf',
     },
+    team: false,
   },
   set4_freeze_anomDmg: {
     sheet: 'NotesFromTheChained',
@@ -34,6 +36,7 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'set4_freeze_anomDmg',
     },
+    team: false,
   },
   set4_freeze_disorderDmg: {
     sheet: 'NotesFromTheChained',
@@ -45,5 +48,6 @@ export const buffs = {
       sheet: 'NotesFromTheChained',
       name: 'set4_freeze_disorderDmg',
     },
+    team: false,
   },
 } as const

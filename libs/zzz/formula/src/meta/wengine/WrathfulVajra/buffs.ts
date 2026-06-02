@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'WrathfulVajra',
       name: 'passive_crit_',
     },
+    team: false,
   },
   cond_fire_sheer_dmg_: {
     sheet: 'WrathfulVajra',
@@ -22,5 +23,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'cond_fire_sheer_dmg_',
     },
+    team: false,
   },
 } as const

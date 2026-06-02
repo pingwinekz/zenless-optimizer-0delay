@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Cissia',
       name: 'ability_squad_crit_dmg_',
     },
+    team: false,
   },
   ability_self_crit_dmg_: {
     sheet: 'Cissia',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Cissia',
       name: 'ability_self_crit_dmg_',
     },
+    team: false,
   },
   core_defIgn_: {
     sheet: 'Cissia',
@@ -33,6 +35,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'core_defIgn_',
     },
+    team: true,
   },
   core_corrodeBone_dmg_: {
     sheet: 'Cissia',
@@ -45,6 +48,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'core_corrodeBone_dmg_',
     },
+    team: false,
   },
   core_corrodeBone_daze_: {
     sheet: 'Cissia',
@@ -57,6 +61,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'core_corrodeBone_daze_',
     },
+    team: false,
   },
   m1_corrodeBone_resIgn_: {
     sheet: 'Cissia',
@@ -69,6 +74,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'm1_corrodeBone_resIgn_',
     },
+    team: false,
   },
   core_corrodeBone_crit_: {
     sheet: 'Cissia',
@@ -80,6 +86,7 @@ export const buffs = {
       sheet: 'Cissia',
       name: 'core_corrodeBone_crit_',
     },
+    team: true,
   },
   core_etherVeil_crit_dmg_: {
     sheet: 'Cissia',
@@ -91,6 +98,7 @@ export const buffs = {
       sheet: 'Cissia',
       name: 'core_etherVeil_crit_dmg_',
     },
+    team: true,
   },
   m1_electric_resIgn_: {
     sheet: 'Cissia',
@@ -103,6 +111,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'm1_electric_resIgn_',
     },
+    team: true,
   },
   m2_serpentsKiss_dmg_: {
     sheet: 'Cissia',
@@ -115,5 +124,6 @@ export const buffs = {
       attribute: 'electric',
       name: 'm2_serpentsKiss_dmg_',
     },
+    team: false,
   },
 } as const

@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'passive_ice_dmg_',
     },
+    team: false,
   },
   team_atk_: {
     sheet: 'BashfulDemon',
@@ -22,5 +23,6 @@ export const buffs = {
       sheet: 'BashfulDemon',
       name: 'team_atk_',
     },
+    team: true,
   },
 } as const

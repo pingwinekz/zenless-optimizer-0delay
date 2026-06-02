@@ -192,10 +192,10 @@ function BonusStatDisplay({
         <NumberInputLazy
           float
           value={value}
-          style={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
+          style={{ flexBasis: 100, height: '100%' }}
           onChange={setValue}
           placeholder="Stat Value"
-          size="small"
+          size="sm"
         />
         <ActionIcon aria-label="Delete Bonus Stat" onClick={onDelete}>
           <IconTrash size={16} />

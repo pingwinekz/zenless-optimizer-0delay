@@ -15,6 +15,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          "Increases Trigger's Stun multiplier when her Aftershock hits an enemy.",
         metadata: cond.aftershock_hit,
         fields: [fieldForBuff(buff.core_stun_)],
       },
@@ -42,6 +44,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
+        description:
+          "Increases the squad's CRIT DMG for each stack of Hunter's Gaze.",
         metadata: cond.hunters_gaze,
         fields: [fieldForBuff(buff.m2_crit_dmg_)],
       },

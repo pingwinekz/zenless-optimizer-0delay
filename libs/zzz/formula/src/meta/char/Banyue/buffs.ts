@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Banyue',
       name: 'core_hpSheerForce',
     },
+    team: false,
   },
   core_sheerForce: {
     sheet: 'Banyue',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Banyue',
       name: 'core_sheerForce',
     },
+    team: false,
   },
   core_fire_dmg_: {
     sheet: 'Banyue',
@@ -33,6 +35,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'core_fire_dmg_',
     },
+    team: false,
   },
   core_crit_dmg_: {
     sheet: 'Banyue',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'Banyue',
       name: 'core_crit_dmg_',
     },
+    team: false,
   },
   ability_fire_dmg_: {
     sheet: 'Banyue',
@@ -56,6 +60,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'ability_fire_dmg_',
     },
+    team: false,
   },
   m1_fire_resRed_: {
     sheet: 'Banyue',
@@ -68,6 +73,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'm1_fire_resRed_',
     },
+    team: false,
   },
   m1_basic_sheer_dmg_: {
     sheet: 'Banyue',
@@ -80,6 +86,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm1_basic_sheer_dmg_',
     },
+    team: false,
   },
   m1_exSpecial_sheer_dmg_: {
     sheet: 'Banyue',
@@ -92,6 +99,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_sheer_dmg_',
     },
+    team: false,
   },
   m2_crit_dmg_: {
     sheet: 'Banyue',
@@ -103,6 +111,7 @@ export const buffs = {
       sheet: 'Banyue',
       name: 'm2_crit_dmg_',
     },
+    team: false,
   },
   m2_fire_dmg_: {
     sheet: 'Banyue',
@@ -115,6 +124,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'm2_fire_dmg_',
     },
+    team: false,
   },
   m4_exSpecial_dmg_: {
     sheet: 'Banyue',
@@ -127,6 +137,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm4_exSpecial_dmg_',
     },
+    team: false,
   },
   m4_basic_dmg_: {
     sheet: 'Banyue',
@@ -139,5 +150,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm4_basic_dmg_',
     },
+    team: false,
   },
 } as const

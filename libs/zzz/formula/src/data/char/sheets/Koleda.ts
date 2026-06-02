@@ -28,9 +28,11 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { quick_use } = allBoolConditionals(key)
+const { quick_use } = allBoolConditionals(key, undefined, { quick_use: 1 })
 const { exSpecial_debuff } = allNumConditionals(key, true, 0, dm.ability.stacks)
-const { charge } = allNumConditionals(key, true, 0, dm.m4.stacks)
+const { charge } = allNumConditionals(key, true, 0, dm.m4.stacks, undefined, {
+  charge: 4,
+})
 
 const core_dazeInc_ = ownBuff.combat.dazeInc_.add(
   percent(subscript(char.core, dm.core.dazeInc_))

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'SwingJazz',
       name: 'set2',
     },
+    team: false,
   },
   set4_cond_chain_or_ult: {
     sheet: 'SwingJazz',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'SwingJazz',
       name: 'set4_cond_chain_or_ult',
     },
+    team: true,
   },
 } as const

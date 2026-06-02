@@ -5,12 +5,13 @@ export const buffs = {
     name: 'core_anom_mv_mult_',
     tag: {
       et: 'display',
-      qt: 'dmg',
+      qt: 'combat',
       q: 'anom_mv_mult_',
       sheet: 'Alice',
       attribute: 'physical',
       name: 'core_anom_mv_mult_',
     },
+    team: true,
   },
   core_addl_disorder_: {
     sheet: 'Alice',
@@ -23,6 +24,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'core_addl_disorder_',
     },
+    team: true,
   },
   core_physical_anomBuildup_: {
     sheet: 'Alice',
@@ -35,6 +37,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'core_physical_anomBuildup_',
     },
+    team: false,
   },
   ability_anomProf: {
     sheet: 'Alice',
@@ -46,6 +49,7 @@ export const buffs = {
       sheet: 'Alice',
       name: 'ability_anomProf',
     },
+    team: false,
   },
   m1_defRed_: {
     sheet: 'Alice',
@@ -57,6 +61,7 @@ export const buffs = {
       sheet: 'Alice',
       name: 'm1_defRed_',
     },
+    team: true,
   },
   m2_physical_anomaly_buff_: {
     sheet: 'Alice',
@@ -70,6 +75,7 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'm2_physical_anomaly_buff_',
     },
+    team: true,
   },
   m2_physical_disorder_buff_: {
     sheet: 'Alice',
@@ -83,6 +89,7 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'm2_physical_disorder_buff_',
     },
+    team: true,
   },
   m4_physical_resIgn_: {
     sheet: 'Alice',
@@ -95,6 +102,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'm4_physical_resIgn_',
     },
+    team: false,
   },
   m4_basic_anomBuildup_: {
     sheet: 'Alice',
@@ -107,6 +115,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm4_basic_anomBuildup_',
     },
+    team: false,
   },
   m6_crit_: {
     sheet: 'Alice',
@@ -118,5 +127,6 @@ export const buffs = {
       sheet: 'Alice',
       name: 'm6_crit_',
     },
+    team: false,
   },
 } as const

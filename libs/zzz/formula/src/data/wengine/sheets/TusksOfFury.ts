@@ -44,7 +44,8 @@ const sheet = registerWengine(
         interrupt_perfdodge.ifOn(subscript(phase, dm.dmg_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   ),
   registerBuff(
     'daze_',
@@ -54,7 +55,8 @@ const sheet = registerWengine(
         interrupt_perfdodge.ifOn(subscript(phase, dm.daze_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

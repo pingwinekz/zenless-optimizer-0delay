@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'ChaosJazz',
       name: 'set2',
     },
+    team: false,
   },
   set4_passive_fire_dmg_: {
     sheet: 'ChaosJazz',
@@ -23,6 +24,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'set4_passive_fire_dmg_',
     },
+    team: false,
   },
   set4_passive_electric_dmg_: {
     sheet: 'ChaosJazz',
@@ -36,6 +38,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'set4_passive_electric_dmg_',
     },
+    team: false,
   },
   set4_off_field_special_dmg_: {
     sheet: 'ChaosJazz',
@@ -49,6 +52,7 @@ export const buffs = {
       damageType1: 'special',
       name: 'set4_off_field_special_dmg_',
     },
+    team: false,
   },
   set4_off_field_assist_dmg_: {
     sheet: 'ChaosJazz',
@@ -59,8 +63,9 @@ export const buffs = {
       q: 'dmg_',
       sheet: 'ChaosJazz',
       dst: null,
-      skillType: 'assistSkill',
+      skillType2: 'assistSkill',
       name: 'set4_off_field_assist_dmg_',
     },
+    team: false,
   },
 } as const

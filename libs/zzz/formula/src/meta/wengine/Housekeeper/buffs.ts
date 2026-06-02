@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Housekeeper',
       name: 'enerRegen',
     },
+    team: false,
   },
   physical_dmg_: {
     sheet: 'Housekeeper',
@@ -22,5 +23,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'physical_dmg_',
     },
+    team: false,
   },
 } as const

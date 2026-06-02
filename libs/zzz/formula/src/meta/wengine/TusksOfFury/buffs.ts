@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'TusksOfFury',
       name: 'passive_shield_',
     },
+    team: false,
   },
   cond_dmg_: {
     sheet: 'TusksOfFury',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'TusksOfFury',
       name: 'cond_dmg_',
     },
+    team: true,
   },
   daze_: {
     sheet: 'TusksOfFury',
@@ -32,5 +34,6 @@ export const buffs = {
       sheet: 'TusksOfFury',
       name: 'daze_',
     },
+    team: true,
   },
 } as const

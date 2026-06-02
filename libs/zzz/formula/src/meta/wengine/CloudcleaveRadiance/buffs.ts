@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'passive_physical_resIgn_',
     },
+    team: false,
   },
   cond_common_dmg_: {
     sheet: 'CloudcleaveRadiance',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'CloudcleaveRadiance',
       name: 'cond_common_dmg_',
     },
+    team: false,
   },
   cond_crit_dmg_: {
     sheet: 'CloudcleaveRadiance',
@@ -33,5 +35,6 @@ export const buffs = {
       sheet: 'CloudcleaveRadiance',
       name: 'cond_crit_dmg_',
     },
+    team: false,
   },
 } as const

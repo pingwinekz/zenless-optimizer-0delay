@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Seth',
       name: 'core_anomProf',
     },
+    team: true,
   },
   ability_anomBuildupRes_: {
     sheet: 'Seth',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Seth',
       name: 'ability_anomBuildupRes_',
     },
+    team: true,
   },
   m2_basic_electric_anomBuildup_: {
     sheet: 'Seth',
@@ -34,6 +36,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm2_basic_electric_anomBuildup_',
     },
+    team: false,
   },
   m4_defensiveAssist_dazeInc_: {
     sheet: 'Seth',
@@ -46,6 +49,7 @@ export const buffs = {
       damageType1: 'defensiveAssist',
       name: 'm4_defensiveAssist_dazeInc_',
     },
+    team: false,
   },
   m6_crit_: {
     sheet: 'Seth',
@@ -57,6 +61,7 @@ export const buffs = {
       sheet: 'Seth',
       name: 'm6_crit_',
     },
+    team: false,
   },
   m6_crit_dmg_: {
     sheet: 'Seth',
@@ -68,5 +73,6 @@ export const buffs = {
       sheet: 'Seth',
       name: 'm6_crit_dmg_',
     },
+    team: false,
   },
 } as const

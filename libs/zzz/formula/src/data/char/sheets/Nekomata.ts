@@ -20,15 +20,29 @@ const dm = mappedStats.char[key]
 const { char } = own
 
 const { dodgeCounter_quickAssist_hit, from_behind, one_enemy_onField } =
-  allBoolConditionals(key)
+  allBoolConditionals(key, undefined, { from_behind: 1, one_enemy_onField: 2 })
 const { assaults_inflicted } = allNumConditionals(
   key,
   true,
   0,
   dm.ability.stacks
 )
-const { exSpecials_used } = allNumConditionals(key, true, 0, dm.m4.stacks)
-const { chain_ult_used } = allNumConditionals(key, true, 0, dm.m6.stacks)
+const { exSpecials_used } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m4.stacks,
+  undefined,
+  { exSpecials_used: 4 }
+)
+const { chain_ult_used } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m6.stacks,
+  undefined,
+  { chain_ult_used: 6 }
+)
 
 const sheet = register(
   key,

@@ -5,6 +5,12 @@ export const conditionals = {
     sheet: 'Lucia',
     name: 'dreamersNurseryRhyme',
     type: 'bool',
+    mindscapeRequirement: 1,
   },
-  etherVeil: { sheet: 'Lucia', name: 'etherVeil', type: 'bool' },
+  etherVeil: {
+    sheet: 'Lucia',
+    name: 'etherVeil',
+    type: 'bool',
+    mindscapeRequirement: 2,
+  },
 } as const

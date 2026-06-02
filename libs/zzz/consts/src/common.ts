@@ -187,12 +187,14 @@ export const statKeyTextMap: Partial<Record<string, string>> = {
   enemyDazeTaken_mult_: 'Enemy Daze Taken Multiplier',
   stun_: 'Stun DMG Multiplier',
   unstun_: 'Unstun DMG Multiplier',
+  stunned_mult_: 'Stun DMG Multiplier',
   res_: 'Resistance',
   resRed_: 'Resistance Reduction',
   sheer_mult_: 'Sheer DMG Multiplier',
   mv_mult_: 'DMG Multiplier Increase',
   buff_mult_: 'Buff Multiplier',
   anom_base_mult_: 'Anomaly Base DMG Multiplier',
+  veilVulnerabilityCap_: 'Veil Vulnerability',
 }
 
 export const elementalData: Record<AttributeKey, string> = {
@@ -205,7 +207,7 @@ export const elementalData: Record<AttributeKey, string> = {
 } as const
 
 Object.entries(elementalData).forEach(([e, name]) => {
-  statKeyTextMap[`${e}_dmg_`] = `${name} DMG`
+  statKeyTextMap[`${e}_dmg_`] = `${name} DMG Bonus`
 })
 
 export const rarityColor = {

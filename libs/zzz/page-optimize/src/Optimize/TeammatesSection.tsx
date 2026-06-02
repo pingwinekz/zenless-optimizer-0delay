@@ -1,10 +1,9 @@
-import { CardThemed } from '@genshin-optimizer/common/ui'
 import {
   useCharacterContext,
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
-import { SimpleGrid, Stack, Text } from '@mantine/core'
+import { Flex } from '@mantine/core'
 import { useCallback } from 'react'
 import { TeammateCard } from './TeammateCard'
 
@@ -24,26 +23,20 @@ export function TeammatesSection() {
 
   const teammates = team.teammates
   const extraTeammates = TEAMMATE_SLOTS.map(
-    (slotIndex) => teammates[slotIndex + 1]?.characterKey
+    (slotIndex) => teammates[slotIndex + 1]
   )
 
   return (
-    <CardThemed bgt="light" style={{ padding: 12 }}>
-      <Stack gap="sm">
-        <Text size="sm" fw={600}>
-          Teammates
-        </Text>
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="sm">
-          {TEAMMATE_SLOTS.map((slotIndex) => (
-            <TeammateCard
-              key={slotIndex}
-              slotIndex={slotIndex}
-              characterKey={extraTeammates[slotIndex]}
-              onRemove={() => removeTeammate(slotIndex)}
-            />
-          ))}
-        </SimpleGrid>
-      </Stack>
-    </CardThemed>
+    <Flex gap={10} style={{ flex: 1 }}>
+      {TEAMMATE_SLOTS.map((slotIndex) => (
+        <TeammateCard
+          key={slotIndex}
+          slotIndex={slotIndex}
+          characterKey={extraTeammates[slotIndex]?.characterKey}
+          teammateDatum={extraTeammates[slotIndex]}
+          onRemove={() => removeTeammate(slotIndex)}
+        />
+      ))}
+    </Flex>
   )
 }

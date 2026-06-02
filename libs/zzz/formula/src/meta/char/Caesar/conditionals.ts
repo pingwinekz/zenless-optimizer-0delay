@@ -11,7 +11,13 @@ export const conditionals = {
     sheet: 'Caesar',
     name: 'exSpecial_assistFollowup_used',
     type: 'bool',
+    mindscapeRequirement: 6,
   },
-  radiant_aegis: { sheet: 'Caesar', name: 'radiant_aegis', type: 'bool' },
+  radiant_aegis: {
+    sheet: 'Caesar',
+    name: 'radiant_aegis',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   stance_switch: { sheet: 'Caesar', name: 'stance_switch', type: 'bool' },
 } as const

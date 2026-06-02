@@ -36,7 +36,10 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { dark_abyss_reverb, normal_enemy, charged_shot_hit } =
-  allBoolConditionals(key)
+  allBoolConditionals(key, undefined, {
+    dark_abyss_reverb: 1,
+    charged_shot_hit: 4,
+  })
 const { stun_left } = allNumConditionals(key, true, 0, dm.core.stun_window3)
 
 const ability_check = (node: NumNode | number) =>

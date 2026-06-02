@@ -42,8 +42,15 @@ const {
   disorder_triggered,
   level_3_charge_hit,
   polar,
-} = allBoolConditionals(key)
-const { fallen_frost } = allNumConditionals(key, true, 0, dm.m1.max_stacks)
+} = allBoolConditionals(key, undefined, { level_3_charge_hit: 1, polar: 6 })
+const { fallen_frost } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m1.max_stacks,
+  undefined,
+  { fallen_frost: 1 }
+)
 
 const ability_check = (node: NumNode | number) =>
   cmpGE(

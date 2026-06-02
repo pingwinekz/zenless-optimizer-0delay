@@ -1,6 +1,6 @@
 import { useDataManagerValues } from '@genshin-optimizer/common/database-ui'
 import { useMediaQueryUp } from '@genshin-optimizer/common/react-util'
-import { CardThemed, useInfScroll } from '@genshin-optimizer/common/ui'
+import { useInfScroll } from '@genshin-optimizer/common/ui'
 import { filterFunction } from '@genshin-optimizer/common/util'
 import {
   useDatabaseContext,
@@ -8,11 +8,12 @@ import {
 } from '@genshin-optimizer/zzz/db-ui'
 import { discFilterConfigs } from '@genshin-optimizer/zzz/util'
 import { IconPlus, IconCopy } from '@tabler/icons-react'
-import { Box, Button, Card, SimpleGrid, Skeleton, Text } from '@mantine/core'
+import { Box, Button, Flex, SimpleGrid, Skeleton, Text } from '@mantine/core'
 import { Suspense, useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DiscCard } from './DiscCard'
 import DiscFilter from './DiscFilter'
+import discInventoryClasses from './DiscInventory.module.css'
 
 const columns = { xs: 2, sm: 3, md: 4, lg: 4, xl: 6 }
 const numToShowMap = { xs: 10, sm: 12, md: 24, lg: 24, xl: 24 }
@@ -58,10 +59,6 @@ export function DiscInventory({
     () => discIds.slice(0, numShow),
     [discIds, numShow]
   )
-  const showingTextProps = {
-    numShowing: discsIdsToShow.length,
-    totalShowing: totalShowing,
-  }
 
   return (
     <>
@@ -69,25 +66,14 @@ export function DiscInventory({
         numShowing={totalDiscsNum}
         total={totalDiscsNum}
         discIds={discIds}
-      ></DiscFilter>
-      <CardThemed bgt="dark">
-        <Card.Section p="sm">
-          <Box
-            pb={16}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            <Text c="dimmed">
-              Showing <b>{showingTextProps.numShowing}</b> out of{' '}
-              {showingTextProps.totalShowing} Items
-            </Text>
-          </Box>
-        </Card.Section>
-      </CardThemed>
+      />
+
+      <Flex className={discInventoryClasses.countRow}>
+        <Text size="xs" c="dimmed">
+          Showing <b>{discsIdsToShow.length}</b> out of {totalShowing} Items
+        </Text>
+      </Flex>
+
       <SimpleGrid cols={columns} spacing={8}>
         <Box>
           <Button
@@ -95,6 +81,7 @@ export function DiscInventory({
             onClick={onAdd}
             color="blue"
             leftSection={<IconPlus size={16} />}
+            size="xs"
           >
             {t('addNew')}
           </Button>
@@ -105,11 +92,13 @@ export function DiscInventory({
             onClick={onShowDup}
             color="blue"
             leftSection={<IconCopy size={16} />}
+            size="xs"
           >
             {t('showDupes')}
           </Button>
         </Box>
       </SimpleGrid>
+
       <Suspense fallback={<Skeleton width="100%" height={5000} />}>
         <Box>
           <SimpleGrid cols={columns} spacing={8}>

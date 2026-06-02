@@ -47,7 +47,8 @@ const sheet = registerWengine(
         prod(wilt, subscript(phase, dm.crit_dmg_ice_fire_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   ),
   registerBuff(
     'crit_dmg_fire_',
@@ -57,7 +58,8 @@ const sheet = registerWengine(
         prod(wilt, subscript(phase, dm.crit_dmg_ice_fire_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

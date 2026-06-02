@@ -1,5 +1,7 @@
 import { allDiscSetKeys, discSetNames } from '@genshin-optimizer/zzz/consts'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
+import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
+import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import {
   useCharacterContext,
   useDatabaseContext,
@@ -7,9 +9,17 @@ import {
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
-import { Translate } from '@genshin-optimizer/zzz/i18n'
-import { Drawer, Flex, HoverCard, Select, Switch, Text } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import {
+  Box,
+  Drawer,
+  Flex,
+  HoverCard,
+  Select,
+  Skeleton,
+  Switch,
+  Text,
+} from '@mantine/core'
+import { Suspense, useMemo, useState } from 'react'
 
 const conditionalIconWidth = 32
 const conditionalNameWidth = 200
@@ -36,7 +46,11 @@ export function FormSetConditionals({
       size={450}
       keepMounted
     >
-      {hasOpened && <FormSetConditionalsContent />}
+      {hasOpened && (
+        <Suspense fallback={<Skeleton height={300} />}>
+          <FormSetConditionalsContent />
+        </Suspense>
+      )}
     </Drawer>
   )
 }
@@ -76,7 +90,7 @@ function DiscSetConditionalRow({
   sheet: string
   condEntries: [string, IConditionalData][]
 }) {
-  const genNs = `disc_${sheet}_gen`
+  const uiSheet = discUiSheets[sheet as keyof typeof discUiSheets]
 
   return (
     <HoverCard
@@ -125,14 +139,20 @@ function DiscSetConditionalRow({
         <Text fw={600} mb={4} size="sm">
           {discSetNames[sheet as keyof typeof discSetNames] ?? sheet}
         </Text>
-        <Flex direction="column" gap={4}>
-          <Text size="xs">
-            <Translate ns={genNs} key18="desc2" />
-          </Text>
-          <Text size="xs">
-            <Translate ns={genNs} key18="desc4" />
-          </Text>
-        </Flex>
+        {uiSheet && (
+          <Box>
+            {Object.entries(uiSheet).map(([blockKey, block]) => (
+              <Box key={blockKey} mb="xs">
+                <Text size="xs" fw={500} c="dimmed" mb={2}>
+                  {blockKey === '2' ? '2-Piece' : '4-Piece'}
+                </Text>
+                {block.documents.map((doc, i) => (
+                  <DocumentDisplay key={i} document={doc} typoVariant="body2" />
+                ))}
+              </Box>
+            ))}
+          </Box>
+        )}
       </HoverCard.Dropdown>
     </HoverCard>
   )

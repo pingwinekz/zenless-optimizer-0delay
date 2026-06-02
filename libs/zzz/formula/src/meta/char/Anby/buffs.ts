@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Anby',
       name: 'core_after3rdBasic_dazeInc_',
     },
+    team: false,
   },
   m1_after4thHit_energyRegen_: {
     sheet: 'Anby',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Anby',
       name: 'm1_after4thHit_energyRegen_',
     },
+    team: false,
   },
   m2_stunned_basic_dmg_: {
     sheet: 'Anby',
@@ -33,6 +35,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm2_stunned_basic_dmg_',
     },
+    team: false,
   },
   m2_unstunned_ex_dazeInc_: {
     sheet: 'Anby',
@@ -45,6 +48,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm2_unstunned_ex_dazeInc_',
     },
+    team: false,
   },
   m6_charge_basic_dmg_: {
     sheet: 'Anby',
@@ -57,6 +61,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm6_charge_basic_dmg_',
     },
+    team: false,
   },
   m6_charge_exSpecial_dmg_: {
     sheet: 'Anby',
@@ -69,5 +74,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm6_charge_exSpecial_dmg_',
     },
+    team: false,
   },
 } as const

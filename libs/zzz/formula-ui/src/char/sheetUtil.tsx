@@ -63,6 +63,7 @@ export function fieldForBuff(buff: IFormulaData<Tag>) {
   return {
     title: <TagDisplay tag={buff.tag} preventRecursion />,
     fieldRef: buff.tag,
+    ...(buff.team !== undefined ? { team: buff.team } : {}),
   }
 }
 

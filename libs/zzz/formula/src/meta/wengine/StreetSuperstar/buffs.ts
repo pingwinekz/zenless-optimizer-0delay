@@ -11,5 +11,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'cond_ult_dmg_',
     },
+    team: false,
   },
 } as const

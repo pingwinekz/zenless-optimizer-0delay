@@ -1,50 +1,79 @@
+import { ImgIcon } from '@genshin-optimizer/common/ui'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
-import { CardThemed, ImgIcon } from '@genshin-optimizer/common/ui'
-import { characterAsset } from '@genshin-optimizer/zzz/assets'
+import {
+  characterAsset,
+  discDefIcon,
+  wengineAsset,
+} from '@genshin-optimizer/zzz/assets'
 import type {
   CharacterKey,
   DiscSetKey,
+  PhaseKey,
   WengineKey,
 } from '@genshin-optimizer/zzz/consts'
+import { allPhaseKeys } from '@genshin-optimizer/zzz/consts'
+import type { TeammateDatum } from '@genshin-optimizer/zzz/db'
 import {
+  useCharacter,
   useCharacterContext,
   useDatabaseContext,
+  useDiscs,
+  useDiscSets,
 } from '@genshin-optimizer/zzz/db-ui'
-import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import {
   CharacterName,
   CharacterSingleSelectionModal,
-  DiscSetAutocomplete,
-  WengineAutocomplete,
+  DiscSetName,
+  WengineName,
+  WengineSelectionModal,
 } from '@genshin-optimizer/zzz/ui'
 import {
   ActionIcon,
+  Avatar,
+  Box,
   Button,
-  CloseButton,
   Flex,
   Group,
+  SegmentedControl,
   Stack,
   Text,
 } from '@mantine/core'
 import { IconRefresh } from '@tabler/icons-react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { CharacterConditionalsDisplay } from './CharacterConditionalsDisplay'
+import { DiscConditionalsDisplay } from './DiscConditionalsDisplay'
 import { WEngineConditionalsDisplay } from './WEngineConditionalsDisplay'
+import { charSheets, discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
+import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
+import type { ReactNode } from 'react'
+import classes from './TeammateCard.module.css'
+
+const MINDSCAPE_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
+  value: String(i),
+  label: String(i),
+}))
+
+const PHASE_OPTIONS = allPhaseKeys.map((p) => ({
+  value: String(p),
+  label: String(p),
+}))
 
 export function TeammateCard({
   slotIndex,
   characterKey,
+  teammateDatum,
   onRemove,
 }: {
   slotIndex: number
   characterKey: CharacterKey | undefined
+  teammateDatum?: TeammateDatum
   onRemove: () => void
 }) {
   const mainChar = useCharacterContext()!
   const { database } = useDatabaseContext()
   const [showCharModal, onShowCharModal, onHideCharModal] = useBoolState()
-  const [discSet2p, setDiscSet2p] = useState<DiscSetKey | ''>('')
-  const [discSet4p, setDiscSet4p] = useState<DiscSetKey | ''>('')
+  const [showWengineModal, onShowWengineModal, onHideWengineModal] =
+    useBoolState()
 
   const setTeammate = useCallback(
     (ck: CharacterKey | null) => {
@@ -53,21 +82,57 @@ export function TeammateCard({
     [database.teams, mainChar.key, slotIndex]
   )
 
-  const removeTeammate = useCallback(() => {
-    database.teams.setTeammate(mainChar.key, null, slotIndex)
-    onRemove()
-  }, [database.teams, mainChar.key, slotIndex, onRemove])
+  const teammate = useCharacter(characterKey)
+  const teammateWengineKey: WengineKey | '' = teammate?.wengineKey || ''
+  const effectiveMindscape =
+    teammateDatum?.mindscape ?? teammate?.mindscape ?? 0
+  const effectiveWenginePhase =
+    teammateDatum?.wenginePhase ?? teammate?.wenginePhase ?? 1
 
-  const teammate = useMemo(
-    () => (characterKey ? database.chars.get(characterKey) : undefined),
-    [database.chars, characterKey]
+  // Get teammate's equipped discs and compute active set bonuses
+  const teammateDiscs = useDiscs(teammate?.equippedDiscs)
+  const activeSets = useDiscSets(teammateDiscs)
+  const hasDiscInfo = Object.keys(activeSets).length > 0
+  const hasDiscConditionals = useMemo(() => {
+    // A 4p set implies the 2p effect is also active, so include both blocks
+    // when scanning for conditionals. Only the matching block's conditionals
+    // are shown — e.g. a 4p effect's conditional only appears when 4p is
+    // actually equipped, not when only 2p of that set is active.
+    return Object.entries(activeSets).some(([setKey, count]) => {
+      const blocksToScan: Array<'2' | '4'> = count === 4 ? ['2', '4'] : ['2']
+      return blocksToScan.some((blockKey) => {
+        const block = discUiSheets[setKey as DiscSetKey]?.[blockKey]
+        return block?.documents.some(
+          (doc) => doc.type === 'conditional' && !!doc.conditional
+        )
+      })
+    })
+  }, [activeSets])
+
+  const setMindscape = useCallback(
+    (val: number) => {
+      if (!characterKey) return
+      database.teams.setTeammateOverride(mainChar.key, characterKey, {
+        mindscape: val,
+      })
+    },
+    [characterKey, database.teams, mainChar.key]
   )
 
-  const teammateWengineKey: WengineKey | '' = teammate?.wengineKey || ''
+  const setPhase = useCallback(
+    (val: PhaseKey) => {
+      if (!characterKey) return
+      database.teams.setTeammateOverride(mainChar.key, characterKey, {
+        wenginePhase: val,
+      })
+    },
+    [characterKey, database.teams, mainChar.key]
+  )
 
   const setWengineKey = useCallback(
     (wKey: WengineKey | '') => {
       if (!characterKey) return
+      database.chars.getOrCreate(characterKey)
       database.chars.set(characterKey, {
         wengineKey: wKey,
       })
@@ -77,12 +142,84 @@ export function TeammateCard({
 
   const syncFromRoster = useCallback(() => {
     if (!characterKey) return
-    database.teams.setTeammate(mainChar.key, characterKey, slotIndex)
-  }, [characterKey, database.teams, mainChar.key, slotIndex])
+    database.teams.setTeammateOverride(mainChar.key, characterKey, {
+      mindscape: undefined,
+      wenginePhase: undefined,
+    })
+  }, [characterKey, database.teams, mainChar.key])
 
+  // Build conditional → fields map from formula-ui sheet
+  // Only include team-wide buffs (team: true) since self-buffs don't affect the main character
+  // NOTE: This hook must be called BEFORE the early return to avoid violating React's Rules of Hooks
+  const conditionalFields = useMemo(() => {
+    if (!characterKey) return undefined
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const result: Record<string, Field[]> = {}
+    Object.values(sheet).forEach((section) => {
+      section.documents.forEach((doc) => {
+        if (
+          doc.type === 'conditional' &&
+          doc.conditional?.fields &&
+          doc.conditional.fields.length > 0
+        ) {
+          const condName = doc.conditional.metadata.name
+          const teamFields = doc.conditional.fields.filter(
+            (f) => !('team' in f) || f.team !== false
+          )
+          if (teamFields.length === 0) return // skip if no team-wide fields
+          if (!result[condName]) result[condName] = []
+          // Deduplicate by stat key (q) — same stat from different sources
+          // (e.g. exSpecial_atk + core_atk both → q: 'atk') shows once
+          const seenQs = new Set(
+            result[condName]
+              .map((f) => ('fieldRef' in f ? f.fieldRef?.q : undefined))
+              .filter(Boolean)
+          )
+          for (const field of teamFields) {
+            const q = 'fieldRef' in field ? field.fieldRef?.q : undefined
+            if (!q || !seenQs.has(q)) {
+              if (q) seenQs.add(q)
+              result[condName].push(field)
+            }
+          }
+        }
+      })
+    })
+    return result
+  }, [characterKey])
+
+  // Build conditional → description map from formula-ui sheet.
+  // Multiple sheet entries may share the same condName — concatenate their
+  // descriptions rather than overwriting, so users see all relevant info.
+  const conditionalDescriptions = useMemo(() => {
+    if (!characterKey) return undefined
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const result: Record<string, ReactNode> = {}
+    Object.values(sheet).forEach((section) => {
+      section.documents.forEach((doc) => {
+        if (doc.type === 'conditional' && doc.conditional?.description) {
+          const condName = doc.conditional.metadata.name
+          const desc = doc.conditional.description
+          if (typeof desc === 'function') return
+          if (result[condName]) {
+            // Append with a line break separator (always strings)
+            result[condName] = `${result[condName]}\n\n${desc}`
+          } else {
+            result[condName] = desc
+          }
+        }
+      })
+    })
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [characterKey])
+
+  // Early return for empty state (no character selected)
+  // Must be after all hooks to avoid violating React's Rules of Hooks
   if (!characterKey) {
     return (
-      <CardThemed bgt="light" style={{ padding: 16 }}>
+      <Flex className={classes.card} p={16} align="center" justify="center">
         <Stack gap="sm" align="center">
           <Text size="sm" c="dimmed">
             Teammate {slotIndex + 1}
@@ -105,84 +242,228 @@ export function TeammateCard({
             showNone={false}
           />
         </Stack>
-      </CardThemed>
+      </Flex>
     )
   }
 
-  const charStat = getCharStat(characterKey)
-
   return (
-    <CardThemed bgt="light" style={{ padding: 12 }}>
+    <>
       <CharacterSingleSelectionModal
         show={showCharModal}
         onHide={onHideCharModal}
         onSelect={(ck) => {
-          if (ck) setTeammate(ck)
+          if (ck) {
+            setTeammate(ck)
+          } else {
+            onRemove()
+          }
           onHideCharModal()
         }}
-        showNone={false}
+        showNone={true}
       />
-      <Stack gap="sm">
-        <Flex justify="space-between" align="center">
-          <Group gap="xs">
-            <ImgIcon size={2} src={characterAsset(characterKey, 'circle')} />
-            <Text
-              size="sm"
-              fw={600}
-              style={{ color: charStat.attribute ?? undefined }}
+      <Stack className={classes.card} gap={0}>
+        {/* ═══════════════════ Main two-column layout ═══════════════════ */}
+        <Flex style={{ flex: 1, minHeight: 0 }} gap={0}>
+          {/* ═══ Left column — Character ═══ */}
+          <Flex
+            direction="column"
+            py={10}
+            pl={10}
+            pr={3}
+            style={{
+              flex: 1,
+              minWidth: 0,
+              borderRight: '1px solid var(--mantine-color-default-border)',
+            }}
+          >
+            {/* Character header: avatar + name + sync */}
+            <Group gap={6} wrap="nowrap" mb={6}>
+              <Avatar
+                src={characterAsset(characterKey, 'circle')}
+                size={48}
+                radius={48}
+                className={classes.avatar}
+                onClick={onShowCharModal}
+              />
+              <Flex direction="column" style={{ flex: 1, minWidth: 0 }}>
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={onShowCharModal}
+                  fullWidth
+                >
+                  <CharacterName characterKey={characterKey} />
+                </Button>
+              </Flex>
+              <ActionIcon
+                size={26}
+                variant="default"
+                onClick={syncFromRoster}
+                title="Sync from roster"
+              >
+                <IconRefresh size={14} />
+              </ActionIcon>
+            </Group>
+
+            {/* Mindscape segmented control */}
+            <SegmentedControl
+              size="xs"
+              value={String(effectiveMindscape)}
+              data={MINDSCAPE_OPTIONS}
+              onChange={(val) => setMindscape(Number(val))}
+              fullWidth
+              withItemsBorders={false}
+              className={classes.segmented}
+              mb={6}
+            />
+
+            {/* Character conditionals */}
+            <Box style={{ flex: 1, overflow: 'auto' }}>
+              <CharacterConditionalsDisplay
+                characterKey={characterKey}
+                mindscapeOverride={effectiveMindscape}
+                conditionalFields={conditionalFields}
+                conditionalDescriptions={conditionalDescriptions}
+                showZeroFields={true}
+              />
+            </Box>
+          </Flex>
+
+          {/* ═══ Right column — Disc conditionals (top) + W-Engine (bottom) ═══ */}
+          <Flex direction="column" style={{ flex: 1, minWidth: 0 }}>
+            {/* ═══ Upper right — Disc conditionals ═══ */}
+            <Box
+              style={{
+                flex: 1,
+                overflow: 'auto',
+                borderBottom: '1px solid var(--mantine-color-default-border)',
+                padding: '10px',
+                minHeight: 0,
+              }}
             >
-              <CharacterName characterKey={characterKey} />
-            </Text>
-          </Group>
-          <Group gap={4}>
-            <ActionIcon
-              size="sm"
-              variant="subtle"
-              onClick={syncFromRoster}
-              title="Sync from roster"
+              {/* Equipped disc sets display */}
+              <Flex direction="column" w="100%" gap={4} mb={6}>
+                {hasDiscInfo ? (
+                  Object.entries(activeSets).map(([setKey, count]) => (
+                    <Flex key={setKey} align="center" gap={4}>
+                      <ImgIcon src={discDefIcon(setKey)} size={1.5} />
+                      <Text
+                        size="xs"
+                        lineClamp={1}
+                        style={{ flex: 1, lineHeight: '18px' }}
+                      >
+                        <DiscSetName setKey={setKey as any} />
+                      </Text>
+                      <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
+                        {count}p
+                      </Text>
+                    </Flex>
+                  ))
+                ) : (
+                  <Text size="xs" c="dimmed" ta="center">
+                    No disc sets
+                  </Text>
+                )}
+              </Flex>
+              {hasDiscConditionals ? (
+                <DiscConditionalsDisplay
+                  activeSets={activeSets}
+                  teammateKey={characterKey}
+                />
+              ) : (
+                <Text size="xs" c="dimmed" ta="center" mt="md">
+                  No disc conditionals
+                </Text>
+              )}
+            </Box>
+
+            {/* ═══ Bottom right — W-Engine conditionals ═══ */}
+            <WengineSelectionModal
+              show={showWengineModal}
+              onHide={onHideWengineModal}
+              onSelect={(wKey) => setWengineKey(wKey)}
+            />
+            <Box
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                padding: '10px',
+                minHeight: 0,
+              }}
             >
-              <IconRefresh size={14} />
-            </ActionIcon>
-            <CloseButton size="sm" onClick={removeTeammate} />
-          </Group>
+              {/* Header: wengine name + phase selector on one line */}
+              <Flex gap={6} align="center" wrap="nowrap" mb={6}>
+                <Flex direction="column" style={{ flex: 1, minWidth: 0 }}>
+                  <Button
+                    size="sm"
+                    variant="default"
+                    onClick={onShowWengineModal}
+                    fullWidth
+                  >
+                    {teammateWengineKey ? (
+                      <WengineName wKey={teammateWengineKey} />
+                    ) : (
+                      'Select a Wengine'
+                    )}
+                  </Button>
+                </Flex>
+                <SegmentedControl
+                  size="xs"
+                  value={String(effectiveWenginePhase)}
+                  data={PHASE_OPTIONS}
+                  onChange={(val) => setPhase(Number(val) as PhaseKey)}
+                  withItemsBorders={false}
+                />
+              </Flex>
+              {/* Body: conditionals on left, icon on right (under phase selector) */}
+              <Flex gap={8} style={{ flex: 1, minHeight: 0 }}>
+                <Box style={{ flex: 1, minWidth: 0, overflow: 'auto' }}>
+                  {teammateWengineKey ? (
+                    <WEngineConditionalsDisplay
+                      wengineKey={teammateWengineKey}
+                      teammateKey={characterKey}
+                    />
+                  ) : (
+                    <Text size="xs" c="dimmed" ta="center" mt="md">
+                      No wengine equipped
+                    </Text>
+                  )}
+                </Box>
+                <Flex
+                  direction="column"
+                  align="center"
+                  justify="flex-start"
+                  pt={4}
+                  style={{ flexShrink: 0 }}
+                >
+                  {teammateWengineKey ? (
+                    <Avatar
+                      src={wengineAsset(teammateWengineKey, 'icon')}
+                      size={48}
+                      radius="sm"
+                      style={{ cursor: 'pointer' }}
+                      onClick={onShowWengineModal}
+                    />
+                  ) : (
+                    <Box
+                      onClick={onShowWengineModal}
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 'var(--mantine-radius-sm)',
+                        background: 'var(--mantine-color-dark-6)',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  )}
+                </Flex>
+              </Flex>
+            </Box>
+          </Flex>
         </Flex>
-
-        <Button fullWidth size="xs" variant="subtle" onClick={onShowCharModal}>
-          Change Character
-        </Button>
-
-        <CharacterConditionalsDisplay characterKey={characterKey} />
-
-        <Stack gap={4}>
-          <Text size="xs" fw={600}>
-            Disc Sets
-          </Text>
-          <DiscSetAutocomplete
-            discSetKey={discSet2p}
-            setDiscSetKey={setDiscSet2p}
-            label="2-Piece Set"
-          />
-          <DiscSetAutocomplete
-            discSetKey={discSet4p}
-            setDiscSetKey={setDiscSet4p}
-            label="4-Piece Set"
-          />
-        </Stack>
-
-        <Stack gap={4}>
-          <Text size="xs" fw={600}>
-            W-Engine
-          </Text>
-          <WengineAutocomplete
-            wkey={teammateWengineKey ?? ''}
-            setWKey={setWengineKey}
-          />
-        </Stack>
-
-        {teammateWengineKey && (
-          <WEngineConditionalsDisplay wengineKey={teammateWengineKey} />
-        )}
       </Stack>
-    </CardThemed>
+    </>
   )
 }

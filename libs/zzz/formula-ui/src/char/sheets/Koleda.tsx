@@ -27,6 +27,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.exSpecial)' }),
+        description:
+          'Increases Chain Attack DMG against enemies hit by EX Special Attack.',
         metadata: cond.exSpecial_debuff,
         fields: [fieldForBuff(buff.ability_chain_dmg_)],
       },
@@ -37,6 +39,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
+        description:
+          'Increases Daze from Special and EX Special Attacks when used quickly in succession.',
         metadata: cond.quick_use,
         fields: [
           fieldForBuff(buff.m1_special_dazeInc_),
@@ -50,6 +54,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
+        description:
+          'Increases Chain Attack and Ultimate DMG after consuming Furnace Fire.',
         metadata: cond.charge,
         fields: [
           fieldForBuff(buff.m4_chain_dmg_),

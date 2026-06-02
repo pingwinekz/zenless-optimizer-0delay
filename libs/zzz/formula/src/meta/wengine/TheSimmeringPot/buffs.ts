@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'TheSimmeringPot',
       name: 'assistFollowUp_daze_',
     },
+    team: false,
   },
   assistFollowUp_dmg_: {
     sheet: 'TheSimmeringPot',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'TheSimmeringPot',
       name: 'assistFollowUp_dmg_',
     },
+    team: false,
   },
 } as const

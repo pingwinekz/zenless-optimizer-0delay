@@ -70,7 +70,8 @@ const sheet = registerWengine(
         prod(chainOrUlt, percent(subscript(phase, dm.fire_dmg_)))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

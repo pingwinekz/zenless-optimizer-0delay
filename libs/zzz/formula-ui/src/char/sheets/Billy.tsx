@@ -25,6 +25,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.chain)' }),
+        description:
+          'Upon launching a Chain Attack, Billy gains increased Ultimate DMG.',
         metadata: cond.ult_dmg_stacks,
         fields: [fieldForBuff(buff.ability_ult_dmg_)],
       },
@@ -41,6 +43,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
+        description:
+          'When at a distance from the target, Billy gains increased EX Special Attack CRIT Rate.',
         metadata: cond.distance,
         fields: [fieldForBuff(buff.m4_exSpecial_crit_)],
       },
@@ -51,6 +55,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
+        description:
+          'When Billy accumulates hits or triggers a Perfect Dodge, he gains increased crouching shot DMG.',
         metadata: cond.m6_stacks,
         fields: [fieldForBuff(buff.m6_common_dmg_)],
       },

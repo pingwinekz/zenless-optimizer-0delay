@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'IceJadeTeapot',
       name: 'impact_',
     },
+    team: false,
   },
   common_dmg_: {
     sheet: 'IceJadeTeapot',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'IceJadeTeapot',
       name: 'common_dmg_',
     },
+    team: true,
   },
 } as const

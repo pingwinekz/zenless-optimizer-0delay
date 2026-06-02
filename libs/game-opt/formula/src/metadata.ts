@@ -13,6 +13,7 @@ type Conditionals = Record<string, Record<string, IConditionalData>>
 type Formulas<T> = Record<string, Record<string, IFormulaData<T>>>
 
 const condMeta = Symbol.for('condMeta')
+const condMindscapeReqs = Symbol.for('condMindscapeReqs')
 
 export function extractCondMetadata(
   data: TagMapNodeEntries<Tag>,
@@ -29,10 +30,19 @@ export function extractCondMetadata(
         return
       }
       const { sheet, name } = extractCond(n.tag!)
+      const mindscapeReqs = n.tag?.[condMindscapeReqs as any] as
+        | Record<string, number>
+        | undefined
+      const mindscapeRequirement = mindscapeReqs?.[name]
       result[sheet] ??= {}
       if (result[sheet][name])
         console.log(`Duplicated conditionals for ${sheet}:${name}`)
-      result[sheet][name] = { sheet, name, ...meta! }
+      result[sheet][name] = {
+        sheet,
+        name,
+        ...meta!,
+        ...(mindscapeRequirement !== undefined && { mindscapeRequirement }),
+      }
     }
   )
   return sortMeta(result)

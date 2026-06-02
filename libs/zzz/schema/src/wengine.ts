@@ -1,7 +1,4 @@
-import {
-  zodBoundedNumber,
-  zodEnum,
-} from '@genshin-optimizer/common/database'
+import { zodBoundedNumber, zodEnum } from '@genshin-optimizer/common/database'
 import {
   type MilestoneKey,
   type PhaseKey,

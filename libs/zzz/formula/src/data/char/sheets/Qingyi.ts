@@ -36,9 +36,25 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { moonlit_blossoms_hit } = allBoolConditionals(key)
-const { flash_connect_consumed } = allNumConditionals(key, true, 0, 25)
-const { subjugation } = allNumConditionals(key, true, 0, dm.core.max_stacks)
+const { moonlit_blossoms_hit } = allBoolConditionals(key, undefined, {
+  moonlit_blossoms_hit: 6,
+})
+const { flash_connect_consumed } = allNumConditionals(
+  key,
+  true,
+  0,
+  25,
+  undefined,
+  { flash_connect_consumed: 1 }
+)
+const { subjugation } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.core.max_stacks,
+  undefined,
+  { subjugation: 2 }
+)
 
 const flash_connect_dmg_ = ownBuff.combat.common_dmg_.add(
   prod(flash_connect_consumed, percent(0.01))

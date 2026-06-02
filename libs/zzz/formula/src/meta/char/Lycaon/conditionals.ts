@@ -7,6 +7,7 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 5,
+    mindscapeRequirement: 6,
   },
   durationLeft: {
     sheet: 'Lycaon',

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'MoonlightLullaby',
       name: 'set2',
     },
+    team: false,
   },
   set4_common_dmg_: {
     sheet: 'MoonlightLullaby',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'MoonlightLullaby',
       name: 'set4_common_dmg_',
     },
+    team: true,
   },
 } as const

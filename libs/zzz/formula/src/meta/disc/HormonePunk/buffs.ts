@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'HormonePunk',
       name: 'set2',
     },
+    team: false,
   },
   set4_cond_entering_combat: {
     sheet: 'HormonePunk',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'HormonePunk',
       name: 'set4_cond_entering_combat',
     },
+    team: false,
   },
 } as const

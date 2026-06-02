@@ -140,7 +140,7 @@ export function CharacterSelectorDisplay({
     }))
   }, [])
 
-  // Sort options (like fribbels' grouped "Sorted by")
+  // Sort options matching OptimizerGrid columns
   const sortByOptions = [
     {
       group: 'DMG',
@@ -149,17 +149,19 @@ export function CharacterSelectorDisplay({
         { value: 'final_atk', label: 'ATK' },
         { value: 'final_hp', label: 'HP' },
         { value: 'final_def', label: 'DEF' },
+        { value: 'final_impact', label: 'Impact' },
       ],
     },
     {
       group: 'Stats',
       items: [
-        { value: 'final_anomProf', label: 'Anomaly Proficiency' },
-        { value: 'final_anomMas', label: 'Anomaly Mastery' },
-        { value: 'final_enerRegen', label: 'Energy Regen' },
         { value: 'final_critRate', label: 'Crit Rate' },
         { value: 'final_critDmg', label: 'Crit DMG' },
-        { value: 'final_penRatio', label: 'PEN Ratio' },
+        { value: 'final_pen', label: 'PEN' },
+        { value: 'final_sheerForce', label: 'Sheer Force' },
+        { value: 'final_enerRegen', label: 'Energy Regen' },
+        { value: 'final_anomProf', label: 'Anomaly Proficiency' },
+        { value: 'final_anomMas', label: 'Anomaly Mastery' },
       ],
     },
   ]

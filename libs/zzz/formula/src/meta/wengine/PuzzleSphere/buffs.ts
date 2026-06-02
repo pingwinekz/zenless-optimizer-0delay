@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'PuzzleSphere',
       name: 'launchingExSpecial_crit_dmg_',
     },
+    team: false,
   },
   targetHpBelow50_exSpecial_dmg_: {
     sheet: 'PuzzleSphere',
@@ -22,5 +23,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'targetHpBelow50_exSpecial_dmg_',
     },
+    team: false,
   },
 } as const

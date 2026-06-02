@@ -27,7 +27,9 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { markedWithSilverStar } = allBoolConditionals(key)
+const { markedWithSilverStar } = allBoolConditionals(key, undefined, {
+  markedWithSilverStar: 2,
+})
 
 const ability_on = cmpGE(
   sum(
@@ -62,7 +64,7 @@ const sheet = register(
       'chain',
       'ChainAttackLeapingThunderstrike',
       0,
-      { ...baseTag, damageType1: 'chain', skillType: 'chainSkill' },
+      { ...baseTag, damageType1: 'chain', skillType1: 'chainSkill' },
       'atk',
       { cond: ability_off }
     ),
@@ -74,7 +76,7 @@ const sheet = register(
       {
         ...baseTag,
         damageType1: 'ult',
-        skillType: 'chainSkill',
+        skillType1: 'chainSkill',
       },
       'atk',
       { cond: ability_off }
@@ -89,7 +91,7 @@ const sheet = register(
       ...baseTag,
       damageType1: 'chain',
       damageType2: 'aftershock',
-      skillType: 'chainSkill',
+      skillType1: 'chainSkill',
     },
     'atk',
     'chain',
@@ -102,7 +104,7 @@ const sheet = register(
       ...baseTag,
       damageType1: 'ult',
       damageType2: 'aftershock',
-      skillType: 'chainSkill',
+      skillType1: 'chainSkill',
     },
     'atk',
     'chain',

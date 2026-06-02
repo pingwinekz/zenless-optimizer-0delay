@@ -30,7 +30,11 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { consumingHp_consecutiveStrikes, moltenEdge } = allBoolConditionals(key)
+const { consumingHp_consecutiveStrikes, moltenEdge } = allBoolConditionals(
+  key,
+  undefined,
+  { moltenEdge: 2 }
+)
 const { hpTallied } = allNumConditionals(
   key,
   true,

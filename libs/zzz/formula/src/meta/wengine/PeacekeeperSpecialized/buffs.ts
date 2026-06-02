@@ -11,6 +11,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'passive_exSpecial_anomBuildup_',
     },
+    team: false,
   },
   passive_assist_anomBuildup_: {
     sheet: 'PeacekeeperSpecialized',
@@ -23,6 +24,7 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'passive_assist_anomBuildup_',
     },
+    team: false,
   },
   enerRegen: {
     sheet: 'PeacekeeperSpecialized',
@@ -34,5 +36,6 @@ export const buffs = {
       sheet: 'PeacekeeperSpecialized',
       name: 'enerRegen',
     },
+    team: false,
   },
 } as const

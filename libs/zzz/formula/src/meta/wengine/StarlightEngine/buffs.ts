@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'StarlightEngine',
       name: 'cond_dmg_',
     },
+    team: false,
   },
 } as const

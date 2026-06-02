@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'MagneticStormBravo',
       name: 'anomProf',
     },
+    team: false,
   },
 } as const

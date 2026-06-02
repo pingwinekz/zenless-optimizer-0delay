@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'passive_physical_dmg_',
     },
+    team: false,
   },
   cond_dmg_: {
     sheet: 'SteelCushion',
@@ -22,5 +23,6 @@ export const buffs = {
       sheet: 'SteelCushion',
       name: 'cond_dmg_',
     },
+    team: false,
   },
 } as const

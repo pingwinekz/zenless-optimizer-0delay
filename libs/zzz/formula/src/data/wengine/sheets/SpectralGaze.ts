@@ -43,7 +43,8 @@ const sheet = registerWengine(
         hit_aftershock_electric.ifOn(subscript(phase, dm.defRed_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   ),
   registerBuff(
     'cond_impact_',

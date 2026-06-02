@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'set2',
     },
+    team: false,
   },
   set4_crit_: {
     sheet: 'WhiteWaterBallad',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'WhiteWaterBallad',
       name: 'set4_crit_',
     },
+    team: false,
   },
   set4_atk_: {
     sheet: 'WhiteWaterBallad',
@@ -33,5 +35,6 @@ export const buffs = {
       sheet: 'WhiteWaterBallad',
       name: 'set4_atk_',
     },
+    team: false,
   },
 } as const

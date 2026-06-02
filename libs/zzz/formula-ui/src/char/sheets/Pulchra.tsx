@@ -14,6 +14,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: "Increases Daze inflicted while in Hunter's Gait state.",
         metadata: cond.hunters_gait,
         fields: [fieldForBuff(buff.core_dazeInc_)],
       },
@@ -24,6 +25,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Increases Aftershock damage against enemies affected by Binding Trap.',
         metadata: cond.binding_trap,
         fields: [fieldForBuff(buff.ability_aftershock_dmg_)],
       },
@@ -34,6 +37,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Increases CRIT Rate against enemies affected by Binding Trap.',
         metadata: cond.binding_trap,
         fields: [fieldForBuff(buff.m1_crit_)],
       },
@@ -44,6 +49,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: "Increases ATK while in Hunter's Gait state.",
         metadata: cond.hunters_gait,
         fields: [fieldForBuff(buff.m2_atk_)],
       },
@@ -58,6 +64,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Increases damage against enemies affected by Binding Trap.',
         metadata: cond.binding_trap,
         fields: [fieldForBuff(buff.m6_common_dmg_)],
       },

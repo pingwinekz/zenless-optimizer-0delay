@@ -34,7 +34,10 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { zeroedIn, ultUsed } = allBoolConditionals(key)
+const { zeroedIn, ultUsed } = allBoolConditionals(key, undefined, {
+  zeroedIn: 1,
+  ultUsed: 2,
+})
 
 const m1_fire_resIgn_ = ownBuff.combat.resIgn_.fire.add(
   cmpGE(char.mindscape, 1, percent(dm.m1.fire_resIgn_))

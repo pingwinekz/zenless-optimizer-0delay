@@ -44,7 +44,8 @@ const sheet = registerWengine(
         when_attacked.ifOn(subscript(phase, dm.enerRegen_))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

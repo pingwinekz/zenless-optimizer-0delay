@@ -6,7 +6,6 @@ import {
   ownBuff,
   percent,
   registerBuff,
-  teamBuff,
 } from '../../util'
 import { entriesForDisc, registerDisc } from '../util'
 
@@ -32,7 +31,7 @@ const sheet = registerDisc(
   ),
   registerBuff(
     'set4_sheer_dmg_',
-    teamBuff.combat.sheer_dmg_.add(
+    ownBuff.combat.sheer_dmg_.add(
       cmpGE(discCount, 4, cmpEq(uponLaunchExSpecialChainOrUlt, 3, percent(0.1)))
     ),
     showCond4Set

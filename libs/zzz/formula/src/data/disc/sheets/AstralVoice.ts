@@ -23,7 +23,8 @@ const sheet = registerDisc(
     teamBuff.combat.common_dmg_.add(
       cmpGE(discCount, 4, prod(astral, percent(0.08)))
     ),
-    showCond4Set
+    showCond4Set,
+    true
   )
 )
 export default sheet

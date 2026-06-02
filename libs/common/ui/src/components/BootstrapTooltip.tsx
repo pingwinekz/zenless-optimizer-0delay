@@ -8,6 +8,7 @@ export function BootstrapTooltip({ children, ...props }: TooltipProps) {
       styles={{
         tooltip: {
           backgroundColor: 'var(--mantine-color-dark-9)',
+          color: 'var(--mantine-color-white)',
           maxWidth: 500,
         },
         arrow: { backgroundColor: 'var(--mantine-color-dark-9)' },

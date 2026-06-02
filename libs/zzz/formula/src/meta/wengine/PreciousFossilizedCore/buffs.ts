@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'PreciousFossilizedCore',
       name: 'daze_',
     },
+    team: false,
   },
 } as const

@@ -1,6 +1,11 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  electro_blitz: { sheet: 'Harumasa', name: 'electro_blitz', type: 'bool' },
+  electro_blitz: {
+    sheet: 'Harumasa',
+    name: 'electro_blitz',
+    type: 'bool',
+    mindscapeRequirement: 2,
+  },
   enemy_anomaly: { sheet: 'Harumasa', name: 'enemy_anomaly', type: 'bool' },
   gleaming_edge: {
     sheet: 'Harumasa',
@@ -10,5 +15,10 @@ export const conditionals = {
     min: 0,
     max: 6,
   },
-  haOtoNoYa: { sheet: 'Harumasa', name: 'haOtoNoYa', type: 'bool' },
+  haOtoNoYa: {
+    sheet: 'Harumasa',
+    name: 'haOtoNoYa',
+    type: 'bool',
+    mindscapeRequirement: 6,
+  },
 } as const

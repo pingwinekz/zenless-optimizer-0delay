@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'SoulRock',
       name: 'set2',
     },
+    team: false,
   },
   dmg_red_: {
     sheet: 'SoulRock',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'SoulRock',
       name: 'dmg_red_',
     },
+    team: false,
   },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Hugo',
       name: 'core_crit_',
     },
+    team: false,
   },
   core_crit_dmg_: {
     sheet: 'Hugo',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Hugo',
       name: 'core_crit_dmg_',
     },
+    team: false,
   },
   core_atk: {
     sheet: 'Hugo',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Hugo',
       name: 'core_atk',
     },
+    team: false,
   },
   core_exSpecial_mv_mult_: {
     sheet: 'Hugo',
@@ -44,6 +47,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'core_exSpecial_mv_mult_',
     },
+    team: false,
   },
   core_ult_mv_mult_: {
     sheet: 'Hugo',
@@ -56,6 +60,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'core_ult_mv_mult_',
     },
+    team: false,
   },
   core_exSpecial_dazeInc_: {
     sheet: 'Hugo',
@@ -68,6 +73,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'core_exSpecial_dazeInc_',
     },
+    team: false,
   },
   ability_chain_dmg_: {
     sheet: 'Hugo',
@@ -80,6 +86,7 @@ export const buffs = {
       damageType1: 'chain',
       name: 'ability_chain_dmg_',
     },
+    team: false,
   },
   ability_exSpecial_dmg_: {
     sheet: 'Hugo',
@@ -92,6 +99,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'ability_exSpecial_dmg_',
     },
+    team: false,
   },
   ability_ult_dmg_: {
     sheet: 'Hugo',
@@ -104,6 +112,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ability_ult_dmg_',
     },
+    team: false,
   },
   m1_exSpecial_crit_: {
     sheet: 'Hugo',
@@ -116,6 +125,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_crit_',
     },
+    team: false,
   },
   m1_exSpecial_crit_dmg_: {
     sheet: 'Hugo',
@@ -128,6 +138,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_crit_dmg_',
     },
+    team: false,
   },
   m1_ult_crit_: {
     sheet: 'Hugo',
@@ -140,6 +151,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm1_ult_crit_',
     },
+    team: false,
   },
   m1_ult_crit_dmg_: {
     sheet: 'Hugo',
@@ -152,6 +164,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm1_ult_crit_dmg_',
     },
+    team: false,
   },
   m2_exSpecial_defIgn_: {
     sheet: 'Hugo',
@@ -164,6 +177,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm2_exSpecial_defIgn_',
     },
+    team: false,
   },
   m2_ult_defIgn_: {
     sheet: 'Hugo',
@@ -176,6 +190,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm2_ult_defIgn_',
     },
+    team: false,
   },
   m4_ice_resIgn_: {
     sheet: 'Hugo',
@@ -188,6 +203,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'm4_ice_resIgn_',
     },
+    team: false,
   },
   m6_exSpecial_dmg_: {
     sheet: 'Hugo',
@@ -200,6 +216,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm6_exSpecial_dmg_',
     },
+    team: false,
   },
   m6_ult_dmg_: {
     sheet: 'Hugo',
@@ -212,6 +229,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm6_ult_dmg_',
     },
+    team: false,
   },
   m6_exSpecial_mv_mult_: {
     sheet: 'Hugo',
@@ -224,5 +242,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm6_exSpecial_mv_mult_',
     },
+    team: false,
   },
 } as const

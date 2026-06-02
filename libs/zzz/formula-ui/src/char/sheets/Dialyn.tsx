@@ -19,6 +19,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('maliciousComplaint'),
+        description:
+          'Increases Daze dealt to enemies under the Malicious Complaint effect.',
         metadata: cond.malicious_complaint,
         fields: [fieldForBuff(buff.core_stun_)],
       },
@@ -33,6 +35,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('overwhelminglyPositive'),
+        description:
+          'Increases DMG dealt by squad members under the Overwhelmingly Positive effect.',
         metadata: cond.overwhelmingly_positive,
         fields: [fieldForBuff(buff.ability_common_dmg_)],
       },
@@ -41,6 +45,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('prevMember'),
+        description:
+          'Determines the buff based on the previous teammate Specialty.',
         metadata: cond.atk_sheerForce,
       },
     },
@@ -48,6 +54,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: (_, value) => ch(`prevMemberCond.${value}`),
+        description:
+          'Increases ATK DMG or Rupture DMG based on the previous teammate Specialty.',
         metadata: cond.prevMember,
         badge: (_, value) => (value === 0 ? null : value),
         fields: [
@@ -62,6 +70,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('overwhelminglyPositive'),
+        description:
+          'Ignores a portion of enemy RES when a squad member has Overwhelmingly Positive.',
         metadata: cond.overwhelmingly_positive,
         fields: [fieldForBuff(buff.m1_resIgn_)],
       },
@@ -72,6 +82,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('maliciousComplaint'),
+        description:
+          'Increases Stun and DMG dealt to enemies under the Malicious Complaint effect.',
         metadata: cond.malicious_complaint,
         fields: [
           fieldForBuff(buff.m2_stun_),
@@ -85,6 +97,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('overwhelminglyPositive'),
+        description:
+          'Increases ATK of squad members under the Overwhelmingly Positive effect.',
         metadata: cond.overwhelmingly_positive,
         fields: [fieldForBuff(buff.m4_atk)],
       },

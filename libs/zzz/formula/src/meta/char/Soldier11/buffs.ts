@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Soldier11',
       name: 'core_common_dmg_',
     },
+    team: false,
   },
   ability_fire_dmg_: {
     sheet: 'Soldier11',
@@ -22,6 +23,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'ability_fire_dmg_',
     },
+    team: false,
   },
   m2_common_dmg_: {
     sheet: 'Soldier11',
@@ -33,6 +35,7 @@ export const buffs = {
       sheet: 'Soldier11',
       name: 'm2_common_dmg_',
     },
+    team: false,
   },
   m2_dodgeCounter_dmg_: {
     sheet: 'Soldier11',
@@ -45,6 +48,7 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'm2_dodgeCounter_dmg_',
     },
+    team: false,
   },
   m4_dmg_red_: {
     sheet: 'Soldier11',
@@ -56,6 +60,7 @@ export const buffs = {
       sheet: 'Soldier11',
       name: 'm4_dmg_red_',
     },
+    team: false,
   },
   m6_fire_resIgn_: {
     sheet: 'Soldier11',
@@ -68,5 +73,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'm6_fire_resIgn_',
     },
+    team: false,
   },
 } as const

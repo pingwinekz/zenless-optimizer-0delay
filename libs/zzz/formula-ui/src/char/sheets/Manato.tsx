@@ -18,6 +18,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.consumingHp'),
+        description:
+          'Increases Basic Attack and Assist Follow-Up CRIT DMG when consuming HP.',
         metadata: cond.consumingHp_consecutiveStrikes,
         fields: [
           fieldForBuff(buff.core_basic_crit_dmg_),
@@ -29,6 +31,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.moltenEdge'),
+        description:
+          'Increases CRIT Rate and Fire DMG while in the Molten Edge state.',
         metadata: cond.moltenEdge,
         fields: [
           fieldForBuff(buff.core_crit_),
@@ -42,6 +46,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
+        description:
+          'Increases Basic Attack and Assist Follow-Up Fire DMG based on HP consumed.',
         metadata: cond.hpTallied,
         fields: [
           fieldForBuff(buff.m1_assistFollowUp_fire_dmg_),
@@ -55,6 +61,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.moltenEdge'),
+        description: 'Ignores enemy Fire RES while in the Molten Edge state.',
         metadata: cond.moltenEdge,
         fields: [fieldForBuff(buff.m2_fire_resIgn_)],
       },
@@ -71,6 +78,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponHit.1', { val1: '$t(skills.assistFollowUp)' }),
+        description:
+          'Increases Fire DMG when an Assist Follow-Up hits an enemy.',
         metadata: cond.assistFollowUpHitsEnemy,
         fields: [fieldForBuff(buff.m6_fire_dmg_)],
       },

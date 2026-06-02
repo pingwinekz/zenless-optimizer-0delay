@@ -42,8 +42,15 @@ const {
   clarity,
   exposed,
   shinrabanshou,
-} = allBoolConditionals(key)
-const { thrusts } = allNumConditionals(key, true, 0, dm.m6.max_stacks)
+} = allBoolConditionals(key, undefined, { clarity: 1, exposed: 4 })
+const { thrusts } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m6.max_stacks,
+  undefined,
+  { thrusts: 2 }
+)
 const { polarityDisorder } = allListConditionals(key, ['exSpecial', 'ult'])
 
 const m2_exSpecial_electric_anomBuildup_ =

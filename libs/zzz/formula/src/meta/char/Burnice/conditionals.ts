@@ -1,10 +1,17 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  additional_burn: { sheet: 'Burnice', name: 'additional_burn', type: 'bool' },
+  abloom: { sheet: 'Burnice', name: 'abloom', type: 'bool' },
+  additional_burn: {
+    sheet: 'Burnice',
+    name: 'additional_burn',
+    type: 'bool',
+    mindscapeRequirement: 6,
+  },
   exSpecial_active: {
     sheet: 'Burnice',
     name: 'exSpecial_active',
     type: 'bool',
+    mindscapeRequirement: 6,
   },
   thermal_penetration: {
     sheet: 'Burnice',
@@ -13,5 +20,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 5,
+    mindscapeRequirement: 2,
   },
 } as const

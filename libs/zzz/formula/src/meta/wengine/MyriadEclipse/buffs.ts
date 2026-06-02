@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'MyriadEclipse',
       name: 'crit_dmg_',
     },
+    team: false,
   },
   deathSentence_defIgn_: {
     sheet: 'MyriadEclipse',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'MyriadEclipse',
       name: 'deathSentence_defIgn_',
     },
+    team: false,
   },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Trigger',
       name: 'core_stun_',
     },
+    team: false,
   },
   ability_aftershock_dazeInc_: {
     sheet: 'Trigger',
@@ -22,6 +23,7 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'ability_aftershock_dazeInc_',
     },
+    team: false,
   },
   m1_stun_: {
     sheet: 'Trigger',
@@ -34,6 +36,7 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'm1_stun_',
     },
+    team: false,
   },
   m2_crit_dmg_: {
     sheet: 'Trigger',
@@ -45,6 +48,7 @@ export const buffs = {
       sheet: 'Trigger',
       name: 'm2_crit_dmg_',
     },
+    team: true,
   },
   m6_armor_break_rounds_dmg_: {
     sheet: 'Trigger',
@@ -56,5 +60,6 @@ export const buffs = {
       sheet: 'Trigger',
       name: 'm6_armor_break_rounds_dmg_',
     },
+    team: false,
   },
 } as const

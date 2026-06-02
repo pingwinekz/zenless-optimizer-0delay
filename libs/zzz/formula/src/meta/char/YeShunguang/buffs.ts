@@ -1,5 +1,17 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
+  core_veilVulnerabilityCap_: {
+    sheet: 'YeShunguang',
+    name: 'core_veilVulnerabilityCap_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'veilVulnerabilityCap_',
+      sheet: 'YeShunguang',
+      name: 'core_veilVulnerabilityCap_',
+    },
+    team: false,
+  },
   core_crit_: {
     sheet: 'YeShunguang',
     name: 'core_crit_',
@@ -10,49 +22,68 @@ export const buffs = {
       sheet: 'YeShunguang',
       name: 'core_crit_',
     },
+    team: false,
   },
-  core_dmg_: {
+  core_common_dmg_: {
     sheet: 'YeShunguang',
-    name: 'core_dmg_',
+    name: 'core_common_dmg_',
     tag: {
       et: 'display',
       qt: 'combat',
       q: 'common_dmg_',
       sheet: 'YeShunguang',
-      name: 'core_dmg_',
+      name: 'core_common_dmg_',
     },
+    team: false,
   },
-  m6_dmg_: {
+  m1_common_dmg_: {
     sheet: 'YeShunguang',
-    name: 'm6_dmg_',
+    name: 'm1_common_dmg_',
     tag: {
       et: 'display',
       qt: 'combat',
       q: 'common_dmg_',
       sheet: 'YeShunguang',
-      name: 'm6_dmg_',
+      name: 'm1_common_dmg_',
     },
+    team: false,
   },
-  team_dmg_: {
+  m1_defIgn_: {
     sheet: 'YeShunguang',
-    name: 'team_dmg_',
+    name: 'm1_defIgn_',
     tag: {
       et: 'display',
       qt: 'combat',
-      q: 'common_dmg_',
+      q: 'defIgn_',
       sheet: 'YeShunguang',
-      name: 'team_dmg_',
+      name: 'm1_defIgn_',
     },
+    team: false,
   },
-  enemy_defRed_: {
+  m2_exSpecial_defIgn_: {
     sheet: 'YeShunguang',
-    name: 'enemy_defRed_',
+    name: 'm2_exSpecial_defIgn_',
     tag: {
       et: 'display',
-      qt: 'common',
-      q: 'defRed_',
+      qt: 'combat',
+      q: 'defIgn_',
       sheet: 'YeShunguang',
-      name: 'enemy_defRed_',
+      damageType1: 'exSpecial',
+      name: 'm2_exSpecial_defIgn_',
     },
+    team: false,
+  },
+  m2_ult_defIgn_: {
+    sheet: 'YeShunguang',
+    name: 'm2_ult_defIgn_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'defIgn_',
+      sheet: 'YeShunguang',
+      damageType1: 'ult',
+      name: 'm2_ult_defIgn_',
+    },
+    team: false,
   },
 } as const

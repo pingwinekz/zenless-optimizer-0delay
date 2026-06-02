@@ -27,8 +27,19 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { fireSuppression_triggered, fireSuppression_4th_hit, charge_consumed } =
-  allBoolConditionals(key)
-const { m2_stacks } = allNumConditionals(key, true, 0, dm.m2.stacks)
+  allBoolConditionals(key, undefined, {
+    charge_consumed: 6,
+  })
+const { m2_stacks } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m2.stacks,
+  undefined,
+  {
+    m2_stacks: 2,
+  }
+)
 
 const core_common_dmg_ = ownBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.common_dmg_))

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'OriginalTransmorpher',
       name: 'passive_hp_',
     },
+    team: false,
   },
   impact_: {
     sheet: 'OriginalTransmorpher',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'OriginalTransmorpher',
       name: 'impact_',
     },
+    team: false,
   },
 } as const

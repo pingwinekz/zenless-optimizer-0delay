@@ -11,6 +11,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'core_exSpecial_dazeInc_',
     },
+    team: false,
   },
   core_dazeInc_: {
     sheet: 'Koleda',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'Koleda',
       name: 'core_dazeInc_',
     },
+    team: false,
   },
   ability_chain_dmg_: {
     sheet: 'Koleda',
@@ -34,6 +36,7 @@ export const buffs = {
       damageType1: 'chain',
       name: 'ability_chain_dmg_',
     },
+    team: true,
   },
   m1_special_dazeInc_: {
     sheet: 'Koleda',
@@ -46,6 +49,7 @@ export const buffs = {
       damageType1: 'special',
       name: 'm1_special_dazeInc_',
     },
+    team: false,
   },
   m1_exSpecial_dazeInc_: {
     sheet: 'Koleda',
@@ -58,6 +62,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_dazeInc_',
     },
+    team: false,
   },
   m4_chain_dmg_: {
     sheet: 'Koleda',
@@ -70,6 +75,7 @@ export const buffs = {
       damageType1: 'chain',
       name: 'm4_chain_dmg_',
     },
+    team: false,
   },
   m4_ult_dmg_: {
     sheet: 'Koleda',
@@ -82,5 +88,6 @@ export const buffs = {
       damageType1: 'ult',
       name: 'm4_ult_dmg_',
     },
+    team: false,
   },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'YesterdayCalls',
       name: 'cond_enerRegen',
     },
+    team: false,
   },
   cond_dazeInc_: {
     sheet: 'YesterdayCalls',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'YesterdayCalls',
       name: 'cond_dazeInc_',
     },
+    team: false,
   },
   cond_crit_dmg_: {
     sheet: 'YesterdayCalls',
@@ -32,5 +34,6 @@ export const buffs = {
       sheet: 'YesterdayCalls',
       name: 'cond_crit_dmg_',
     },
+    team: true,
   },
 } as const

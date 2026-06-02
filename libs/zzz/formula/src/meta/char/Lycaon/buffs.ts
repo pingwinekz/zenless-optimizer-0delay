@@ -11,6 +11,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'core_basic_dazeInc_',
     },
+    team: false,
   },
   core_dodgeCounter_dazeInc_: {
     sheet: 'Lycaon',
@@ -23,6 +24,7 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'core_dodgeCounter_dazeInc_',
     },
+    team: false,
   },
   core_dash_dazeInc_: {
     sheet: 'Lycaon',
@@ -35,6 +37,7 @@ export const buffs = {
       damageType1: 'dash',
       name: 'core_dash_dazeInc_',
     },
+    team: false,
   },
   core_assistFollowUp_dazeInc_: {
     sheet: 'Lycaon',
@@ -47,6 +50,7 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'core_assistFollowUp_dazeInc_',
     },
+    team: false,
   },
   core_ice_resRed_: {
     sheet: 'Lycaon',
@@ -59,6 +63,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'core_ice_resRed_',
     },
+    team: false,
   },
   core_ether_resRed_: {
     sheet: 'Lycaon',
@@ -71,6 +76,7 @@ export const buffs = {
       attribute: 'ether',
       name: 'core_ether_resRed_',
     },
+    team: false,
   },
   core_electric_resRed_: {
     sheet: 'Lycaon',
@@ -83,6 +89,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'core_electric_resRed_',
     },
+    team: false,
   },
   core_fire_resRed_: {
     sheet: 'Lycaon',
@@ -95,6 +102,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'core_fire_resRed_',
     },
+    team: false,
   },
   core_physical_resRed_: {
     sheet: 'Lycaon',
@@ -107,6 +115,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'core_physical_resRed_',
     },
+    team: false,
   },
   ability_stun_: {
     sheet: 'Lycaon',
@@ -118,6 +127,7 @@ export const buffs = {
       sheet: 'Lycaon',
       name: 'ability_stun_',
     },
+    team: false,
   },
   m1_dazeInc_: {
     sheet: 'Lycaon',
@@ -129,6 +139,7 @@ export const buffs = {
       sheet: 'Lycaon',
       name: 'm1_dazeInc_',
     },
+    team: false,
   },
   m1_fullCharge_dazeInc_: {
     sheet: 'Lycaon',
@@ -140,6 +151,7 @@ export const buffs = {
       sheet: 'Lycaon',
       name: 'm1_fullCharge_dazeInc_',
     },
+    team: false,
   },
   m6_common_dmg_: {
     sheet: 'Lycaon',
@@ -151,5 +163,6 @@ export const buffs = {
       sheet: 'Lycaon',
       name: 'm6_common_dmg_',
     },
+    team: false,
   },
 } as const

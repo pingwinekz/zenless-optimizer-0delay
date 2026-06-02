@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'etherVeil_hp_',
     },
+    team: true,
   },
   core_hpSheerForce: {
     sheet: 'Yidhari',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'core_hpSheerForce',
     },
+    team: false,
   },
   core_common_dmg_: {
     sheet: 'Yidhari',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'core_common_dmg_',
     },
+    team: false,
   },
   ability_crit_dmg_: {
     sheet: 'Yidhari',
@@ -43,6 +46,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'ability_crit_dmg_',
     },
+    team: false,
   },
   m1_basic_ice_resIgn_: {
     sheet: 'Yidhari',
@@ -56,6 +60,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm1_basic_ice_resIgn_',
     },
+    team: false,
   },
   m1_exSpecial_ice_resIgn_: {
     sheet: 'Yidhari',
@@ -69,6 +74,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_ice_resIgn_',
     },
+    team: false,
   },
   m2_crit_dmg_: {
     sheet: 'Yidhari',
@@ -80,6 +86,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'm2_crit_dmg_',
     },
+    team: false,
   },
   m4_hp_: {
     sheet: 'Yidhari',
@@ -91,6 +98,7 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'm4_hp_',
     },
+    team: false,
   },
   m6_sheer_dmg_: {
     sheet: 'Yidhari',
@@ -102,5 +110,6 @@ export const buffs = {
       sheet: 'Yidhari',
       name: 'm6_sheer_dmg_',
     },
+    team: false,
   },
 } as const

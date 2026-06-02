@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'physical_dmg_',
     },
+    team: false,
   },
   daze_: {
     sheet: 'BoxCutter',
@@ -22,5 +23,6 @@ export const buffs = {
       sheet: 'BoxCutter',
       name: 'daze_',
     },
+    team: false,
   },
 } as const

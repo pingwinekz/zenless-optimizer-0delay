@@ -17,6 +17,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'When Tanuki Wish is active, ATK and common DMG are increased.',
         metadata: cond.tanuki_wish,
         fields: [
           fieldForBuff(buff.core_atk),
@@ -30,6 +32,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'When Tanuki Wish is active, Anomaly Buildup and Anomaly DMG are increased.',
         metadata: cond.tanuki_wish,
         fields: [
           fieldForBuff(buff.ability_anomBuildup_),
@@ -44,6 +48,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
+        description: 'Enemies in Sweet Scare state have reduced RES.',
         metadata: cond.sweet_scare,
         fields: [fieldForBuff(buff.m1_resRed_)],
       },
@@ -67,6 +72,8 @@ const sheet = createBaseSheet(key, {
           val1: '$t(skills.exSpecial)',
           val2: '$t(skills.ult)',
         }),
+        description:
+          'Upon hitting with EX Special Attack or Ultimate, common DMG and Anomaly Buildup are increased.',
         metadata: cond.exSpecial_ult_hit,
         fields: [
           fieldForBuff(buff.m2_common_dmg_),
@@ -98,6 +105,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
+        description:
+          'When Powerful Shells hit, additional disorder DMG is dealt.',
         metadata: cond.powerful_shell_hits,
         fields: [fieldForBuff(buff.m6_addl_disorder_)],
       },

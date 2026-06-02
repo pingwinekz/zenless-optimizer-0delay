@@ -19,6 +19,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'Increases Dash Attack CRIT DMG when the attack triggers a critical hit.',
         metadata: cond.gleaming_edge,
         fields: [fieldForBuff(buff.core_dash_crit_dmg_)],
       },
@@ -29,6 +31,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Increases DMG dealt to enemies under an Attribute Anomaly.',
         metadata: cond.enemy_anomaly,
         fields: [fieldForBuff(buff.ability_common_dmg_)],
       },
@@ -39,6 +43,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
+        description:
+          'Increases Dash Attack DMG while possessing Electro Blitz.',
         metadata: cond.electro_blitz,
         fields: [fieldForBuff(buff.m2_dash_dmg_)],
       },
@@ -49,6 +55,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
+        description:
+          'Increases Electric RES Ignore and deals additional DMG after Ha-Oto no Ya hits.',
         metadata: cond.haOtoNoYa,
         fields: [
           fieldForBuff(buff.m6_electric_resIgn_),

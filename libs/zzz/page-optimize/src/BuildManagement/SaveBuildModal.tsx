@@ -1,7 +1,9 @@
+import { useDatabaseContext, useTeam } from '@genshin-optimizer/zzz/db-ui'
+import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
   OptConfigContext,
   useCharacterContext,
-  useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
 import {
   Button,
@@ -19,14 +21,19 @@ import { useTranslation } from 'react-i18next'
 export const SaveBuildModal = memo(function SaveBuildModal({
   opened,
   onClose,
+  selectedBuild,
+  characterKey,
 }: {
   opened: boolean
   onClose: () => void
+  selectedBuild: GeneratedBuild | null
+  characterKey: CharacterKey | null
 }) {
   const { t } = useTranslation('page_optimize')
   const { database } = useDatabaseContext()
   const { optConfig } = useContext(OptConfigContext)
   const character = useCharacterContext()
+  const team = useTeam(characterKey ?? '')
 
   const form = useForm({
     initialValues: {
@@ -43,32 +50,56 @@ export const SaveBuildModal = memo(function SaveBuildModal({
 
   const handleSave = useCallback(
     (values: { name: string; description: string }) => {
-      const listId = optConfig.generatedBuildListId
-      if (!listId) return
-
-      const generatedBuildList = database.generatedBuildList.get(listId)
-      if (!generatedBuildList || !generatedBuildList.builds.length) return
-
-      // Save each build as a separate saved build entry
-      const now = Date.now()
+      if (!selectedBuild) return
       const characterKey = character?.key ?? ''
-      for (const build of generatedBuildList.builds) {
-        database.savedBuilds.new({
-          name: values.name,
-          description: values.description,
-          value: build.value,
-          wengineKey: build.wengineKey,
-          discIds: build.discIds,
-          characterKey,
-          createdAt: now,
-          updatedAt: now,
-        })
+
+      // Capture full optimizer settings
+      const optimizerSettings: Record<string, unknown> = {
+        statFilters: optConfig.statFilters,
+        maxBuildsToShow: optConfig.maxBuildsToShow,
+        levelLow: optConfig.levelLow,
+        levelHigh: optConfig.levelHigh,
+        slot4: optConfig.slot4,
+        slot5: optConfig.slot5,
+        slot6: optConfig.slot6,
+        setFilter2: optConfig.setFilter2,
+        setFilter4: optConfig.setFilter4,
+        useEquipped: optConfig.useEquipped,
+        useCharacterPriority: optConfig.useCharacterPriority,
+        includeOffsets: optConfig.includeOffsets,
+        optWengine: optConfig.optWengine,
+        wlevelLow: optConfig.wlevelLow,
+        wlevelHigh: optConfig.wlevelHigh,
+        wEngineTypes: optConfig.wEngineTypes,
+        useEquippedWengine: optConfig.useEquippedWengine,
       }
+
+      // Capture team snapshot (teammates, conditionals, frames, enemy stats)
+      const teamSnapshot = team
+        ? {
+            teammates: team.teammates,
+            frames: team.frames,
+            enemyLvl: team.enemyLvl,
+            enemyDef: team.enemyDef,
+            enemyStunMultiplier: team.enemyStunMultiplier,
+          }
+        : undefined
+
+      database.savedBuilds.new({
+        name: values.name,
+        description: values.description,
+        value: selectedBuild.value,
+        wengineKey: selectedBuild.wengineKey,
+        discIds: selectedBuild.discIds,
+        characterKey,
+        optimizerSettings,
+        teamSnapshot,
+      })
 
       form.reset()
       onClose()
     },
-    [optConfig.generatedBuildListId, database, form, onClose, character?.key]
+    [selectedBuild, optConfig, team, database, form, onClose, character?.key]
   )
 
   return (

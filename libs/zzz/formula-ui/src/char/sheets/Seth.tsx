@@ -26,6 +26,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          "Increases the entire squad's Anomaly Proficiency while Seth has his Shield of Firm Resolve.",
         metadata: cond.shield_active,
         fields: [fieldForBuff(buff.core_anomProf)],
       },
@@ -36,6 +38,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          "Reduces the squad's Anomaly Buildup RES when Seth's Chain Attack or finishing move hits an enemy.",
         metadata: cond.chain_finish_hit,
         fields: [fieldForBuff(buff.ability_anomBuildupRes_)],
       },

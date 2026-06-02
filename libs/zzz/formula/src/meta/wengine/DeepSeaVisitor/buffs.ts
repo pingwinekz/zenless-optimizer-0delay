@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'passive_ice_dmg_',
     },
+    team: false,
   },
   crit_: {
     sheet: 'DeepSeaVisitor',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'DeepSeaVisitor',
       name: 'crit_',
     },
+    team: false,
   },
   extra_crit_: {
     sheet: 'DeepSeaVisitor',
@@ -33,5 +35,6 @@ export const buffs = {
       sheet: 'DeepSeaVisitor',
       name: 'extra_crit_',
     },
+    team: false,
   },
 } as const

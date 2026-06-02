@@ -3,8 +3,7 @@ import {
   OptConfigContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
-import { Flex, HoverCard, Text } from '@mantine/core'
-import { IconHelp } from '@tabler/icons-react'
+import { Flex } from '@mantine/core'
 import { useCallback, useContext } from 'react'
 import { FilterRow, FormStatTextStyled, HeaderText } from '../layout'
 
@@ -15,33 +14,25 @@ const statFilterStatKeys: StatFilterStatKey[] = [
   'crit_',
   'crit_dmg_',
   'pen',
-  'pen_',
-  'enerRegen_',
   'enerRegen',
   'anomProf',
   'anomMas',
   'impact',
-  'dazeInc_',
   'sheerForce',
-  'dmg_',
 ]
 
-const statLabels: Record<StatFilterStatKey, string> = {
+const statLabels: Partial<Record<StatFilterStatKey, string>> = {
   hp: 'HP',
   def: 'DEF',
   atk: 'ATK',
   crit_: 'CR',
   crit_dmg_: 'CD',
   pen: 'PEN',
-  pen_: 'PEN%',
-  enerRegen_: 'ERR%',
   enerRegen: 'ERR',
   anomProf: 'AP',
   anomMas: 'AM',
   impact: 'Impact',
-  dazeInc_: 'Daze%',
   sheerForce: 'SF',
-  dmg_: 'DMG%',
 }
 
 export function MinMaxStatFilters({
@@ -122,23 +113,7 @@ export function MinMaxStatFilters({
 
   return (
     <Flex direction="column" gap={5}>
-      <Flex justify="space-between" align="center">
-        <HeaderText>Stat min / max filters</HeaderText>
-        <HoverCard width={300} openDelay={200} closeDelay={100}>
-          <HoverCard.Target>
-            <IconHelp size={16} style={{ cursor: 'pointer', opacity: 0.6 }} />
-          </HoverCard.Target>
-          <HoverCard.Dropdown>
-            <Text fw={600} mb={4}>
-              Stat Filters
-            </Text>
-            <Text size="sm">
-              Set minimum or maximum values for each stat. The optimizer will
-              only return builds that meet these thresholds.
-            </Text>
-          </HoverCard.Dropdown>
-        </HoverCard>
-      </Flex>
+      <HeaderText>Stat min / max filters</HeaderText>
 
       <Flex direction="column" gap={7}>
         {statFilterStatKeys.map((statKey) => {

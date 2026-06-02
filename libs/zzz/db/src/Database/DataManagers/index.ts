@@ -1,3 +1,4 @@
+export * from './CharacterBuildDataManager'
 export * from './CharacterDataManager'
 export * from './CharMetaDataManager'
 export * from './DiscDataManager'
