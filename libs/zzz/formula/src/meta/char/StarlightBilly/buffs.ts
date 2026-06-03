@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'StarlightBilly',
       name: 'core_critDmg',
     },
+    team: false,
   },
   core_hpSheerForce: {
     sheet: 'StarlightBilly',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'StarlightBilly',
       name: 'core_hpSheerForce',
     },
+    team: false,
   },
   ability_dmg_: {
     sheet: 'StarlightBilly',
@@ -33,6 +35,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'ability_dmg_',
     },
+    team: false,
   },
   m1_physResIgn: {
     sheet: 'StarlightBilly',
@@ -45,6 +48,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'm1_physResIgn',
     },
+    team: false,
   },
   m4_critDmg: {
     sheet: 'StarlightBilly',
@@ -56,6 +60,7 @@ export const buffs = {
       sheet: 'StarlightBilly',
       name: 'm4_critDmg',
     },
+    team: false,
   },
   m2_dmg_: {
     sheet: 'StarlightBilly',
@@ -68,6 +73,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'm2_dmg_',
     },
+    team: false,
   },
   m6_sheer_: {
     sheet: 'StarlightBilly',
@@ -80,5 +86,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'm6_sheer_',
     },
+    team: false,
   },
 } as const

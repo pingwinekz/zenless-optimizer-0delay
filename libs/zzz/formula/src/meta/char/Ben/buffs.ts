@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Ben',
       name: 'core_atk',
     },
+    team: false,
   },
   ability_crit_: {
     sheet: 'Ben',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Ben',
       name: 'ability_crit_',
     },
+    team: true,
   },
   m1_dmg_red_: {
     sheet: 'Ben',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Ben',
       name: 'm1_dmg_red_',
     },
+    team: true,
   },
   m4_dmg_: {
     sheet: 'Ben',
@@ -43,6 +46,7 @@ export const buffs = {
       sheet: 'Ben',
       name: 'm4_dmg_',
     },
+    team: false,
   },
   m6_basic_dazeInc_: {
     sheet: 'Ben',
@@ -55,6 +59,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'm6_basic_dazeInc_',
     },
+    team: false,
   },
   m6_dash_dazeInc_: {
     sheet: 'Ben',
@@ -67,6 +72,7 @@ export const buffs = {
       damageType1: 'dash',
       name: 'm6_dash_dazeInc_',
     },
+    team: false,
   },
   m6_dodgeCounter_dazeInc_: {
     sheet: 'Ben',
@@ -79,5 +85,6 @@ export const buffs = {
       damageType1: 'dodgeCounter',
       name: 'm6_dodgeCounter_dazeInc_',
     },
+    team: false,
   },
 } as const

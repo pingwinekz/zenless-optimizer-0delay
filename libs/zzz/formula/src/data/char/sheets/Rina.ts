@@ -36,7 +36,12 @@ const {
   within_10m,
   active_char,
   exSpecial_chain_ult_hit,
-} = allBoolConditionals(key)
+} = allBoolConditionals(key, undefined, {
+  within_10m: 1,
+  active_char: 2,
+  minions_onField: 4,
+  exSpecial_chain_ult_hit: 6,
+})
 
 const sheet = register(
   key,

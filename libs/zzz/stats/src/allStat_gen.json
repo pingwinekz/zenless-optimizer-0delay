@@ -1800,7 +1800,7 @@
         "anomMas": 87,
         "anomProf": 90,
         "impact": 95,
-        "enerRegen": 0
+        "enerRegen": 2
       },
       "promotionStats": [
         {
@@ -16250,7 +16250,7 @@
         "anomMas": 92,
         "anomProf": 90,
         "impact": 93,
-        "enerRegen": 0
+        "enerRegen": 2
       },
       "promotionStats": [
         {
@@ -21444,7 +21444,7 @@
         "anomMas": 90,
         "anomProf": 89,
         "impact": 95,
-        "enerRegen": 0
+        "enerRegen": 2
       },
       "promotionStats": [
         {
@@ -24789,7 +24789,7 @@
         "anomMas": 90,
         "anomProf": 89,
         "impact": 95,
-        "enerRegen": 0
+        "enerRegen": 2
       },
       "promotionStats": [
         {

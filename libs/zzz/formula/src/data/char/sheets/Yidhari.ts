@@ -28,7 +28,10 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { etherVeil, erudition } = allBoolConditionals(key)
+const { etherVeil, erudition } = allBoolConditionals(key, undefined, {
+  etherVeil: 4,
+  erudition: 6,
+})
 const { missingHp } = allNumConditionals(key, true, 0, 50)
 
 const sheet = register(

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Nicole',
       name: 'core_defRed_',
     },
+    team: false,
   },
   ability_ether_dmg_: {
     sheet: 'Nicole',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Nicole',
       name: 'ability_ether_dmg_',
     },
+    team: false,
   },
   m1_exSpecial_dmg_: {
     sheet: 'Nicole',
@@ -33,6 +35,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_dmg_',
     },
+    team: false,
   },
   m1_exSpecial_anomBuildup_: {
     sheet: 'Nicole',
@@ -45,6 +48,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm1_exSpecial_anomBuildup_',
     },
+    team: false,
   },
   m6_crit_: {
     sheet: 'Nicole',
@@ -56,5 +60,6 @@ export const buffs = {
       sheet: 'Nicole',
       name: 'm6_crit_',
     },
+    team: true,
   },
 } as const

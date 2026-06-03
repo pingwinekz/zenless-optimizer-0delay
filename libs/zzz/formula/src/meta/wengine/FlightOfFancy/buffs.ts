@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'FlightOfFancy',
       name: 'anomBuildup_',
     },
+    team: false,
   },
   etherDmg_anomProf: {
     sheet: 'FlightOfFancy',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'FlightOfFancy',
       name: 'etherDmg_anomProf',
     },
+    team: false,
   },
 } as const

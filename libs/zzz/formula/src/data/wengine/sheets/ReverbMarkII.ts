@@ -29,7 +29,8 @@ const sheet = registerWengine(
         exSpecialOrChainUsed.ifOn(subscript(phase, dm.anomMas_anomProf))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   ),
   registerBuff(
     'anomProf',
@@ -39,7 +40,8 @@ const sheet = registerWengine(
         exSpecialOrChainUsed.ifOn(subscript(phase, dm.anomMas_anomProf))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

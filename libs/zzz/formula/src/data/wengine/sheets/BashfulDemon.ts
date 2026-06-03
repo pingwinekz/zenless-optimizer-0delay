@@ -45,7 +45,8 @@ const sheet = registerWengine(
         prod(launch_ex_attack, percent(subscript(phase, dm.atk_)))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

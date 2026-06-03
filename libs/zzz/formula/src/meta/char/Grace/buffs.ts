@@ -1,5 +1,75 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
+  special_ether_anom_mv_mult_: {
+    sheet: 'Grace',
+    name: 'special_ether_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Grace',
+      attribute: 'ether',
+      damageType1: 'abloom',
+      name: 'special_ether_anom_mv_mult_',
+    },
+    team: true,
+  },
+  special_electric_anom_mv_mult_: {
+    sheet: 'Grace',
+    name: 'special_electric_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Grace',
+      attribute: 'electric',
+      damageType1: 'abloom',
+      name: 'special_electric_anom_mv_mult_',
+    },
+    team: true,
+  },
+  special_fire_anom_mv_mult_: {
+    sheet: 'Grace',
+    name: 'special_fire_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Grace',
+      attribute: 'fire',
+      damageType1: 'abloom',
+      name: 'special_fire_anom_mv_mult_',
+    },
+    team: true,
+  },
+  special_physical_anom_mv_mult_: {
+    sheet: 'Grace',
+    name: 'special_physical_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Grace',
+      attribute: 'physical',
+      damageType1: 'abloom',
+      name: 'special_physical_anom_mv_mult_',
+    },
+    team: true,
+  },
+  special_ice_anom_mv_mult_: {
+    sheet: 'Grace',
+    name: 'special_ice_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Grace',
+      attribute: 'ice',
+      damageType1: 'abloom',
+      name: 'special_ice_anom_mv_mult_',
+    },
+    team: true,
+  },
   core_special_electric_anomBuildup_: {
     sheet: 'Grace',
     name: 'core_special_electric_anomBuildup_',
@@ -12,6 +82,7 @@ export const buffs = {
       damageType1: 'special',
       name: 'core_special_electric_anomBuildup_',
     },
+    team: false,
   },
   core_exSpecial_electric_anomBuildup_: {
     sheet: 'Grace',
@@ -25,6 +96,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'core_exSpecial_electric_anomBuildup_',
     },
+    team: false,
   },
   ability_shock_dmg_: {
     sheet: 'Grace',
@@ -38,6 +110,20 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'ability_shock_dmg_',
     },
+    team: false,
+  },
+  potential_electric_dmg_: {
+    sheet: 'Grace',
+    name: 'potential_electric_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'dmg_',
+      sheet: 'Grace',
+      attribute: 'electric',
+      name: 'potential_electric_dmg_',
+    },
+    team: false,
   },
   m2_electric_resRed_: {
     sheet: 'Grace',
@@ -50,6 +136,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'm2_electric_resRed_',
     },
+    team: true,
   },
   m2_electric_anomBuildupResRed_: {
     sheet: 'Grace',
@@ -62,6 +149,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'm2_electric_anomBuildupResRed_',
     },
+    team: true,
   },
   m4_enerRegen_: {
     sheet: 'Grace',
@@ -73,6 +161,7 @@ export const buffs = {
       sheet: 'Grace',
       name: 'm4_enerRegen_',
     },
+    team: false,
   },
   m6_special_mv_mult_: {
     sheet: 'Grace',
@@ -85,6 +174,7 @@ export const buffs = {
       damageType1: 'special',
       name: 'm6_special_mv_mult_',
     },
+    team: false,
   },
   m6_exSpecial_mv_mult_: {
     sheet: 'Grace',
@@ -97,5 +187,6 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm6_exSpecial_mv_mult_',
     },
+    team: false,
   },
 } as const

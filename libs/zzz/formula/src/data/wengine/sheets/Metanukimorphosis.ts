@@ -45,7 +45,8 @@ const sheet = registerWengine(
         aftershock.ifOn(subscript(phase, dm.anomProf))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

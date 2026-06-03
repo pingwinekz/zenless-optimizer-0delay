@@ -19,6 +19,8 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('stanceSwitchCond'),
+            description:
+              'Increases Impact after a Perfect Block, Retaliation, or Defensive Assist.',
             metadata: cond.stance_switch,
             fields: [fieldForBuff(buff.stance_switch_impact_)],
           },
@@ -31,6 +33,8 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('ultCond'),
+            description:
+              'Increases Daze dealt by Ultimate against shielded enemies.',
             metadata: cond.enemy_shielded,
             fields: [fieldForBuff(buff.ult_dazeInc_)],
           },
@@ -52,6 +56,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'While Radiant Aegis is active, the entire squad gains bonus ATK.',
         metadata: cond.radiant_aegis,
         fields: [fieldForBuff(buff.core_atk)],
       },
@@ -62,6 +68,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityTeamCond'),
+        description: 'Allows a teammate to activate Defensive Assist.',
         metadata: cond.can_defensive_assist,
       },
     },
@@ -69,6 +76,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Enemies take increased DMG when Caesar performs defensive actions or Basic Attack: Dead End.',
         metadata: cond.ability_debuff,
         fields: [fieldForBuff(buff.ability_dmgInc_)],
       },
@@ -79,6 +88,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: 'While Radiant Aegis is active, Caesar reduces enemy RES.',
         metadata: cond.radiant_aegis,
         fields: [fieldForBuff(buff.m1_resRed_)],
       },
@@ -89,6 +99,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description:
+          'While Radiant Aegis is active, Caesar regenerates Energy and gains bonus ATK.',
         metadata: cond.radiant_aegis,
         fields: [
           fieldForBuff(buff.m2_enerRegen_),
@@ -119,6 +131,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
+        description:
+          'Increases CRIT Rate and CRIT DMG after using Overpowered Shield Bash or Aiding Blade.',
         metadata: cond.exSpecial_assistFollowup_used,
         fields: [fieldForBuff(buff.m6_crit_), fieldForBuff(buff.m6_crit_dmg_)],
       },

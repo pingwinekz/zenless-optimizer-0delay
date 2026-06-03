@@ -44,6 +44,14 @@
   "linter": {
     "enabled": false
   },
+  "css": {
+    "parser": {
+      "cssModules": true
+    },
+    "formatter": {
+      "enabled": true
+    }
+  },
   "javascript": {
     "formatter": {
       "jsxQuoteStyle": "double",

@@ -15,9 +15,6 @@ const cardGap = 10
 const lcCardH = 85
 const formCardH = 415
 const charCardH = formCardH - lcCardH - cardGap
-const charZoom = 0.75
-const charVerticalOffset = -20
-
 const cardStyle: React.CSSProperties = {
   borderRadius: 6,
   backgroundColor: 'var(--layer-2)',
@@ -88,12 +85,10 @@ export function CharacterPreviewPanel({
           component="img"
           src={characterAsset(characterKey, 'full')}
           style={{
-            width: 350,
-            height: 'auto',
-            transform: `translate(-14.6%, calc(-50% + ${charVerticalOffset}px)) scale(${charZoom})`,
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center top',
             filter: 'brightness(1.05) saturate(1.05)',
           }}
         />

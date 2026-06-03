@@ -44,6 +44,7 @@ export default async function runExecutor(
     }
     return undefined
   })
+
   const buffs = extractFormulaMetadata<Tag, Tag>(
     data,
     (tag: Tag, value, result) => {
@@ -64,6 +65,10 @@ export default async function runExecutor(
       ) {
         const sheet = tag.sheet!
         const name = value.tag['name']!
+        // Use the listing entry's `et` field which comes from `registerBuff`'s
+        // `team` parameter: ownBuff.listing.buffs → et: 'own',
+        // teamBuff.listing.buffs → et: 'teamBuff'.
+        const team = tag['et'] === 'teamBuff'
         const preExisting = result[sheet]?.[name]
         // Ignore double listings for damageType
         if (
@@ -74,7 +79,7 @@ export default async function runExecutor(
         ) {
           return undefined
         }
-        return { sheet, name, tag: { ...tag, ...value.tag } }
+        return { sheet, name, tag: { ...tag, ...value.tag }, team }
       }
       return undefined
     }

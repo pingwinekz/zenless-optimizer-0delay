@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'AstralVoice',
       name: 'set2',
     },
+    team: false,
   },
   set4_team_dmg_: {
     sheet: 'AstralVoice',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'AstralVoice',
       name: 'set4_team_dmg_',
     },
+    team: true,
   },
 } as const

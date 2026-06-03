@@ -15,13 +15,15 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreAbloom'),
+        description:
+          'While Abloom is active, anomaly DMG multipliers for all elements are increased.',
         metadata: cond.abloom,
         fields: [
-          fieldForBuff(buff.core_ether_abloom),
-          fieldForBuff(buff.core_electric_abloom),
-          fieldForBuff(buff.core_fire_abloom),
-          fieldForBuff(buff.core_physical_abloom),
-          fieldForBuff(buff.core_ice_abloom),
+          fieldForBuff(buff.core_ether_anom_mv_mult_),
+          fieldForBuff(buff.core_electric_anom_mv_mult_),
+          fieldForBuff(buff.core_fire_anom_mv_mult_),
+          fieldForBuff(buff.core_physical_anom_mv_mult_),
+          fieldForBuff(buff.core_ice_anom_mv_mult_),
         ],
       },
     },
@@ -49,6 +51,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('prophecyCond'),
+        description:
+          "Targets under Vivian's Prophecy take increased anomaly and disorder DMG.",
         metadata: cond.prophecy,
         fields: [
           fieldForBuff(buff.m1_anomaly_dmg_),
@@ -66,6 +70,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreAbloom'),
+        description:
+          'While Abloom is active, anomaly DMG and resistance ignore are increased.',
         metadata: cond.abloom,
         fields: [
           fieldForBuff(buff.m2_anom_mv_mult_),
@@ -88,6 +94,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
+        description:
+          'Hitting with Basic Attack: Fluttering Frock - Suspension or Featherbloom increases ATK.',
         metadata: cond.fluttering_featherbloom_used,
         fields: [fieldForBuff(buff.m4_atk_)],
       },

@@ -33,7 +33,9 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { tigers_roar, chain_hit } = allBoolConditionals(key)
+const { tigers_roar, chain_hit } = allBoolConditionals(key, undefined, {
+  chain_hit: 1,
+})
 
 const sheet = register(
   key,

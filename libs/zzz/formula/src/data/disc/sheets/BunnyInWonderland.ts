@@ -30,7 +30,8 @@ const sheet = registerDisc(
         cmpEq(own.char.specialty, 'defense', prod(stacks, percent(0.06)))
       )
     ),
-    showCond4Set
+    showCond4Set,
+    true
   )
 )
 export default sheet

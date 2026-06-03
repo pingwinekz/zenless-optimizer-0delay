@@ -11,6 +11,14 @@ const discIdsSchema = zodTypedRecord(
   discIdValueSchema
 ) as z.ZodType<DiscIds>
 
+const teamSnapshotSchema = z.object({
+  teammates: z.array(z.any()).optional(),
+  frames: z.array(z.any()).optional(),
+  enemyLvl: z.number().optional(),
+  enemyDef: z.number().optional(),
+  enemyStunMultiplier: z.number().optional(),
+})
+
 const savedBuildSchema = z.object({
   name: z.string(),
   value: z.number(),
@@ -20,9 +28,15 @@ const savedBuildSchema = z.object({
   createdAt: z.number().int(),
   updatedAt: z.number().int(),
   description: z.string().optional(),
+
+  // Full optimizer settings snapshot (used when loading a build back)
+  optimizerSettings: z.record(z.string(), z.any()).optional(),
+  // Team snapshot: teammates with overrides, frames with conditionals/bonus stats, enemy data
+  teamSnapshot: teamSnapshotSchema.optional(),
 })
 
 export type SavedBuild = z.infer<typeof savedBuildSchema>
+export type SavedBuildTeamSnapshot = z.infer<typeof teamSnapshotSchema>
 
 export class SavedBuildDataManager extends DataManager<
   string,

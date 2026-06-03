@@ -1,5 +1,7 @@
 import { allDiscSetKeys, discSetNames } from '@genshin-optimizer/zzz/consts'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
+import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
+import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import {
   useCharacterContext,
   useDatabaseContext,
@@ -7,12 +9,21 @@ import {
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
-import { Translate } from '@genshin-optimizer/zzz/i18n'
-import { Drawer, Flex, HoverCard, Select, Switch, Text } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import {
+  Box,
+  Divider,
+  Drawer,
+  Flex,
+  HoverCard,
+  Select,
+  Skeleton,
+  Switch,
+  Text,
+} from '@mantine/core'
+import { Suspense, useMemo, useState } from 'react'
 
 const conditionalIconWidth = 32
-const conditionalNameWidth = 200
+const conditionalNameWidth = 255
 const conditionalInputWidth = 100
 const defaultGap = 5
 const columnGap = 6
@@ -33,10 +44,14 @@ export function FormSetConditionals({
       onClose={onClose}
       title="Conditional set effects"
       position="right"
-      size={450}
+      size={550}
       keepMounted
     >
-      {hasOpened && <FormSetConditionalsContent />}
+      {hasOpened && (
+        <Suspense fallback={<Skeleton height={300} />}>
+          <FormSetConditionalsContent />
+        </Suspense>
+      )}
     </Drawer>
   )
 }
@@ -63,7 +78,13 @@ function FormSetConditionalsContent() {
       <Flex gap={defaultGap} align="center">
         <div style={{ width: conditionalIconWidth }} />
         <div style={{ width: conditionalNameWidth }} />
+        <Flex style={{ flex: 1 }} justify="flex-end">
+          <Text size="xs" c="dimmed">
+            Effect
+          </Text>
+        </Flex>
       </Flex>
+      <Divider />
       {discOptions}
     </Flex>
   )
@@ -76,7 +97,27 @@ function DiscSetConditionalRow({
   sheet: string
   condEntries: [string, IConditionalData][]
 }) {
-  const genNs = `disc_${sheet}_gen`
+  const character = useCharacterContext()!
+  const { database } = useDatabaseContext()
+  const team = useTeam(character.key)
+  const uiSheet = discUiSheets[sheet as keyof typeof discUiSheets]
+
+  const currentValues = useMemo(() => {
+    const vals: Record<string, number> = {}
+    for (const [condName, condData] of condEntries) {
+      const currentCond = team?.frames[0]?.conditionals?.find(
+        (c) => c.sheet === sheet && c.condKey === condName
+      )
+      const defaultVal =
+        condData.type === 'bool'
+          ? 1
+          : condData.type === 'num'
+            ? (condData.max ?? 10)
+            : 0
+      vals[condName] = currentCond?.condValue ?? defaultVal
+    }
+    return vals
+  }, [team, sheet, condEntries])
 
   return (
     <HoverCard
@@ -109,13 +150,19 @@ function DiscSetConditionalRow({
           >
             {discSetNames[sheet as keyof typeof discSetNames] ?? sheet}
           </div>
-          <Flex style={{ flex: 1 }} gap={defaultGap} wrap="wrap">
+          <Flex
+            style={{ flex: 1 }}
+            gap={defaultGap}
+            justify="flex-end"
+            wrap="wrap"
+          >
             {condEntries.map(([condName, condData]) => (
               <ConditionalInput
                 key={condName}
                 sheet={sheet}
                 condName={condName}
                 condData={condData}
+                currentValue={currentValues[condName]}
               />
             ))}
           </Flex>
@@ -125,13 +172,56 @@ function DiscSetConditionalRow({
         <Text fw={600} mb={4} size="sm">
           {discSetNames[sheet as keyof typeof discSetNames] ?? sheet}
         </Text>
-        <Flex direction="column" gap={4}>
-          <Text size="xs">
-            <Translate ns={genNs} key18="desc2" />
-          </Text>
-          <Text size="xs">
-            <Translate ns={genNs} key18="desc4" />
-          </Text>
+        <Flex direction="column" gap={12}>
+          <Flex direction="column" gap={4}>
+            <Text size="xs" fw={600} tt="uppercase" c="dimmed">
+              Set description
+            </Text>
+            {uiSheet &&
+              Object.entries(uiSheet).map(([blockKey, block]) => (
+                <Box key={blockKey}>
+                  <Text size="xs" fw={500} mb={2}>
+                    {blockKey === '2' ? '2-Piece' : '4-Piece'}
+                  </Text>
+                  {block.documents.map((doc, i) => (
+                    <DocumentDisplay
+                      key={i}
+                      document={doc}
+                      typoVariant="body2"
+                    />
+                  ))}
+                </Box>
+              ))}
+          </Flex>
+          <Flex direction="column" gap={4}>
+            <Text size="xs" fw={600} tt="uppercase" c="dimmed">
+              Enabled effect
+            </Text>
+            {condEntries.map(([condName, condData]) => {
+              const label = condData.name
+              const val = currentValues[condName]
+              return (
+                <Flex key={condName} align="center" gap={4}>
+                  {condData.type === 'bool' && (
+                    <Text
+                      size="xs"
+                      c={val > 0 ? 'green' : 'dimmed'}
+                      fw={500}
+                    >
+                      {val > 0 ? 'ON' : 'OFF'}
+                    </Text>
+                  )}
+                  {condData.type === 'num' && (
+                    <Text size="xs" c="blue" fw={500}>
+                      {val}
+                      {condData.max != null && `/${condData.max}`}
+                    </Text>
+                  )}
+                  <Text size="xs">{label}</Text>
+                </Flex>
+              )
+            })}
+          </Flex>
         </Flex>
       </HoverCard.Dropdown>
     </HoverCard>
@@ -142,18 +232,16 @@ function ConditionalInput({
   sheet,
   condName,
   condData,
+  currentValue: propCurrentValue,
 }: {
   sheet: string
   condName: string
   condData: IConditionalData
+  currentValue: number
 }) {
   const character = useCharacterContext()!
   const { database } = useDatabaseContext()
-  const team = useTeam(character.key)
-  const currentCond = team?.frames[0]?.conditionals?.find(
-    (c) => c.sheet === sheet && c.condKey === condName
-  )
-  const currentValue = currentCond?.condValue ?? 0
+  const currentValue = propCurrentValue
 
   const setValue = (condValue: number) => {
     database.teams.setFrameConditional(

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'PhaethonsMelody',
       name: 'set2',
     },
+    team: false,
   },
   set4_squad_anomProf: {
     sheet: 'PhaethonsMelody',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'PhaethonsMelody',
       name: 'set4_squad_anomProf',
     },
+    team: false,
   },
   set4_not_self_ether_: {
     sheet: 'PhaethonsMelody',
@@ -33,5 +35,6 @@ export const buffs = {
       attribute: 'ether',
       name: 'set4_not_self_ether_',
     },
+    team: false,
   },
 } as const

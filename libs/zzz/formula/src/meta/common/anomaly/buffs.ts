@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'anomaly',
       name: 'frostbite_crit_dmg_',
     },
+    team: true,
   },
 } as const

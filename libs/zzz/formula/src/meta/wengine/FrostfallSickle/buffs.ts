@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'cond_ice_dmg_',
     },
+    team: false,
   },
   cond_abloom_dmg_: {
     sheet: 'FrostfallSickle',
@@ -23,5 +24,6 @@ export const buffs = {
       damageType1: 'abloom',
       name: 'cond_abloom_dmg_',
     },
+    team: false,
   },
 } as const

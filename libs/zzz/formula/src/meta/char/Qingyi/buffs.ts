@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'flash_connect_dmg_',
     },
+    team: false,
   },
   flash_connect_dazeInc_: {
     sheet: 'Qingyi',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'flash_connect_dazeInc_',
     },
+    team: false,
   },
   chain_dmg_: {
     sheet: 'Qingyi',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'chain_dmg_',
     },
+    team: false,
   },
   core_stun_: {
     sheet: 'Qingyi',
@@ -43,6 +46,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'core_stun_',
     },
+    team: false,
   },
   ability_basic_dazeInc_: {
     sheet: 'Qingyi',
@@ -55,6 +59,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'ability_basic_dazeInc_',
     },
+    team: false,
   },
   ability_atk: {
     sheet: 'Qingyi',
@@ -66,6 +71,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'ability_atk',
     },
+    team: false,
   },
   m1_defRed_: {
     sheet: 'Qingyi',
@@ -77,6 +83,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'm1_defRed_',
     },
+    team: false,
   },
   m1_crit_: {
     sheet: 'Qingyi',
@@ -88,6 +95,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'm1_crit_',
     },
+    team: false,
   },
   m2_dazeInc_: {
     sheet: 'Qingyi',
@@ -99,6 +107,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'm2_dazeInc_',
     },
+    team: false,
   },
   m6_resRed_: {
     sheet: 'Qingyi',
@@ -110,6 +119,7 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'm6_resRed_',
     },
+    team: false,
   },
   m6_crit_dmg_: {
     sheet: 'Qingyi',
@@ -121,5 +131,6 @@ export const buffs = {
       sheet: 'Qingyi',
       name: 'm6_crit_dmg_',
     },
+    team: false,
   },
 } as const

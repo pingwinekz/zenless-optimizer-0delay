@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'WeepingCradle',
       name: 'cond_dmg_',
     },
+    team: true,
   },
 } as const

@@ -1,5 +1,6 @@
-import { Modal } from '@mantine/core'
+import { Modal, Skeleton } from '@mantine/core'
 import { IconTriangleInvertedFilled } from '@tabler/icons-react'
+import { Suspense } from 'react'
 import modalClasses from './DiscEditorModal.module.css'
 import { DiscEditorModalContent } from './DiscEditorModalContent'
 import { useDiscEditorModalStore } from './discEditorModalStore'
@@ -13,7 +14,11 @@ export function DiscEditorModal() {
   return (
     <div>
       <Modal size={560} centered opened={open} onClose={closeOverlay}>
-        {open && <DiscEditorModalContent />}
+        {open && (
+          <Suspense fallback={<Skeleton height={400} />}>
+            <DiscEditorModalContent />
+          </Suspense>
+        )}
       </Modal>
       {open && prev && (
         <IconTriangleInvertedFilled

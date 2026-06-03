@@ -26,6 +26,7 @@ export function CharacterStatSummary({
         <CharacterStatRow statKey="impact" value={stats?.impact ?? 0} />
         <CharacterStatRow statKey="crit_" value={stats?.crit_ ?? 0} />
         <CharacterStatRow statKey="crit_dmg_" value={stats?.crit_dmg_ ?? 0} />
+        <CharacterStatRow statKey="pen" value={stats?.pen ?? 0} />
         <CharacterStatRow statKey="pen_" value={stats?.pen_ ?? 0} />
         <CharacterStatRow statKey="anomProf" value={stats?.anomProf ?? 0} />
         <CharacterStatRow statKey="anomMas" value={stats?.anomMas ?? 0} />

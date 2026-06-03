@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'RiotSuppressorMarkVI',
       name: 'passive_crit_',
     },
+    team: false,
   },
   basic_ether_dmg_: {
     sheet: 'RiotSuppressorMarkVI',
@@ -23,5 +24,6 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_ether_dmg_',
     },
+    team: false,
   },
 } as const

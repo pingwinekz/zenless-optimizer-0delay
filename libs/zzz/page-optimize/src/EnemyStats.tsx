@@ -5,8 +5,6 @@ import {
   NumberInputLazy,
 } from '@genshin-optimizer/common/ui'
 import { isIn } from '@genshin-optimizer/common/util'
-import type { Document } from '@genshin-optimizer/game-opt/sheet-ui'
-import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import { allAttributeKeys } from '@genshin-optimizer/zzz/consts'
 import type { EnemyStatKey, EnemyStatsTag } from '@genshin-optimizer/zzz/db'
 import {
@@ -19,11 +17,7 @@ import {
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
-import {
-  type Attribute,
-  type Tag,
-  enemyMeta,
-} from '@genshin-optimizer/zzz/formula'
+import { type Attribute, type Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName } from '@genshin-optimizer/zzz/ui'
 import { IconTrash } from '@tabler/icons-react'
@@ -66,157 +60,172 @@ export function EnemyStatsSection() {
     )
 
   return (
-    <Stack gap={1}>
-      <Box style={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-        <NumberInputLazy
-          label="Enemy Lvl"
-          value={enemyLvl}
-          onChange={(v) => database.teams.set(characterKey, { enemyLvl: v })}
-        />
-        <NumberInputLazy
-          label="Enemy DEF"
-          value={enemyDef}
-          onChange={(v) => database.teams.set(characterKey, { enemyDef: v })}
-        />
-        <NumberInputLazy
-          label="Enemy Stun Multiplier"
-          value={enemyStunMultiplier}
-          onChange={(v) =>
-            database.teams.set(characterKey, { enemyStunMultiplier: v })
-          }
-        />
-      </Box>
-      <DocumentDisplay document={enemyDoc} />
+    <Stack gap="sm">
       <CardThemed bgt="light">
-        <CardSection
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1,
-          }}
-        >
-          <Text size="sm" fw={700}>
-            Elemental Resistances & Weaknesses
-          </Text>
-          <Box
-            style={{
-              display: 'flex',
-              gap: 1,
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            <Text
-              size="xs"
-              style={{ minWidth: '4em', color: 'var(--mantine-color-red-6)' }}
-            >
-              Resists
+        <CardSection style={{ padding: 8 }}>
+          <Stack gap="xs">
+            <Text size="sm" fw={700}>
+              Enemy Base Stats
             </Text>
-            {allAttributeKeys.map((attr) => (
-              <Button
-                key={attr}
-                size="compact-sm"
-                variant={
-                  enemyStats.some(
-                    (s) =>
-                      s.tag.q === 'res_' &&
-                      s.tag.attribute === attr &&
-                      s.value > 0
-                  )
-                    ? 'filled'
-                    : 'outline'
+            <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <NumberInputLazy
+                label="Enemy Lvl"
+                value={enemyLvl}
+                onChange={(v) =>
+                  database.teams.set(characterKey, { enemyLvl: v })
                 }
-                color={
-                  enemyStats.some(
-                    (s) =>
-                      s.tag.q === 'res_' &&
-                      s.tag.attribute === attr &&
-                      s.value > 0
-                  )
-                    ? 'red'
-                    : 'gray'
+              />
+              <NumberInputLazy
+                label="Enemy DEF"
+                value={enemyDef}
+                onChange={(v) =>
+                  database.teams.set(characterKey, { enemyDef: v })
                 }
-                onClick={() => {
-                  const existing = enemyStats.findIndex(
-                    (s) => s.tag.q === 'res_' && s.tag.attribute === attr
-                  )
-                  if (existing !== -1 && enemyStats[existing].value > 0)
-                    setStat({ q: 'res_', attribute: attr }, null, existing)
-                  else setStat({ q: 'res_', attribute: attr }, 40)
-                }}
-              >
-                <ColorText color={attr}>
-                  <AttributeName attribute={attr} />
-                </ColorText>
-              </Button>
-            ))}
-          </Box>
-          <Box
-            style={{
-              display: 'flex',
-              gap: 1,
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            <Text
-              size="xs"
-              style={{ minWidth: '4em', color: 'var(--mantine-color-teal-6)' }}
-            >
-              Weak
-            </Text>
-            {allAttributeKeys.map((attr) => (
-              <Button
-                key={attr}
-                size="compact-sm"
-                variant={
-                  enemyStats.some(
-                    (s) =>
-                      s.tag.q === 'res_' &&
-                      s.tag.attribute === attr &&
-                      s.value < 0
-                  )
-                    ? 'filled'
-                    : 'outline'
+              />
+              <NumberInputLazy
+                label="Enemy Stun Multiplier"
+                value={enemyStunMultiplier}
+                onChange={(v) =>
+                  database.teams.set(characterKey, { enemyStunMultiplier: v })
                 }
-                color={
-                  enemyStats.some(
-                    (s) =>
-                      s.tag.q === 'res_' &&
-                      s.tag.attribute === attr &&
-                      s.value < 0
-                  )
-                    ? 'teal'
-                    : 'gray'
-                }
-                onClick={() => {
-                  const existing = enemyStats.findIndex(
-                    (s) => s.tag.q === 'res_' && s.tag.attribute === attr
-                  )
-                  if (existing !== -1 && enemyStats[existing].value < 0)
-                    setStat({ q: 'res_', attribute: attr }, null, existing)
-                  else setStat({ q: 'res_', attribute: attr }, -20)
-                }}
-              >
-                <ColorText color={attr}>
-                  <AttributeName attribute={attr} />
-                </ColorText>
-              </Button>
-            ))}
-          </Box>
+              />
+            </Box>
+          </Stack>
         </CardSection>
       </CardThemed>
-      {enemyStats.map(({ tag, value }, i) => (
-        <EnemyStatDisplay
-          key={JSON.stringify(tag) + i}
-          tag={tag}
-          value={value}
-          setValue={(value) => setStat(tag, value, i)}
-          onDelete={() => setStat(tag, null, i)}
-          setTag={(tag) => setStat(tag, value, i)}
-        />
-      ))}
-      <InitialStatDropdown onSelect={newTarget} />
+
+      <CardThemed bgt="light">
+        <CardSection style={{ padding: 8 }}>
+          <Stack gap="xs">
+            <Text size="sm" fw={700}>
+              Elemental Resistances & Weaknesses
+            </Text>
+            <Box
+              style={{
+                display: 'flex',
+                gap: 4,
+                alignItems: 'center',
+                flexWrap: 'wrap',
+              }}
+            >
+              <Text
+                size="sm"
+                fw={700}
+                style={{ minWidth: '4em', color: 'var(--mantine-color-red-4)' }}
+              >
+                Resists
+              </Text>
+              {allAttributeKeys.map((attr) => {
+                const isActive = enemyStats.some(
+                  (s) =>
+                    s.tag.q === 'res_' &&
+                    s.tag.attribute === attr &&
+                    s.value > 0
+                )
+                return (
+                  <Button
+                    key={attr}
+                    size="compact-sm"
+                    variant={isActive ? 'filled' : 'outline'}
+                    color={isActive ? 'red.5' : 'gray'}
+                    onClick={() => {
+                      const existing = enemyStats.findIndex(
+                        (s) => s.tag.q === 'res_' && s.tag.attribute === attr
+                      )
+                      if (existing !== -1 && enemyStats[existing].value > 0)
+                        setStat({ q: 'res_', attribute: attr }, null, existing)
+                      else setStat({ q: 'res_', attribute: attr }, 40)
+                    }}
+                  >
+                    {isActive ? (
+                      <AttributeName attribute={attr} />
+                    ) : (
+                      <ColorText color={attr}>
+                        <AttributeName attribute={attr} />
+                      </ColorText>
+                    )}
+                  </Button>
+                )
+              })}
+            </Box>
+            <Box
+              style={{
+                display: 'flex',
+                gap: 4,
+                alignItems: 'center',
+                flexWrap: 'wrap',
+              }}
+            >
+              <Text
+                size="sm"
+                fw={700}
+                style={{
+                  minWidth: '4em',
+                  color: 'var(--mantine-color-teal-3)',
+                }}
+              >
+                Weak
+              </Text>
+              {allAttributeKeys.map((attr) => {
+                const isActive = enemyStats.some(
+                  (s) =>
+                    s.tag.q === 'res_' &&
+                    s.tag.attribute === attr &&
+                    s.value < 0
+                )
+                return (
+                  <Button
+                    key={attr}
+                    size="compact-sm"
+                    variant={isActive ? 'filled' : 'outline'}
+                    color={isActive ? 'teal.4' : 'gray'}
+                    onClick={() => {
+                      const existing = enemyStats.findIndex(
+                        (s) => s.tag.q === 'res_' && s.tag.attribute === attr
+                      )
+                      if (existing !== -1 && enemyStats[existing].value < 0)
+                        setStat({ q: 'res_', attribute: attr }, null, existing)
+                      else setStat({ q: 'res_', attribute: attr }, -20)
+                    }}
+                  >
+                    {isActive ? (
+                      <AttributeName attribute={attr} />
+                    ) : (
+                      <ColorText color={attr}>
+                        <AttributeName attribute={attr} />
+                      </ColorText>
+                    )}
+                  </Button>
+                )
+              })}
+            </Box>
+          </Stack>
+        </CardSection>
+      </CardThemed>
+
+      {enemyStats.length > 0 && (
+        <CardThemed bgt="light">
+          <CardSection style={{ padding: 8 }}>
+            <Stack gap="xs">
+              <Text size="sm" fw={700}>
+                Custom Enemy Stats
+              </Text>
+              {enemyStats.map(({ tag, value }, i) => (
+                <EnemyStatDisplay
+                  key={JSON.stringify(tag) + i}
+                  tag={tag}
+                  value={value}
+                  setValue={(value) => setStat(tag, value, i)}
+                  onDelete={() => setStat(tag, null, i)}
+                  setTag={(tag) => setStat(tag, value, i)}
+                />
+              ))}
+              <InitialStatDropdown onSelect={newTarget} />
+            </Stack>
+          </CardSection>
+        </CardThemed>
+      )}
+      {enemyStats.length === 0 && <InitialStatDropdown onSelect={newTarget} />}
     </Stack>
   )
 }
@@ -230,6 +239,8 @@ function InitialStatDropdown({
 }) {
   return (
     <DropdownButton
+      size="compact-sm"
+      w="auto"
       title={
         (tag && (
           <TagDisplay
@@ -269,10 +280,11 @@ function EnemyStatDisplay({
       <CardSection
         style={{
           display: 'flex',
-          gap: 1,
+          gap: 8,
           justifyContent: 'space-around',
           alignItems: 'center',
           flexWrap: 'wrap',
+          padding: '8px 12px',
         }}
       >
         <Text>
@@ -290,10 +302,10 @@ function EnemyStatDisplay({
         <NumberInputLazy
           float
           value={value}
-          style={{ flexBasis: 150, flexGrow: 1, height: '100%' }}
+          style={{ flexBasis: 100, height: '100%' }}
           onChange={setValue}
           placeholder="Stat Value"
-          size="small"
+          size="sm"
         />
         <ActionIcon aria-label="Delete Enemy Stat" onClick={onDelete}>
           <IconTrash size={16} />
@@ -331,12 +343,4 @@ function AttributeDropdown({
       ))}
     </DropdownButton>
   )
-}
-
-const enemyDoc: Document = {
-  type: 'conditional',
-  conditional: {
-    label: 'Enemy is Stunned',
-    metadata: enemyMeta.conditionals.isStunned,
-  },
 }

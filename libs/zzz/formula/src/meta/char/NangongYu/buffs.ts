@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'core_anomProf',
     },
+    team: false,
   },
   core_impact: {
     sheet: 'NangongYu',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'core_impact',
     },
+    team: false,
   },
   core_anomBuildup_: {
     sheet: 'NangongYu',
@@ -33,6 +35,7 @@ export const buffs = {
       attribute: 'ether',
       name: 'core_anomBuildup_',
     },
+    team: false,
   },
   core_daze_: {
     sheet: 'NangongYu',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'core_daze_',
     },
+    team: false,
   },
   core_squad_dmg_: {
     sheet: 'NangongYu',
@@ -55,6 +59,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'core_squad_dmg_',
     },
+    team: true,
   },
   core_etherVeil_atk: {
     sheet: 'NangongYu',
@@ -66,6 +71,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'core_etherVeil_atk',
     },
+    team: true,
   },
   m1_resIgn_: {
     sheet: 'NangongYu',
@@ -77,6 +83,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'm1_resIgn_',
     },
+    team: false,
   },
   m4_anomProf: {
     sheet: 'NangongYu',
@@ -88,6 +95,7 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'm4_anomProf',
     },
+    team: false,
   },
   m4_basicAnomalyBuildup_: {
     sheet: 'NangongYu',
@@ -100,6 +108,7 @@ export const buffs = {
       attribute: 'ether',
       name: 'm4_basicAnomalyBuildup_',
     },
+    team: false,
   },
   m6_daze_: {
     sheet: 'NangongYu',
@@ -111,5 +120,6 @@ export const buffs = {
       sheet: 'NangongYu',
       name: 'm6_daze_',
     },
+    team: false,
   },
 } as const

@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'CannonRotor',
       name: 'passive_atk_',
     },
+    team: false,
   },
 } as const

@@ -42,7 +42,8 @@ const sheet = registerDisc(
         )
       )
     ),
-    showCond4Set
+    showCond4Set,
+    true
   )
 )
 export default sheet

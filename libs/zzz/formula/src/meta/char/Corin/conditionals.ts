@@ -1,6 +1,11 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  chain_ult_hit: { sheet: 'Corin', name: 'chain_ult_hit', type: 'bool' },
+  chain_ult_hit: {
+    sheet: 'Corin',
+    name: 'chain_ult_hit',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   charge: {
     sheet: 'Corin',
     name: 'charge',
@@ -8,6 +13,7 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 40,
+    mindscapeRequirement: 6,
   },
   exSpecial_chain_ult_hits: {
     sheet: 'Corin',
@@ -16,5 +22,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 20,
+    mindscapeRequirement: 2,
   },
 } as const

@@ -3,9 +3,9 @@ import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import {
   allBoolConditionals,
   own,
-  ownBuff,
   percent,
   registerBuff,
+  teamBuff,
 } from '../../util'
 import { entriesForDisc, registerDisc } from '../util'
 
@@ -24,10 +24,11 @@ const sheet = registerDisc(
   // Conditional buffs
   registerBuff(
     'set4_cond_def_assist_or_evasive_assist_dmg_',
-    ownBuff.combat.common_dmg_.add(
+    teamBuff.combat.common_dmg_.add(
       cmpGE(discCount, 4, def_assist_or_evasive_assist.ifOn(percent(0.15)))
     ),
-    showCond4Set
+    showCond4Set,
+    true // 'all squad members' — team-wide
   )
 )
 export default sheet

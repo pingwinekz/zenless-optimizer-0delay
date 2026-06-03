@@ -9,6 +9,12 @@ export const conditionals = {
     sheet: 'Anby',
     name: 'm1After4thBasicHit',
     type: 'bool',
+    mindscapeRequirement: 1,
   },
-  m6ChargeConsumed: { sheet: 'Anby', name: 'm6ChargeConsumed', type: 'bool' },
+  m6ChargeConsumed: {
+    sheet: 'Anby',
+    name: 'm6ChargeConsumed',
+    type: 'bool',
+    mindscapeRequirement: 6,
+  },
 } as const

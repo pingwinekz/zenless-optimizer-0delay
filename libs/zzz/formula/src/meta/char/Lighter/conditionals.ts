@@ -1,6 +1,11 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  collapse: { sheet: 'Lighter', name: 'collapse', type: 'bool' },
+  collapse: {
+    sheet: 'Lighter',
+    name: 'collapse',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   elation: {
     sheet: 'Lighter',
     name: 'elation',

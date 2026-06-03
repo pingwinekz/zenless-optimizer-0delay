@@ -122,7 +122,8 @@ const ConditionalDisplay = memo(function ConditionalDisplay({
     () => ({
       ...tag,
       src,
-      dst,
+      // Disc/char conditionals often store dst=null; keep TagContext dst for reads.
+      dst: dst ?? tag.dst ?? null,
     }),
     [tag, src, dst]
   )

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'stance_switch_impact_',
     },
+    team: false,
   },
   ult_dazeInc_: {
     sheet: 'Caesar',
@@ -22,6 +23,7 @@ export const buffs = {
       damageType1: 'ult',
       name: 'ult_dazeInc_',
     },
+    team: false,
   },
   core_atk: {
     sheet: 'Caesar',
@@ -33,6 +35,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'core_atk',
     },
+    team: true,
   },
   ability_dmgInc_: {
     sheet: 'Caesar',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'ability_dmgInc_',
     },
+    team: true,
   },
   m1_resRed_: {
     sheet: 'Caesar',
@@ -55,6 +59,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm1_resRed_',
     },
+    team: true,
   },
   m2_enerRegen_: {
     sheet: 'Caesar',
@@ -66,6 +71,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm2_enerRegen_',
     },
+    team: false,
   },
   m6_exSpecial_assistFollowup_crit_: {
     sheet: 'Caesar',
@@ -77,6 +83,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm6_exSpecial_assistFollowup_crit_',
     },
+    team: false,
   },
   m6_dmg_: {
     sheet: 'Caesar',
@@ -88,6 +95,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm6_dmg_',
     },
+    team: false,
   },
   m6_crit_: {
     sheet: 'Caesar',
@@ -99,6 +107,7 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm6_crit_',
     },
+    team: false,
   },
   m6_crit_dmg_: {
     sheet: 'Caesar',
@@ -110,5 +119,6 @@ export const buffs = {
       sheet: 'Caesar',
       name: 'm6_crit_dmg_',
     },
+    team: false,
   },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'core_impact',
     },
+    team: false,
   },
   core_stun_: {
     sheet: 'Dialyn',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'core_stun_',
     },
+    team: true,
   },
   ability_exSpecial_crit_dmg_: {
     sheet: 'Dialyn',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'ability_exSpecial_crit_dmg_',
     },
+    team: false,
   },
   ability_common_dmg_: {
     sheet: 'Dialyn',
@@ -43,6 +46,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'ability_common_dmg_',
     },
+    team: true,
   },
   ability_attack_dmg: {
     sheet: 'Dialyn',
@@ -55,6 +59,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'ability_attack_dmg',
     },
+    team: false,
   },
   ability_rupture_dmg: {
     sheet: 'Dialyn',
@@ -67,6 +72,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'ability_rupture_dmg',
     },
+    team: false,
   },
   m1_resIgn_: {
     sheet: 'Dialyn',
@@ -78,6 +84,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'm1_resIgn_',
     },
+    team: true,
   },
   m2_stun_: {
     sheet: 'Dialyn',
@@ -89,6 +96,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'm2_stun_',
     },
+    team: true,
   },
   m2_common_dmg_: {
     sheet: 'Dialyn',
@@ -100,6 +108,7 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'm2_common_dmg_',
     },
+    team: true,
   },
   m4_atk: {
     sheet: 'Dialyn',
@@ -111,5 +120,6 @@ export const buffs = {
       sheet: 'Dialyn',
       name: 'm4_atk',
     },
+    team: false,
   },
 } as const

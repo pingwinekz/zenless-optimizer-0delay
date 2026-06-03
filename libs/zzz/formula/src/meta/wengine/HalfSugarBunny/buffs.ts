@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'HalfSugarBunny',
       name: 'passive_enerRegen',
     },
+    team: false,
   },
   passive_atk_: {
     sheet: 'HalfSugarBunny',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'HalfSugarBunny',
       name: 'passive_atk_',
     },
+    team: true,
   },
   passive_hp_: {
     sheet: 'HalfSugarBunny',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'HalfSugarBunny',
       name: 'passive_hp_',
     },
+    team: true,
   },
   cond_crit_dmg_: {
     sheet: 'HalfSugarBunny',
@@ -43,5 +46,6 @@ export const buffs = {
       sheet: 'HalfSugarBunny',
       name: 'cond_crit_dmg_',
     },
+    team: true,
   },
 } as const

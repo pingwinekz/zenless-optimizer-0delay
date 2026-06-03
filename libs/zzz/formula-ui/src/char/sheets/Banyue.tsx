@@ -26,6 +26,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: coreCondText,
+        description:
+          'Upon launching an EX Special Attack or Assist Follow-Up, Banyue gains increased Fire DMG and CRIT DMG.',
         metadata: cond.exSpecialFollowUpUsed,
         fields: [
           fieldForBuff(buff.core_sheerForce),
@@ -40,6 +42,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'With Vidyaraja Stacks active, Banyue deals increased Fire DMG.',
         metadata: cond.vidyaraja,
         fields: [fieldForBuff(buff.ability_fire_dmg_)],
       },
@@ -50,6 +54,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
+        description:
+          'When an enemy is in the Tremor state, Banyue reduces their Fire RES and deals increased Sheer DMG.',
         metadata: cond.tremor,
         fields: [
           fieldForBuff(buff.m1_fire_resRed_),
@@ -64,6 +70,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: coreCondText,
+        description:
+          'Upon launching an EX Special Attack or Assist Follow-Up, Banyue gains additional Fire DMG and CRIT DMG.',
         metadata: cond.exSpecialFollowUpUsed,
         fields: [
           fieldForBuff(buff.m2_fire_dmg_),
@@ -86,6 +94,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'With Vidyaraja Stacks active, Banyue gains increased Fire DMG bonus.',
         metadata: cond.vidyaraja,
         fields: [
           {

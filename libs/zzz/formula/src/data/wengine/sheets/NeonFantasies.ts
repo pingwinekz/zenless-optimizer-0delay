@@ -35,7 +35,8 @@ const sheet = registerWengine(
         prod(stacks, percent(subscript(phase, dm.squadDmg)))
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   ),
   // Base Anomaly Prof: always active
   registerBuff(

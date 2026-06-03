@@ -1,8 +1,12 @@
 import { ModalWrapper } from '@genshin-optimizer/common/ui'
 import { toggleInArr } from '@genshin-optimizer/common/util'
-import { allDiscSetKeys } from '@genshin-optimizer/zzz/consts'
+import {
+  allDiscSetKeys,
+  disc2pEffect,
+  discSetNames,
+  statKeyTextMap,
+} from '@genshin-optimizer/zzz/consts'
 import type { DiscSetKey, DiscSlotKey } from '@genshin-optimizer/zzz/consts'
-import { discSetNames } from '@genshin-optimizer/zzz/consts'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import {
   OptConfigContext,
@@ -93,6 +97,28 @@ function DiscSetFilterModalContent({
     [currentFilter, setCurrentFilter]
   )
 
+  const effectGroups = useMemo(() => buildEffectGroups(), [])
+
+  const handleEffectToggle = useCallback(
+    (group: EffectGroup) => {
+      const groupSetKeys = group.setKeys
+      const someSelected = groupSetKeys.some((k) => currentFilter.includes(k))
+      if (someSelected) {
+        // Remove all sets in this group
+        setCurrentFilter(currentFilter.filter((k) => !groupSetKeys.includes(k)))
+      } else {
+        // Add all sets in this group
+        const existing = new Set(currentFilter)
+        const merged = [
+          ...currentFilter,
+          ...groupSetKeys.filter((k) => !existing.has(k)),
+        ]
+        setCurrentFilter(merged)
+      }
+    },
+    [currentFilter, setCurrentFilter]
+  )
+
   const handleRevert = useCallback(() => {
     database.optConfigs.set(optConfigId, initialFilters)
   }, [database, optConfigId, initialFilters])
@@ -169,7 +195,9 @@ function DiscSetFilterModalContent({
         <Stack gap={10}>
           <TextInput
             data-autofocus
-            placeholder="Search disc sets..."
+            placeholder={
+              mode === '2p' ? 'Search effects...' : 'Search disc sets...'
+            }
             value={search}
             onChange={(e) => setSearch(e.currentTarget.value)}
             size="xs"
@@ -180,7 +208,10 @@ function DiscSetFilterModalContent({
             }
           />
 
-          <Divider label="Disc Sets" labelPosition="center" />
+          <Divider
+            label={mode === '2p' ? '2-Piece Effects' : 'Disc Sets'}
+            labelPosition="center"
+          />
 
           <SegmentedControl
             value={mode}
@@ -194,12 +225,21 @@ function DiscSetFilterModalContent({
           />
 
           <Box style={{ maxHeight: 400, overflowY: 'auto' }}>
-            <DiscSetGrid
-              setKeys={allDiscSetKeys}
-              checkedNames={new Set(currentFilter)}
-              onToggle={handleToggle}
-              search={search}
-            />
+            {mode === '2p' ? (
+              <EffectGrid
+                effectGroups={effectGroups}
+                checkedSetKeys={new Set(currentFilter)}
+                onToggle={handleEffectToggle}
+                search={search}
+              />
+            ) : (
+              <DiscSetGrid
+                setKeys={allDiscSetKeys}
+                checkedNames={new Set(currentFilter)}
+                onToggle={handleToggle}
+                search={search}
+              />
+            )}
           </Box>
         </Stack>
       </Box>
@@ -286,6 +326,163 @@ const DiscSetRow = memo(function DiscSetRow({
       >
         {discSetNames[setKey] ?? setKey}
       </Text>
+    </UnstyledButton>
+  )
+})
+
+// ── 2-Piece Effect Grouping ──
+
+interface EffectGroup {
+  effectKey: string
+  label: string
+  setKeys: DiscSetKey[]
+}
+
+// Override labels for disc sets where the 2p effect description differs
+// from what the generic stat-key→label would produce (e.g. special damage types)
+const effectLabelOverrides: Record<
+  string,
+  { label: string; effectKey: string }
+> = {
+  DawnsBloom: {
+    label: 'Basic ATK DMG +15%',
+    effectKey: 'dmg_0.15|dawn',
+  },
+  ShadowHarmony: {
+    label: 'Dash/Aftershock DMG +15%',
+    effectKey: 'dmg_0.15|shadow',
+  },
+}
+
+function buildEffectGroups(): EffectGroup[] {
+  const groups = new Map<string, EffectGroup>()
+
+  for (const [setKey, effects] of Object.entries(disc2pEffect)) {
+    const sk = setKey as DiscSetKey
+    // Check for label override first
+    const override = effectLabelOverrides[sk]
+    if (override) {
+      if (!groups.has(override.effectKey)) {
+        groups.set(override.effectKey, {
+          effectKey: override.effectKey,
+          label: override.label,
+          setKeys: [],
+        })
+      }
+      groups.get(override.effectKey)!.setKeys.push(sk)
+      continue
+    }
+
+    const entries = Object.entries(effects)
+    if (entries.length === 0) continue
+    const sorted = [...entries].sort(([a], [b]) => a.localeCompare(b))
+    const effectKey = sorted.map(([k, v]) => `${k}_${v}`).join('|')
+
+    if (!groups.has(effectKey)) {
+      const label = sorted
+        .map(([k, v]) => {
+          const name = statKeyTextMap[k] ?? k
+          return v < 1 && v > -1
+            ? `${name} +${(v * 100).toFixed(0)}%`
+            : `${name} +${v}`
+        })
+        .join('\n')
+      groups.set(effectKey, { effectKey, label, setKeys: [] })
+    }
+    groups.get(effectKey)!.setKeys.push(sk)
+  }
+  return [...groups.values()]
+}
+
+function EffectGrid({
+  effectGroups,
+  checkedSetKeys,
+  onToggle,
+  search,
+}: {
+  effectGroups: EffectGroup[]
+  checkedSetKeys: Set<string>
+  onToggle: (group: EffectGroup) => void
+  search: string
+}) {
+  const columns = useMemo(() => {
+    const cols: EffectGroup[][] = [[], [], [], []]
+    effectGroups.forEach((g, i) => cols[i % 4].push(g))
+    return cols
+  }, [effectGroups])
+
+  const q = search.toLowerCase()
+  return (
+    <div className={classes.effectGrid}>
+      {columns.map((col, ci) => (
+        <div key={ci} className={classes.effectGridCol}>
+          {col.map((group) => {
+            const allChecked = group.setKeys.every((k) => checkedSetKeys.has(k))
+            const dimmed =
+              !!q &&
+              !group.label.toLowerCase().includes(q) &&
+              !group.setKeys.some((k) =>
+                (discSetNames[k] ?? k).toLowerCase().includes(q)
+              )
+
+            return (
+              <EffectGroupCard
+                key={group.effectKey}
+                group={group}
+                checked={allChecked}
+                dimmed={dimmed}
+                onToggle={onToggle}
+              />
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const EffectGroupCard = memo(function EffectGroupCard({
+  group,
+  checked,
+  dimmed,
+  onToggle,
+}: {
+  group: EffectGroup
+  checked: boolean
+  dimmed: boolean
+  onToggle: (group: EffectGroup) => void
+}) {
+  const handleClick = useCallback(() => onToggle(group), [onToggle, group])
+
+  return (
+    <UnstyledButton
+      className={`${classes.effectCard} ${checked ? classes.effectCardChecked : ''} ${dimmed ? classes.effectCardDimmed : ''}`}
+      onClick={handleClick}
+    >
+      <Text
+        size="xs"
+        truncate
+        fw={checked ? 600 : undefined}
+        c={checked ? undefined : 'dimmed'}
+      >
+        {group.label}
+      </Text>
+      <Group gap={1} mt={2}>
+        {group.setKeys.map((key) => (
+          <img
+            key={key}
+            className={classes.effectSetImg}
+            src={discDefIcon(key)}
+            alt={discSetNames[key] ?? key}
+            title={discSetNames[key] ?? key}
+          />
+        ))}
+        {group.setKeys.length > 1 && (
+          <Text size="xs" c="dimmed" style={{ marginLeft: 2, fontSize: 10 }}>
+            x{group.setKeys.length}
+          </Text>
+        )}
+      </Group>
     </UnstyledButton>
   )
 })

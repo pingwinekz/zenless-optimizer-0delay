@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'CinderCobalt',
       name: 'enteringCombatOrSwitchingIn_atk_',
     },
+    team: false,
   },
 } as const

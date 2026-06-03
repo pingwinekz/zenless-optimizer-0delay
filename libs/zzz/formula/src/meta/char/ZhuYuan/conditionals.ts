@@ -12,6 +12,12 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 5,
+    mindscapeRequirement: 2,
   },
-  suppresive_mode: { sheet: 'ZhuYuan', name: 'suppresive_mode', type: 'bool' },
+  suppresive_mode: {
+    sheet: 'ZhuYuan',
+    name: 'suppresive_mode',
+    type: 'bool',
+    mindscapeRequirement: 2,
+  },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Corin',
       name: 'core_common_dmg_',
     },
+    team: false,
   },
   ability_common_dmg_: {
     sheet: 'Corin',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'Corin',
       name: 'ability_common_dmg_',
     },
+    team: false,
   },
   m1_common_dmg_: {
     sheet: 'Corin',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'Corin',
       name: 'm1_common_dmg_',
     },
+    team: false,
   },
   m2_physical_resRed_: {
     sheet: 'Corin',
@@ -44,5 +47,6 @@ export const buffs = {
       attribute: 'physical',
       name: 'm2_physical_resRed_',
     },
+    team: false,
   },
 } as const

@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Lighter',
       name: 'core_impact_',
     },
+    team: false,
   },
   core_ice_resRed_: {
     sheet: 'Lighter',
@@ -22,6 +23,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'core_ice_resRed_',
     },
+    team: false,
   },
   core_fire_resRed_: {
     sheet: 'Lighter',
@@ -34,6 +36,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'core_fire_resRed_',
     },
+    team: false,
   },
   ability_ice_dmg_: {
     sheet: 'Lighter',
@@ -46,6 +49,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'ability_ice_dmg_',
     },
+    team: true,
   },
   ability_fire_dmg_: {
     sheet: 'Lighter',
@@ -58,6 +62,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'ability_fire_dmg_',
     },
+    team: true,
   },
   m1_ice_resRed_: {
     sheet: 'Lighter',
@@ -70,6 +75,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'm1_ice_resRed_',
     },
+    team: false,
   },
   m1_fire_resRed_: {
     sheet: 'Lighter',
@@ -82,6 +88,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'm1_fire_resRed_',
     },
+    team: false,
   },
   m1_finishing_move_dmg_: {
     sheet: 'Lighter',
@@ -93,6 +100,7 @@ export const buffs = {
       sheet: 'Lighter',
       name: 'm1_finishing_move_dmg_',
     },
+    team: false,
   },
   m2_stun_: {
     sheet: 'Lighter',
@@ -104,6 +112,7 @@ export const buffs = {
       sheet: 'Lighter',
       name: 'm2_stun_',
     },
+    team: false,
   },
   m4_enerRegen_: {
     sheet: 'Lighter',
@@ -115,5 +124,6 @@ export const buffs = {
       sheet: 'Lighter',
       name: 'm4_enerRegen_',
     },
+    team: true,
   },
 } as const

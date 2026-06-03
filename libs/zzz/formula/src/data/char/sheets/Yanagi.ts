@@ -1,6 +1,6 @@
 import {
-  cmpEq,
   cmpGE,
+  cmpNE,
   min,
   prod,
   subscript,
@@ -42,8 +42,15 @@ const {
   clarity,
   exposed,
   shinrabanshou,
-} = allBoolConditionals(key)
-const { thrusts } = allNumConditionals(key, true, 0, dm.m6.max_stacks)
+} = allBoolConditionals(key, undefined, { clarity: 1, exposed: 4 })
+const { thrusts } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m6.max_stacks,
+  undefined,
+  { thrusts: 2 }
+)
 const { polarityDisorder } = allListConditionals(key, ['exSpecial', 'ult'])
 
 const m2_exSpecial_electric_anomBuildup_ =
@@ -124,12 +131,12 @@ const sheet = register(
   ),
   registerBuff('basic_pen_', ownBuff.combat.pen_.add(kagen.ifOn(percent(0.1)))),
   registerBuff(
-    'exSpecial_anom_base_',
+    'polarity_anom_base_',
     ownBuff.combat.anom_base_.addWithDmgType(
       'disorder',
-      cmpEq(
+      cmpNE(
         polarityDisorder.value,
-        1,
+        0,
         cmpGE(
           char.mindscape,
           2,
@@ -148,58 +155,15 @@ const sheet = register(
       )
     ),
     undefined,
-    true
+    false
   ),
   registerBuff(
-    'ult_anom_base_',
-    teamBuff.combat.anom_base_.addWithDmgType(
+    'polarity_anom_flat_dmg',
+    ownBuff.combat.anom_flat_dmg.addWithDmgType(
       'disorder',
-      cmpEq(
+      cmpNE(
         polarityDisorder.value,
-        2,
-        cmpGE(
-          char.mindscape,
-          2,
-          sum(
-            prod(-1, sum(percent(1), percent(-dm.m2.polarity_disorder_mv_))),
-            prod(
-              min(
-                cmpGE(char.mindscape, 6, dm.m6.max_stacks, dm.m2.max_stacks),
-                thrusts
-              ),
-              percent(dm.m2.add_polarity_disorder_mv_)
-            )
-          ),
-          percent(-0.85)
-        )
-      )
-    ),
-    undefined,
-    true
-  ),
-  registerBuff(
-    'exSpecial_anom_flat_dmg',
-    teamBuff.combat.anom_flat_dmg.addWithDmgType(
-      'disorder',
-      cmpEq(
-        polarityDisorder.value,
-        1,
-        prod(
-          sum(percent(5), prod(char.special, percent(2.25))),
-          own.final.anomProf
-        )
-      )
-    ),
-    undefined,
-    true
-  ),
-  registerBuff(
-    'ult_anom_flat_dmg',
-    teamBuff.combat.anom_flat_dmg.addWithDmgType(
-      'disorder',
-      cmpEq(
-        polarityDisorder.value,
-        2,
+        0,
         prod(
           sum(percent(5), prod(char.chain, percent(2.25))),
           own.final.anomProf
@@ -207,7 +171,7 @@ const sheet = register(
       )
     ),
     undefined,
-    true
+    false
   ),
   registerBuff(
     'core_addl_disorder_',

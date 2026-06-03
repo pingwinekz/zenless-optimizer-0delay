@@ -35,7 +35,11 @@ export function withMember(
   return data.map(({ tag, value }) => ({ tag: { ...tag, src }, value }))
 }
 
-type TempICharacter = {
+/**
+ * Fields that define a character's talent/stat profile, used by
+ * `charTagMapNodeEntries` to register character data into the calculator.
+ */
+export type CharBufferInput = {
   key: CharacterKey
   level: number
   promotion: number
@@ -48,7 +52,28 @@ type TempICharacter = {
   mindscape: number
   potential: number
 }
-export function charTagMapNodeEntries(data: TempICharacter): TagMapNodeEntries {
+
+/**
+ * Default values for a teammate when no roster data is available.
+ * Kept in sync between UI display (CharCalcProvider) and optimizer
+ * computation (buildStatsUtils).
+ */
+export const DEFAULT_TEAMMATE_CHAR = {
+  level: 60,
+  promotion: 5,
+  basic: 11,
+  dodge: 11,
+  special: 11,
+  chain: 11,
+  assist: 11,
+  core: 6,
+  mindscape: 0,
+  potential: 5,
+} as const satisfies Omit<CharBufferInput, 'key'>
+
+export function charTagMapNodeEntries(
+  data: CharBufferInput
+): TagMapNodeEntries {
   const {
     lvl,
     promotion,

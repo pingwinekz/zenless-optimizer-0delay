@@ -17,6 +17,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.morale_consumed'),
+        description: 'Increases Impact when Morale Points are consumed.',
         metadata: cond.morale_consumed,
         fields: [fieldForBuff(buff.core_impact_)],
       },
@@ -25,6 +26,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.morale_burst_hit'),
+        description:
+          'Reduces enemy Ice and Fire RES when Morale Burst attacks hit.',
         metadata: cond.morale_burst_hit,
         fields: [
           fieldForBuff(buff.core_ice_resRed_),
@@ -38,6 +41,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description: 'Increases Ice and Fire DMG based on Elation stacks.',
         metadata: cond.elation,
         fields: [
           fieldForBuff(buff.ability_ice_dmg_),
@@ -51,6 +55,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('collapseCond'),
+        description:
+          'Further reduces enemy Ice and Fire RES against enemies with Collapse.',
         metadata: cond.collapse,
         fields: [
           fieldForBuff(buff.m1_ice_resRed_),
@@ -73,6 +79,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('collapseCond'),
+        description: 'Increases Daze dealt to enemies with Collapse.',
         metadata: cond.collapse,
         fields: [fieldForBuff(buff.m2_stun_)],
       },

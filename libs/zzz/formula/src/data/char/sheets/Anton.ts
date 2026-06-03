@@ -27,8 +27,17 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { burst_mode, chain_ult_used } = allBoolConditionals(key)
-const { piledriver_crits } = allNumConditionals(key, true, 0, dm.m6.stacks)
+const { burst_mode, chain_ult_used } = allBoolConditionals(key, undefined, {
+  chain_ult_used: 4,
+})
+const { piledriver_crits } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m6.stacks,
+  undefined,
+  { piledriver_crits: 6 }
+)
 
 const core_piledriver_dmg_ = ownBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.piledriver_dmg_))
@@ -243,7 +252,7 @@ const sheet = register(
   registerBuff('core_drill_dmg_', core_drill_dmg_, undefined, false, false),
   registerBuff(
     'ability_electric_anom_mv_mult_',
-    ownBuff.dmg.anom_mv_mult_.electric.add(
+    ownBuff.combat.anom_mv_mult_.electric.add(
       cmpGE(
         sum(
           team.common.count.electric,

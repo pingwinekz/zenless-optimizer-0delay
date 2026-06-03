@@ -51,7 +51,7 @@ const sheet = register(
   // Core Passive: Squad Abloom DMG from excess Anomaly Mastery (display only, not counted)
   registerBuff(
     'core_abloomDmg',
-    teamBuff.dmg.anom_mv_mult_.add(
+    teamBuff.combat.anom_mv_mult_.add(
       prod(excessAnomMas, percent(dm.core.abloomDmgPerExcessMas[0]))
     ),
     'infer',

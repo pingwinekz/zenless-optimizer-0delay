@@ -181,7 +181,7 @@ export const disc2pEffect: Record<
   BranchBladeSong: { crit_dmg_: 0.16 },
   ChaosJazz: { anomProf: 30 },
   ChaoticMetal: { ether_dmg_: 0.1 },
-  DawnsBloom: {}, // TODO: Handle this automatically. For now, we will need to add the 2p effect manually
+  DawnsBloom: { dmg_: 0.15 },
   FangedMetal: { physical_dmg_: 0.1 },
   FreedomBlues: { anomProf: 30 },
   HormonePunk: { atk_: 0.1 },

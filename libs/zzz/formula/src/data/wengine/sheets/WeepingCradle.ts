@@ -5,8 +5,8 @@ import {
   allBoolConditionals,
   allNumConditionals,
   own,
-  ownBuff,
   registerBuff,
+  teamBuff,
 } from '../../util'
 import {
   cmpSpecialtyAndEquipped,
@@ -30,7 +30,7 @@ const sheet = registerWengine(
   // Conditional buffs
   registerBuff(
     'cond_dmg_',
-    ownBuff.combat.common_dmg_.add(
+    teamBuff.combat.common_dmg_.add(
       cmpSpecialtyAndEquipped(
         key,
         attack.ifOn(
@@ -41,7 +41,8 @@ const sheet = registerWengine(
         )
       )
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

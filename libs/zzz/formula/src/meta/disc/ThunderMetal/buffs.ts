@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'set2',
     },
+    team: false,
   },
   set4_cond_enemy_shocked_atk_: {
     sheet: 'ThunderMetal',
@@ -22,5 +23,6 @@ export const buffs = {
       sheet: 'ThunderMetal',
       name: 'set4_cond_enemy_shocked_atk_',
     },
+    team: false,
   },
 } as const

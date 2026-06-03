@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "setupDate": "2026-05-31",
+  "languages": ["node", "markdown"],
+  "framework": "react",
+  "packageManager": "yarn",
+  "agents": [],
+  "skills": [],
+  "modelStrategy": "mixed",
+  "mcp": []
+}

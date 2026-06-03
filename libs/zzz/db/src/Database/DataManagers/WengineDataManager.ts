@@ -42,10 +42,7 @@ export class WengineDataManager extends DataManager<
     return undefined
   }
 
-  override toCache(
-    storageObj: ICachedWengine,
-    id: string
-  ): ICachedWengine {
+  override toCache(storageObj: ICachedWengine, id: string): ICachedWengine {
     return { ...storageObj, id }
   }
 

@@ -1,3 +1,5 @@
+import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Button, Flex, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconDownload, IconUpload } from '@tabler/icons-react'
@@ -7,7 +9,13 @@ import { ExportImportSection } from './ExportImportSection'
 import { LoadBuildModal } from './LoadBuildModal'
 import { SaveBuildModal } from './SaveBuildModal'
 
-export const BuildsSection = memo(function BuildsSection() {
+export const BuildsSection = memo(function BuildsSection({
+  selectedBuild = null,
+  characterKey = null,
+}: {
+  selectedBuild?: GeneratedBuild | null
+  characterKey?: CharacterKey | null
+}) {
   const { t } = useTranslation('page_optimize')
   const [saveOpened, { open: openSave, close: closeSave }] =
     useDisclosure(false)
@@ -45,8 +53,17 @@ export const BuildsSection = memo(function BuildsSection() {
         <ExportImportSection />
       </Flex>
 
-      <SaveBuildModal opened={saveOpened} onClose={closeSave} />
-      <LoadBuildModal opened={loadOpened} onClose={closeLoad} />
+      <SaveBuildModal
+        opened={saveOpened}
+        onClose={closeSave}
+        selectedBuild={selectedBuild}
+        characterKey={characterKey}
+      />
+      <LoadBuildModal
+        opened={loadOpened}
+        onClose={closeLoad}
+        characterKey={characterKey}
+      />
     </>
   )
 })

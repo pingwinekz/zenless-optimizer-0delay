@@ -4,8 +4,14 @@ export const conditionals = {
     sheet: 'Banyue',
     name: 'exSpecialFollowUpUsed',
     type: 'bool',
+    mindscapeRequirement: 2,
   },
-  tremor: { sheet: 'Banyue', name: 'tremor', type: 'bool' },
+  tremor: {
+    sheet: 'Banyue',
+    name: 'tremor',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   vidyaraja: {
     sheet: 'Banyue',
     name: 'vidyaraja',

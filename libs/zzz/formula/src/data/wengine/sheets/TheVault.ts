@@ -26,7 +26,8 @@ const sheet = registerWengine(
     teamBuff.combat.common_dmg_.add(
       cmpSpecialtyAndEquipped(key, ether_hit.ifOn(subscript(phase, dm.dmg_)))
     ),
-    showSpecialtyAndEquipped(key)
+    showSpecialtyAndEquipped(key),
+    true
   )
 )
 export default sheet

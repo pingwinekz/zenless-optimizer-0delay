@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'BlazingLaurel',
       name: 'impact_',
     },
+    team: false,
   },
   crit_dmg_ice_: {
     sheet: 'BlazingLaurel',
@@ -22,6 +23,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'crit_dmg_ice_',
     },
+    team: true,
   },
   crit_dmg_fire_: {
     sheet: 'BlazingLaurel',
@@ -34,5 +36,6 @@ export const buffs = {
       attribute: 'fire',
       name: 'crit_dmg_fire_',
     },
+    team: true,
   },
 } as const

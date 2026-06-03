@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'TheBrimstone',
       name: 'cond_atk_',
     },
+    team: false,
   },
 } as const

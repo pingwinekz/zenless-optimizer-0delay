@@ -34,8 +34,11 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { darkbreaker, etherVeil, dreamersNurseryRhyme } =
-  allBoolConditionals(key)
+const { darkbreaker, etherVeil, dreamersNurseryRhyme } = allBoolConditionals(
+  key,
+  undefined,
+  { dreamersNurseryRhyme: 1, etherVeil: 2 }
+)
 
 const exSpecial_harmony_dmg_ = ownBuff.combat.flat_dmg.add(
   prod(own.final.hp, sum(percent(0.34), prod(char.special, percent(0.03))))

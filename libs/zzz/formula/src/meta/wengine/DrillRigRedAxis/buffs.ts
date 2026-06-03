@@ -12,6 +12,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_eletric_dmg_',
     },
+    team: false,
   },
   dash_eletric_dmg_: {
     sheet: 'DrillRigRedAxis',
@@ -25,5 +26,6 @@ export const buffs = {
       damageType1: 'dash',
       name: 'dash_eletric_dmg_',
     },
+    team: false,
   },
 } as const

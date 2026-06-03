@@ -20,15 +20,7 @@ import {
 } from '@genshin-optimizer/zzz/ui'
 import { CharacterEditModal } from './CharacterEditModal'
 import { CharacterPreview } from './CharacterPreview'
-export { ShowcaseDiscPanel, ShowcaseDiscCard } from './card/ShowcaseDiscPanel'
-import { FilterBar } from './FilterBar'
-import { cardTotalW, defaultGap, parentH } from './constantsUi'
-import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
-import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
-import { oklchCharacterListColor } from './color/colorUtilsOklch'
 import {
-  closestCenter,
-  defaultDropAnimationSideEffects,
   DndContext,
   type DragEndEvent,
   DragOverlay,
@@ -36,6 +28,8 @@ import {
   type DropAnimation,
   PointerSensor,
   TouchSensor,
+  closestCenter,
+  defaultDropAnimationSideEffects,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -55,7 +49,6 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import {
   Suspense,
   memo,
-  startTransition,
   useCallback,
   useDeferredValue,
   useEffect,
@@ -64,7 +57,11 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { FilterBar } from './FilterBar'
+import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
+import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
+import { oklchCharacterListColor } from './color/colorUtilsOklch'
+import { cardTotalW, defaultGap, parentH } from './constantsUi'
 const dropAnimationDuration = 200
 
 const dropAnimationConfig: DropAnimation = {
@@ -145,16 +142,26 @@ export default function PageCharacter() {
   }, [displayCharacter, charKeys, deferredSearchTerm, database])
 
   // Sync visual order to customSortOrder so the optimizer priority matches
-  // what the user sees on the characters page
+  // what the user sees on the characters page.
+  // The set() call is deferred via setTimeout to prevent React from detecting
+  // a synchronous nested update when useSyncExternalStore's forceStoreRerender
+  // flushes immediately outside React's execution context.
+  const syncedOrderRef = useRef('')
   useEffect(() => {
-    const current = displayCharacter.customSortOrder
+    const current = database.displayCharacter.get().customSortOrder
+    const serialized = filteredCharKeys.join(',')
+    if (syncedOrderRef.current === serialized) return
     if (
       current.length !== filteredCharKeys.length ||
       current.some((ck, i) => ck !== filteredCharKeys[i])
     ) {
-      database.displayCharacter.set({ customSortOrder: filteredCharKeys })
+      syncedOrderRef.current = serialized
+      const next = [...filteredCharKeys]
+      setTimeout(() => {
+        database.displayCharacter.set({ customSortOrder: next })
+      }, 0)
     }
-  }, [filteredCharKeys, displayCharacter, database.displayCharacter])
+  }, [filteredCharKeys, database.displayCharacter])
 
   const { specialtyType, attribute, rarity } = displayCharacter
 
@@ -268,7 +275,7 @@ export default function PageCharacter() {
       </Suspense>
 
       {/* Root flex: fixed-width row matching HSR CharacterTab */}
-      <Flex style={{ width: 1593, height: '100%' }} gap={defaultGap}>
+      <Flex style={{ width: 1640, height: '100%' }} gap={defaultGap}>
         {/* Left: CharacterMenu + Grid + Density */}
         <Box
           miw={300}
@@ -339,7 +346,7 @@ export default function PageCharacter() {
                       rank={rankMap.get(charKey) ?? 0}
                       onClick={() => {
                         setLocalFocus(charKey)
-                        startTransition(() => setFocusCharacter(charKey))
+                        setFocusCharacter(charKey)
                       }}
                       onDoubleClick={() => {
                         setFocusCharacter(charKey)
@@ -520,3 +527,4 @@ const SortableCharacterRow = memo(function SortableCharacterRow({
     </Box>
   )
 })
+export { ShowcaseDiscPanel, ShowcaseDiscCard } from './card/ShowcaseDiscPanel'

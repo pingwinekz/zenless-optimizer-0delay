@@ -1,8 +1,16 @@
+import { ColorText } from '@genshin-optimizer/common/ui'
+import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import type { UISheet } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
-import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
+import {
+  type CharacterKey,
+  type DiscSetKey,
+  elementalData,
+} from '@genshin-optimizer/zzz/consts'
 import { FreedomBlues } from '@genshin-optimizer/zzz/formula'
-import { tagToTagField, trans } from '../../util'
+import { allStats } from '@genshin-optimizer/zzz/stats'
+import { useContext } from 'react'
+import { trans } from '../../util'
 import { Set2Display, Set4Display } from '../components'
 
 const key: DiscSetKey = 'FreedomBlues'
@@ -10,6 +18,22 @@ const [chg, ch] = trans('disc', key)
 const icon = discDefIcon(key)
 const cond = FreedomBlues.conditionals
 const buff = FreedomBlues.buffs
+
+// Component that dynamically shows the correct attribute name and color
+// based on which character equips this disc set (from TagContext.src)
+function AnomBuildupResLabel() {
+  const tag = useContext(TagContext)
+  const src = tag?.src as CharacterKey | undefined
+  const attr = src ? allStats.char[src]?.attribute : undefined
+  if (attr && attr in elementalData) {
+    return (
+      <ColorText color={attr}>
+        {elementalData[attr]} Anomaly Buildup RES
+      </ColorText>
+    )
+  }
+  return <>Anomaly Buildup RES</>
+}
 
 const sheet: UISheet<'2' | '4'> = {
   2: {
@@ -35,7 +59,12 @@ const sheet: UISheet<'2' | '4'> = {
         conditional: {
           label: ch('set4_cond'),
           metadata: cond.exSpecialHit,
-          fields: [tagToTagField(buff.anomBuildupRes_.tag)],
+          fields: [
+            {
+              title: <AnomBuildupResLabel />,
+              fieldRef: buff.anomBuildupRes_.tag,
+            },
+          ],
         },
       },
     ],

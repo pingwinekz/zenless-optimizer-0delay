@@ -10,17 +10,19 @@ export const buffs = {
       sheet: 'Promeia',
       name: 'core_anomProf',
     },
+    team: false,
   },
   core_abloomDmg: {
     sheet: 'Promeia',
     name: 'core_abloomDmg',
     tag: {
       et: 'display',
-      qt: 'dmg',
+      qt: 'combat',
       q: 'anom_mv_mult_',
       sheet: 'Promeia',
       name: 'core_abloomDmg',
     },
+    team: true,
   },
   ability_iceAnomBuildup: {
     sheet: 'Promeia',
@@ -33,6 +35,7 @@ export const buffs = {
       attribute: 'ice',
       name: 'ability_iceAnomBuildup',
     },
+    team: false,
   },
   m2_anomProf: {
     sheet: 'Promeia',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'Promeia',
       name: 'm2_anomProf',
     },
+    team: false,
   },
   m6_resIgn_: {
     sheet: 'Promeia',
@@ -56,5 +60,6 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'm6_resIgn_',
     },
+    team: false,
   },
 } as const

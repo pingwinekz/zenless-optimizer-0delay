@@ -54,6 +54,8 @@ type CharacterRawData = {
     PenRate: 0 // Pen ratio
     SpBarPoint: 120 // Max energy
     SpRecover: 120 // Energy Regen
+    RpMax: 120 // Max Decibels (Rupture)
+    RpRecover: 200 // Decibel Regen / AAA (Rupture)
   }
   Level: Record<
     string,
@@ -225,7 +227,10 @@ export const charactersDetailedJSONData = Object.fromEntries(
           anomMas: raw.Stats.ElementAbnormalPower,
           anomProf: raw.Stats.ElementMystery,
           impact: raw.Stats.BreakStun,
-          enerRegen: raw.Stats.SpRecover / FLAT_SCALING,
+          enerRegen:
+            raw.Stats.SpRecover > 0
+              ? raw.Stats.SpRecover / FLAT_SCALING
+              : raw.Stats.RpRecover / FLAT_SCALING,
         },
         promotionStats: Object.values(raw.Level).map(
           ({ HpMax, Attack, Defence }) => ({

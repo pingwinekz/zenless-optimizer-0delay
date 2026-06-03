@@ -98,6 +98,7 @@ export type BonusStatKey = (typeof bonusStatKeys)[number]
 
 export const bonusStatDmgTypeIncStats = [
   'atk_',
+  'defIgn_',
   'dmg_',
   'crit_',
   'crit_dmg_',
@@ -230,7 +231,9 @@ export type OptFrame = z.infer<typeof optFrameSchema>
 const teammateDatumSchema = z.object({
   characterKey: z.enum(allCharacterKeys),
   optConfigId: z.string().optional(),
-  // Future: build inforamtion like buildId, buildTcId, etc.
+  mindscape: z.number().int().min(0).max(6).optional(),
+  wenginePhase: z.number().int().min(1).max(5).optional(),
+  discSet4Key: z.string().optional(),
 })
 
 export type TeammateDatum = z.infer<typeof teammateDatumSchema>
@@ -306,6 +309,9 @@ export class TeamDataManager extends DataManager<
       teammates.push({
         characterKey: raw.characterKey,
         optConfigId,
+        mindscape: raw.mindscape,
+        wenginePhase: raw.wenginePhase,
+        discSet4Key: raw.discSet4Key,
       })
     }
 
@@ -424,7 +430,7 @@ export class TeamDataManager extends DataManager<
     const hashList: string[] = []
     return rawConditionals
       .map(({ sheet, condKey, src, dst, condValue }) => {
-        if (!condValue) return undefined
+        if (condValue === undefined || condValue === null) return undefined
         if (!isMember(src) || !(dst === null || isMember(dst))) return undefined
         const cond = getConditional(sheet, condKey)
         if (!cond) return undefined
@@ -630,6 +636,22 @@ export class TeamDataManager extends DataManager<
       frames[0] = { ...frame0, ...patch }
       return { frames }
     })
+  }
+
+  setTeammateOverride(
+    teamKey: CharacterKey,
+    characterKey: CharacterKey,
+    override: {
+      mindscape?: number
+      wenginePhase?: number
+      discSet4Key?: string
+    }
+  ) {
+    this.set(teamKey, (team) => ({
+      teammates: team.teammates.map((t) =>
+        t.characterKey === characterKey ? { ...t, ...override } : t
+      ),
+    }))
   }
 
   setTeammateOptConfigId(

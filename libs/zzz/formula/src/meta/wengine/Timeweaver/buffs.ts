@@ -11,6 +11,7 @@ export const buffs = {
       attribute: 'electric',
       name: 'passive_electric_anomBuildup_',
     },
+    team: false,
   },
   cond_anomProf: {
     sheet: 'Timeweaver',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'Timeweaver',
       name: 'cond_anomProf',
     },
+    team: false,
   },
   passive_disorder_dmg_: {
     sheet: 'Timeweaver',
@@ -34,5 +36,6 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'passive_disorder_dmg_',
     },
+    team: false,
   },
 } as const

@@ -12,11 +12,13 @@ export const conditionals = {
     sheet: 'Dialyn',
     name: 'malicious_complaint',
     type: 'bool',
+    mindscapeRequirement: 2,
   },
   overwhelmingly_positive: {
     sheet: 'Dialyn',
     name: 'overwhelmingly_positive',
     type: 'bool',
+    mindscapeRequirement: 1,
   },
   prevMember: {
     sheet: 'Dialyn',

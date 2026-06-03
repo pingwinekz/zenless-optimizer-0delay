@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Pulchra',
       name: 'core_dazeInc_',
     },
+    team: false,
   },
   ability_aftershock_dmg_: {
     sheet: 'Pulchra',
@@ -22,6 +23,7 @@ export const buffs = {
       damageType1: 'aftershock',
       name: 'ability_aftershock_dmg_',
     },
+    team: true,
   },
   m1_crit_: {
     sheet: 'Pulchra',
@@ -33,6 +35,7 @@ export const buffs = {
       sheet: 'Pulchra',
       name: 'm1_crit_',
     },
+    team: false,
   },
   m2_atk_: {
     sheet: 'Pulchra',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'Pulchra',
       name: 'm2_atk_',
     },
+    team: false,
   },
   m6_special_dmg_: {
     sheet: 'Pulchra',
@@ -56,6 +60,7 @@ export const buffs = {
       damageType1: 'special',
       name: 'm6_special_dmg_',
     },
+    team: false,
   },
   m6_common_dmg_: {
     sheet: 'Pulchra',
@@ -67,5 +72,6 @@ export const buffs = {
       sheet: 'Pulchra',
       name: 'm6_common_dmg_',
     },
+    team: true,
   },
 } as const

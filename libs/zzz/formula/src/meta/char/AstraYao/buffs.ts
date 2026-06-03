@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'common_dmg_',
     },
+    team: true,
   },
   crit_dmg_: {
     sheet: 'AstraYao',
@@ -21,6 +22,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'crit_dmg_',
     },
+    team: true,
   },
   core_atk: {
     sheet: 'AstraYao',
@@ -32,6 +34,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'core_atk',
     },
+    team: true,
   },
   m1_resRed_: {
     sheet: 'AstraYao',
@@ -43,6 +46,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'm1_resRed_',
     },
+    team: false,
   },
   m4_attack_quickAssist_extraDmg: {
     sheet: 'AstraYao',
@@ -56,6 +60,7 @@ export const buffs = {
       damageType1: 'quickAssist',
       name: 'm4_attack_quickAssist_extraDmg',
     },
+    team: true,
   },
   m4_anomaly_quickAssist_anomBuildup_: {
     sheet: 'AstraYao',
@@ -69,6 +74,7 @@ export const buffs = {
       damageType1: 'quickAssist',
       name: 'm4_anomaly_quickAssist_anomBuildup_',
     },
+    team: true,
   },
   m4_stun_quickAssist_dazeInc_: {
     sheet: 'AstraYao',
@@ -82,6 +88,7 @@ export const buffs = {
       damageType1: 'quickAssist',
       name: 'm4_stun_quickAssist_dazeInc_',
     },
+    team: true,
   },
   m6_crit_: {
     sheet: 'AstraYao',
@@ -93,6 +100,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'm6_crit_',
     },
+    team: false,
   },
   m6_mv_mult_: {
     sheet: 'AstraYao',
@@ -104,6 +112,7 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'm6_mv_mult_',
     },
+    team: false,
   },
   m6_capriccio_crit_: {
     sheet: 'AstraYao',
@@ -115,5 +124,6 @@ export const buffs = {
       sheet: 'AstraYao',
       name: 'm6_capriccio_crit_',
     },
+    team: false,
   },
 } as const

@@ -15,6 +15,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.onslaught'),
+        description:
+          'Seed gains bonus ATK and CRIT DMG when the Vanguard unleashes an EX Special Attack.',
         metadata: cond.onslaught,
         fields: [
           fieldForBuff(buff.core_atk),
@@ -26,6 +28,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.directStrike'),
+        description:
+          "Increases the Vanguard's ATK and CRIT DMG when Seed unleashes an EX Special Attack.",
         metadata: cond.directStrike,
         fields: [
           fieldForBuff(buff.core_vanguard_atk),
@@ -61,6 +65,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.onslaught'),
+        description:
+          "Seed ignores a portion of the enemy's DEF while the onslaught effect is active.",
         metadata: cond.onslaught,
         fields: [fieldForBuff(buff.m2_defIgn_)],
       },
@@ -69,6 +75,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.directStrikeDisplay'),
+        description:
+          "The Vanguard ignores a portion of the enemy's DEF when the direct strike effect is active.",
         metadata: cond.directStrikeDisplay,
         fields: [fieldForBuff(buff.m2_vanguard_defIgn_)],
       },
@@ -77,6 +85,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
+        description:
+          'Increases Basic Attack DMG for each 5 Energy consumed by EX Special Attack: Raining Iron Petals.',
         metadata: cond.energy_consumed,
         fields: [fieldForBuff(buff.m2_basic_dmg_)],
       },
@@ -87,6 +97,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.onslaught'),
+        description:
+          'Activates additional effects while the onslaught state is active.',
         metadata: cond.onslaught,
       },
     },
@@ -94,6 +106,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond.directStrike'),
+        description:
+          'Activates additional effects on the Vanguard when the direct strike state is active.',
         metadata: cond.directStrike,
         targeted: true,
       },

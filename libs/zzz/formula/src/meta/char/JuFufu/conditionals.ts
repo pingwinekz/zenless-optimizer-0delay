@@ -1,5 +1,10 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  chain_hit: { sheet: 'JuFufu', name: 'chain_hit', type: 'bool' },
+  chain_hit: {
+    sheet: 'JuFufu',
+    name: 'chain_hit',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   tigers_roar: { sheet: 'JuFufu', name: 'tigers_roar', type: 'bool' },
 } as const

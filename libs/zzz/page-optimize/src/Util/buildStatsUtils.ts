@@ -1,12 +1,18 @@
 import { notEmpty, toDecimal } from '@genshin-optimizer/common/util'
 import { presets } from '@genshin-optimizer/game-opt/engine'
 import { constant } from '@genshin-optimizer/pando/engine'
-import type { DiscSlotKey, PhaseKey } from '@genshin-optimizer/zzz/consts'
+import type {
+  DiscSlotKey,
+  DiscSetKey,
+  PhaseKey,
+  CharacterKey,
+} from '@genshin-optimizer/zzz/consts'
 import type {
   ICachedCharacter,
   ICachedDisc,
   Team,
   DiscIds,
+  TeammateDatum,
 } from '@genshin-optimizer/zzz/db'
 import { teamCharacterKeys, getTeamFrame0 } from '@genshin-optimizer/zzz/db'
 import type { Tag } from '@genshin-optimizer/zzz/formula'
@@ -17,6 +23,7 @@ import {
   withMember,
   withPreset,
   charTagMapNodeEntries,
+  DEFAULT_TEAMMATE_CHAR,
   wengineTagMapNodeEntries,
   discsToTagMapNodeEntries,
   conditionalEntries,
@@ -41,6 +48,7 @@ export type BuildCombatStats = {
   enerRegen: number
   anomProf: number
   anomMas: number
+  sheerForce: number
   dmgBonus: number
   defIgn: number
 }
@@ -58,6 +66,7 @@ export type BuildBaseStats = {
   enerRegen: number
   anomProf: number
   anomMas: number
+  sheerForce: number
 }
 
 export type EnrichedBuild = {
@@ -81,42 +90,59 @@ export function computeBuildStats(
   character: ICachedCharacter,
   discs: Record<DiscSlotKey, ICachedDisc | undefined>,
   team: Team,
-  targetTag?: Tag | Tag[]
+  targetTag?: Tag | Tag[],
+  getTeammateChar?: (key: CharacterKey) => ICachedCharacter | undefined,
+  getDisc?: (id: string) => ICachedDisc | undefined
 ): { final: BuildCombatStats; base: BuildBaseStats; targetValue?: number } {
-  const entries = buildCalculatorEntries(character, discs, team)
+  const entries = buildCalculatorEntries(
+    character,
+    discs,
+    team,
+    getTeammateChar,
+    getDisc
+  )
   const calc = zzzCalculatorWithEntries(entries)
 
   // Must match the `src` set by `withMember()` above
   const ownReader = convert(ownTag, { et: 'own', src: character.key })
+  // Combat stats require a preset to pick up withPreset-scoped entries
+  // (conditionals, bonus stats, teammate buffs, enemy stats)
+  const combatReader = convert(ownTag, {
+    et: 'own',
+    src: character.key,
+    preset: 'preset0',
+  })
 
   const final: BuildCombatStats = {
-    hp: calc.compute(ownReader.final.hp).val,
-    atk: calc.compute(ownReader.final.atk).val,
-    def: calc.compute(ownReader.final.def).val,
-    impact: calc.compute(ownReader.final.impact).val,
-    critRate: calc.compute(ownReader.common.cappedCrit_).val,
-    critDmg: calc.compute(ownReader.final.crit_dmg_).val,
-    penRatio: calc.compute(ownReader.final.pen_).val,
-    pen: calc.compute(ownReader.final.pen).val,
-    enerRegen: calc.compute(ownReader.final.enerRegen).val,
-    anomProf: calc.compute(ownReader.final.anomProf).val,
-    anomMas: calc.compute(ownReader.final.anomMas).val,
-    dmgBonus: calc.compute(ownReader.final.dmg_).val,
-    defIgn: calc.compute(ownReader.final.defIgn_).val,
+    hp: calc.compute(combatReader.final.hp).val,
+    atk: calc.compute(combatReader.final.atk).val,
+    def: calc.compute(combatReader.final.def).val,
+    impact: calc.compute(combatReader.final.impact).val,
+    critRate: calc.compute(combatReader.final.crit_).val,
+    critDmg: calc.compute(combatReader.final.crit_dmg_).val,
+    penRatio: calc.compute(combatReader.final.pen_).val,
+    pen: calc.compute(combatReader.final.pen).val,
+    enerRegen: calc.compute(combatReader.final.enerRegen).val,
+    anomProf: calc.compute(combatReader.final.anomProf).val,
+    anomMas: calc.compute(combatReader.final.anomMas).val,
+    sheerForce: calc.compute(combatReader.final.sheerForce).val,
+    dmgBonus: calc.compute(combatReader.final.dmg_).val,
+    defIgn: calc.compute(combatReader.final.defIgn_).val,
   }
 
   const base: BuildBaseStats = {
-    hp: calc.compute(ownReader.base.hp).val,
-    atk: calc.compute(ownReader.base.atk).val,
-    def: calc.compute(ownReader.base.def).val,
-    impact: calc.compute(ownReader.base.impact).val,
-    critRate: calc.compute(ownReader.common.cappedCrit_).val,
-    critDmg: calc.compute(ownReader.base.crit_dmg_).val,
-    penRatio: calc.compute(ownReader.base.pen_).val,
-    pen: 0, // base raw pen is not applicable
-    enerRegen: calc.compute(ownReader.base.enerRegen).val,
-    anomProf: calc.compute(ownReader.base.anomProf).val,
-    anomMas: calc.compute(ownReader.base.anomMas).val,
+    hp: calc.compute(ownReader.initial.hp).val,
+    atk: calc.compute(ownReader.initial.atk).val,
+    def: calc.compute(ownReader.initial.def).val,
+    impact: calc.compute(ownReader.initial.impact).val,
+    critRate: calc.compute(ownReader.initial.crit_).val,
+    critDmg: calc.compute(ownReader.initial.crit_dmg_).val,
+    penRatio: calc.compute(ownReader.initial.pen_).val,
+    pen: calc.compute(ownReader.initial.pen).val,
+    enerRegen: calc.compute(ownReader.initial.enerRegen).val,
+    anomProf: calc.compute(ownReader.initial.anomProf).val,
+    anomMas: calc.compute(ownReader.initial.anomMas).val,
+    sheerForce: calc.compute(ownReader.initial.sheerForce).val,
   }
 
   if (targetTag) {
@@ -146,7 +172,8 @@ export async function batchComputeBuildStats(
   character: ICachedCharacter,
   team: Team,
   onProgress?: (completed: number, total: number) => void,
-  targetTag?: Tag | Tag[]
+  targetTag?: Tag | Tag[],
+  getTeammateChar?: (key: CharacterKey) => ICachedCharacter | undefined
 ): Promise<EnrichedBuild[]> {
   const BATCH_SIZE = 10
   const enriched: EnrichedBuild[] = []
@@ -195,17 +222,16 @@ export async function batchComputeBuildStats(
           character,
           discs,
           team,
-          targetTag
+          targetTag,
+          getTeammateChar,
+          getDisc
         )
         combatStats = result.final
         baseStats = result.base
         // For rotation DMG (array targetTag), the solver already computed
         // the correct multi-preset value — don't override it with the
         // post-solver single-preset computation.
-        if (
-          !Array.isArray(targetTag) &&
-          result.targetValue !== undefined
-        ) {
+        if (!Array.isArray(targetTag) && result.targetValue !== undefined) {
           value = result.targetValue
         }
       } catch {
@@ -237,10 +263,89 @@ export async function batchComputeBuildStats(
 function buildCalculatorEntries(
   character: ICachedCharacter,
   discs: Record<DiscSlotKey, ICachedDisc | undefined>,
-  team: Team
+  team: Team,
+  getTeammateChar?: (key: CharacterKey) => ICachedCharacter | undefined,
+  getDisc?: (id: string) => ICachedDisc | undefined
 ): TagMapNodeEntries {
   const teamMembers = teamCharacterKeys(team)
   const frames = team.frames.length > 0 ? team.frames : [getTeamFrame0(team)]
+
+  // Build withMember entries for all non-main teammates using their roster data + overrides
+  const teammateEntries = team.teammates
+    .filter((t) => t.characterKey !== character.key)
+    .flatMap((teammateDatum: TeammateDatum) => {
+      const {
+        characterKey: charKey,
+        mindscape: overrideMindscape,
+        wenginePhase: overridePhase,
+        discSet4Key,
+      } = teammateDatum
+
+      // Look up the teammate's roster data (if available)
+      const teammateChar = getTeammateChar?.(charKey)
+
+      // Use override if present, otherwise fall back to roster data, then defaults
+      const mindscape = overrideMindscape ?? teammateChar?.mindscape ?? 0
+      const wengineKey = teammateChar?.wengineKey
+      const wenginePhase = (overridePhase ??
+        teammateChar?.wenginePhase ??
+        1) as PhaseKey
+
+      const teammateDiscs =
+        getDisc && teammateChar
+          ? Object.values(teammateChar.equippedDiscs)
+              .map((id) => (id ? getDisc(id) : undefined))
+              .filter(notEmpty)
+          : []
+      const discEntries: TagMapNodeEntries =
+        teammateDiscs.length > 0
+          ? discsToTagMapNodeEntries(teammateDiscs)
+          : discSet4Key
+            ? [ownBuff.common.count.sheet(discSet4Key as DiscSetKey).add(4)]
+            : []
+
+      return [
+        ...withMember(
+          charKey,
+          ...charTagMapNodeEntries({
+            key: charKey,
+            level: teammateChar?.level ?? DEFAULT_TEAMMATE_CHAR.level,
+            promotion:
+              teammateChar?.promotion ?? DEFAULT_TEAMMATE_CHAR.promotion,
+            basic: teammateChar?.basic ?? DEFAULT_TEAMMATE_CHAR.basic,
+            dodge: teammateChar?.dodge ?? DEFAULT_TEAMMATE_CHAR.dodge,
+            special: teammateChar?.special ?? DEFAULT_TEAMMATE_CHAR.special,
+            chain: teammateChar?.chain ?? DEFAULT_TEAMMATE_CHAR.chain,
+            assist: teammateChar?.assist ?? DEFAULT_TEAMMATE_CHAR.assist,
+            core: teammateChar?.core ?? DEFAULT_TEAMMATE_CHAR.core,
+            mindscape,
+            potential:
+              teammateChar?.potential ?? DEFAULT_TEAMMATE_CHAR.potential,
+          }),
+          ...wengineTagMapNodeEntries(
+            wengineKey
+              ? {
+                  key: wengineKey,
+                  level: 60,
+                  modification: 5,
+                  phase: wenginePhase,
+                }
+              : undefined
+          ),
+          ...discEntries
+        ),
+        // Teammate count bonuses (specialty, faction, attribute)
+        ownBuff.common.count
+          .withSpecialty(allStats.char[charKey].specialty as any)
+          .add(1),
+        ownBuff.common.count
+          .withFaction(allStats.char[charKey].faction as any)
+          .add(1),
+        ownBuff.common.count
+          .withTag({ attribute: allStats.char[charKey].attribute as any })
+          .add(1),
+      ]
+    })
 
   return [
     ...teamData(teamMembers),
@@ -271,6 +376,7 @@ function buildCalculatorEntries(
       ),
       ...discsToTagMapNodeEntries(Object.values(discs).filter(notEmpty))
     ),
+    ...teammateEntries,
     enemy.common.lvl.add(team.enemyLvl),
     enemy.common.def.add(team.enemyDef),
     enemy.common.stun_.add(team.enemyStunMultiplier / 100),
@@ -312,20 +418,6 @@ function buildCalculatorEntries(
         ),
       ]
     }),
-    // Non-main teammates count
-    ...team.teammates
-      .filter((t) => t.characterKey !== character.key)
-      .flatMap(({ characterKey: charKey }) => [
-        ownBuff.common.count
-          .withSpecialty(allStats.char[charKey].specialty as any)
-          .add(1),
-        ownBuff.common.count
-          .withFaction(allStats.char[charKey].faction as any)
-          .add(1),
-        ownBuff.common.count
-          .withTag({ attribute: allStats.char[charKey].attribute as any })
-          .add(1),
-      ]),
   ]
 }
 
@@ -347,11 +439,9 @@ export const STAT_LABELS: Record<string, string> = {
   impact: 'IMP',
   critRate: 'CR',
   critDmg: 'CD',
-  penRatio: 'PEN%',
+  sheerForce: 'SF',
   pen: 'PEN',
   enerRegen: 'ER',
   anomProf: 'AP',
   anomMas: 'AM',
-  dmgBonus: 'DMG%',
-  defIgn: 'DEF IGN',
 }

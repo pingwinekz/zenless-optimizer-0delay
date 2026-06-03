@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'ReverbMarkI',
       name: 'impact_',
     },
+    team: true,
   },
 } as const

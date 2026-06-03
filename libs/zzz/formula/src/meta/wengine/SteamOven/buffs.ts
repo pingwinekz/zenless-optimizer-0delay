@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'SteamOven',
       name: 'cond_impact_',
     },
+    team: false,
   },
 } as const

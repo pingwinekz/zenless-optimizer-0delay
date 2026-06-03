@@ -41,20 +41,43 @@ export const allStatics = <Tag_ extends Tag>(sheet: Sheet<Tag>) =>
     .withAll('q', [])
 export const createAllBoolConditionals =
   <Tag_ extends Tag>(nullTag: Tag_) =>
-  (sheet: Sheet<Tag>, ignored?: CondIgnored) =>
-    allConditionals(nullTag, sheet, ignored, { type: 'bool' }, (r) => ({
-      ifOn: (node: NumNode | number, off?: NumNode | number) =>
-        cmpNE(r, 0, node, off),
-      ifOff: (node: NumNode | number) => cmpEq(r, 0, node),
-    }))
+  (
+    sheet: Sheet<Tag>,
+    ignored?: CondIgnored,
+    mindscapeRequirements?: Record<string, number>
+  ) =>
+    allConditionals(
+      nullTag,
+      sheet,
+      ignored,
+      { type: 'bool' },
+      (r) => ({
+        ifOn: (node: NumNode | number, off?: NumNode | number) =>
+          cmpNE(r, 0, node, off),
+        ifOff: (node: NumNode | number) => cmpEq(r, 0, node),
+      }),
+      mindscapeRequirements
+    )
 export const createAllListConditionals =
   <T extends string, Tag_ extends Tag>(nullTag: Tag_) =>
-  (sheet: Sheet<Tag>, list: T[], ignored?: CondIgnored) =>
-    allConditionals(nullTag, sheet, ignored, { type: 'list', list }, (r) => ({
-      map: (table: Record<T, number>, def = 0) =>
-        subscript(r, [def, ...list.map((v) => table[v] ?? def)]),
-      value: r,
-    }))
+  (
+    sheet: Sheet<Tag>,
+    list: T[],
+    ignored?: CondIgnored,
+    mindscapeRequirements?: Record<string, number>
+  ) =>
+    allConditionals(
+      nullTag,
+      sheet,
+      ignored,
+      { type: 'list', list },
+      (r) => ({
+        map: (table: Record<T, number>, def = 0) =>
+          subscript(r, [def, ...list.map((v) => table[v] ?? def)]),
+        value: r,
+      }),
+      mindscapeRequirements
+    )
 export const createAllNumConditionals =
   <Tag_ extends Tag>(nullTag: Tag_) =>
   (
@@ -62,14 +85,16 @@ export const createAllNumConditionals =
     int_only = true,
     min?: number,
     max?: number,
-    ignored?: CondIgnored
+    ignored?: CondIgnored,
+    mindscapeRequirements?: Record<string, number>
   ) =>
     allConditionals(
       nullTag,
       sheet,
       ignored,
       { type: 'num', int_only, min, max },
-      (r) => r
+      (r) => r,
+      mindscapeRequirements
     )
 
 export const createConditionalEntries =
@@ -84,13 +109,15 @@ export const createConditionalEntries =
   }
 
 const condMeta = Symbol.for('condMeta')
+const condMindscapeReqs = Symbol.for('condMindscapeReqs')
 type CondIgnored = 'both' | 'src' | 'dst' | 'none'
 function allConditionals<T, Tag_ extends Tag>(
   nullTag: Tag_,
   sheet: Sheet<Tag_>,
   shared: CondIgnored = 'none',
   meta: IBaseConditionalData,
-  transform: (r: Read<Tag_>, q: string) => T
+  transform: (r: Read<Tag_>, q: string) => T,
+  mindscapeRequirements?: Record<string, number>
 ): Record<string, T> {
   // Keep the base tag "full" here so that `cond` returns consistent tags
   const baseTag: Omit<Tag_, 'preset' | 'src' | 'dst' | 'q'> = {
@@ -98,6 +125,7 @@ function allConditionals<T, Tag_ extends Tag>(
     sheet,
     qt: 'cond' as const,
     [condMeta]: meta, // Add metadata directly to tag
+    [condMindscapeReqs]: mindscapeRequirements, // Add mindscape requirements
     // Remove irrelevant tags
     ...nullTag,
   } as unknown as Tag_

@@ -34,7 +34,7 @@ const baseTag = getBaseTag(data_gen)
 const { char } = own
 
 const { masked, flyTheFlag, vortexConsumed, flyTheFlagHit, frostedBanner } =
-  allBoolConditionals(key)
+  allBoolConditionals(key, undefined, { flyTheFlagHit: 4, frostedBanner: 6 })
 
 const m6_dmg_ = ownBuff.combat.common_dmg_.add(
   cmpGE(char.mindscape, 6, frostedBanner.ifOn(percent(dm.m6.dmg_)))

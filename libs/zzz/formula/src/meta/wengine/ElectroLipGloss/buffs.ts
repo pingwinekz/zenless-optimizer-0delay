@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'ElectroLipGloss',
       name: 'atk_',
     },
+    team: false,
   },
   common_dmg_: {
     sheet: 'ElectroLipGloss',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'ElectroLipGloss',
       name: 'common_dmg_',
     },
+    team: false,
   },
 } as const

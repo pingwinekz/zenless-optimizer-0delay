@@ -15,6 +15,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: 'Increases CRIT Rate while in the Binding Seal state.',
         metadata: cond.binding_seal,
         fields: [fieldForBuff(buff.core_crit_)],
       },
@@ -40,6 +41,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
+        description:
+          'Ignores a portion of enemy DEF when attacking Bound enemies.',
         metadata: cond.enemy_bound,
         fields: [fieldForBuff(buff.m1_defIgn_)],
       },
@@ -65,6 +68,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
+        description: 'Increases CRIT DMG while Evelyn shield is active.',
         metadata: cond.m4_shield_exists,
         fields: [fieldForBuff(buff.m4_crit_dmg_)],
       },

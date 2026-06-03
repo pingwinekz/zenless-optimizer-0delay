@@ -14,7 +14,7 @@
     "anomMas": 90,
     "anomProf": 89,
     "impact": 95,
-    "enerRegen": 0
+    "enerRegen": 2
   },
   "promotionStats": [
     { "hp": 0, "atk": 0, "def": 0 },

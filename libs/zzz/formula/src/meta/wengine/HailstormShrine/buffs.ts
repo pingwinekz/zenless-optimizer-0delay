@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'HailstormShrine',
       name: 'passive_crit_dmg_',
     },
+    team: false,
   },
   ice_dmg_: {
     sheet: 'HailstormShrine',
@@ -22,5 +23,6 @@ export const buffs = {
       attribute: 'ice',
       name: 'ice_dmg_',
     },
+    team: false,
   },
 } as const

@@ -11,6 +11,7 @@ export const buffs = {
       damageType1: 'basic',
       name: 'basic_anomBuildup_',
     },
+    team: false,
   },
   core_atk: {
     sheet: 'Yuzuha',
@@ -22,6 +23,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'core_atk',
     },
+    team: true,
   },
   core_common_dmg_: {
     sheet: 'Yuzuha',
@@ -33,6 +35,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'core_common_dmg_',
     },
+    team: true,
   },
   ability_anomBuildup_: {
     sheet: 'Yuzuha',
@@ -44,6 +47,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'ability_anomBuildup_',
     },
+    team: true,
   },
   ability_anomaly_buff_: {
     sheet: 'Yuzuha',
@@ -56,6 +60,7 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'ability_anomaly_buff_',
     },
+    team: true,
   },
   ability_disorder_buff_: {
     sheet: 'Yuzuha',
@@ -68,6 +73,7 @@ export const buffs = {
       damageType1: 'disorder',
       name: 'ability_disorder_buff_',
     },
+    team: true,
   },
   m1_resRed_: {
     sheet: 'Yuzuha',
@@ -79,6 +85,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'm1_resRed_',
     },
+    team: true,
   },
   m2_common_dmg_: {
     sheet: 'Yuzuha',
@@ -90,6 +97,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'm2_common_dmg_',
     },
+    team: true,
   },
   m2_anomBuildup_: {
     sheet: 'Yuzuha',
@@ -101,6 +109,7 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'm2_anomBuildup_',
     },
+    team: true,
   },
   m4_assistFollowUp_dmg_: {
     sheet: 'Yuzuha',
@@ -113,6 +122,7 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'm4_assistFollowUp_dmg_',
     },
+    team: false,
   },
   m4_assistFollowUp_anomBuildup_: {
     sheet: 'Yuzuha',
@@ -125,6 +135,7 @@ export const buffs = {
       damageType1: 'assistFollowUp',
       name: 'm4_assistFollowUp_anomBuildup_',
     },
+    team: false,
   },
   m6_addl_disorder_: {
     sheet: 'Yuzuha',
@@ -136,5 +147,6 @@ export const buffs = {
       sheet: 'Yuzuha',
       name: 'm6_addl_disorder_',
     },
+    team: true,
   },
 } as const

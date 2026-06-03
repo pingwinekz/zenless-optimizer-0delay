@@ -158,20 +158,6 @@ export function ShowcaseDiscCard({
         }}
       >
         <ShadowRings />
-        <Box
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: -1,
-            borderRadius: 6,
-            background:
-              'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 100%)',
-            pointerEvents: 'none',
-          }}
-        />
         <Text
           style={{
             fontSize: 13,
@@ -218,24 +204,11 @@ export function ShowcaseDiscCard({
         boxShadow: showcaseShadow + showcaseShadowInsetAddition,
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
         cursor: 'pointer',
       }}
     >
       <ShadowRings />
-      <Box
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: -1,
-          borderRadius: 6,
-          background:
-            'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.5) 100%)',
-          pointerEvents: 'none',
-        }}
-      />
       {/* Top row: set icon | rarity + level */}
       <Flex justify="space-between" align="center">
         <Box
@@ -253,8 +226,8 @@ export function ShowcaseDiscCard({
         <Flex gap={8} align="center">
           <Box
             style={{
-              width: 10,
-              height: 10,
+              width: 16,
+              height: 16,
               borderRadius: '50%',
               backgroundColor: GRADES[disc.rarity] ?? '#bdbdbd',
               display: 'inline-block',
@@ -291,12 +264,15 @@ export function ShowcaseDiscCard({
 
       {/* Main stat row */}
       {(() => {
-        const effectiveMainKeys = effectiveMainStats?.[slot as DiscSlotKey] ?? []
-        const isMainEffective = (effectiveMainKeys as string[]).includes(disc.mainStatKey)
+        const effectiveMainKeys =
+          effectiveMainStats?.[slot as DiscSlotKey] ?? []
+        const isMainEffective = (effectiveMainKeys as string[]).includes(
+          disc.mainStatKey
+        )
         const mainStatColor = isMainEffective ? '#FFA54C' : '#fff'
         return (
           <Flex justify="space-between" align="center">
-            <Flex gap={2} align="center">
+            <Flex gap={0} align="center">
               <Flex style={{ marginLeft: -3, marginRight: 2 }} align="center">
                 <StatIcon
                   statKey={disc.mainStatKey}
@@ -362,7 +338,7 @@ export function ShowcaseDiscCard({
           const statTextShadow = '0 1px 4px rgba(0, 0, 0, 0.9)'
           return (
             <Flex key={i} justify="space-between" align="center">
-              <Flex gap={2} align="center">
+              <Flex gap={0} align="center">
                 <Flex style={{ marginLeft: -3, marginRight: 2 }} align="center">
                   <StatIcon
                     statKey={sub.key}
@@ -403,35 +379,43 @@ export function ShowcaseDiscCard({
           )
         })}
       </Box>
-      {/* Per-disc score - Hoyolab style rating badge */}
-      <Flex direction="column" align="center" gap={2} mt={4}>
+      {/* Divider */}
+      <Box
+        style={{
+          margin: '6px 0',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.125)',
+        }}
+      />
+
+      {/* Score footer */}
+      <Flex justify="space-between" align="center">
+        <Flex gap={4} align="center">
+          <Box
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              backgroundColor: gradeColor(discScore.grade),
+            }}
+          />
+          <Text
+            style={{
+              fontSize: 13,
+              lineHeight: '22px',
+              textShadow: '0 1px 4px rgba(0, 0, 0, 0.9)',
+            }}
+          >
+            Score
+          </Text>
+        </Flex>
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: 700,
-            color: gradeColor(discScore.grade),
+            fontSize: 13,
+            lineHeight: '22px',
             textShadow: '0 1px 4px rgba(0, 0, 0, 0.9)',
           }}
         >
-          {discScore.grade}
-        </Text>
-        <Text
-          style={{
-            fontSize: 12,
-            color: 'rgba(255,255,255,0.85)',
-            textShadow: '0 1px 4px rgba(0, 0, 0, 0.9)',
-          }}
-        >
-          {(discScore.efficiency * 100).toFixed(0)}%
-        </Text>
-        <Text
-          style={{
-            fontSize: 11,
-            color: 'rgba(255,255,255,0.7)',
-            textShadow: '0 1px 4px rgba(0, 0, 0, 0.9)',
-          }}
-        >
-          ({discScore.effectiveRolls}/{discScore.totalRolls})
+          {discScore.grade} ({(discScore.efficiency * 100).toFixed(0)}%)
         </Text>
       </Flex>
     </Box>

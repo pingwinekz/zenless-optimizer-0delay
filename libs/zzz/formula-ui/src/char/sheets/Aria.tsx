@@ -37,6 +37,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
+        description:
+          'While Moment of Delusion is active, attacks ignore a portion of enemy DEF.',
         metadata: cond.boolConditional,
         fields: [fieldForBuff(buff.m2_defIgn)],
       },
@@ -47,6 +49,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
+        description:
+          'While Moment of Delusion is active, Enhanced Attack and Ultimate deal increased Ether DMG.',
         metadata: cond.boolConditional,
         fields: [
           {

@@ -27,7 +27,11 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { shieldOn, enemyBlocked, attackLaunched } = allBoolConditionals(key)
+const { shieldOn, enemyBlocked, attackLaunched } = allBoolConditionals(
+  key,
+  undefined,
+  { enemyBlocked: 1, attackLaunched: 6 }
+)
 
 const m4_dmg_ = ownBuff.combat.common_dmg_.add(
   cmpGE(char.mindscape, 4, enemyBlocked.ifOn(percent(dm.m4.dmg_)))

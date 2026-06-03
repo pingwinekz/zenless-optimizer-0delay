@@ -25,6 +25,7 @@ import {
   HoverCard,
 } from '@mantine/core'
 import { useCallback, useMemo } from 'react'
+import { CharacterBuildSelector } from './Optimize/CharacterBuildSelector'
 import { HeaderText } from './layout/HeaderText'
 
 const defaultGap = 5
@@ -140,7 +141,7 @@ export function CharacterSelectorDisplay({
     }))
   }, [])
 
-  // Sort options (like fribbels' grouped "Sorted by")
+  // Sort options matching OptimizerGrid columns
   const sortByOptions = [
     {
       group: 'DMG',
@@ -149,17 +150,19 @@ export function CharacterSelectorDisplay({
         { value: 'final_atk', label: 'ATK' },
         { value: 'final_hp', label: 'HP' },
         { value: 'final_def', label: 'DEF' },
+        { value: 'final_impact', label: 'Impact' },
       ],
     },
     {
       group: 'Stats',
       items: [
-        { value: 'final_anomProf', label: 'Anomaly Proficiency' },
-        { value: 'final_anomMas', label: 'Anomaly Mastery' },
-        { value: 'final_enerRegen', label: 'Energy Regen' },
         { value: 'final_critRate', label: 'Crit Rate' },
         { value: 'final_critDmg', label: 'Crit DMG' },
-        { value: 'final_penRatio', label: 'PEN Ratio' },
+        { value: 'final_pen', label: 'PEN' },
+        { value: 'final_sheerForce', label: 'Sheer Force' },
+        { value: 'final_enerRegen', label: 'Energy Regen' },
+        { value: 'final_anomProf', label: 'Anomaly Proficiency' },
+        { value: 'final_anomMas', label: 'Anomaly Mastery' },
       ],
     },
   ]
@@ -245,6 +248,12 @@ export function CharacterSelectorDisplay({
             />
           )}
         </Flex>
+
+        {/* Saved Builds section */}
+        <Flex justify="space-between" align="center" style={{ marginTop: 20 }}>
+          <HeaderText>Saved Builds</HeaderText>
+        </Flex>
+        <CharacterBuildSelector characterKey={characterKey} compact />
 
         {/* Presets section — no tooltip icon, matching fribbels */}
         <Flex justify="space-between" align="center" style={{ marginTop: 20 }}>

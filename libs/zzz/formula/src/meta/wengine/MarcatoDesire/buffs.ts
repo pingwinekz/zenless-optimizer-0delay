@@ -10,5 +10,6 @@ export const buffs = {
       sheet: 'MarcatoDesire',
       name: 'atk_',
     },
+    team: false,
   },
 } as const

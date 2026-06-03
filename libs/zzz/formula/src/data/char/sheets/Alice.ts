@@ -34,8 +34,11 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
-const { physical_anomaly_inflicted, assault_triggered } =
-  allBoolConditionals(key)
+const { physical_anomaly_inflicted, assault_triggered } = allBoolConditionals(
+  key,
+  undefined,
+  { assault_triggered: 1 }
+)
 
 const m4_basic_anomBuildup_ = ownBuff.combat.anomBuildup_.addWithDmgType(
   'basic',
@@ -126,7 +129,7 @@ const sheet = register(
   // Buffs
   registerBuff(
     'core_anom_mv_mult_',
-    teamBuff.dmg.anom_mv_mult_.physical.add(
+    teamBuff.combat.anom_mv_mult_.physical.add(
       physical_anomaly_inflicted.ifOn(percent(dm.core.dmg))
     ),
     undefined,

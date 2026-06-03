@@ -27,8 +27,19 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { ex_chain_ult_used, suppresive_mode } = allBoolConditionals(key)
-const { shotshells_hit } = allNumConditionals(key, true, 0, dm.m2.stacks)
+const { ex_chain_ult_used, suppresive_mode } = allBoolConditionals(
+  key,
+  undefined,
+  { suppresive_mode: 2 }
+)
+const { shotshells_hit } = allNumConditionals(
+  key,
+  true,
+  0,
+  dm.m2.stacks,
+  undefined,
+  { shotshells_hit: 2 }
+)
 
 const core_dmg_ = ownBuff.combat.common_dmg_.add(
   sum(

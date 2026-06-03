@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'Nekomata',
       name: 'core_common_dmg_',
     },
+    team: false,
   },
   ability_exSpecial_dmg_: {
     sheet: 'Nekomata',
@@ -22,6 +23,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'ability_exSpecial_dmg_',
     },
+    team: false,
   },
   m1_physical_resIgn_: {
     sheet: 'Nekomata',
@@ -34,6 +36,7 @@ export const buffs = {
       attribute: 'physical',
       name: 'm1_physical_resIgn_',
     },
+    team: false,
   },
   m2_enerRegen_: {
     sheet: 'Nekomata',
@@ -45,6 +48,7 @@ export const buffs = {
       sheet: 'Nekomata',
       name: 'm2_enerRegen_',
     },
+    team: false,
   },
   m4_crit_: {
     sheet: 'Nekomata',
@@ -56,6 +60,7 @@ export const buffs = {
       sheet: 'Nekomata',
       name: 'm4_crit_',
     },
+    team: false,
   },
   m6_crit_dmg_: {
     sheet: 'Nekomata',
@@ -67,5 +72,6 @@ export const buffs = {
       sheet: 'Nekomata',
       name: 'm6_crit_dmg_',
     },
+    team: false,
   },
 } as const

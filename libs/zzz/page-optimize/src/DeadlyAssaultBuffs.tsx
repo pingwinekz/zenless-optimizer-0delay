@@ -1,11 +1,6 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
-import type { AttributeKey, SpecialityKey } from '@genshin-optimizer/zzz/consts'
-import type {
-  BonusStatTag,
-  EnemyStatsTag,
-  TeamBonusStat,
-  TeamEnemyStat,
-} from '@genshin-optimizer/zzz/db'
+import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
+import type { TeamBonusStat, TeamEnemyStat } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0 } from '@genshin-optimizer/zzz/db'
 import {
   useCharacterContext,
@@ -13,64 +8,11 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import { Box, CardSection, Group, Stack, Text } from '@mantine/core'
+import { Box, CardSection, Stack, Text } from '@mantine/core'
 import seasons from './daSeasons_gen.json'
+import { parseBuffDescription } from './parseBuffDescription'
 
 const BOSS_CDN = 'https://static.nanoka.cc/assets/zzz'
-
-type BuffBonusStat = {
-  tag: BonusStatTag
-  value: number
-  specialty?: SpecialityKey
-}
-type BuffEnemyStat = {
-  tag: EnemyStatsTag
-  value: number
-  specialty?: SpecialityKey
-}
-type BuffConfig = {
-  bonusStats: BuffBonusStat[]
-  enemyStats: BuffEnemyStat[]
-}
-
-const buffConfigs: Record<string, BuffConfig> = {
-  'Scorching Frost': {
-    bonusStats: [
-      { tag: { q: 'anomProf', qt: 'base' }, value: 30 },
-      { tag: { q: 'dmg_', qt: 'combat', damageType2: 'abloom' }, value: 10 },
-      { tag: { q: 'dmg_', qt: 'combat', attribute: 'ice' }, value: 30 },
-    ],
-    enemyStats: [{ tag: { q: 'resRed_', attribute: 'ice' }, value: 25 }],
-  },
-  Decree: {
-    bonusStats: [
-      { tag: { q: 'sheer_dmg_', qt: 'combat' }, value: 20 },
-      {
-        tag: { q: 'crit_dmg_', qt: 'combat' },
-        value: 50,
-        specialty: 'rupture',
-      },
-      {
-        tag: { q: 'resIgn_', qt: 'combat', damageType1: 'special' },
-        value: 30,
-        specialty: 'rupture',
-      },
-      {
-        tag: { q: 'resIgn_', qt: 'combat', damageType1: 'chain' },
-        value: 30,
-        specialty: 'rupture',
-      },
-    ],
-    enemyStats: [],
-  },
-  'Singular Blade': {
-    bonusStats: [
-      { tag: { q: 'anomProf', qt: 'base' }, value: 20 },
-      { tag: { q: 'crit_dmg_', qt: 'combat' }, value: 60 },
-    ],
-    enemyStats: [{ tag: { q: 'defRed_' }, value: 10 }],
-  },
-}
 
 function getActiveSeason() {
   const now = Date.now()
@@ -100,9 +42,9 @@ export function DeadlyAssaultBuffs() {
       }) ?? [])
     : []
 
-  const applyBuff = (title: string) => {
-    const config = buffConfigs[title]
-    if (!config) return
+  const applyBuff = (desc: string) => {
+    const config = parseBuffDescription(desc)
+    if (!config.bonusStats.length && !config.enemyStats.length) return
     const characterSpecialty = getCharStat(characterKey).specialty
     const newBonusStats: TeamBonusStat[] = config.bonusStats
       .filter(({ specialty }) => !specialty || specialty === characterSpecialty)
@@ -162,91 +104,125 @@ export function DeadlyAssaultBuffs() {
 
   return (
     <CardThemed bgt="light">
-      <CardSection>
-        <Stack gap={1.5}>
-          <Text size="sm" fw={700}>
-            Boss
-          </Text>
-          <Group gap={1}>
-            {zones.map((zone) => (
+      <CardSection
+        style={{
+          padding: 12,
+          borderBottom: '1px solid var(--border-subtle)',
+        }}
+      >
+        <Text size="sm" fw={700}>
+          Boss
+        </Text>
+      </CardSection>
+      <CardSection style={{ padding: 12 }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 8,
+          }}
+        >
+          {zones.map((zone) => (
+            <CardThemed
+              key={zone.name}
+              bgt="dark"
+              style={{
+                outline: `2px solid ${
+                  zone.name === selectedBossName
+                    ? 'var(--mantine-color-yellow-6)'
+                    : 'transparent'
+                }`,
+              }}
+            >
+              <CardSection
+                onClick={() => selectBoss(zone)}
+                style={{ cursor: 'pointer', padding: 8 }}
+              >
+                <Stack align="center" gap={4}>
+                  <Box
+                    component="img"
+                    src={`${BOSS_CDN}/Monster_${zone.monsterImage}.webp`}
+                    alt={zone.monsterName ?? zone.name}
+                    style={{ width: 96, height: 96, objectFit: 'contain' }}
+                    onError={(e) => {
+                      const el = e.target as HTMLImageElement
+                      el.style.display = 'none'
+                    }}
+                  />
+                  <Text size="xs" style={{ textAlign: 'center' }}>
+                    {zone.name}
+                  </Text>
+                </Stack>
+              </CardSection>
+            </CardThemed>
+          ))}
+        </div>
+      </CardSection>
+
+      <CardSection
+        style={{
+          padding: 12,
+          borderTop: '1px solid var(--border-subtle)',
+          borderBottom: '1px solid var(--border-subtle)',
+        }}
+      >
+        <Text size="sm" fw={700}>
+          Buff
+        </Text>
+      </CardSection>
+      <CardSection style={{ padding: 12 }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 8,
+          }}
+        >
+          {buffs.map((buff) => {
+            const config = parseBuffDescription(buff.desc)
+            const hasConfig =
+              config.bonusStats.length > 0 || config.enemyStats.length > 0
+            return (
               <CardThemed
-                key={zone.name}
+                key={buff.id}
                 bgt="dark"
-                style={{
-                  flex: '1 1 160px',
-                  outline: `2px solid ${
-                    zone.name === selectedBossName
-                      ? 'var(--mantine-color-yellow-6)'
-                      : 'transparent'
-                  }`,
-                }}
+                style={{ opacity: hasConfig ? 1 : 0.5 }}
               >
                 <CardSection
-                  onClick={() => selectBoss(zone)}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() => hasConfig && applyBuff(buff.desc)}
+                  style={{
+                    cursor: hasConfig ? 'pointer' : 'default',
+                    padding: 8,
+                  }}
                 >
-                  <Stack align="center" p={4}>
-                    <Box
-                      component="img"
-                      src={`${BOSS_CDN}/Monster_${zone.monsterImage}.webp`}
-                      alt={zone.monsterName ?? zone.name}
-                      style={{ width: 96, height: 96, objectFit: 'contain' }}
-                      onError={(e) => {
-                        const el = e.target as HTMLImageElement
-                        el.style.display = 'none'
+                  <Stack gap={4}>
+                    <Text size="sm" fw={700}>
+                      {buff.title}
+                    </Text>
+                    <Text
+                      size="xs"
+                      dangerouslySetInnerHTML={{
+                        __html: buff.desc
+                          .replace(/\n/g, ' ')
+                          .replace(
+                            /<color=(#[A-Fa-f0-9]{6})>/g,
+                            '<span style="color:$1">'
+                          )
+                          .replace(/<\/color>/g, '</span>')
+                          .trim(),
                       }}
                     />
-                    <Text size="xs" style={{ textAlign: 'center' }}>
-                      {zone.name}
-                    </Text>
+                    {!hasConfig && (
+                      <Text size="xs" c="dimmed">
+                        No stat mapping configured
+                      </Text>
+                    )}
                   </Stack>
                 </CardSection>
               </CardThemed>
-            ))}
-          </Group>
-          <Text size="sm" fw={700}>
-            Buff
-          </Text>
-          <Group gap={1}>
-            {buffs.map((buff) => {
-              const hasConfig = !!buffConfigs[buff.title]
-              return (
-                <CardThemed
-                  key={buff.id}
-                  bgt="dark"
-                  style={{ flex: '1 1 200px', opacity: hasConfig ? 1 : 0.5 }}
-                >
-                  <CardSection
-                    onClick={() => hasConfig && applyBuff(buff.title)}
-                    style={{ cursor: hasConfig ? 'pointer' : 'default' }}
-                  >
-                    <Stack p={4}>
-                      <Text fw={700}>{buff.title}</Text>
-                      <Text
-                        size="xs"
-                        dangerouslySetInnerHTML={{
-                          __html: buff.desc
-                            .replace(/\n/g, ' ')
-                            .replace(
-                              /<color=(#[A-Fa-f0-9]{6})>/g,
-                              '<span style="color:$1">'
-                            )
-                            .replace(/<\/color>/g, '</span>')
-                            .trim(),
-                        }}
-                      />
-                      {!hasConfig && (
-                        <Text size="xs" style={{ marginTop: 4 }}>
-                          No stat mapping configured
-                        </Text>
-                      )}
-                    </Stack>
-                  </CardSection>
-                </CardThemed>
-              )
-            })}
-          </Group>
-        </Stack>
+            )
+          })}
+        </div>
       </CardSection>
     </CardThemed>
   )

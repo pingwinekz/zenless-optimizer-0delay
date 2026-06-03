@@ -1,5 +1,75 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
+  exSpecial_ether_anom_mv_mult_: {
+    sheet: 'Burnice',
+    name: 'exSpecial_ether_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Burnice',
+      attribute: 'ether',
+      damageType1: 'abloom',
+      name: 'exSpecial_ether_anom_mv_mult_',
+    },
+    team: true,
+  },
+  exSpecial_electric_anom_mv_mult_: {
+    sheet: 'Burnice',
+    name: 'exSpecial_electric_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Burnice',
+      attribute: 'electric',
+      damageType1: 'abloom',
+      name: 'exSpecial_electric_anom_mv_mult_',
+    },
+    team: true,
+  },
+  exSpecial_fire_anom_mv_mult_: {
+    sheet: 'Burnice',
+    name: 'exSpecial_fire_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Burnice',
+      attribute: 'fire',
+      damageType1: 'abloom',
+      name: 'exSpecial_fire_anom_mv_mult_',
+    },
+    team: true,
+  },
+  exSpecial_physical_anom_mv_mult_: {
+    sheet: 'Burnice',
+    name: 'exSpecial_physical_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Burnice',
+      attribute: 'physical',
+      damageType1: 'abloom',
+      name: 'exSpecial_physical_anom_mv_mult_',
+    },
+    team: true,
+  },
+  exSpecial_ice_anom_mv_mult_: {
+    sheet: 'Burnice',
+    name: 'exSpecial_ice_anom_mv_mult_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anom_mv_mult_',
+      sheet: 'Burnice',
+      attribute: 'ice',
+      damageType1: 'abloom',
+      name: 'exSpecial_ice_anom_mv_mult_',
+    },
+    team: true,
+  },
   core_afterburn_dmg_: {
     sheet: 'Burnice',
     name: 'core_afterburn_dmg_',
@@ -10,6 +80,7 @@ export const buffs = {
       sheet: 'Burnice',
       name: 'core_afterburn_dmg_',
     },
+    team: false,
   },
   ability_fire_anomBuildup_: {
     sheet: 'Burnice',
@@ -22,6 +93,31 @@ export const buffs = {
       attribute: 'fire',
       name: 'ability_fire_anomBuildup_',
     },
+    team: false,
+  },
+  potential_anomMas: {
+    sheet: 'Burnice',
+    name: 'potential_anomMas',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'anomMas',
+      sheet: 'Burnice',
+      name: 'potential_anomMas',
+    },
+    team: false,
+  },
+  potential_common_dmg_: {
+    sheet: 'Burnice',
+    name: 'potential_common_dmg_',
+    tag: {
+      et: 'display',
+      qt: 'combat',
+      q: 'common_dmg_',
+      sheet: 'Burnice',
+      name: 'potential_common_dmg_',
+    },
+    team: false,
   },
   m1_afterburn_fire_anomBuildup_: {
     sheet: 'Burnice',
@@ -34,6 +130,7 @@ export const buffs = {
       attribute: 'fire',
       name: 'm1_afterburn_fire_anomBuildup_',
     },
+    team: false,
   },
   m2_pen_: {
     sheet: 'Burnice',
@@ -45,6 +142,7 @@ export const buffs = {
       sheet: 'Burnice',
       name: 'm2_pen_',
     },
+    team: true,
   },
   m4_exSpecial_crit_: {
     sheet: 'Burnice',
@@ -57,6 +155,7 @@ export const buffs = {
       damageType1: 'exSpecial',
       name: 'm4_exSpecial_crit_',
     },
+    team: false,
   },
   m4_assistSkill_crit_: {
     sheet: 'Burnice',
@@ -66,9 +165,10 @@ export const buffs = {
       qt: 'combat',
       q: 'crit_',
       sheet: 'Burnice',
-      skillType: 'assistSkill',
+      skillType2: 'assistSkill',
       name: 'm4_assistSkill_crit_',
     },
+    team: false,
   },
   m6_burn_fire_resIgn_: {
     sheet: 'Burnice',
@@ -82,6 +182,7 @@ export const buffs = {
       damageType1: 'anomaly',
       name: 'm6_burn_fire_resIgn_',
     },
+    team: false,
   },
   m6_fire_resIgn_: {
     sheet: 'Burnice',
@@ -94,17 +195,19 @@ export const buffs = {
       attribute: 'fire',
       name: 'm6_fire_resIgn_',
     },
+    team: false,
   },
   m6_fire_anom_mv_mult_: {
     sheet: 'Burnice',
     name: 'm6_fire_anom_mv_mult_',
     tag: {
       et: 'display',
-      qt: 'dmg',
+      qt: 'combat',
       q: 'anom_mv_mult_',
       sheet: 'Burnice',
       attribute: 'fire',
       name: 'm6_fire_anom_mv_mult_',
     },
+    team: false,
   },
 } as const

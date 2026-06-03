@@ -17,6 +17,8 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('passionCond'),
+            description:
+              'Boosts Anomaly Buildup and ATK while in the Passion state.',
             metadata: cond.passion,
             fields: [
               fieldForBuff(buff.passion_physical_anomBuildup_),
@@ -32,6 +34,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('gnawedCond'),
+        description: 'Increases CRIT Rate and CRIT DMG against Gnawed enemies.',
         metadata: cond.gnawed,
         fields: [
           fieldForBuff(buff.core_assault_crit_),
@@ -45,6 +48,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
+        description:
+          'Increases Physical Anomaly Buildup against enemies suffering an Attribute Anomaly.',
         metadata: cond.enemy_suffering_anomaly,
         fields: [fieldForBuff(buff.ability_physical_anomBuildup_)],
       },
@@ -55,6 +60,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('passionCond'),
+        description:
+          'Boosts Physical Anomaly Buildup and all DMG while in the Passion state.',
         metadata: cond.passion,
         fields: [
           fieldForBuff(buff.m1_physical_anomBuildup_),
@@ -68,6 +75,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('gnawedCond'),
+        description:
+          'Ignores enemy DEF and boosts Assault CRIT DMG against Gnawed enemies.',
         metadata: cond.gnawed,
         fields: [
           fieldForBuff(buff.m2_defIgn_),
@@ -82,6 +91,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
+        description:
+          'Increases Anomaly DMG after any squad member triggers Assault or Disorder.',
         metadata: cond.assault_or_disorder_triggered,
         fields: [fieldForBuff(buff.m4_anomaly_dmg_)],
       },
@@ -92,6 +103,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('passionCond'),
+        description:
+          'Grants bonus CRIT Rate and CRIT DMG while in the Passion state.',
         metadata: cond.passion,
         fields: [fieldForBuff(buff.m6_crit_), fieldForBuff(buff.m6_crit_dmg_)],
       },

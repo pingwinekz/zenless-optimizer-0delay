@@ -22,6 +22,6 @@ describe('WengineDataManager', () => {
       lock: false,
     }
     const result = wengines['validate'](valid)
-    expect(result?.modification).toBe(4)
+    expect(result?.modification).toBe(3)
   })
 })

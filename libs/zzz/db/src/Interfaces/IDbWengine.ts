@@ -1,4 +1,8 @@
-import type { MilestoneKey, PhaseKey, WengineKey } from '@genshin-optimizer/zzz/consts'
+import type {
+  MilestoneKey,
+  PhaseKey,
+  WengineKey,
+} from '@genshin-optimizer/zzz/consts'
 
 export interface ICachedWengine {
   id: string

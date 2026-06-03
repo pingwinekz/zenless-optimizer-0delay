@@ -10,6 +10,7 @@ export const buffs = {
       sheet: 'WoodpeckerElectro',
       name: 'set2',
     },
+    team: false,
   },
   set4_cond_crit_basic_dodge_ex_atk_: {
     sheet: 'WoodpeckerElectro',
@@ -21,5 +22,6 @@ export const buffs = {
       sheet: 'WoodpeckerElectro',
       name: 'set4_cond_crit_basic_dodge_ex_atk_',
     },
+    team: false,
   },
 } as const

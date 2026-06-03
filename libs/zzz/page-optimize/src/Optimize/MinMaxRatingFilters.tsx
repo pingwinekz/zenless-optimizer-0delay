@@ -1,5 +1,4 @@
-import { Flex, HoverCard, Text } from '@mantine/core'
-import { IconHelp } from '@tabler/icons-react'
+import { Flex } from '@mantine/core'
 import { FilterRow, HeaderText } from '../layout'
 
 export function MinMaxRatingFilters({
@@ -9,23 +8,7 @@ export function MinMaxRatingFilters({
 }) {
   return (
     <Flex direction="column" gap={5}>
-      <Flex justify="space-between" align="center">
-        <HeaderText>Rating min / max filters</HeaderText>
-        <HoverCard width={300} openDelay={200} closeDelay={100}>
-          <HoverCard.Target>
-            <IconHelp size={16} style={{ cursor: 'pointer', opacity: 0.6 }} />
-          </HoverCard.Target>
-          <HoverCard.Dropdown>
-            <Text fw={600} mb={4}>
-              Rating Filters
-            </Text>
-            <Text size="sm">
-              Set minimum or maximum values for build ratings. These filters
-              apply to the final build scores.
-            </Text>
-          </HoverCard.Dropdown>
-        </HoverCard>
-      </Flex>
+      <HeaderText>Rating min / max filters</HeaderText>
 
       <Flex direction="column" gap={7}>
         <FilterRow

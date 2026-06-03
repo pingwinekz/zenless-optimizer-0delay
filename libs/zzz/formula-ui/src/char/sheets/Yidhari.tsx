@@ -17,6 +17,8 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('etherVeilCond'),
+            description:
+              'While Ether Veil: Wellspring is active, bonus HP is gained.',
             metadata: cond.etherVeil,
             fields: [fieldForBuff(buff.etherVeil_hp_)],
           },
@@ -33,6 +35,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: 'When Yidhari has missing HP, bonus common DMG is gained.',
         metadata: cond.missingHp,
         fields: [fieldForBuff(buff.core_common_dmg_)],
       },
@@ -43,6 +46,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreCond'),
+        description: 'When Yidhari has missing HP, bonus CRIT DMG is gained.',
         metadata: cond.missingHp,
         fields: [fieldForBuff(buff.ability_crit_dmg_)],
       },
@@ -68,6 +72,8 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('etherVeilCond'),
+        description:
+          'While Ether Veil: Wellspring is active, bonus HP is gained.',
         metadata: cond.etherVeil,
         fields: [fieldForBuff(buff.m4_hp_)],
       },
@@ -78,6 +84,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('eruditionCond'),
+        description: 'While Erudition is active, sheer DMG is increased.',
         metadata: cond.erudition,
         fields: [fieldForBuff(buff.m6_sheer_dmg_)],
       },

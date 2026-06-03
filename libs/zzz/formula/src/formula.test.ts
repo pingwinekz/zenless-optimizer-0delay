@@ -32,6 +32,7 @@ import {
   own,
   ownBuff,
   ownTag,
+  reader,
   tagStr,
   team,
 } from './data/util'
@@ -424,6 +425,74 @@ describe('team', () => {
     expect(
       calc.compute(team.common.count.withFaction('StarsOfLyra')).val
     ).toEqual(0)
+  })
+})
+
+describe('tag leak test', () => {
+  it('reproduce name leaking into qt:char read', () => {
+    const teams = teamData(['Anton'])
+    const data: TagMapNodeEntries = [
+      ...teams,
+      ...withMember(
+        'Anton',
+        ...charTagMapNodeEntries({
+          level: 60,
+          promotion: 5,
+          key: 'Anton',
+          mindscape: 4,
+          potential: 0,
+          basic: 6,
+          dodge: 6,
+          special: 6,
+          assist: 6,
+          chain: 6,
+          core: 6,
+        }),
+        ...wengineTagMapNodeEntries({
+          key: 'VortexRevolver',
+          level: 60,
+          modification: 5,
+          phase: 1,
+        }),
+        ownBuff.initial.atk.add(25),
+        ownBuff.combat.atk.add(100),
+        ownBuff.combat.atk_.add(0.08),
+        ownBuff.initial.crit_.add(0.7),
+        ownBuff.initial.crit_dmg_.add(1.04),
+        ownBuff.initial.dmg_.electric.add(0.4),
+        ownBuff.initial.anomProf.add(338)
+      ),
+      own.common.critMode.add('avg'),
+      enemy.common.def.add(635),
+      enemy.common.res_.electric.add(0.1),
+      enemyDebuff.common.stun_.add(1.5),
+      enemyDebuff.common.unstun_.add(1),
+    ]
+    const calc = new Calculator(
+      keys,
+      values,
+      compileTagMapValues(keys, data)
+    ).withTag({ src: 'Anton', dst: 'Anton', preset: 'preset0' })
+
+    // Try to access a buff that has a name, and also reads own.char.mindscape
+    // m4_crit_ buff entry: registered at {..., name:'m4_crit_', et:'teamBuff', ...}
+    // Its formula value includes cmpGE(char.mindscape, 4, ...)
+    // When evaluating this formula, name:'m4_crit_' should leak into qt:char reads
+
+    const m4Tag = reader.withTag({
+      name: 'm4_crit_',
+      et: 'display',
+      qt: 'combat' as any,
+      q: 'crit_',
+    }).tag
+
+    // Compute the m4_crit_ buff display entry — this is at sheet:'Anton' so we need to include sheet
+    // The value is cmpGE(char.mindscape, 4, chain_ult_used.ifOn(...))
+    // This should trigger char.mindscape read with name:'m4_crit_' leaked from context
+    expect(() => {
+      const result = calc.compute(read({ ...m4Tag, sheet: 'Anton' }))
+      console.log('m4_crit_ display formula result:', result.val)
+    }).not.toThrow()
   })
 })
 

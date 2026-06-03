@@ -36,7 +36,9 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { morale_burst_hit, collapse } = allBoolConditionals(key)
+const { morale_burst_hit, collapse } = allBoolConditionals(key, undefined, {
+  collapse: 1,
+})
 const { morale_consumed } = allNumConditionals(key, true, 0, dm.core.max_morale)
 const { elation } = allNumConditionals(key, true, 0, dm.ability.stacks)
 

@@ -1,9 +1,19 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
   basic_hit: { sheet: 'Yanagi', name: 'basic_hit', type: 'bool' },
-  clarity: { sheet: 'Yanagi', name: 'clarity', type: 'bool' },
+  clarity: {
+    sheet: 'Yanagi',
+    name: 'clarity',
+    type: 'bool',
+    mindscapeRequirement: 1,
+  },
   exSpecial_used: { sheet: 'Yanagi', name: 'exSpecial_used', type: 'bool' },
-  exposed: { sheet: 'Yanagi', name: 'exposed', type: 'bool' },
+  exposed: {
+    sheet: 'Yanagi',
+    name: 'exposed',
+    type: 'bool',
+    mindscapeRequirement: 4,
+  },
   jougen: { sheet: 'Yanagi', name: 'jougen', type: 'bool' },
   kagen: { sheet: 'Yanagi', name: 'kagen', type: 'bool' },
   polarityDisorder: {
@@ -20,5 +30,6 @@ export const conditionals = {
     int_only: true,
     min: 0,
     max: 4,
+    mindscapeRequirement: 2,
   },
 } as const

@@ -118,6 +118,8 @@ const stats: Record<Stat, Desc> = {
   flat_dmg: agg,
   anom_flat_dmg: agg,
   addl_disorder_: agg,
+  anom_mv_mult_: agg,
+  veilVulnerabilityCap_: agg,
 } as const
 const finalStats = objFilterKeys(stats, [
   ...flatAndPercentStats,
@@ -171,7 +173,6 @@ export const ownTag = {
     dmg_taken_mult_: fixed,
     stunned_mult_: fixed,
     mv_mult_: agg,
-    anom_mv_mult_: agg,
     sheer_mult_: fixed,
     anomaly_crit_mult_: fixed,
     anom_base_mult_: fixed,
@@ -225,7 +226,18 @@ export const convert = createConvert<Read>()
 
 // Default queries
 const noName = { src: null, name: null }
-export const own = convert(ownTag, { et: 'own', dst: null })
+export const own = (() => {
+  const r = convert(ownTag, { et: 'own', dst: null })
+  // Add name:null to char property reads to prevent formula context `name` from
+  // leaking into `sheet:iso` reread queries. Char entries never have `name`
+  // in their tags, so clearing name bits is safe; but without this, formula
+  // `name` can leak into `qt:char` reads, which use `unique` accumulator and
+  // would fail if both `{sheet:iso}` and `{sheet:iso, et:own}` reread targets
+  // happen to match entries.
+  for (const q of Object.keys(ownTag.char))
+    r.char[q] = r.char[q].with('name', null)
+  return r
+})()
 export const team = convert(ownTag, { et: 'team', dst: null, ...noName })
 export const target = convert(ownTag, { et: 'target', ...noName })
 export const enemy = convert(enemyTag, { et: 'enemy', dst: null, ...noName })

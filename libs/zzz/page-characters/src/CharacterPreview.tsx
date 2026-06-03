@@ -1,11 +1,17 @@
-import type { CharacterKey, DiscSlotKey, PhaseKey } from '@genshin-optimizer/zzz/consts'
+import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
+import { characterAsset } from '@genshin-optimizer/zzz/assets'
+import type {
+  CharacterKey,
+  DiscSlotKey,
+  PhaseKey,
+} from '@genshin-optimizer/zzz/consts'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import {
   useCharacter,
+  useDatabaseContext,
   useDiscs,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
-import { characterAsset } from '@genshin-optimizer/zzz/assets'
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { own } from '@genshin-optimizer/zzz/formula'
 import {
@@ -13,21 +19,40 @@ import {
   useZzzCalcContext,
 } from '@genshin-optimizer/zzz/formula-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
-import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import { Flex, Box, Center, Text } from '@mantine/core'
-import { IconUser } from '@tabler/icons-react'
-import { useCallback, useEffect, useMemo } from 'react'
-import {
-  calculateCharacterScore,
-  getCharacterEffectiveStats,
-  getCharacterEffectiveMainStats,
-  getCharacterSubstatWeights,
-  gradeColor,
-} from '@genshin-optimizer/zzz/util'
 import {
   DiscEditorModal,
   useDiscEditorModalStore,
 } from '@genshin-optimizer/zzz/ui'
+import { useCharacterTabStore } from '@genshin-optimizer/zzz/ui'
+import {
+  calculateCharacterScore,
+  getCharacterEffectiveMainStats,
+  getCharacterEffectiveStats,
+  getCharacterSubstatWeights,
+  gradeColor,
+} from '@genshin-optimizer/zzz/util'
+import { Box, Center, Flex, Text } from '@mantine/core'
+import { IconUser } from '@tabler/icons-react'
+import { useCallback, useEffect, useMemo } from 'react'
+import {
+  ShadowRings,
+  showcaseShadow,
+  showcaseShadowInsetAddition,
+  showcaseTransition,
+} from './CharacterPreviewComponents'
+import { CharacterStatSummary } from './card/CharacterStatSummary'
+import { ShowcaseCharacterHeader } from './card/ShowcaseCharacterHeader'
+import { ShowcaseDiscPanel } from './card/ShowcaseDiscPanel'
+import { ShowcasePortrait } from './card/ShowcasePortrait'
+import { ShowcaseWengine } from './card/ShowcaseWengine'
+import { extractPaletteInWorker } from './color/colorExtractionService'
+import { pickBestSeed, withAlpha } from './color/colorUtils'
+import {
+  ShowcaseColorMode,
+  resolveShowcaseColor,
+  resolveShowcaseTheme,
+} from './color/showcaseColorService'
+import { useShowcaseColorStore } from './color/showcaseColorStore'
 import {
   cardTotalW,
   defaultGap,
@@ -35,28 +60,8 @@ import {
   parentH,
   parentW,
 } from './constantsUi'
-import {
-  ShadowRings,
-  showcaseShadow,
-  showcaseShadowInsetAddition,
-  showcaseTransition,
-} from './CharacterPreviewComponents'
-import { extractPaletteInWorker } from './color/colorExtractionService'
-import { pickBestSeed, withAlpha } from './color/colorUtils'
-import {
-  resolveShowcaseColor,
-  resolveShowcaseTheme,
-  ShowcaseColorMode,
-} from './color/showcaseColorService'
-import { useShowcaseColorStore } from './color/showcaseColorStore'
-import { useCharacterTabStore } from '@genshin-optimizer/zzz/ui'
 import { ShowcaseCustomizationSidebar } from './customization/ShowcaseCustomizationSidebar'
 import type { ShowcasePreset } from './customization/ShowcaseCustomizationSidebar'
-import { CharacterStatSummary } from './card/CharacterStatSummary'
-import { ShowcasePortrait } from './card/ShowcasePortrait'
-import { ShowcaseWengine } from './card/ShowcaseWengine'
-import { ShowcaseCharacterHeader } from './card/ShowcaseCharacterHeader'
-import { ShowcaseDiscPanel } from './card/ShowcaseDiscPanel'
 
 type ComputedStats = {
   hp: number
@@ -65,6 +70,7 @@ type ComputedStats = {
   impact: number
   crit_: number
   crit_dmg_: number
+  pen: number
   pen_: number
   anomProf: number
   anomMas: number
@@ -122,8 +128,19 @@ function PreviewCalcWrapper({
   onEdit?: () => void
   onDelete?: () => void
 }) {
+  const { database } = useDatabaseContext()
   const character = useCharacter(characterKey)
   const team = useTeam(characterKey)
+
+  // Ensure the character and team records exist — use effects to avoid
+  // synchronously mutating the store during render (which can cascade
+  // through useSyncExternalStore subscribers into infinite re-renders).
+  useEffect(() => {
+    if (characterKey && !character) database.chars.getOrCreate(characterKey)
+  }, [characterKey, character, database.chars])
+  useEffect(() => {
+    if (characterKey && !team) database.teams.getOrCreate(characterKey)
+  }, [characterKey, team, database.teams])
 
   const tag = useMemo<Tag>(
     () => ({
@@ -199,6 +216,7 @@ function PreviewContent({
       impact: calc.compute(own.final.impact).val,
       crit_: calc.compute(own.common.cappedCrit_).val,
       crit_dmg_: calc.compute(own.final.crit_dmg_).val,
+      pen: calc.compute(own.final.pen).val,
       pen_: calc.compute(own.final.pen_).val,
       anomProf: calc.compute(own.final.anomProf).val,
       anomMas: calc.compute(own.final.anomMas).val,
@@ -238,7 +256,7 @@ function PreviewContent({
     [discs, characterKey]
   )
 
-  const portraitUrl = characterAsset(characterKey, 'select')
+  const portraitUrl = characterAsset(characterKey, 'full')
 
   // Color pipeline: extracted portrait color → seed → theme
   const { portraitColorByCharKey, portraitPaletteByCharKey } =
@@ -366,8 +384,6 @@ function PreviewContent({
           fontFamily: 'var(--font-showcase, sans-serif)',
         }}
       >
-
-
         {/* === LEFT COLUMN: Portrait === */}
         <ShowcasePortrait
           portraitUrl={portraitUrl}
@@ -462,7 +478,6 @@ function PreviewContent({
                 >
                   {score.effectiveRolls}/{score.totalRolls} rolls
                 </Text>
-
               </Flex>
             )}
 
