@@ -98,7 +98,6 @@ function DiscSetConditionalRow({
   condEntries: [string, IConditionalData][]
 }) {
   const character = useCharacterContext()!
-  const { database } = useDatabaseContext()
   const team = useTeam(character.key)
   const uiSheet = discUiSheets[sheet as keyof typeof discUiSheets]
 
@@ -203,11 +202,7 @@ function DiscSetConditionalRow({
               return (
                 <Flex key={condName} align="center" gap={4}>
                   {condData.type === 'bool' && (
-                    <Text
-                      size="xs"
-                      c={val > 0 ? 'green' : 'dimmed'}
-                      fw={500}
-                    >
+                    <Text size="xs" c={val > 0 ? 'green' : 'dimmed'} fw={500}>
                       {val > 0 ? 'ON' : 'OFF'}
                     </Text>
                   )}

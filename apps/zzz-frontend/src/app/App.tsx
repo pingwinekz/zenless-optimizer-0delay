@@ -1,32 +1,48 @@
-import { AdBlockContextWrapper } from '@genshin-optimizer/common/ad'
 import { ScrollTop } from '@genshin-optimizer/common/ui'
 import { isDev } from '@genshin-optimizer/common/util'
-import { Box, Flex, MantineProvider, Skeleton } from '@mantine/core'
+import { Box, Flex, MantineProvider } from '@mantine/core'
 import { setDebugMode } from '@genshin-optimizer/pando/engine'
 import { DatabaseProvider } from '@genshin-optimizer/zzz/db-ui'
 import '@genshin-optimizer/zzz/i18n' // import to load translations
+import PageCharacters from '@genshin-optimizer/zzz/page-characters'
+import PageDiscs from '@genshin-optimizer/zzz/page-discs'
 import PageHome from '@genshin-optimizer/zzz/page-home'
+import PageOptimize from '@genshin-optimizer/zzz/page-optimize'
+import PageSettings from '@genshin-optimizer/zzz/page-settings'
+import PageWengines from '@genshin-optimizer/zzz/page-wengines'
 import {
   createMantineTheme,
   themeResolver,
   useThemeStore,
 } from '@genshin-optimizer/zzz/theme'
-import { Suspense, lazy, useMemo } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 import '../styles.scss'
 import Footer from './Footer'
 import Header from './Header'
 import { LayoutSider } from './LayoutSider'
-const PageDiscs = lazy(() => import('@genshin-optimizer/zzz/page-discs'))
-const PageOptimize = lazy(() => import('@genshin-optimizer/zzz/page-optimize'))
-const PageCharacters = lazy(
-  () => import('@genshin-optimizer/zzz/page-characters')
-)
-const PageWengines = lazy(() => import('@genshin-optimizer/zzz/page-wengines'))
-const PageSettings = lazy(() => import('@genshin-optimizer/zzz/page-settings'))
+import { NavigateContextProvider, useNavigateContext } from './NavigateContext'
+import { useTabStore, type TabKey } from './useTabStore'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 
 // Enable debug mode for Pando calcs
 setDebugMode(isDev)
+
+// Priority order for staggered mounting of inactive tabs
+const TAB_MOUNT_PRIORITY: TabKey[] = [
+  'optimize',
+  'characters',
+  'discs',
+  'wengines',
+  'settings',
+  'home',
+]
+const TAB_MOUNT_DELAY = 200 // ms between each tab mount
 
 export default function App() {
   const seedColor = useThemeStore((s) => s.seedColor)
@@ -39,18 +55,118 @@ export default function App() {
       defaultColorScheme="dark"
     >
       <DatabaseProvider>
-        <HashRouter basename="/">
-          <AdBlockContextWrapper>
-            <Content />
-          </AdBlockContextWrapper>
+        <NavigateContextProvider>
+          <Content />
           <ScrollTop />
-        </HashRouter>
+        </NavigateContextProvider>
       </DatabaseProvider>
     </MantineProvider>
   )
 }
 
+function TabRenderer() {
+  const activeTab = useTabStore((s) => s.activeTab)
+  const { navigateToOptimize } = useNavigateContext()
+  const [mountedTabs, setMountedTabs] = useState<Set<TabKey>>(
+    () => new Set([activeTab])
+  )
+
+  // Staggered mount: mount inactive tabs one-by-one on a delay
+  useEffect(() => {
+    const toMount = TAB_MOUNT_PRIORITY.filter(
+      (t) => t !== activeTab && !mountedTabs.has(t)
+    )
+    if (toMount.length === 0) return
+
+    let i = 0
+    const timers: number[] = []
+
+    const tryMountNext = () => {
+      if (i >= toMount.length) return
+      const tab = toMount[i]
+      setMountedTabs((prev) => new Set([...prev, tab]))
+      i++
+      if (i < toMount.length) {
+        timers.push(window.setTimeout(tryMountNext, TAB_MOUNT_DELAY))
+      }
+    }
+
+    timers.push(window.setTimeout(tryMountNext, TAB_MOUNT_DELAY))
+
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t))
+    }
+    // Only run on mount (when activeTab changes, keep previously mounted tabs)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleNavigateToOptimize = useCallback(
+    (characterKey: CharacterKey) => {
+      navigateToOptimize(characterKey)
+    },
+    [navigateToOptimize]
+  )
+
+  const pageMap: Record<TabKey, ReactNode> = useMemo(
+    () => ({
+      home: <PageHome />,
+      discs: <PageDiscs />,
+      wengines: <PageWengines />,
+      characters: (
+        <PageCharacters onNavigateToOptimize={handleNavigateToOptimize} />
+      ),
+      optimize: <PageOptimize />,
+      settings: <PageSettings />,
+    }),
+    [handleNavigateToOptimize]
+  )
+
+  return (
+    <>
+      {TAB_MOUNT_PRIORITY.map((tab) => {
+        // Always render active tab even if not yet mounted via staggered mount
+        if (!mountedTabs.has(tab) && tab !== activeTab) return null
+        const isActive = tab === activeTab
+        return (
+          <Box
+            key={tab}
+            style={{
+              display: isActive ? undefined : 'none',
+              width: '100%',
+            }}
+          >
+            {pageMap[tab]}
+          </Box>
+        )
+      })}
+    </>
+  )
+}
+
 function Content() {
+  const setActiveTab = useTabStore((s) => s.setActiveTab)
+
+  // Sync tab state with browser back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash.replace('#/', '')
+      const tab = (hash.split('?')[0] || 'home') as TabKey
+      const ALL_TABS: TabKey[] = [
+        'home',
+        'discs',
+        'wengines',
+        'characters',
+        'optimize',
+        'settings',
+      ]
+      if ((ALL_TABS as string[]).includes(tab)) {
+        setActiveTab(tab, false)
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [setActiveTab])
+
   return (
     <Flex direction="column" mih="100vh" pos="relative">
       <Header anchor="back-to-top-anchor" />
@@ -67,16 +183,7 @@ function Content() {
             width: '100%',
           }}
         >
-          <Suspense fallback={<Skeleton h="100%" />}>
-            <Routes>
-              <Route index element={<PageHome />} />
-              <Route path="/discs" element={<PageDiscs />} />
-              <Route path="/optimize" element={<PageOptimize />} />
-              <Route path="/characters/*" element={<PageCharacters />} />
-              <Route path="/wengines" element={<PageWengines />} />
-              <Route path="/settings" element={<PageSettings />} />
-            </Routes>
-          </Suspense>
+          <TabRenderer />
         </Box>
       </Flex>
 

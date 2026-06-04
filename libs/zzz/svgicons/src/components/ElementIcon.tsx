@@ -1,14 +1,15 @@
 import type { SvgIconProps } from '@genshin-optimizer/common/svgicons'
 import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
-import {
-  ElectricIcon,
-  EtherIcon,
-  FireIcon,
-  FrostIcon,
-  IceIcon,
-  PhysicalIcon,
-  WindIcon,
-} from '../icons'
+
+const elementUrls: Record<string, string> = {
+  fire: 'https://static.nanoka.cc/assets/zzz/IconFire.webp',
+  ice: 'https://static.nanoka.cc/assets/zzz/IconIce.webp',
+  electric: 'https://static.nanoka.cc/assets/zzz/IconElectric.webp',
+  frost: 'https://static.nanoka.cc/assets/zzz/IconFrost.webp',
+  physical: 'https://static.nanoka.cc/assets/zzz/IconPhysical.webp',
+  ether: 'https://static.nanoka.cc/assets/zzz/IconEther.webp',
+  wind: 'https://static.nanoka.cc/assets/zzz/IconWind.webp',
+}
 
 export function ElementIcon({
   ele,
@@ -17,20 +18,26 @@ export function ElementIcon({
   ele: AttributeKey | 'frost'
   iconProps?: SvgIconProps
 }) {
-  switch (ele) {
-    case 'fire':
-      return <FireIcon {...iconProps} />
-    case 'ice':
-      return <IceIcon {...iconProps} />
-    case 'electric':
-      return <ElectricIcon {...iconProps} />
-    case 'frost':
-      return <FrostIcon {...iconProps} />
-    case 'physical':
-      return <PhysicalIcon {...iconProps} />
-    case 'ether':
-      return <EtherIcon {...iconProps} />
-    case 'wind':
-      return <WindIcon {...iconProps} />
-  }
+  const url = elementUrls[ele]
+  if (!url) return null
+
+  const { fontSize, style } = iconProps as Record<string, unknown>
+  const cssStyle = (style ?? {}) as React.CSSProperties
+  // For SVGs, fontSize controls intrinsic size; for <img>, map to width/height.
+  // 'inherit' means "inherit parent font-size" in SVG context → equivalent to 1em.
+  const fs = (fontSize as string | undefined) ?? cssStyle.fontSize
+  const imgSize =
+    cssStyle.width ?? cssStyle.height ?? (fs && fs !== 'inherit' ? fs : '1em')
+
+  return (
+    <img
+      src={url}
+      alt={ele}
+      style={{
+        width: imgSize,
+        height: imgSize,
+        ...cssStyle,
+      }}
+    />
+  )
 }

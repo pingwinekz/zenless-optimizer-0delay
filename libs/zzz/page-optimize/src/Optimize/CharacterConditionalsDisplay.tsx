@@ -16,6 +16,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
@@ -65,7 +66,9 @@ function ConditionalText({
   return <div style={{ whiteSpace: 'pre-line', ...style }}>{children}</div>
 }
 
-function condLabel(key: string): string {
+function condLabel(key: string, ns: string): string {
+  const translated = i18n.t(key, { ns })
+  if (typeof translated === 'string' && translated !== key) return translated
   return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
@@ -87,13 +90,21 @@ export function CharacterConditionalsDisplay({
   mindscapeOverride,
   conditionalFields,
   conditionalDescriptions,
+  conditionalLabels,
   showZeroFields = false,
+  passiveFields,
 }: {
   characterKey: CharacterKey
   mindscapeOverride?: number
   conditionalFields?: Record<string, Field[]>
   conditionalDescriptions?: Record<string, ReactNode>
+  conditionalLabels?: Record<string, ReactNode>
   showZeroFields?: boolean
+  passiveFields?: {
+    field: Field
+    /** 0 = always available, 1-6 = requires that mindscape level */
+    mindscape: number
+  }[]
 }) {
   const { t } = useTranslation('charNames_gen')
   const mainChar = useCharacterContext()!
@@ -125,7 +136,11 @@ export function CharacterConditionalsDisplay({
     const bReq = (b as IConditionalData).mindscapeRequirement ?? 0
     return aReq - bReq
   })
-  if (condEntries.length === 0) {
+  const visiblePassives =
+    passiveFields?.filter((entry) => effectiveMindscape >= entry.mindscape) ??
+    []
+  const hasPassives = visiblePassives.length > 0
+  if (condEntries.length === 0 && !hasPassives) {
     return (
       <Text size="xs" c="dimmed">
         No conditionals
@@ -136,6 +151,33 @@ export function CharacterConditionalsDisplay({
   return (
     <Flex direction="column" gap={5}>
       <HeaderText>{t(characterKey)} Conditionals</HeaderText>
+      {hasPassives && (
+        <Box
+          style={{
+            borderRadius: 'var(--mantine-radius-sm)',
+            border: '1px solid var(--mantine-color-default-border)',
+            padding: '6px 8px',
+            fontSize: 11,
+            lineHeight: '16px',
+          }}
+        >
+          {visiblePassives.map(
+            (entry, i) =>
+              'fieldRef' in entry.field && (
+                <TagFieldDisplay
+                  key={i}
+                  field={entry.field}
+                  showZero={true}
+                  rowSx={{
+                    paddingTop: 1,
+                    paddingBottom: 1,
+                    gap: 6,
+                  }}
+                />
+              )
+          )}
+        </Box>
+      )}
       {condEntries
         .filter(([condName]) => {
           // If conditionalFields is provided and this condName has no entry,
@@ -155,6 +197,7 @@ export function CharacterConditionalsDisplay({
             mindscape={effectiveMindscape}
             fields={conditionalFields?.[condName]}
             description={conditionalDescriptions?.[condName]}
+            label={conditionalLabels?.[condName]}
             showZeroFields={showZeroFields}
           />
         ))}
@@ -172,6 +215,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
   mindscape,
   fields,
   description,
+  label: labelProp,
   showZeroFields = false,
 }: {
   characterKey: CharacterKey
@@ -183,6 +227,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
   mindscape: number
   fields?: Field[]
   description?: ReactNode
+  label?: ReactNode
   showZeroFields?: boolean
 }) {
   const outerTag = useContext(TagContext)
@@ -235,7 +280,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
     )
   }
 
-  const label = condLabel(condName)
+  const label = labelProp ?? condLabel(condName, `char_${characterKey}`)
 
   const rowContent = (
     <>
@@ -400,7 +445,7 @@ const NumConditionalRow = memo(function NumConditionalRow({
   disabled,
   mindscapeRequirement,
 }: {
-  label: string
+  label: ReactNode
   value: number
   min: number
   max: number

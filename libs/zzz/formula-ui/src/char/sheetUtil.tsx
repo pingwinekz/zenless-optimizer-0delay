@@ -10,6 +10,7 @@ import type { CharacterKey, SkillKey } from '@genshin-optimizer/zzz/consts'
 import { allSkillKeys } from '@genshin-optimizer/zzz/consts'
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { formulas, own } from '@genshin-optimizer/zzz/formula'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat, mappedStats } from '@genshin-optimizer/zzz/stats'
 import { TagDisplay } from '../components'
 import { st, trans } from '../util'
@@ -129,9 +130,47 @@ function abilityFormulaNameToTranslated(
   abilityFormulaName: string
 ) {
   const [ability, hitNumber, type] = abilityFormulaName.split('_')
-  return st(type, {
-    val: `$t(char_${charKey}_gen:${skill}.${ability}.params.${hitNumber.replace(/\D/g, '')})`,
-  })
+  const hitIdx = hitNumber.replace(/\D/g, '')
+  return (
+    <FormulaNameSpan
+      charKey={charKey}
+      skill={skill}
+      ability={ability}
+      hitIdx={hitIdx}
+      type={type}
+    />
+  )
+}
+
+/**
+ * Renders a formula name (e.g. "BasicAttackSweepingEdge_0_dmg") using i18n.
+ * Falls back to a clean human-readable name when the locale key is missing.
+ */
+function FormulaNameSpan({
+  charKey,
+  skill,
+  ability,
+  hitIdx,
+  type,
+}: {
+  charKey: CharacterKey
+  skill: SkillKey
+  ability: string
+  hitIdx: string
+  type: string
+}) {
+  const trKey = `${skill}.${ability}.params.${hitIdx}`
+  const ns = `char_${charKey}_gen`
+  if (i18n.exists(`${ns}:${trKey}`)) {
+    return st(type, {
+      val: `$t(${ns}:${trKey})`,
+    })
+  }
+  // Fallback: convert PascalCase ability name to readable words, include hit number
+  const abilityName = ability.replace(/([A-Z])/g, ' $1').trim()
+  const hitNum = Number(hitIdx) + 1 // 0-indexed → 1-indexed for user display
+  const val = hitIdx ? `${abilityName} #${hitNum} ` : `${abilityName} `
+  return st(type, { val })
 }
 
 function createCoreAndAbilitySheet(

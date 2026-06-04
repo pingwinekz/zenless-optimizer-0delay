@@ -362,7 +362,7 @@ export function BuildsSection() {
 
 ### Testing Strategy
 - Test each phase independently
-- Run `yarn run mini-ci` after each phase
+- Run `bun run mini-ci` after each phase
 - Manual testing with real builds
 
 ---
@@ -392,7 +392,7 @@ export function BuildsSection() {
 - [ ] Horizontal layout working on desktop and mobile
 - [ ] All existing ZZZ functionality preserved
 - [ ] New features (weights, combo, analysis) functional
-- [ ] All tests passing (`yarn run mini-ci`)
+- [ ] All tests passing (`bun run mini-ci`)
 - [ ] No performance regressions
 - [ ] Accessibility standards met
 - [ ] Documentation complete

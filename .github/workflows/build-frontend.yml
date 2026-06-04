@@ -27,10 +27,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'yarn'
-      - name: Yarn install
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
         run: |
-          yarn install --immutable --immutable-cache
+          bun install --frozen-lockfile
       - name: Setup .env
         run: |
           printf '%s' "$ZO_ENVFILE" > apps/zzz-frontend/.env.local
@@ -38,7 +38,7 @@ jobs:
           ZO_ENVFILE: ${{ vars.ZO_ENVFILE }}
       - name: Build frontend
         run: |
-          yarn run nx run zzz-frontend:build:production
+          npx nx run zzz-frontend:build:production
       - name: echos
         run: |
           echo zzz-frontend > frontend_name

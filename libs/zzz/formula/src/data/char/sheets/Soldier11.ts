@@ -1,3 +1,4 @@
+import type { NumNode } from '@genshin-optimizer/pando/engine'
 import { cmpGE, prod, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
@@ -40,6 +41,16 @@ const { m2_stacks } = allNumConditionals(
     m2_stacks: 2,
   }
 )
+
+const ability_check = (a: number | NumNode) =>
+  cmpGE(
+    sum(
+      team.common.count.fire,
+      team.common.count.withFaction('NewEriduDefenseForce')
+    ),
+    3,
+    a
+  )
 
 const core_common_dmg_ = ownBuff.combat.common_dmg_.add(
   percent(subscript(char.core, dm.core.common_dmg_))
@@ -196,17 +207,18 @@ const sheet = register(
   registerBuff(
     'ability_fire_dmg_',
     ownBuff.combat.dmg_.fire.add(
-      cmpGE(
-        sum(
-          team.common.count.fire,
-          team.common.count.withFaction('NewEriduDefenseForce')
-        ),
-        3,
+      ability_check(
         sum(
           dm.ability.fire_dmg_,
           isStunned.ifOn(dm.ability.fire_dmg_additional)
         )
       )
+    )
+  ),
+  registerBuff(
+    'ability_crit_dmg_',
+    ownBuff.combat.crit_dmg_.add(
+      ability_check(percent(subscript(char.potential, dm.potential.crit_dmg_)))
     )
   ),
   registerBuff('m2_common_dmg_', m2_common_dmg_, undefined, undefined, false),

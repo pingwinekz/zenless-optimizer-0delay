@@ -17,12 +17,12 @@ Path aliases: `@genshin-optimizer/<scope>/<name>` → `libs/<scope>/<name>/src/i
 
 ## Commands
 
-Package manager: **yarn** (v3.4.1, node-modules linker). Use `yarn`, not `npm`.
+Package manager: **bun**. Use `bun`, not `npm` or `yarn`.
 
 ### Local CI (pre-push verification)
 
 ```
-yarn mini-ci
+bun run mini-ci
 ```
 
 Runs: biome format → typecheck → eslint → test (in that order, all via `nx affected`).
@@ -30,15 +30,15 @@ Runs: biome format → typecheck → eslint → test (in that order, all via `nx
 ### Individual commands
 
 ```bash
-yarn run nx serve zzz-frontend          # Dev server
-yarn run nx build zzz-frontend          # Build frontend
-yarn run nx graph                       # Dependency graph
+bun nx serve zzz-frontend               # Dev server
+bun nx build zzz-frontend               # Build frontend
+bun nx graph                            # Dependency graph
 npx nx run-many --target=typecheck      # Typecheck all
 npx nx run-many --target=eslint:lint --max-warnings=0  # Lint all
 npx nx run-many --target=test           # Test all
 npx nx run-many -t gen-file             # Regenerate generated files
-yarn biome ci                           # Biome format check
-yarn biome format --write               # Auto-format
+bun biome ci                            # Biome format check
+bun biome format --write                # Auto-format
 ```
 
 ### Single package
@@ -52,8 +52,8 @@ npx nx eslint:lint <project-name>
 ### Data submodules
 
 ```bash
-yarn reload-dm   # git submodule update --init
-yarn update-dm   # git submodule update --remote
+bun run reload-dm   # git submodule update --init
+bun run update-dm   # git submodule update --remote
 ```
 
 ## CI Pipeline (`.github/workflows/ci.yml`)
@@ -132,7 +132,7 @@ The following skills are installed and will be loaded on demand:
 
 ## Gotchas
 
-- `gen-file` targets depend on `load-dm` (submodule data). Run `yarn reload-dm` before generating if submodules are empty.
+- `gen-file` targets depend on `load-dm` (submodule data). Run `bun run reload-dm` before generating if submodules are empty.
 - `zzz-frontend` build depends on `common-localization` and `zzz-localization` (implicit deps in `project.json`).
 - The `mini-ci` command uses `nx affected` — it only checks packages changed since master. For full checks, use `nx run-many`.
 - Biome formatting is checked separately from ESLint linting in CI. Both must pass.

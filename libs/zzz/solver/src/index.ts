@@ -3,6 +3,7 @@ import type { Preset } from '@genshin-optimizer/game-opt/engine'
 import type { Candidate, Progress } from '@genshin-optimizer/game-opt/solver'
 
 import {
+  cmpGE,
   constant,
   detach,
   max,
@@ -111,10 +112,12 @@ export function createSolverConfig(
     return undefined
   })
 
-  // Partition sets into non-overlapping (exclusive to one filter) and overlapping (in both)
-  const only2 = setFilter2.filter((q) => !setFilter4.includes(q))
-  const only4 = setFilter4.filter((q) => !setFilter2.includes(q))
-  const both = setFilter2.filter((q) => setFilter4.includes(q))
+  // Whether both filter types are active (user selected both 2p and 4p sets)
+  const bothFiltersActive = !!setFilter2.length && !!setFilter4.length
+  // Union of all sets selected across both filters
+  const allSelectedSets = [...new Set([...setFilter2, ...setFilter4])]
+  // Sets exclusive to the 2p filter (present only in setFilter2, not setFilter4)
+  const exclusive2p = setFilter2.filter((q) => !setFilter4.includes(q))
 
   nodes.push(
     // filter2: if not empty, at least one >= 2
@@ -125,14 +128,25 @@ export function createSolverConfig(
     setFilter4.length
       ? max(...setFilter4.map((q) => read({ q }, 'sum')))
       : constant(Infinity),
-    // Combined overlap constraint: when the same set(s) appear in both filters
-    // AND there are no non-overlapping alternatives in either filter, the
-    // solver must use overlapping sets for BOTH bonuses. Without this constraint,
-    // the solver could satisfy both >=2 and >=4 with just 4 discs of the same
-    // set (e.g. 4 FangedMetal + 2 random). The sum of all overlapping set
-    // counts must be >= 6 to ensure enough distinct discs for both bonuses.
-    !only2.length && !only4.length && both.length
-      ? sum(...both.map((q) => read({ q }, 'sum')))
+    // When both 2p and 4p filters are active, ensure every disc comes from
+    // one of the user's chosen sets. Without this, the solver can satisfy
+    // both >=2 and >=4 using just 4 discs of the 4p set, leaving 2 random
+    // unselected discs that contribute nothing to any bonus.
+    // When only one filter type is active, random filler discs are allowed.
+    bothFiltersActive && allSelectedSets.length
+      ? sum(...allSelectedSets.map((q) => read({ q }, 'sum')))
+      : constant(Infinity),
+    // When both filters are active and there are exclusive 2p sets, prevent
+    // distributions like 5+1 (5 of 4p set + 1 of a 2p set) where neither
+    // fills a meaningful bonus. Either at least one 4p set fills all 6 slots
+    // (all-same-set build), or at least one exclusive 2p set has >= 2 discs.
+    bothFiltersActive && exclusive2p.length
+      ? cmpGE(
+          max(...setFilter4.map((q) => read({ q }, 'sum'))),
+          6,
+          2,
+          max(...exclusive2p.map((q) => read({ q }, 'sum')))
+        )
       : constant(Infinity)
     // other calcs (graph, etc)
   )
@@ -157,7 +171,8 @@ export function createSolverConfig(
       }),
       2, // setFilter2
       4, // setFilter4
-      !only2.length && !only4.length && both.length ? 6 : Infinity, // combined overlap (4 for 4p + 2 for 2p = 6)
+      bothFiltersActive && allSelectedSets.length ? 6 : Infinity, // all selected sets fill 6 slots
+      bothFiltersActive && exclusive2p.length ? 2 : Infinity, // prevent 5+1 splits
     ],
     numWorkers,
     topN: numOfBuilds,

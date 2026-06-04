@@ -23,10 +23,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'yarn'
+
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: bun install --frozen-lockfile
 
       - name: Build frontend
         run: |

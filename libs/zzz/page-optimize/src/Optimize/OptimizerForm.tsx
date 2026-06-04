@@ -1,4 +1,5 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
+import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import type {
   CharacterKey,
   DiscSlotKey,
@@ -7,6 +8,7 @@ import type {
 import type {
   ICachedCharacter,
   ICachedDisc,
+  StatFilters,
   Team,
 } from '@genshin-optimizer/zzz/db'
 import { getTeamFrame0 } from '@genshin-optimizer/zzz/db'
@@ -14,6 +16,8 @@ import {
   OptConfigContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
+import { buffs } from '@genshin-optimizer/zzz/formula'
+import { charSheets } from '@genshin-optimizer/zzz/formula-ui'
 import {
   Button,
   CardSection,
@@ -26,7 +30,9 @@ import {
   Text,
 } from '@mantine/core'
 import { IconBolt, IconSettings, IconTarget } from '@tabler/icons-react'
+import type { MutableRefObject } from 'react'
 import { useCallback, useContext, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { AfterShockToggleButton } from '../AfterShockToggleButton'
 import { AppliedBuffStats } from '../AppliedBuffStats'
 import { CharacterPreviewPanel } from '../CharacterPreviewPanel'
@@ -50,9 +56,6 @@ import {
   TeammateFormRow,
 } from '../layout'
 import { OptimizerMenuIds } from '../layout/optimizerMenuIds'
-import { charSheets } from '@genshin-optimizer/zzz/formula-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { ReactNode } from 'react'
 import { CharacterConditionalsDisplay } from './CharacterConditionalsDisplay'
 import { DiscMainSetFilters } from './DiscMainSetFilters'
 import { MinMaxStatFilters } from './MinMaxStatFilters'
@@ -67,6 +70,7 @@ export function OptimizerForm({
   disabled,
   sortByKey,
   resultLimit,
+  statFiltersRef,
   onCharacterChange,
   onWengineChange,
   onSortByChange,
@@ -79,6 +83,7 @@ export function OptimizerForm({
   disabled?: boolean
   sortByKey?: string
   resultLimit?: number
+  statFiltersRef: MutableRefObject<StatFilters>
   onCharacterChange: (ck: CharacterKey) => void
   onWengineChange: (wengineKey: WengineKey | '') => void
   onSortByChange: (key: string) => void
@@ -167,6 +172,57 @@ export function OptimizerForm({
     return Object.keys(result).length > 0 ? result : undefined
   }, [characterKey])
 
+  // Build conditional → label map from formula-ui sheet.
+  const conditionalLabels = useMemo(() => {
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const result: Record<string, ReactNode> = {}
+    Object.values(sheet).forEach((section) => {
+      section.documents.forEach((doc) => {
+        if (doc.type === 'conditional' && doc.conditional?.label) {
+          const condName = doc.conditional.metadata.name
+          const label = doc.conditional.label
+          if (typeof label === 'function') return
+          result[condName] = label
+        }
+      })
+    })
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [characterKey])
+
+  // Extract passive (always-active) buff fields from 'fields' documents
+  const passiveFields = useMemo(() => {
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const charBuffs = buffs[characterKey] as
+      | Record<string, { team?: boolean }>
+      | undefined
+    if (!charBuffs) return undefined
+    const result: {
+      field: Field
+      /** 0 = always available, 1-6 = requires that mindscape level */
+      mindscape: number
+    }[] = []
+    Object.entries(sheet).forEach(([sectionKey, section]) => {
+      const mindscape = sectionKey.startsWith('m')
+        ? Number(sectionKey.slice(1)) || 0
+        : 0
+      section.documents.forEach((doc) => {
+        if (doc.type === 'fields' && doc.fields?.length) {
+          for (const field of doc.fields) {
+            if ('fieldRef' in field && field.fieldRef?.name) {
+              // Only include fields that match a known buff (excludes skill formula fields)
+              if (charBuffs[field.fieldRef.name]) {
+                result.push({ field, mindscape })
+              }
+            }
+          }
+        }
+      })
+    })
+    return result.length > 0 ? result : undefined
+  }, [characterKey])
+
   return (
     <FilterContainer>
       {/* ── Character options (5-card layout matching fribbels) ── */}
@@ -198,6 +254,8 @@ export function OptimizerForm({
             characterKey={characterKey}
             conditionalFields={conditionalFields}
             conditionalDescriptions={conditionalDescriptions}
+            conditionalLabels={conditionalLabels}
+            passiveFields={passiveFields}
           />
         </FormCard>
 
@@ -241,9 +299,22 @@ export function OptimizerForm({
           <DiscMainSetFilters discsBySlot={discsBySlot} disabled={disabled} />
         </FormCard>
 
-        {/* Stat min/max filters */}
+        {/* Stat min/max filters - INITIAL */}
         <FormCard size="small">
-          <MinMaxStatFilters disabled={disabled} />
+          <MinMaxStatFilters
+            qt="initial"
+            disabled={disabled}
+            statFiltersRef={statFiltersRef}
+          />
+        </FormCard>
+
+        {/* Stat min/max filters - FINAL */}
+        <FormCard size="small">
+          <MinMaxStatFilters
+            qt="final"
+            disabled={disabled}
+            statFiltersRef={statFiltersRef}
+          />
         </FormCard>
       </FormRow>
 

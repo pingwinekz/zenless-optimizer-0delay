@@ -47,6 +47,9 @@ const dm = {
     fire_dmg_: data_gen.abilityParams[1],
     fire_dmg_additional: data_gen.abilityParams[2],
   },
+  potential: {
+    crit_dmg_: data_gen.potentialParams[1],
+  },
   m1: {
     energy_threshold: data_gen.mindscapeParams[0][1],
     energy: data_gen.mindscapeParams[0][2],

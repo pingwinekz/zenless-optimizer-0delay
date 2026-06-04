@@ -20,7 +20,7 @@ import { IconTrash, IconX } from '@tabler/icons-react'
 import { ActionIcon, Box, Button, Grid, Skeleton } from '@mantine/core'
 import { Suspense, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+
 import { CharStatsDisplay } from './CharStatsDisplay'
 
 export function CharacterEditor({
@@ -74,7 +74,7 @@ function CharacterEditorContent({
 
 export function Content({ onClose }: { onClose?: () => void }) {
   const { t } = useTranslation(['page_characters'])
-  const navigate = useNavigate()
+
   const { database } = useDatabaseContext()
   const character = useCharacterContext()!
   const { key: characterKey, equippedDiscs } = character
@@ -82,8 +82,8 @@ export function Content({ onClose }: { onClose?: () => void }) {
     const name = t(`${characterKey}`)
     if (!window.confirm(t('removeCharacter', { value: name }))) return
     database.chars.remove(characterKey)
-    navigate('/characters')
-  }, [database, navigate, characterKey, t])
+    onClose?.()
+  }, [database, characterKey, t, onClose])
   const hasPotential = useMemo(() => {
     return getCharStat(characterKey).potentialParams.length > 0
   }, [characterKey])

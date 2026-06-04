@@ -181,6 +181,8 @@ export function CharacterSelectorDisplay({
           setWengineKey(wKey)
           onHideWengineModal()
         }}
+        wengineTypeFilter={charStat.specialty}
+        characterKey={characterKey}
       />
       <Flex direction="column" gap={defaultGap}>
         {/* Character section — HeaderText + tooltip like fribbels */}

@@ -141,7 +141,7 @@ type CharacterEditForm = {
 - [ ] Cancel discards unsaved changes
 - [ ] Add new character → simple modal (not full editor)
 - [ ] Optimize tab still opens full `CharacterEditor`
-- [ ] `yarn run mini-ci` on affected projects
+- [ ] `bun run mini-ci` on affected projects
 
 ---
 
@@ -168,7 +168,7 @@ Save/Cancel, wire page-characters/index.tsx, remove route-based CharacterEditor 
 Reference HSR: fribbels-hsr-optimizer/src/lib/overlays/modals/CharacterModal.tsx
 Do not change libs/zzz/formula-ui CharacterEditor or page-optimize usage.
 
-Run yarn run mini-ci. Do not commit unless asked.
+Run bun run mini-ci. Do not commit unless asked.
 ```
 
 ---

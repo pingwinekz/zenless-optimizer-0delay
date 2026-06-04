@@ -35,7 +35,8 @@
     "phase": "Phase",
     "cancel": "Cancel",
     "save": "Save",
-    "wengine": "W-Engine"
+    "wengine": "W-Engine",
+    "skillLevels": "Skill Levels"
   },
   "customizationSidebar": {
     "label": "Customization",

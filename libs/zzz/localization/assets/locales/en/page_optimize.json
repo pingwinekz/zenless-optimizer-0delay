@@ -19,6 +19,11 @@
   "worker_one": "{{count}} Worker",
   "worker_other": "{{count}} Workers",
   "removeTeammate": "Remove Teammate",
+  "FormRowLabels": {
+    "Character options": "Character options",
+    "Relic & stat filters": "Disc & stat filters",
+    "Character custom stats simulation": "Character custom stats simulation"
+  },
   "TeammateRow": {
     "Header": "Teammates"
   },

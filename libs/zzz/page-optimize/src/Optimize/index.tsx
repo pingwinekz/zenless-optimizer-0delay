@@ -9,16 +9,17 @@ import type {
   Progress as SolverProgress,
 } from '@genshin-optimizer/game-opt/solver'
 import { Solver, buildCount } from '@genshin-optimizer/game-opt/solver'
-import {
-  type DiscSlotKey,
-  type CharacterKey,
-  type PhaseKey,
-  allDiscSlotKeys,
+import type {
+  DiscSlotKey,
+  CharacterKey,
+  PhaseKey,
 } from '@genshin-optimizer/zzz/consts'
+import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
 import {
   type DiscIds,
   type ICachedDisc,
   type GeneratedBuild,
+  type StatFilters,
   type maxBuildsToShowList,
   getTeamFrame0,
   targetTag,
@@ -138,17 +139,20 @@ export default function Optimize() {
   const mate = team.teammates.find((t) => t.characterKey === characterKey)
   const optConfigId = mate?.optConfigId
 
-  if (!optConfigId) {
-    const newOptConfigId = database.optConfigs.new({
-      wEngineTypes: [getCharStat(characterKey).specialty],
-    })
-    database.teams.setTeammateOptConfigId(
-      characterKey,
-      characterKey,
-      newOptConfigId
-    )
-    return null
-  }
+  useEffect(() => {
+    if (!optConfigId) {
+      const newOptConfigId = database.optConfigs.new({
+        wEngineTypes: [getCharStat(characterKey).specialty],
+      })
+      database.teams.setTeammateOptConfigId(
+        characterKey,
+        characterKey,
+        newOptConfigId
+      )
+    }
+  }, [optConfigId, characterKey, database])
+
+  if (!optConfigId) return null
   return (
     <OptConfigProvider optConfigId={optConfigId}>
       <OptimizeWrapper />
@@ -163,25 +167,41 @@ function OptimizeWrapper() {
   const { key: characterKey } = character
   const team = useTeam(characterKey)!
   const { tag: target } = getTeamFrame0(team)
-  const [numWorkers] = useState(8)
+  const [numWorkers] = useState(() =>
+    Math.min(navigator.hardwareConcurrency || 4, 8)
+  )
   const [progress, setProgress] = useState<SolverProgress | undefined>(
     undefined
   )
   const { optConfig, optConfigId } = useContext(OptConfigContext)
+  const statFiltersRef = useRef<StatFilters>(optConfig.statFilters ?? [])
   const discs = useDataManagerValues(database.discs)
 
-  // Sidebar display state
-  const {
-    setPermutationDetails,
-    setPermutations,
-    setPermutationsSearched,
-    setPermutationsResults,
-    setOptimizationInProgress,
-    setOptimizerStartTime,
-    setOptimizerEndTime,
-    setOptimizerProgress,
-    clearPinnedBuilds,
-  } = useOptimizerDisplayStore()
+  // Sidebar display state — individual subscriptions to stable setter functions
+  // avoids re-rendering on unrelated store changes
+  const setPermutationDetails = useOptimizerDisplayStore(
+    (s) => s.setPermutationDetails
+  )
+  const setPermutations = useOptimizerDisplayStore((s) => s.setPermutations)
+  const setPermutationsSearched = useOptimizerDisplayStore(
+    (s) => s.setPermutationsSearched
+  )
+  const setPermutationsResults = useOptimizerDisplayStore(
+    (s) => s.setPermutationsResults
+  )
+  const setOptimizationInProgress = useOptimizerDisplayStore(
+    (s) => s.setOptimizationInProgress
+  )
+  const setOptimizerStartTime = useOptimizerDisplayStore(
+    (s) => s.setOptimizerStartTime
+  )
+  const setOptimizerEndTime = useOptimizerDisplayStore(
+    (s) => s.setOptimizerEndTime
+  )
+  const setOptimizerProgress = useOptimizerDisplayStore(
+    (s) => s.setOptimizerProgress
+  )
+  const clearPinnedBuilds = useOptimizerDisplayStore((s) => s.clearPinnedBuilds)
 
   // Stat display toggle (combat vs basic stats in grid)
   const [statDisplay, setStatDisplay] = useState<StatDisplay>('combat')
@@ -381,7 +401,7 @@ function OptimizeWrapper() {
       setPermutationsSearched(0)
       setPermutationsResults(0)
 
-      const statFilters = (optConfig.statFilters ?? []).filter(
+      const statFilters = (statFiltersRef.current ?? []).filter(
         (s) => !s.disabled
       )
       const frames = target.rotation
@@ -446,7 +466,7 @@ function OptimizeWrapper() {
     [
       calc,
       target,
-      optConfig.statFilters,
+      statFiltersRef,
       optConfig.setFilter2,
       optConfig.setFilter4,
       optConfig.maxBuildsToShow,
@@ -631,6 +651,7 @@ function OptimizeWrapper() {
             discsBySlot={discsBySlot}
             sortByKey={sortByKey}
             resultLimit={optConfig.maxBuildsToShow}
+            statFiltersRef={statFiltersRef}
             onCharacterChange={onCharacterChange}
             onWengineChange={onWengineChange}
             onSortByChange={setSortByKey}
@@ -700,7 +721,7 @@ function OptimizeWrapper() {
             <Box
               style={{
                 position: 'sticky',
-                top: 253,
+                top: 80,
                 width: 233,
                 alignSelf: 'flex-start',
                 flexShrink: 0,

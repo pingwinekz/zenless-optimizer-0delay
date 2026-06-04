@@ -243,6 +243,60 @@ export function TeammateCard({
     return Object.keys(result).length > 0 ? result : undefined
   }, [characterKey])
 
+  // Build conditional → label map from formula-ui sheet.
+  const conditionalLabels = useMemo(() => {
+    if (!characterKey) return undefined
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const result: Record<string, ReactNode> = {}
+    Object.values(sheet).forEach((section) => {
+      section.documents.forEach((doc) => {
+        if (doc.type === 'conditional' && doc.conditional?.label) {
+          const condName = doc.conditional.metadata.name
+          const label = doc.conditional.label
+          if (typeof label === 'function') return
+          result[condName] = label
+        }
+      })
+    })
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [characterKey])
+
+  // Extract passive (always-active) team-wide buff fields from 'fields' documents
+  const passiveFields = useMemo(() => {
+    if (!characterKey) return undefined
+    const sheet = charSheets[characterKey]
+    if (!sheet) return undefined
+    const charBuffs = buffs[characterKey] as
+      | Record<string, { team?: boolean }>
+      | undefined
+    if (!charBuffs) return undefined
+    const result: {
+      field: Field
+      /** 0 = always available, 1-6 = requires that mindscape level */
+      mindscape: number
+    }[] = []
+    Object.entries(sheet).forEach(([sectionKey, section]) => {
+      const mindscape = sectionKey.startsWith('m')
+        ? Number(sectionKey.slice(1)) || 0
+        : 0
+      section.documents.forEach((doc) => {
+        if (doc.type === 'fields' && doc.fields?.length) {
+          for (const field of doc.fields) {
+            if ('fieldRef' in field && field.fieldRef?.name) {
+              const buffMeta = charBuffs[field.fieldRef.name]
+              // Only include fields that match a known team-wide buff
+              if (buffMeta && buffMeta.team === true) {
+                result.push({ field, mindscape })
+              }
+            }
+          }
+        }
+      })
+    })
+    return result.length > 0 ? result : undefined
+  }, [characterKey])
+
   return (
     <>
       <CharacterSingleSelectionModal
@@ -336,6 +390,8 @@ export function TeammateCard({
                   mindscapeOverride={effectiveMindscape}
                   conditionalFields={conditionalFields}
                   conditionalDescriptions={conditionalDescriptions}
+                  conditionalLabels={conditionalLabels}
+                  passiveFields={passiveFields}
                   showZeroFields={true}
                 />
               </Box>
@@ -394,6 +450,7 @@ export function TeammateCard({
                 show={showWengineModal}
                 onHide={onHideWengineModal}
                 onSelect={(wKey) => setWengineKey(wKey)}
+                characterKey={characterKey}
               />
               <Box
                 style={{

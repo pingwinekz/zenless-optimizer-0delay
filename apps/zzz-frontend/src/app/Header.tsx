@@ -6,7 +6,7 @@ import {
   useOpenClose,
 } from '@genshin-optimizer/common/react-util'
 import { Suspense } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { useTabStore } from './useTabStore'
 
 export const HEADER_HEIGHT = 48
 
@@ -22,6 +22,7 @@ function HeaderContent({ anchor }: { anchor: string }) {
   const { isOpen: isSidebarOpen, toggle: toggleSidebar } = useOpenClose(
     OpenCloseIDs.MENU_SIDEBAR
   )
+  const setActiveTab = useTabStore((s) => s.setActiveTab)
 
   return (
     <Box
@@ -44,11 +45,14 @@ function HeaderContent({ anchor }: { anchor: string }) {
           </ActionIcon>
         </Flex>
         <Flex
-          component={RouterLink as any}
-          {...({ to: '/' } as any)}
+          onClick={() => setActiveTab('home')}
           align="center"
           gap={8}
-          style={{ textDecoration: 'none', color: 'inherit' }}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            cursor: 'pointer',
+          }}
         >
           <Text
             fw={500}

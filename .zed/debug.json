@@ -1,0 +1,86 @@
+[
+  {
+    "adapter": "JavaScript",
+    "label": "Serve ZZZ Frontend (dev)",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "serve", "zzz-frontend"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Debug Chrome - ZZZ Frontend",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:4200/zenless-optimizer-0delay/",
+    "webRoot": "${ZED_WORKTREE_ROOT}",
+    "cwd": "${ZED_WORKTREE_ROOT}",
+    "runtimeExecutable": "/opt/thorium-browser-avx2/thorium-browser",
+    "console": "externalTerminal",
+    "sourceMaps": true,
+    "pauseForSourceMap": true,
+    "sourceMapRenames": true
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Build ZZZ Frontend (production)",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "build", "zzz-frontend"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Test All Packages",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "run-many", "-t", "test"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Test Single Package (prompts in terminal)",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "test", "zzz-stats"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "TypeCheck All Packages",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "run-many", "-t", "typecheck"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Lint All Packages",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["nx", "run-many", "-t", "eslint:lint", "--max-warnings=0"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  },
+  {
+    "adapter": "JavaScript",
+    "label": "Full CI Check (mini-ci)",
+    "type": "node",
+    "request": "launch",
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["run", "mini-ci"],
+    "console": "integratedTerminal",
+    "skipFiles": ["<node_internals>/**"]
+  }
+]

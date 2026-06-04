@@ -118,5 +118,6 @@
       }
     }
   ],
-  "nxCloudAccessToken_disabled": "MTMwNzFkNGItNDI5OC00MTAwLTliMzItMDYzYzhjNzRiMTVifHJlYWQtd3JpdGU="
+  "nxCloudAccessToken_disabled": "MTMwNzFkNGItNDI5OC00MTAwLTliMzItMDYzYzhjNzRiMTVifHJlYWQtd3JpdGU=",
+  "analytics": false
 }

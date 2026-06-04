@@ -1,9 +1,15 @@
-import { wengineAsset } from '@genshin-optimizer/zzz/assets'
+import { commonDefIcon, wengineAsset } from '@genshin-optimizer/zzz/assets'
+import { DropdownButton, ImgIcon } from '@genshin-optimizer/common/ui'
+import { range } from '@genshin-optimizer/common/util'
 import {
   type CharacterKey,
   type PhaseKey,
+  type SkillKey,
   type WengineKey,
   allPhaseKeys,
+  allSkillKeys,
+  coreByLevel,
+  skillByLevel,
 } from '@genshin-optimizer/zzz/consts'
 
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
@@ -19,8 +25,10 @@ import {
   ActionIcon,
   Box,
   Button,
+  Grid,
   Group,
   Image,
+  Menu,
   Modal,
   SegmentedControl,
   Skeleton,
@@ -33,6 +41,14 @@ type CharacterEditForm = {
   mindscape: number
   wengineKey: WengineKey | null
   wenginePhase: PhaseKey
+  level: number
+  basic: number
+  dodge: number
+  assist: number
+  special: number
+  chain: number
+  core: number
+  potential: number
 }
 
 export function CharacterEditModal({
@@ -50,6 +66,14 @@ export function CharacterEditModal({
     mindscape: 0,
     wengineKey: null,
     wenginePhase: 1,
+    level: 1,
+    basic: 1,
+    dodge: 1,
+    assist: 1,
+    special: 1,
+    chain: 1,
+    core: 0,
+    potential: 0,
   })
   const [initialForm, setInitialForm] = useState<CharacterEditForm | null>(null)
 
@@ -64,6 +88,14 @@ export function CharacterEditModal({
       mindscape: char.mindscape,
       wengineKey: char.wengineKey || null,
       wenginePhase: char.wenginePhase as PhaseKey,
+      level: char.level,
+      basic: char.basic,
+      dodge: char.dodge,
+      assist: char.assist,
+      special: char.special,
+      chain: char.chain,
+      core: char.core,
+      potential: char.potential,
     }
     setForm(f)
     setInitialForm(f)
@@ -74,11 +106,22 @@ export function CharacterEditModal({
     return (
       initialForm.mindscape !== form.mindscape ||
       initialForm.wengineKey !== form.wengineKey ||
-      initialForm.wenginePhase !== form.wenginePhase
+      initialForm.wenginePhase !== form.wenginePhase ||
+      initialForm.basic !== form.basic ||
+      initialForm.dodge !== form.dodge ||
+      initialForm.assist !== form.assist ||
+      initialForm.special !== form.special ||
+      initialForm.chain !== form.chain ||
+      initialForm.core !== form.core ||
+      initialForm.potential !== form.potential
     )
   }, [initialForm, form])
 
   const charStat = characterKey ? getCharStat(characterKey) : null
+  const hasPotential = useMemo(
+    () => (charStat?.potentialParams.length ?? 0) > 0,
+    [charStat]
+  )
 
   const onSave = () => {
     if (!characterKey) return
@@ -87,6 +130,13 @@ export function CharacterEditModal({
       mindscape: form.mindscape,
       wengineKey: form.wengineKey ?? '',
       wenginePhase: form.wenginePhase,
+      basic: form.basic,
+      dodge: form.dodge,
+      assist: form.assist,
+      special: form.special,
+      chain: form.chain,
+      core: form.core,
+      potential: form.potential,
     })
 
     useCharacterTabStore.getState().setFocusCharacter(characterKey)
@@ -103,12 +153,13 @@ export function CharacterEditModal({
           setWengineSelectOpen(false)
         }}
         wengineTypeFilter={charStat?.specialty ?? ''}
+        characterKey={characterKey ?? undefined}
         zIndex={210}
       />
       <Modal
         opened={!!characterKey}
         onClose={onClose}
-        size={400}
+        size={500}
         centered
         withCloseButton={false}
         padding="md"
@@ -137,6 +188,52 @@ export function CharacterEditModal({
               fullWidth
               size="xs"
             />
+          </Box>
+
+          {hasPotential && (
+            <>
+              <Text fw={600} mb="xs">
+                {t('potential')}
+              </Text>
+              <Box mb="md">
+                <SegmentedControl
+                  data={[0, 1, 2, 3, 4, 5].map((p) => ({
+                    value: String(p),
+                    label: `P${p}`,
+                  }))}
+                  value={String(form.potential)}
+                  onChange={(v) =>
+                    setForm((f) => ({ ...f, potential: Number(v) }))
+                  }
+                  fullWidth
+                  size="xs"
+                />
+              </Box>
+            </>
+          )}
+          <Text fw={600} mb={4}>
+            {t('editCharacter.skillLevels')}
+          </Text>
+          <Box mb="md">
+            <Grid columns={3}>
+              {allSkillKeys.map((sk) => (
+                <Grid.Col span={1} key={sk}>
+                  <SkillLevelButton
+                    skillKey={sk}
+                    value={form[sk]}
+                    maxLevel={skillByLevel(form.level)}
+                    onChange={(v) => setForm((f) => ({ ...f, [sk]: v }))}
+                  />
+                </Grid.Col>
+              ))}
+              <Grid.Col span={1}>
+                <CoreLevelButton
+                  value={form.core}
+                  maxLevel={coreByLevel(form.level)}
+                  onChange={(v) => setForm((f) => ({ ...f, core: v }))}
+                />
+              </Grid.Col>
+            </Grid>
           </Box>
 
           <Text fw={600} mb="xs">
@@ -221,5 +318,63 @@ export function CharacterEditModal({
         </Suspense>
       </Modal>
     </>
+  )
+}
+
+function SkillLevelButton({
+  skillKey,
+  value,
+  maxLevel,
+  onChange,
+}: {
+  skillKey: SkillKey
+  value: number
+  maxLevel: number
+  onChange: (v: number) => void
+}) {
+  const { t } = useTranslation('page_characters')
+  return (
+    <DropdownButton
+      fullWidth
+      title={t(skillKey, { level: value })}
+      color="primary"
+      leftSection={
+        <ImgIcon src={commonDefIcon(skillKey)} size={1.5} sideMargin />
+      }
+    >
+      {range(1, maxLevel).map((i) => (
+        <Menu.Item key={i} disabled={value === i} onClick={() => onChange(i)}>
+          {t(skillKey, { level: i })}
+        </Menu.Item>
+      ))}
+    </DropdownButton>
+  )
+}
+
+function CoreLevelButton({
+  value,
+  maxLevel,
+  onChange,
+}: {
+  value: number
+  maxLevel: number
+  onChange: (v: number) => void
+}) {
+  const { t } = useTranslation('page_characters')
+  return (
+    <DropdownButton
+      fullWidth
+      title={t('core', { level: value })}
+      color="primary"
+      leftSection={
+        <ImgIcon src={commonDefIcon('core')} size={1.5} sideMargin />
+      }
+    >
+      {range(0, maxLevel).map((i) => (
+        <Menu.Item key={i} disabled={value === i} onClick={() => onChange(i)}>
+          {t('core', { level: i })}
+        </Menu.Item>
+      ))}
+    </DropdownButton>
   )
 }

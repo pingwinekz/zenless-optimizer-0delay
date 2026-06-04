@@ -23,7 +23,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -62,7 +62,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -96,7 +96,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -127,7 +127,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -159,7 +159,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -190,7 +190,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -221,7 +221,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -251,7 +251,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -283,7 +283,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -314,7 +314,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -346,7 +346,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -378,7 +378,7 @@ Requirements:
 - Use existing shared components from libs/common/ where possible
 - Create placeholder components for any missing features with TODO comments
 - Ensure all existing functionality continues to work
-- Run `yarn run mini-ci` after implementation to verify
+- Run `bun run mini-ci` after implementation to verify
 
 Output:
 - New/modified file paths
@@ -398,6 +398,6 @@ Output:
 ## Tips
 
 - Start with Phase 1 and work sequentially
-- Run `yarn run mini-ci` after each phase to verify
+- Run `bun run mini-ci` after each phase to verify
 - If you encounter blockers, document them and move to the next phase
 - You can implement phases in parallel if they don't depend on each other

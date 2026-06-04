@@ -32,7 +32,7 @@ import {
 import { CharCalcProvider } from '@genshin-optimizer/zzz/formula-ui'
 import { CharacterName } from '@genshin-optimizer/zzz/ui'
 import { Box } from '@mantine/core'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CharacterOptDisplay } from './CharacterOptDisplay'
 import { TeamHeaderHeightContext } from './context/TeamHeaderHeightContext'
@@ -43,9 +43,14 @@ export default function PageOptimize() {
   const characterKey = optCharKey ?? allCharacterKeys[0]
   const { t } = useTranslation(['charNames_gen', 'page_character'])
   const character = useCharacter(characterKey)
-  if (characterKey && !character) database.chars.getOrCreate(characterKey)
   const team = useTeam(characterKey)
-  if (characterKey && !team) database.teams.getOrCreate(characterKey)
+
+  // Create character/team if they don't exist yet — in useEffect to avoid
+  // triggering state updates on other components during render
+  useEffect(() => {
+    if (characterKey && !character) database.chars.getOrCreate(characterKey)
+    if (characterKey && !team) database.teams.getOrCreate(characterKey)
+  }, [characterKey, character, team, database])
   useTitle(
     useMemo(() => {
       const charName = characterKey && t(`charNames_gen:${characterKey}`)

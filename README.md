@@ -95,17 +95,17 @@ For a more interactive and detailed view of the project, run `nx graph`.
 
 ## Basic Setup
 
-Install `yarn` ([link](https://yarnpkg.com/getting-started/install)).
+Install `bun` ([link](https://bun.sh)).
 
-Run `yarn` to install dependencies.
+Run `bun install` to install dependencies.
 
 ## Development server
 
-Run `yarn run nx serve {frontend | sr-frontend | zzz-frontend}` for a dev server. Navigate to [http://localhost:4200](http://localhost:4200). The app will automatically reload if you change any of the source files.
+Run `bun nx serve zzz-frontend` for a dev server. Navigate to [http://localhost:4200](http://localhost:4200). The app will automatically reload if you change any of the source files.
 
 ## Understand this workspace
 
-Run `yarn run nx graph` to see a diagram of the dependencies of the projects.
+Run `bun nx graph` to see a diagram of the dependencies of the projects.
 
 ## Acknowledgments
 

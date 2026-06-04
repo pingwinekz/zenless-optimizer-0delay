@@ -10,6 +10,12 @@ const buff = Soldier0Anby.buffs
 const formula = Soldier0Anby.formulas
 
 const sheet = createBaseSheet(key, {
+  potential: [
+    {
+      type: 'fields',
+      fields: [fieldForBuff(buff.ability_aftershock_dmg_)],
+    },
+  ],
   core: [
     {
       type: 'conditional',

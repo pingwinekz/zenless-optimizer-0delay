@@ -37,7 +37,7 @@ export function characterSortConfigs(
       const order = database.displayCharacter.get()?.customSortOrder
       if (!order) return 0
       const idx = order.indexOf(ck as CharacterKey)
-      return idx === -1 ? 9999 : idx
+      return idx === -1 ? -9999 : -idx
     },
     score: (ck) => {
       const char = database.chars.get(ck as CharacterKey)

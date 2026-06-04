@@ -4,7 +4,6 @@ import {
 } from '@genshin-optimizer/common/database-ui'
 
 import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import {
   CharacterMenu,
@@ -56,7 +55,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { FilterBar } from './FilterBar'
 import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
 import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
@@ -72,9 +71,12 @@ const dropAnimationConfig: DropAnimation = {
   }),
 }
 
-export default function PageCharacter() {
+export default function PageCharacter({
+  onNavigateToOptimize,
+}: {
+  onNavigateToOptimize?: (characterKey: CharacterKey) => void
+} = {}) {
   const { database } = useDatabaseContext()
-  const navigate = useNavigate()
   const displayCharacter = useDataEntryBase(database.displayCharacter)
   const focusCharacter = useCharacterTabStore((s) => s.focusCharacter)
   const setFocusCharacter = useCharacterTabStore((s) => s.setFocusCharacter)
@@ -210,10 +212,14 @@ export default function PageCharacter() {
       const reordered = [...currentOrder]
       const [moved] = reordered.splice(oldIndex, 1)
       reordered.splice(newIndex, 0, moved)
-      database.displayCharacter.set({
-        sortType: 'custom',
-        customSortOrder: reordered,
-      })
+      // Defer to let @dnd-kit clean up its internal drag state (transforms, sortable
+      // overlays) before the database trigger re-renders SortableContext with new items.
+      setTimeout(() => {
+        database.displayCharacter.set({
+          sortType: 'custom',
+          customSortOrder: reordered,
+        })
+      }, 0)
     },
     [charKeys, displayCharacter.customSortOrder, database.displayCharacter]
   )
@@ -270,7 +276,6 @@ export default function PageCharacter() {
             editCharacter(ck)
             setnewCharacter(false)
           }}
-          newFirst={true}
         />
       </Suspense>
 
@@ -299,8 +304,7 @@ export default function PageCharacter() {
             }}
             onOptimize={() => {
               if (focusCharacter) {
-                database.dbMeta.set({ optCharKey: focusCharacter })
-                navigate(`/optimize?character=${focusCharacter}`)
+                onNavigateToOptimize?.(focusCharacter)
               }
             }}
           />
@@ -350,8 +354,7 @@ export default function PageCharacter() {
                       }}
                       onDoubleClick={() => {
                         setFocusCharacter(charKey)
-                        database.dbMeta.set({ optCharKey: charKey })
-                        navigate(`/optimize?character=${charKey}`)
+                        onNavigateToOptimize?.(charKey)
                       }}
                       onEdit={(ck) => editCharacter(ck)}
                       onDelete={(ck) => deleteCharacter(ck)}

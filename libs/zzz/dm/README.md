@@ -4,7 +4,7 @@ This library was generated with [Nx](https://nx.dev).
 
 ## Update Datamine
 
-To update the datamine to a new commit, run `yarn run update-dm`. This will update both the Genshin and Star Rail datamines.
+To update the datamine to a new commit, run `bun run update-dm`. This will update both the Genshin and Star Rail datamines.
 
 ## Getting data from Hakush.in
 

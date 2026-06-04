@@ -1,28 +1,28 @@
-import type { TriggerString } from "@genshin-optimizer/common/database";
-import { deepClone, objKeyMap } from "@genshin-optimizer/common/util";
-import type { CharacterKey, DiscSlotKey } from "@genshin-optimizer/zzz/consts";
-import { allDiscSlotKeys } from "@genshin-optimizer/zzz/consts";
-import type { ICharacter } from "@genshin-optimizer/zzz/zood";
-import { parseCharacter } from "@genshin-optimizer/zzz/zood";
-import type { ICachedCharacter } from "../../Interfaces";
-import { DataManager } from "../DataManager";
-import type { ZzzDatabase } from "../Database";
+import type { TriggerString } from '@genshin-optimizer/common/database'
+import { deepClone, objKeyMap } from '@genshin-optimizer/common/util'
+import type { CharacterKey, DiscSlotKey } from '@genshin-optimizer/zzz/consts'
+import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
+import type { ICharacter } from '@genshin-optimizer/zzz/zood'
+import { parseCharacter } from '@genshin-optimizer/zzz/zood'
+import type { ICachedCharacter } from '../../Interfaces'
+import { DataManager } from '../DataManager'
+import type { ZzzDatabase } from '../Database'
 
 export class CharacterDataManager extends DataManager<
   CharacterKey,
-  "characters",
+  'characters',
   ICachedCharacter,
   ICharacter
 > {
   constructor(database: ZzzDatabase) {
-    super(database, "characters");
+    super(database, 'characters')
   }
   override validate(obj: unknown) {
-    return parseCharacter(obj);
+    return parseCharacter(obj)
   }
 
   override toCache(storageObj: ICharacter, id: CharacterKey): ICachedCharacter {
-    const oldChar = this.get(id);
+    const oldChar = this.get(id)
     return {
       equippedDiscs: oldChar
         ? oldChar.equippedDiscs
@@ -30,26 +30,26 @@ export class CharacterDataManager extends DataManager<
             allDiscSlotKeys,
             (sk) =>
               Object.values(this.database.discs?.data ?? {}).find(
-                (a) => a?.location === id && a.slotKey === sk,
-              )?.id ?? "",
+                (a) => a?.location === id && a.slotKey === sk
+              )?.id ?? ''
           ),
       ...storageObj,
-    };
+    }
   }
   // These overrides allow CharacterKey to be used as id.
   // This assumes we only support one copy of a character in a DB.
   override toStorageKey(key: string): string {
-    return `${this.goKeySingle}_${key}`;
+    return `${this.goKeySingle}_${key}`
   }
   override toCacheKey(key: string): CharacterKey {
-    return key.split(`${this.goKeySingle}_`)[1] as CharacterKey;
+    return key.split(`${this.goKeySingle}_`)[1] as CharacterKey
   }
 
   getOrCreate(key: CharacterKey): ICachedCharacter {
     if (!this.keys.includes(key)) {
-      this.set(key, initialCharacterData(key));
+      this.set(key, initialCharacterData(key))
     }
-    return this.get(key) as ICachedCharacter;
+    return this.get(key) as ICachedCharacter
   }
 
   // hasDup(char: ICharacter, isSro: boolean) {
@@ -110,18 +110,18 @@ export class CharacterDataManager extends DataManager<
   //   }
   // }
   triggerCharacter(key: CharacterKey, reason: TriggerString) {
-    this.trigger(key, reason, this.get(key));
+    this.trigger(key, reason, this.get(key))
   }
 
   override remove(key: CharacterKey): ICachedCharacter | undefined {
-    const char = this.get(key);
-    if (!char) return undefined;
+    const char = this.get(key)
+    if (!char) return undefined
     for (const discKey of Object.values(char.equippedDiscs)) {
-      const disc = this.database.discs.get(discKey);
+      const disc = this.database.discs.get(discKey)
       if (discKey && disc && disc.location === key)
-        this.database.discs.setCached(discKey, { ...disc, location: "" });
+        this.database.discs.setCached(discKey, { ...disc, location: '' })
     }
-    return super.remove(key);
+    return super.remove(key)
   }
 
   /**
@@ -130,11 +130,11 @@ export class CharacterDataManager extends DataManager<
    * This function should be use internally for database to maintain cache on ICachedCharacter.
    */
   setEquippedDisc(key: CharacterKey, slotKey: DiscSlotKey, discId: string) {
-    const char = super.get(key);
-    if (!char) return;
-    const equippedDiscs = deepClone(char.equippedDiscs);
-    equippedDiscs[slotKey] = discId;
-    super.setCached(key, { ...char, equippedDiscs });
+    const char = super.get(key)
+    if (!char) return
+    const equippedDiscs = deepClone(char.equippedDiscs)
+    equippedDiscs[slotKey] = discId
+    super.setCached(key, { ...char, equippedDiscs })
   }
 }
 
@@ -151,8 +151,8 @@ export function initialCharacterData(key: CharacterKey): ICachedCharacter {
     chain: 11,
     special: 11,
     assist: 11,
-    wengineKey: "",
+    wengineKey: '',
     wenginePhase: 1,
-    equippedDiscs: objKeyMap(allDiscSlotKeys, () => ""),
-  };
+    equippedDiscs: objKeyMap(allDiscSlotKeys, () => ''),
+  }
 }

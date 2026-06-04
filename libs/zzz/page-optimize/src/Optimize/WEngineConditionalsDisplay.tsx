@@ -17,11 +17,13 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import { wengineUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import { memo, useContext, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HeaderText } from '../layout'
 
@@ -42,7 +44,9 @@ function ConditionalText({
   return <div style={{ whiteSpace: 'pre-line', ...style }}>{children}</div>
 }
 
-function condLabel(key: string): string {
+function condLabel(key: string, ns: string): string {
+  const translated = i18n.t(key, { ns })
+  if (typeof translated === 'string' && translated !== key) return translated
   return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
@@ -106,19 +110,16 @@ export function WEngineConditionalsDisplay({
     const passiveTeamFields: Field[] = []
     sheet.documents.forEach((doc) => {
       // Process 'conditional' documents (interactive conditionals)
-      if (
-        doc.type === 'conditional' &&
-        doc.conditional?.fields &&
-        doc.conditional.fields.length > 0
-      ) {
+      if (doc.type === 'conditional' && doc.conditional) {
         const condName = doc.conditional.metadata.name
         const fields = doc.conditional.fields
+        const fieldsArr = fields ?? []
         if (teammateKey) {
           // Collect only fields that match entries in the buff metadata
           // (or have an explicit team flag). Fields that don't match any
           // buff entry (e.g., Duration formulas) can't be used to determine
           // team status.
-          const matchingBuffFields = fields.filter((f: Field) => {
+          const matchingBuffFields = fieldsArr.filter((f: Field) => {
             if ('team' in f) return true
             if (wengineBuffs && 'fieldRef' in f && f.fieldRef?.name)
               return !!wengineBuffs[f.fieldRef.name]
@@ -136,7 +137,7 @@ export function WEngineConditionalsDisplay({
           if (!hasTeamBuff) return
           // Include team-wide buff fields and informational fields
           // (fields that don't match any entry in the buff metadata).
-          const teamFields = fields.filter(
+          const teamFields = fieldsArr.filter(
             (f: Field) =>
               // If no buff metadata, include everything
               !wengineBuffs ||
@@ -158,7 +159,7 @@ export function WEngineConditionalsDisplay({
         } else {
           // Main character view: include all fields
           if (!result[condName]) result[condName] = []
-          result[condName].push(...fields)
+          result[condName].push(...fieldsArr)
         }
       }
       // Process 'fields' documents (passive buffs like squadDmg_)
@@ -206,6 +207,23 @@ export function WEngineConditionalsDisplay({
     return Object.keys(result).length > 0 ? result : undefined
   }, [wengineKey, teammateKey])
 
+  // Extract localized labels from wengine UI sheet
+  const weCondLabels = useMemo(() => {
+    if (!wengineKey) return undefined
+    const sheet = wengineUiSheets[wengineKey]
+    if (!sheet) return undefined
+    const result: Record<string, ReactNode> = {}
+    sheet.documents.forEach((doc) => {
+      if (doc.type === 'conditional' && doc.conditional?.label) {
+        const condName = doc.conditional.metadata.name
+        const label = doc.conditional.label
+        if (typeof label === 'function') return
+        result[condName] = label
+      }
+    })
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [wengineKey])
+
   // Tag context for rendering passive team-wide buff fields
   const outerTag = useContext(TagContext)
   const tagForPassiveFields = useMemo(
@@ -232,12 +250,19 @@ export function WEngineConditionalsDisplay({
     ? (Object.entries(wengineConditionals) as [string, IConditionalData][])
     : []
 
-  // If there are no conditionals AND no passive team fields, render nothing
+  // If there are no conditionals AND no passive team fields, show placeholder
   if (
     condEntries.length === 0 &&
     (!passiveTeamFields || passiveTeamFields.length === 0)
   )
-    return null
+    return (
+      <Flex direction="column" gap={5}>
+        <HeaderText>{t(wengineKey)} Conditionals</HeaderText>
+        <Text size="sm" c="dimmed">
+          No conditionals for this W-Engine.
+        </Text>
+      </Flex>
+    )
 
   return (
     <Flex direction="column" gap={5}>
@@ -291,6 +316,7 @@ export function WEngineConditionalsDisplay({
             mainCharKey={mainChar.key}
             src={src}
             fields={weConditionalFields?.[condName]}
+            label={weCondLabels?.[condName]}
           />
         ))}
     </Flex>
@@ -306,6 +332,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   mainCharKey,
   src,
   fields,
+  label: labelProp,
 }: {
   wengineKey: WengineKey
   condName: string
@@ -315,6 +342,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   mainCharKey: CharacterKey
   src: CharacterKey
   fields?: Field[]
+  label?: ReactNode
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(() => ({ ...outerTag, src }), [outerTag, src])
@@ -335,7 +363,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
     )
   }
 
-  const label = condLabel(condName)
+  const label = labelProp ?? condLabel(condName, `wengine_${wengineKey}`)
 
   const rowContent = (
     <>
@@ -476,7 +504,7 @@ const NumConditionalRow = memo(function NumConditionalRow({
   step,
   onChange,
 }: {
-  label: string
+  label: ReactNode
   value: number
   min: number
   max: number

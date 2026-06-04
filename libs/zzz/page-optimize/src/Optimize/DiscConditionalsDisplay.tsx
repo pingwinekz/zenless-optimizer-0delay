@@ -20,11 +20,13 @@ import {
 import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
 
 import { ImgIcon } from '@genshin-optimizer/common/ui'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import { memo, useContext, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { HeaderText } from '../layout'
 
 const inputWidth = 61
@@ -44,7 +46,9 @@ function ConditionalText({
   return <div style={{ whiteSpace: 'pre-line', ...style }}>{children}</div>
 }
 
-function condLabel(key: string): string {
+function condLabel(key: string, ns: string): string {
+  const translated = i18n.t(key, { ns })
+  if (typeof translated === 'string' && translated !== key) return translated
   return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
@@ -225,6 +229,27 @@ function DiscSetSection({
     return Object.keys(result).length > 0 ? result : undefined
   }, [setKey, count, teammateKey, teamKey])
 
+  // Extract localized labels from disc UI sheet
+  const discCondLabels = useMemo(() => {
+    const sheet = discUiSheets[setKey]
+    if (!sheet) return undefined
+    const result: Record<string, ReactNode> = {}
+    const blocksToScan: Array<'2' | '4'> = count === 4 ? ['2', '4'] : ['2']
+    for (const blockKey of blocksToScan) {
+      const block = sheet[blockKey]
+      if (!block) continue
+      for (const doc of block.documents) {
+        if (doc.type === 'conditional' && doc.conditional?.label) {
+          const condName = doc.conditional.metadata.name
+          const label = doc.conditional.label
+          if (typeof label === 'function') continue
+          result[condName] = label
+        }
+      }
+    }
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [setKey, count])
+
   return (
     <Flex direction="column" gap={2}>
       <Flex align="center" gap={4} mb={2}>
@@ -250,6 +275,7 @@ function DiscSetSection({
             database={database}
             teammateKey={teammateKey}
             fields={discConditionalFields?.[condName]}
+            label={discCondLabels?.[condName]}
           />
         ))}
     </Flex>
@@ -265,6 +291,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
   database,
   teammateKey,
   fields,
+  label: labelProp,
 }: {
   setKey: DiscSetKey
   condName: string
@@ -274,6 +301,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
   database: ReturnType<typeof useDatabaseContext>['database']
   teammateKey: CharacterKey
   fields?: Field[]
+  label?: ReactNode
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(
@@ -284,7 +312,11 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
     (c) => c.sheet === setKey && c.condKey === condName
   )
   const defaultVal =
-    condData.type === 'bool' ? 1 : condData.type === 'num' ? (condData.max ?? 10) : 0
+    condData.type === 'bool'
+      ? 1
+      : condData.type === 'num'
+        ? (condData.max ?? 10)
+        : 0
   const currentValue = currentCond?.condValue ?? defaultVal
 
   const setValue = (condValue: number) => {
@@ -299,7 +331,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
     )
   }
 
-  const label = condLabel(condName)
+  const label = labelProp ?? condLabel(condName, `disc_${setKey}`)
 
   const rowContent = (
     <>
@@ -449,7 +481,7 @@ const NumConditionalRow = memo(function NumConditionalRow({
   step,
   onChange,
 }: {
-  label: string
+  label: ReactNode
   value: number
   min: number
   max: number

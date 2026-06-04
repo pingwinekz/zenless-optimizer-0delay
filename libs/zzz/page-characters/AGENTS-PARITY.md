@@ -271,7 +271,7 @@ Checklist comparing HSR Characters tab features against ZZZ implementation after
 2. **One source of truth for dimensions** — `constantsUi.ts` only.
 3. **CSS modules** for list/preview complexity (match HSR `*.module.css` where inline styles are brittle).
 4. **ZZZ data only** — no HSR assets, conditionals, or sim APIs without a ZZZ equivalent.
-5. **Phased PRs** — `yarn run mini-ci` must pass after each phase.
+5. **Phased PRs** — `bun run mini-ci` must pass after each phase.
 
 ---
 
@@ -431,7 +431,7 @@ Checklist comparing HSR Characters tab features against ZZZ implementation after
 
 ## Phase 8 — QA
 
-- [ ] `yarn run mini-ci`
+- [ ] `bun run mini-ci`
 - [ ] 1920×1080: list 300px, preview 1100×880, page ~1593px
 - [ ] Default / Compact density
 - [ ] DnD custom sort persists
@@ -472,7 +472,7 @@ Implement ONE phase only (I will specify which). Reference:
 Target: libs/zzz/page-characters + libs/zzz/ui/src/Character.
 Map HSR → ZZZ (wengine/disc/mindscape). Do not rewrite existing 1593/300/1100×880 shell.
 
-After the phase: yarn run mini-ci. Do not commit unless asked.
+After the phase: bun run mini-ci. Do not commit unless asked.
 ```
 
 **Example:** `Implement Phase 2 only per AGENTS-PARITY.md.`

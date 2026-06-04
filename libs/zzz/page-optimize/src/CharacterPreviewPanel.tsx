@@ -62,6 +62,8 @@ export function CharacterPreviewPanel({
         show={showWengineModal}
         onHide={onHideWengineModal}
         onSelect={(wKey) => setWengineKey(wKey)}
+        wengineTypeFilter={charStat.specialty}
+        characterKey={characterKey}
       />
 
       {/* Character art card — clicking opens character select modal */}

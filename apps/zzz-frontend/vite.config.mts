@@ -84,6 +84,26 @@ export default defineConfig(() => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react/')
+          )
+            return 'react-vendor'
+          if (id.includes('node_modules/@mantine/')) return 'mantine'
+          if (id.includes('node_modules/ag-grid')) return 'ag-grid'
+          if (id.includes('node_modules/@tabler/icons-react'))
+            return 'tabler-icons'
+          if (
+            id.includes('node_modules/i18next') ||
+            id.includes('node_modules/react-i18next')
+          )
+            return 'i18n'
+        },
+      },
+    },
   },
 
   test: {

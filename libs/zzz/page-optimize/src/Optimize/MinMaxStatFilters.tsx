@@ -4,6 +4,7 @@ import {
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
 import { Flex } from '@mantine/core'
+import type { MutableRefObject } from 'react'
 import { useCallback, useContext } from 'react'
 import { FilterRow, FormStatTextStyled, HeaderText } from '../layout'
 
@@ -37,91 +38,67 @@ const statLabels: Partial<Record<StatFilterStatKey, string>> = {
 
 export function MinMaxStatFilters({
   disabled = false,
+  qt = 'final',
+  statFiltersRef,
 }: {
   disabled?: boolean
+  qt?: 'initial' | 'combat' | 'final'
+  statFiltersRef: MutableRefObject<StatFilters>
 }) {
   const {
     optConfigId,
-    optConfig: { statFilters },
+    optConfig: { statFilters = [] },
   } = useContext(OptConfigContext)
 
   const { database } = useDatabaseContext()
 
-  const setStatFilters = useCallback(
-    (statFilters: StatFilters) =>
-      database.optConfigs.set(optConfigId, { statFilters }),
-    [database, optConfigId]
+  const save = useCallback(
+    (updated: StatFilters) => {
+      database.optConfigs.set(optConfigId, { statFilters: updated })
+      statFiltersRef.current = updated
+    },
+    [database, optConfigId, statFiltersRef]
   )
 
-  const updateFilter = useCallback(
-    (index: number, field: 'value' | 'isMax', value: number | boolean) => {
+  const headerLabel =
+    qt === 'initial' ? 'INITIAL' : qt === 'combat' ? 'COMBAT' : 'FINAL'
+
+  const mutate = useCallback(
+    (statKey: StatFilterStatKey, val: number | undefined, isMax: boolean) => {
       const updated = structuredClone(statFilters)
-      if (index >= 0 && index < updated.length) {
-        if (field === 'value') {
-          updated[index].value = value as number
+      if (val === undefined) {
+        save(updated.filter((f) => !(f.tag.q === statKey && f.tag.qt === qt)))
+      } else {
+        const idx = updated.findIndex(
+          (f) => f.tag.q === statKey && f.tag.qt === qt && f.isMax === isMax
+        )
+        if (idx >= 0) {
+          updated[idx].value = val
         } else {
-          updated[index].isMax = value as boolean
+          updated.push({
+            tag: { q: statKey, qt },
+            value: val,
+            isMax,
+            disabled: false,
+          })
         }
-        setStatFilters(updated)
+        save(updated)
       }
     },
-    [statFilters, setStatFilters]
-  )
-
-  const addFilter = useCallback(
-    (q: StatFilterStatKey) => {
-      const updated = structuredClone(statFilters)
-      const existing = updated.findIndex((f) => f.tag.q === q && !f.isMax)
-      if (existing === -1) {
-        updated.push({
-          tag: { q, qt: 'final' },
-          value: 0,
-          isMax: false,
-          disabled: false,
-        })
-      }
-      setStatFilters(updated)
-    },
-    [statFilters, setStatFilters]
-  )
-
-  const addMaxFilter = useCallback(
-    (q: StatFilterStatKey) => {
-      const updated = structuredClone(statFilters)
-      const existing = updated.findIndex((f) => f.tag.q === q && f.isMax)
-      if (existing === -1) {
-        updated.push({
-          tag: { q, qt: 'final' },
-          value: 0,
-          isMax: true,
-          disabled: false,
-        })
-      }
-      setStatFilters(updated)
-    },
-    [statFilters, setStatFilters]
-  )
-
-  const clearFilter = useCallback(
-    (q: StatFilterStatKey) => {
-      const updated = structuredClone(statFilters)
-      const filtered = updated.filter((f) => !(f.tag.q === q))
-      setStatFilters(filtered)
-    },
-    [statFilters, setStatFilters]
+    [qt, statFilters, save]
   )
 
   return (
     <Flex direction="column" gap={5}>
-      <HeaderText>Stat min / max filters</HeaderText>
+      <HeaderText>Stat min / max filters - {headerLabel}</HeaderText>
 
       <Flex direction="column" gap={7}>
         {statFilterStatKeys.map((statKey) => {
           const minFilter = statFilters.find(
-            (f) => f.tag.q === statKey && !f.isMax
+            (f) => f.tag.q === statKey && f.tag.qt === qt && !f.isMax
           )
           const maxFilter = statFilters.find(
-            (f) => f.tag.q === statKey && f.isMax
+            (f) => f.tag.q === statKey && f.tag.qt === qt && f.isMax
           )
           return (
             <FilterRow
@@ -131,28 +108,8 @@ export function MinMaxStatFilters({
               }
               min={minFilter?.value}
               max={maxFilter?.value}
-              setMin={(val) => {
-                if (val === undefined) {
-                  clearFilter(statKey)
-                } else {
-                  if (!minFilter) addFilter(statKey)
-                  const idx = statFilters.findIndex(
-                    (f) => f.tag.q === statKey && !f.isMax
-                  )
-                  if (idx >= 0) updateFilter(idx, 'value', val)
-                }
-              }}
-              setMax={(val) => {
-                if (val === undefined) {
-                  clearFilter(statKey)
-                } else {
-                  if (!maxFilter) addMaxFilter(statKey)
-                  const idx = statFilters.findIndex(
-                    (f) => f.tag.q === statKey && f.isMax
-                  )
-                  if (idx >= 0) updateFilter(idx, 'value', val)
-                }
-              }}
+              setMin={(val) => mutate(statKey, val, false)}
+              setMax={(val) => mutate(statKey, val, true)}
               disabled={disabled}
             />
           )

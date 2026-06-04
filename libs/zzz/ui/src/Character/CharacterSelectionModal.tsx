@@ -1,64 +1,35 @@
 import { useDataEntryBase } from '@genshin-optimizer/common/database-ui'
-import {
-  CardThemed,
-  ImgIcon,
-  ModalWrapper,
-  SortByButton,
-  SqBadge,
-} from '@genshin-optimizer/common/ui'
-import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
+import { ImgIcon, ModalWrapper } from '@genshin-optimizer/common/ui'
+import { filterFunction } from '@genshin-optimizer/common/util'
 import {
   characterAsset,
-  factionDefIcon,
-  rarityDefIcon,
   specialityDefIcon,
 } from '@genshin-optimizer/zzz/assets'
-import type {
-  AttributeKey,
-  CharacterKey,
-  CharacterRarityKey,
-  SpecialityKey,
-} from '@genshin-optimizer/zzz/consts'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
   allAttributeKeys,
   allCharacterKeys,
-  allCharacterRarityKeys,
   allSpecialityKeys,
-  milestoneMaxLevel,
 } from '@genshin-optimizer/zzz/consts'
-import { useCharacter, useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
-import {
-  Box,
-  CloseButton,
-  Divider,
-  Skeleton,
-  Text,
-  TextInput,
-} from '@mantine/core'
-import type { ChangeEvent } from 'react'
-import React, { Suspense, useDeferredValue, useMemo, useState } from 'react'
+import { Box, CloseButton, Flex, Text, TextInput } from '@mantine/core'
+import type { CSSProperties, ChangeEvent } from 'react'
+import { Suspense, useDeferredValue, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SegmentedFilterRow } from '../toggles'
-import {
-  type CharacterSortKey,
-  characterFilterConfigs,
-  characterSortConfigs,
-  characterSortMap,
-} from './CharacterSort'
+import { characterFilterConfigs } from './CharacterSort'
 
 export function CharacterSingleSelectionModal({
   show,
   onHide,
   onSelect,
-  newFirst = false,
   showNone = false,
 }: {
   show: boolean
   onHide: () => void
   onSelect: (cKey: CharacterKey | null) => void
-  newFirst?: boolean
   showNone?: boolean
 }) {
   const { database } = useDatabaseContext()
@@ -67,152 +38,20 @@ export function CharacterSingleSelectionModal({
   const deferredSearchTerm = useDeferredValue(searchTerm)
   const deferredState = useDeferredValue(displayCharacter)
   const characterKeyList = useMemo(() => {
-    const { attribute, specialtyType, rarity, sortType, ascending } =
-      deferredState
-    const sortByKeys = [
-      ...(newFirst ? ['new'] : []),
-      ...(characterSortMap[sortType] ?? []),
-    ] as CharacterSortKey[]
-    const filteredKeys = allCharacterKeys
-      .filter(
-        filterFunction(
-          { attribute, specialtyType, rarity, name: deferredSearchTerm },
-          characterFilterConfigs(database)
-        )
+    const { attribute, specialtyType, rarity } = deferredState
+    const filteredKeys = allCharacterKeys.filter(
+      filterFunction(
+        { attribute, specialtyType, rarity, name: deferredSearchTerm },
+        characterFilterConfigs(database)
       )
-      .sort(
-        sortFunction(sortByKeys, ascending, characterSortConfigs(database), [
-          'new',
-        ])
-      )
+    )
     return filteredKeys
-  }, [deferredState, newFirst, deferredSearchTerm, database])
+  }, [deferredState, deferredSearchTerm, database])
 
   const onClose = () => {
     setSearchTerm('')
     onHide()
   }
-
-  const filterSearchSortProps = {
-    searchTerm: searchTerm,
-    onChangeSpecialtyFilter: (specialtyType: SpecialityKey[]) => {
-      database.displayCharacter.set({ specialtyType })
-    },
-    onChangeAttributeFilter: (attribute: AttributeKey[]) => {
-      database.displayCharacter.set({ attribute })
-    },
-    onChangeRarityFilter: (rarity: CharacterRarityKey[]) => {
-      database.displayCharacter.set({ rarity })
-    },
-    onChangeSearch: (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setSearchTerm(e.target.value)
-    },
-    onChangeSort: (sortType: CharacterSortKey) => {
-      if (sortType !== 'new') database.displayCharacter.set({ sortType })
-    },
-    onChangeAsc: (ascending: boolean) => {
-      database.displayCharacter.set({ ascending })
-    },
-  }
-
-  return (
-    <CharacterSelectionModalBase
-      show={show}
-      charactersToShow={characterKeyList}
-      filterSearchSortProps={filterSearchSortProps}
-      onClose={onClose}
-    >
-      <Box style={{ flex: 1, overflow: 'auto' }}>
-        <Suspense fallback={<Skeleton width="100%" height={1000} />}>
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-              gap: '4px',
-            }}
-          >
-            {showNone && (
-              <Box>
-                <CharacterCard
-                  characterKey={undefined}
-                  onClick={() => {
-                    onHide()
-                    onSelect(null)
-                  }}
-                />
-              </Box>
-            )}
-            {characterKeyList.map((characterKey) => (
-              <Box key={characterKey}>
-                <CharacterCard
-                  characterKey={characterKey}
-                  onClick={() => {
-                    onHide()
-                    onSelect(characterKey)
-                  }}
-                />
-              </Box>
-            ))}
-          </Box>
-        </Suspense>
-      </Box>
-    </CharacterSelectionModalBase>
-  )
-}
-
-function CharacterCard({
-  characterKey,
-  onClick,
-}: { characterKey: CharacterKey | undefined; onClick: () => void }) {
-  return (
-    <CardThemed
-      bgt="light"
-      style={{
-        position: 'relative',
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '16px 16px 16px 16px',
-        border: '3px solid var(--layer-2)',
-      }}
-    >
-      <SelectionCard characterKey={characterKey} onClick={onClick} />
-    </CardThemed>
-  )
-}
-
-type FilterSearchSortProps = {
-  searchTerm: string
-  onChangeSpecialtyFilter: (weaps: SpecialityKey[]) => void
-  onChangeAttributeFilter: (elements: AttributeKey[]) => void
-  onChangeRarityFilter: (rarity: CharacterRarityKey[]) => void
-  onChangeSearch: (e: ChangeEvent<HTMLTextAreaElement>) => void
-  onChangeSort: (sortType: CharacterSortKey) => void
-  onChangeAsc: (asc: boolean) => void
-}
-
-type CharacterSelectionModalBaseProps = {
-  show: boolean
-  charactersToShow: CharacterKey[]
-  filterSearchSortProps: FilterSearchSortProps
-  onClose: () => void
-  children: React.ReactNode
-}
-const sortKeys = Object.keys(characterSortMap)
-
-function CharacterSelectionModalBase({
-  show,
-  charactersToShow: _charactersToShow,
-  filterSearchSortProps,
-  onClose,
-  children,
-}: CharacterSelectionModalBaseProps) {
-  const { t } = useTranslation('page_characters')
-  const { database } = useDatabaseContext()
-  const displayCharacter = useDataEntryBase(database.displayCharacter)
-
-  const { specialtyType, attribute, rarity, sortType, ascending } =
-    displayCharacter
 
   return (
     <ModalWrapper
@@ -221,114 +60,119 @@ function CharacterSelectionModalBase({
       size="75%"
       containerProps={{
         style: {
-          height: '100vh',
+          height: '80%',
+          maxWidth: 1450,
+          minHeight: 'min(910px, 90dvh)',
         },
       }}
     >
-      <CardThemed
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-        }}
-      >
-        <Box
-          style={{
-            display: 'flex',
-            gap: 8,
-            padding: '16px',
-            alignItems: 'center',
-          }}
-        >
-          <TextInput
-            styles={{
-              input: {
-                height: 40,
-                lineHeight: '40px',
-                fontSize: 14,
-                borderRadius: 4,
-              },
-            }}
-            w={200}
-            placeholder={t('searchPlaceholder')}
-            value={filterSearchSortProps.searchTerm}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              filterSearchSortProps.onChangeSearch(e as any)
-            }
-            rightSection={
-              filterSearchSortProps.searchTerm ? (
-                <CloseButton
-                  size="sm"
-                  onClick={() =>
-                    filterSearchSortProps.onChangeSearch({
-                      target: { value: '' },
-                    } as any)
-                  }
-                />
-              ) : undefined
-            }
-            rightSectionPointerEvents="all"
-          />
-          <Box style={{ flex: 1 }}>
-            <SegmentedFilterRow
-              tags={allSpecialityKeys.map((sk) => ({
-                key: sk,
-                display: <ImgIcon src={specialityDefIcon(sk)} size={1.5} />,
-              }))}
-              currentFilter={specialtyType}
-              setCurrentFilters={(specialtyType) =>
-                database.displayCharacter.set({ specialtyType })
+      <Flex direction="column" style={{ height: '100%', overflow: 'hidden' }}>
+        {/* ─── Filter bar ─── */}
+        <Box p="md" pb={0}>
+          <Flex gap="sm" wrap="wrap" align="center">
+            {/* Search */}
+            <TextInput
+              styles={{
+                input: {
+                  height: 40,
+                  lineHeight: '40px',
+                  fontSize: 14,
+                  borderRadius: 4,
+                },
+              }}
+              w={200}
+              placeholder="Search character name"
+              value={searchTerm}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value.toLowerCase())
               }
-            />
-          </Box>
-          <Box style={{ width: 421 }}>
-            <SegmentedFilterRow
-              tags={allAttributeKeys.map((atr) => ({
-                key: atr,
-                display: (
-                  <ElementIcon
-                    ele={atr}
-                    iconProps={{ style: { fontSize: '1.3rem' } }}
-                  />
-                ),
-              }))}
-              currentFilter={attribute}
-              setCurrentFilters={(attribute) =>
-                database.displayCharacter.set({ attribute })
+              rightSection={
+                searchTerm ? (
+                  <CloseButton size="sm" onClick={() => setSearchTerm('')} />
+                ) : undefined
               }
+              rightSectionPointerEvents="all"
             />
-          </Box>
-          <Box style={{ minWidth: 120 }}>
-            <SegmentedFilterRow
-              tags={allCharacterRarityKeys.map((rk) => ({
-                key: rk,
-                display: <ImgIcon src={rarityDefIcon(rk)} size={1.2} />,
-              }))}
-              currentFilter={rarity}
-              setCurrentFilters={(rarity) =>
-                database.displayCharacter.set({ rarity })
-              }
-            />
-          </Box>
-          <SortByButton
-            sortKeys={sortKeys}
-            value={sortType}
-            onChange={(sortType) =>
-              filterSearchSortProps.onChangeSort(sortType)
-            }
-            ascending={ascending}
-            onChangeAsc={(ascending) =>
-              filterSearchSortProps.onChangeAsc(ascending)
-            }
-          />
+
+            {/* Element filters */}
+            <Box style={{ flex: '1 1 0', minWidth: 280 }}>
+              <SegmentedFilterRow
+                tags={allAttributeKeys.map((atr) => ({
+                  key: atr,
+                  display: (
+                    <ElementIcon
+                      ele={atr}
+                      iconProps={{ style: { fontSize: '1.3rem' } }}
+                    />
+                  ),
+                  flexBasis: `${100 / allAttributeKeys.length}%`,
+                }))}
+                currentFilter={deferredState.attribute}
+                setCurrentFilters={(attribute) =>
+                  database.displayCharacter.set({ attribute })
+                }
+              />
+            </Box>
+
+            {/* Specialty/Class filters */}
+            <Box style={{ flex: '1 1 0', minWidth: 240 }}>
+              <SegmentedFilterRow
+                tags={allSpecialityKeys.map((sk) => ({
+                  key: sk,
+                  display: <ImgIcon src={specialityDefIcon(sk)} size={1.5} />,
+                  flexBasis: `${100 / allSpecialityKeys.length}%`,
+                }))}
+                currentFilter={deferredState.specialtyType}
+                setCurrentFilters={(specialtyType) =>
+                  database.displayCharacter.set({ specialtyType })
+                }
+              />
+            </Box>
+          </Flex>
         </Box>
-        <Divider />
-        {children}
-      </CardThemed>
+
+        {/* ─── Character card grid ─── */}
+        <Box style={{ flex: 1, overflow: 'auto', padding: '12px 16px 24px' }}>
+          <Suspense fallback={null}>
+            <Box
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+              }}
+            >
+              {showNone && (
+                <SelectionCard
+                  characterKey={undefined}
+                  onClick={() => {
+                    onHide()
+                    onSelect(null)
+                  }}
+                />
+              )}
+              {characterKeyList.map((characterKey) => (
+                <SelectionCard
+                  key={characterKey}
+                  characterKey={characterKey}
+                  onClick={() => {
+                    onHide()
+                    onSelect(characterKey)
+                  }}
+                />
+              ))}
+            </Box>
+          </Suspense>
+        </Box>
+      </Flex>
     </ModalWrapper>
   )
 }
 
+/**
+ * Character selection card with rarity accent and transparent PNG silhouette.
+ * Renders the character's 'select' asset with object-fit: contain so the
+ * natural silhouette shape shows through against the dark gradient background.
+ */
 function SelectionCard({
   characterKey,
   onClick,
@@ -337,159 +181,163 @@ function SelectionCard({
   onClick: () => void
 }) {
   const { t } = useTranslation(['page_characters', 'charNames_gen'])
-  const character = useCharacter(characterKey)
-  const { rarity, attribute, faction, specialty } = characterKey
-    ? getCharStat(characterKey)
-    : {}
-  const { level = 1, promotion = 0, mindscape = 0 } = character ?? {}
+  const stat = characterKey ? getCharStat(characterKey) : undefined
+  const rarity = stat?.rarity ?? 'A'
+  const isS = rarity === 'S'
+
+  const rarityColor = isS ? '#f0b232' : '#c26cff'
+  const rarityGlow = isS ? 'rgba(240,178,50,0.35)' : 'rgba(194,108,255,0.3)'
+  const rarityBg = isS
+    ? 'linear-gradient(160deg, rgba(240,178,50,0.12) 0%, rgba(240,178,50,0.04) 100%)'
+    : 'linear-gradient(160deg, rgba(194,108,255,0.10) 0%, rgba(194,108,255,0.03) 100%)'
+
+  const cardWidth = 130
+  const cardHeight = Math.round(cardWidth * 1.15)
+  const skewPct = 28 // percent offset for parallelogram lean
+  const hOverlap = Math.round((cardWidth * skewPct) / 100)
+
+  const baseStyle: CSSProperties = {
+    cursor: 'pointer',
+    position: 'relative',
+    width: cardWidth,
+    flexShrink: 0,
+    marginRight: characterKey ? -hOverlap : 0,
+    transition: 'transform 0.2s cubic-bezier(.4,0,.2,1), filter 0.2s ease',
+    zIndex: 1,
+  }
+
+  const outerRef = useRef<HTMLDivElement>(null)
+
+  if (!characterKey || !stat) {
+    return (
+      <Box style={baseStyle} onClick={onClick}>
+        <Box
+          style={{
+            width: cardWidth,
+            aspectRatio: '1 / 1.15',
+            borderRadius: 12,
+            border: '2px dashed rgba(255,255,255,0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255,255,255,0.03)',
+          }}
+        >
+          <Text size="xl" c="dimmed">
+            —
+          </Text>
+        </Box>
+      </Box>
+    )
+  }
 
   return (
-    <Box onClick={onClick} style={{ cursor: 'pointer' }}>
+    <Box ref={outerRef} style={baseStyle}>
+      {/* Rarity glow backdrop — sits naturally outside clip-path */}
+      <Box
+        style={{
+          position: 'absolute',
+          inset: -4,
+          borderRadius: 16,
+          background: rarityBg,
+          filter: 'blur(8px)',
+          opacity: 0.8,
+          pointerEvents: 'none',
+          transition: 'opacity 0.2s ease',
+        }}
+      />
+
+      {/* Card frame — clip-path creates the parallelogram lean.
+          Event handlers live here so the hit-area matches the visual shape. */}
       <Box
         style={{
           position: 'relative',
-          width: '100%',
-          height: '120px',
-          display: 'flex',
-          paddingLeft: '3px',
-          gap: '0.125rem',
-          alignItems: 'center',
+          width: cardWidth,
+          height: cardHeight,
+          overflow: 'hidden',
+          background: `linear-gradient(180deg, ${isS ? 'rgba(240,178,50,0.08)' : 'rgba(194,108,255,0.06)'} 0%, rgba(12,12,16,0.6) 50%, rgba(8,8,12,0.95) 100%)`,
+          border: `1.5px solid ${isS ? 'rgba(240,178,50,0.4)' : 'rgba(194,108,255,0.35)'}`,
+          boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)',
+          clipPath: `polygon(0% 0%, ${100 - skewPct}% 0%, 100% 100%, ${skewPct}% 100%)`,
+          cursor: 'pointer',
+        }}
+        onClick={onClick}
+        onMouseEnter={() => {
+          const el = outerRef.current
+          if (!el) return
+          el.style.transform = 'translateY(-6px) scale(1.05)'
+          el.style.zIndex = '10'
+          el.style.filter = `drop-shadow(0 8px 24px ${rarityGlow})`
+        }}
+        onMouseLeave={() => {
+          const el = outerRef.current
+          if (!el) return
+          el.style.transform = ''
+          el.style.zIndex = ''
+          el.style.filter = ''
         }}
       >
+        {/* Character portrait — transparent PNG, natural silhouette */}
+        <Box
+          component="img"
+          src={characterAsset(characterKey, 'select')}
+          alt=""
+          loading="lazy"
+          draggable={false}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            objectPosition: '50% 15%',
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Top rarity accent line */}
         <Box
           style={{
             position: 'absolute',
-            left: 0,
             top: 0,
-            width: '100%',
-            height: '100%',
-            opacity: 0.7,
-            background: attribute
-              ? `var(--mantine-color-${attribute}-filled)`
-              : 'var(--layer-2)',
+            left: '15%',
+            right: '15%',
+            height: 2,
+            background: `linear-gradient(90deg, transparent, ${rarityColor}, transparent)`,
+            borderRadius: 1,
           }}
         />
+
+        {/* Name plate at bottom — left padding offsets the parallelogram skew
+            so text sits within the visible area at the bottom of the clip. */}
         <Box
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            zIndex: 1,
-            flexShrink: 1,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background:
+              'linear-gradient(transparent 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.92) 100%)',
+            padding: `24px 8px 7px ${skewPct}%`,
           }}
         >
-          {characterKey ? (
-            <Box
-              component="img"
-              style={{ height: '120px', display: 'block' }}
-              src={characterAsset(characterKey, 'select')}
-            />
-          ) : (
-            <Box
-              style={{
-                fontSize: '100px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100px',
-                height: '120px',
-              }}
-            >
-              <Text style={{ fontSize: '100px', lineHeight: 1 }}>—</Text>
-            </Box>
-          )}
-        </Box>
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            zIndex: 1,
-            justifyContent: 'space-evenly',
-            background: 'var(--layer-2)',
-            padding: '4px 12px',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          {characterKey ? (
-            <>
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.125rem',
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    fontStyle: 'italic',
-                  }}
-                >
-                  {t(`charNames_gen:${characterKey}`)}
-                </Text>
-              </Box>
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.125rem',
-                }}
-              >
-                <ImgIcon
-                  size={2}
-                  src={factionDefIcon(faction ?? 'BelebogHeavyIndustries')}
-                />
-                <ElementIcon
-                  ele={attribute ?? 'physical'}
-                  iconProps={{ style: { fontSize: '1.5em' } }}
-                />
-                <ImgIcon
-                  size={1.5}
-                  src={specialityDefIcon(specialty ?? 'anomaly')}
-                />
-              </Box>
-
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                }}
-              >
-                <ImgIcon size={1.5} src={rarityDefIcon(rarity ?? 'A')} />
-                {!!character && (
-                  <Box
-                    style={{
-                      textShadow: '0 0 5px gray',
-                      display: 'flex',
-                      gap: '0.25rem',
-                    }}
-                  >
-                    <Box>
-                      <Text component="span" style={{ whiteSpace: 'nowrap' }}>
-                        {t('charLevel', { level: level })}
-                      </Text>
-                      <Text component="span" c="dimmed">
-                        /{milestoneMaxLevel[promotion]}
-                      </Text>
-                    </Box>
-                    <Text component="span">M{mindscape}</Text>
-                  </Box>
-                )}
-
-                {!character && (
-                  <Text component="span">
-                    <SqBadge color={'electric'}>
-                      {t('characterEditor.new')}
-                    </SqBadge>
-                  </Text>
-                )}
-              </Box>
-            </>
-          ) : (
-            <Text>{t('characterEditor.none')}</Text>
-          )}
+          <Text
+            size="xs"
+            fw={600}
+            ta="center"
+            style={{
+              color: '#fff',
+              lineHeight: 1.2,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+            }}
+          >
+            {t(`charNames_gen:${characterKey}`)}
+          </Text>
         </Box>
       </Box>
     </Box>
