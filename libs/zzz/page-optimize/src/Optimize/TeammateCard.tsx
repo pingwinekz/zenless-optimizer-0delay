@@ -1,5 +1,6 @@
-import { ImgIcon } from '@genshin-optimizer/common/ui'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
+import { ImgIcon } from '@genshin-optimizer/common/ui'
+import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import {
   characterAsset,
   discDefIcon,
@@ -17,9 +18,11 @@ import {
   useCharacter,
   useCharacterContext,
   useDatabaseContext,
-  useDiscs,
   useDiscSets,
+  useDiscs,
 } from '@genshin-optimizer/zzz/db-ui'
+import { buffs } from '@genshin-optimizer/zzz/formula'
+import { charSheets, discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import {
   CharacterName,
   CharacterSingleSelectionModal,
@@ -40,15 +43,12 @@ import {
 } from '@mantine/core'
 import { IconRefresh } from '@tabler/icons-react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import type { ReactNode } from 'react'
 import { CharacterBuildSelector } from './CharacterBuildSelector'
 import { CharacterConditionalsDisplay } from './CharacterConditionalsDisplay'
 import { DiscConditionalsDisplay } from './DiscConditionalsDisplay'
-import { WEngineConditionalsDisplay } from './WEngineConditionalsDisplay'
-import { charSheets, discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
-import { buffs } from '@genshin-optimizer/zzz/formula'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { ReactNode } from 'react'
 import classes from './TeammateCard.module.css'
+import { WEngineConditionalsDisplay } from './WEngineConditionalsDisplay'
 
 const MINDSCAPE_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
   value: String(i),

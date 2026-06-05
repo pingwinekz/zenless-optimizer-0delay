@@ -1,7 +1,7 @@
 import {
-  createTheme,
   type CSSVariablesResolver,
   type MantineThemeOverride,
+  createTheme,
 } from '@mantine/core'
 import chroma from 'chroma-js'
 import {

@@ -1,21 +1,21 @@
-import { memo, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Box, Group, SegmentedControl, Text } from '@mantine/core'
-import { getUnitStr } from '@genshin-optimizer/common/util'
 import { BootstrapTooltip } from '@genshin-optimizer/common/ui'
-import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import { CharIconCircle, CharacterName } from '@genshin-optimizer/zzz/ui'
+import { getUnitStr } from '@genshin-optimizer/common/util'
 import { allCharacterKeys } from '@genshin-optimizer/zzz/consts'
 import type { DiscSubStatKey } from '@genshin-optimizer/zzz/consts'
 import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import { CharIconCircle, CharacterName } from '@genshin-optimizer/zzz/ui'
+import type { IDisc } from '@genshin-optimizer/zzz/zood'
+import { Box, Group, SegmentedControl, Text } from '@mantine/core'
+import { memo, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { computeCurrentScore } from '../scoring/currentScore'
+import { computeMaxPotential } from '../scoring/potentialScore'
+import { formatScorePct } from '../scoring/scoreFormatting'
 import {
   getMergedEffectiveStats,
   getMergedSubstatWeights,
 } from '../scoring/statWeightUtils'
-import type { IDisc } from '@genshin-optimizer/zzz/zood'
-import { computeCurrentScore } from '../scoring/currentScore'
-import { computeMaxPotential } from '../scoring/potentialScore'
-import { formatScorePct } from '../scoring/scoreFormatting'
 
 type Mode = 'buckets' | 'top10'
 

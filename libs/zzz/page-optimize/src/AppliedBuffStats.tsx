@@ -5,16 +5,15 @@ import {
   NumberInputLazy,
 } from '@genshin-optimizer/common/ui'
 import { isIn } from '@genshin-optimizer/common/util'
-import { allAttributeKeys, type StatKey } from '@genshin-optimizer/zzz/consts'
-import type { Attribute, Tag } from '@genshin-optimizer/zzz/formula'
+import { type StatKey, allAttributeKeys } from '@genshin-optimizer/zzz/consts'
 import {
   type BonusStatKey,
   type BonusStatTag,
   type EnemyStatKey,
   type EnemyStatsTag,
   type TeamBonusStat,
-  bonusStatDmgTypeIncStats,
   bonusStatDamageTypes,
+  bonusStatDmgTypeIncStats,
   bonusStatKeys,
   bonusStatQtKeys,
   enemyStatKeys,
@@ -27,9 +26,9 @@ import {
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
+import type { Attribute, Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay, qtMap } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName, StatDisplay } from '@genshin-optimizer/zzz/ui'
-import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
 import {
   ActionIcon,
   CardSection,
@@ -38,6 +37,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
 import { useCallback } from 'react'
 import { AfterShockToggleButton } from './AfterShockToggleButton'
 import { DmgTypeDropdown } from './DmgTypeDropdown'

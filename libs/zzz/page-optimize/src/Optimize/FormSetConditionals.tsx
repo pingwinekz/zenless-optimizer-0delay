@@ -1,14 +1,14 @@
-import { allDiscSetKeys, discSetNames } from '@genshin-optimizer/zzz/consts'
-import { discDefIcon } from '@genshin-optimizer/zzz/assets'
+import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
 import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
+import { discDefIcon } from '@genshin-optimizer/zzz/assets'
+import { allDiscSetKeys, discSetNames } from '@genshin-optimizer/zzz/consts'
 import {
   useCharacterContext,
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
-import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
+import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
 import {
   Box,
   Divider,

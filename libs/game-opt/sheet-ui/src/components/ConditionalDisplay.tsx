@@ -12,8 +12,8 @@ import type {
   INumConditionalData,
 } from '@genshin-optimizer/game-opt/engine'
 import { CalcContext, TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import { IconArrowRight, IconCheck, IconSquare } from '@tabler/icons-react'
 import { Button, Divider, Group, Menu, Slider, Stack } from '@mantine/core'
+import { IconArrowRight, IconCheck, IconSquare } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import {

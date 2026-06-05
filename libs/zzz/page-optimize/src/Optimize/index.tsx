@@ -1,8 +1,8 @@
 import {
-  useDataManagerValues,
   useDataManagerBase,
+  useDataManagerValues,
 } from '@genshin-optimizer/common/database-ui'
-import { DeferCreateProvider, DeferCreate } from '@genshin-optimizer/common/ui'
+import { DeferCreate, DeferCreateProvider } from '@genshin-optimizer/common/ui'
 import { objKeyMap } from '@genshin-optimizer/common/util'
 import type {
   BuildResult,
@@ -10,24 +10,20 @@ import type {
 } from '@genshin-optimizer/game-opt/solver'
 import { Solver, buildCount } from '@genshin-optimizer/game-opt/solver'
 import type {
-  DiscSlotKey,
   CharacterKey,
+  DiscSlotKey,
   PhaseKey,
 } from '@genshin-optimizer/zzz/consts'
 import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
 import {
   type DiscIds,
-  type ICachedDisc,
   type GeneratedBuild,
+  type ICachedDisc,
   type StatFilters,
-  type maxBuildsToShowList,
   getTeamFrame0,
+  type maxBuildsToShowList,
   targetTag,
 } from '@genshin-optimizer/zzz/db'
-import {
-  hasHigherPriority,
-  getCharacterEffectiveStats,
-} from '@genshin-optimizer/zzz/util'
 import {
   OptConfigContext,
   OptConfigProvider,
@@ -37,14 +33,18 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { useZzzCalcContext } from '@genshin-optimizer/zzz/formula-ui'
+import { ShowcaseDiscCard } from '@genshin-optimizer/zzz/page-characters'
 import { createSolverConfig } from '@genshin-optimizer/zzz/solver'
 import { getCharStat, getWengineStat } from '@genshin-optimizer/zzz/stats'
 import {
   DiscEditorModal,
   useDiscEditorModalStore,
 } from '@genshin-optimizer/zzz/ui'
-import { ShowcaseDiscCard } from '@genshin-optimizer/zzz/page-characters'
-import { Box, Flex, Stack, Text, Loader } from '@mantine/core'
+import {
+  getCharacterEffectiveStats,
+  hasHigherPriority,
+} from '@genshin-optimizer/zzz/util'
+import { Box, Flex, Loader, Stack, Text } from '@mantine/core'
 import type { MouseEvent } from 'react'
 import {
   useCallback,
@@ -55,21 +55,21 @@ import {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BuildsSection } from '../BuildManagement'
 import {
-  PermutationsSection,
   OptimizerControlsSection,
-  ResultsSection,
+  PermutationsSection,
   PinnedBuildsSection,
+  ResultsSection,
 } from '../Sidebar'
 import type { StatDisplay } from '../Sidebar'
-import { BuildsSection } from '../BuildManagement'
-import { useOptimizerDisplayStore } from '../stores/useOptimizerDisplayStore'
-import { useResponsive } from '../hooks'
-import { ResponsiveBottomBar } from '../layout'
-import { OptimizerForm } from './OptimizerForm'
-import { OptimizerGrid } from './OptimizerGrid'
 import { batchComputeBuildStats } from '../Util/buildStatsUtils'
 import type { EnrichedBuild } from '../Util/buildStatsUtils'
+import { useResponsive } from '../hooks'
+import { ResponsiveBottomBar } from '../layout'
+import { useOptimizerDisplayStore } from '../stores/useOptimizerDisplayStore'
+import { OptimizerForm } from './OptimizerForm'
+import { OptimizerGrid } from './OptimizerGrid'
 
 /**
  * Renders the 6 showcase-style disc cards in a single horizontal row

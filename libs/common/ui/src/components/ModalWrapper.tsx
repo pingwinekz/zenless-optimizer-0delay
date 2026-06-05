@@ -1,4 +1,4 @@
-import { Modal, Box } from '@mantine/core'
+import { Box, Modal } from '@mantine/core'
 import type { ModalProps } from '@mantine/core'
 
 type ModalWrapperProps = ModalProps & {

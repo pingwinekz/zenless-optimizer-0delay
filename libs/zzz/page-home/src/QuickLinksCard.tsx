@@ -1,7 +1,7 @@
 import { DiscordIcon } from '@genshin-optimizer/common/svgicons'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import { IconGitFork, IconLink } from '@tabler/icons-react'
 import { Button, CardSection, Group, Stack, Title } from '@mantine/core'
+import { IconGitFork, IconLink } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 
 const links = [

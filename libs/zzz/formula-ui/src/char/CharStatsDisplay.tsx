@@ -1,5 +1,4 @@
 import { shouldShowDevComponents } from '@genshin-optimizer/common/util'
-import { Box } from '@mantine/core'
 import type { Read } from '@genshin-optimizer/game-opt/engine'
 import { DebugReadContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
@@ -15,6 +14,7 @@ import {
   getHighlightRGBA,
   isHighlight,
 } from '@genshin-optimizer/zzz/ui'
+import { Box } from '@mantine/core'
 import { useContext, useMemo } from 'react'
 import { useZzzCalcContext } from '../hooks'
 import { tagToTagField } from '../util'

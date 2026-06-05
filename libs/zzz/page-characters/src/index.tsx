@@ -3,22 +3,6 @@ import {
   useDataManagerKeys,
 } from '@genshin-optimizer/common/database-ui'
 
-import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
-import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import {
-  CharacterMenu,
-  CharacterRow,
-  CharacterSingleSelectionModal,
-  DragOverlayRow,
-  StatHighlightContext,
-  characterFilterConfigs,
-  characterSortConfigs,
-  characterSortMap,
-  precomputedCssVars,
-  useCharacterTabStore,
-} from '@genshin-optimizer/zzz/ui'
-import { CharacterEditModal } from './CharacterEditModal'
-import { CharacterPreview } from './CharacterPreview'
 import {
   DndContext,
   type DragEndEvent,
@@ -42,6 +26,21 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { filterFunction, sortFunction } from '@genshin-optimizer/common/util'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import {
+  CharacterMenu,
+  CharacterRow,
+  CharacterSingleSelectionModal,
+  DragOverlayRow,
+  StatHighlightContext,
+  characterFilterConfigs,
+  characterSortConfigs,
+  characterSortMap,
+  precomputedCssVars,
+  useCharacterTabStore,
+} from '@genshin-optimizer/zzz/ui'
 import { Box, Flex, SegmentedControl } from '@mantine/core'
 import { useMergedRef } from '@mantine/hooks'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
@@ -55,7 +54,8 @@ import {
   useRef,
   useState,
 } from 'react'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { CharacterEditModal } from './CharacterEditModal'
+import { CharacterPreview } from './CharacterPreview'
 import { FilterBar } from './FilterBar'
 import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
 import { DEFAULT_CONFIG } from './color/colorPipelineConfig'

@@ -1,5 +1,6 @@
 import { ModalWrapper } from '@genshin-optimizer/common/ui'
 import { toggleInArr } from '@genshin-optimizer/common/util'
+import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import {
   allDiscSetKeys,
   disc2pEffect,
@@ -12,7 +13,6 @@ import {
   OptConfigContext,
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
-import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import {
   Badge,
   Box,

@@ -16,8 +16,8 @@ import {
   PotentialSelect,
   SkillDropdown,
 } from '@genshin-optimizer/zzz/ui'
-import { IconTrash, IconX } from '@tabler/icons-react'
 import { ActionIcon, Box, Button, Grid, Skeleton } from '@mantine/core'
+import { IconTrash, IconX } from '@tabler/icons-react'
 import { Suspense, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

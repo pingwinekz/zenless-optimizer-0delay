@@ -1,4 +1,3 @@
-import { Box, CloseButton, Flex, TextInput } from '@mantine/core'
 import { ImgIcon } from '@genshin-optimizer/common/ui'
 import { rarityDefIcon, specialityDefIcon } from '@genshin-optimizer/zzz/assets'
 import type {
@@ -13,6 +12,7 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
 import { SegmentedFilterRow } from '@genshin-optimizer/zzz/ui'
+import { Box, CloseButton, Flex, TextInput } from '@mantine/core'
 import type { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 

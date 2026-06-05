@@ -1,6 +1,5 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import { IconUsers } from '@tabler/icons-react'
 import {
   Anchor,
   Box,
@@ -10,6 +9,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
+import { IconUsers } from '@tabler/icons-react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import failchon from './teamIcons/failchon.png'

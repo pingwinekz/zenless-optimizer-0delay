@@ -8,7 +8,6 @@ import {
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
 import { WengineRarityToggle, WengineToggle } from '@genshin-optimizer/zzz/ui'
-import { IconRecycle } from '@tabler/icons-react'
 import {
   Box,
   Button,
@@ -17,6 +16,7 @@ import {
   SimpleGrid,
   Text,
 } from '@mantine/core'
+import { IconRecycle } from '@tabler/icons-react'
 import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 

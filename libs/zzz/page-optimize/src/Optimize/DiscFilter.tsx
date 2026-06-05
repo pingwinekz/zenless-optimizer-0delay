@@ -16,7 +16,6 @@ import {
   useDatabaseContext,
 } from '@genshin-optimizer/zzz/db-ui'
 import { StatDisplay } from '@genshin-optimizer/zzz/ui'
-import { IconX } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -28,6 +27,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconX } from '@tabler/icons-react'
 import { Suspense, useCallback, useContext } from 'react'
 import { DiscLevelFilter } from './DiscLevelFilter'
 import { DiscSetFilter } from './DiscSetFilter'

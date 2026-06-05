@@ -1,3 +1,4 @@
+import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 /**
  * Vanilla JS cell renderers for AG Grid in the Optimizer grid.
  *
@@ -5,7 +6,6 @@
  * to avoid React mount/unmount overhead during grid scroll virtualization.
  */
 import type { ICellRendererComp, ICellRendererParams } from 'ag-grid-community'
-import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 
 // ── Disc Set Image Cache ──
 // Pre-warm disc set images from the assets module

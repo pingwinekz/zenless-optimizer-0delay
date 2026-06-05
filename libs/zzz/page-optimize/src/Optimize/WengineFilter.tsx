@@ -21,7 +21,6 @@ import {
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
 import { WengineToggle } from '@genshin-optimizer/zzz/ui'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import { IconCheckbox, IconSquare, IconX } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -34,6 +33,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconCheckbox, IconSquare, IconX } from '@tabler/icons-react'
 import { Suspense, useContext, useMemo } from 'react'
 import { WengineLevelFilter } from './WengineLevelFilter'
 export function WengineFilter({

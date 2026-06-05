@@ -1,5 +1,5 @@
-import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
 import { Button, Flex, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconDownload, IconUpload } from '@tabler/icons-react'

@@ -12,8 +12,8 @@ import {
 } from '@genshin-optimizer/game-opt/formula-ui'
 import type { CalcResult } from '@genshin-optimizer/pando/engine'
 import { read } from '@genshin-optimizer/pando/engine'
-import { IconHelp } from '@tabler/icons-react'
 import { ActionIcon, Box, Divider, Stack, Text } from '@mantine/core'
+import { IconHelp } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
 import React, { useCallback, useContext, useMemo } from 'react'
 import {

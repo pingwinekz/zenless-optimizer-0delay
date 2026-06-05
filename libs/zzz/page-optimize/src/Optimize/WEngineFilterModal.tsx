@@ -6,6 +6,7 @@ import {
   allSpecialityKeys,
   allWengineKeys,
 } from '@genshin-optimizer/zzz/consts'
+import { wengineMaxLevel } from '@genshin-optimizer/zzz/consts'
 import type { TeamConditional } from '@genshin-optimizer/zzz/db'
 import {
   OptConfigContext,
@@ -20,7 +21,6 @@ import {
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
 import { WengineLevelSlider, WengineToggle } from '@genshin-optimizer/zzz/ui'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import { wengineMaxLevel } from '@genshin-optimizer/zzz/consts'
 import {
   ActionIcon,
   Box,

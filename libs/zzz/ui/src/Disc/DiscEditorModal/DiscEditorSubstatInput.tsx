@@ -11,8 +11,8 @@ import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
 import { Group, Menu, SegmentedControl, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import { StatDisplay } from '../../Character'
-import type { SubstatUpgradeValues } from './discEditorModalTypes'
 import modalClasses from './DiscEditorModal.module.css'
+import type { SubstatUpgradeValues } from './discEditorModalTypes'
 
 export function DiscEditorSubstatInput({
   index,

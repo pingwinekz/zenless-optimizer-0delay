@@ -1,3 +1,4 @@
+import { characterAsset, discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type {
   CharacterKey,
   DiscMainStatKey,
@@ -10,19 +11,18 @@ import {
   getDiscSubStatBaseVal,
   statKeyTextMap,
 } from '@genshin-optimizer/zzz/consts'
-import { characterAsset, discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { ICachedDisc } from '@genshin-optimizer/zzz/db'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
 import { calculateDiscScore, gradeColor } from '@genshin-optimizer/zzz/util'
 import { Box, Flex, Text } from '@mantine/core'
 import { useMemo } from 'react'
-import { defaultGap, discCardH, discCardW, parentW } from '../constantsUi'
 import {
   ShadowRings,
   showcaseShadow,
   showcaseShadowInsetAddition,
   showcaseTransition,
 } from '../CharacterPreviewComponents'
+import { defaultGap, discCardH, discCardW, parentW } from '../constantsUi'
 
 const LEFT_SLOTS: DiscSlotKey[] = ['1', '2', '3']
 const RIGHT_SLOTS: DiscSlotKey[] = ['6', '5', '4']

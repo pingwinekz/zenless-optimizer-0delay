@@ -5,7 +5,6 @@ import {
 } from '@genshin-optimizer/common/ui'
 import { prettify } from '@genshin-optimizer/common/util'
 import type { Read } from '@genshin-optimizer/game-opt/engine'
-import { IconChevronDown, IconX } from '@tabler/icons-react'
 import {
   Accordion,
   ActionIcon,
@@ -14,6 +13,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
+import { IconChevronDown, IconX } from '@tabler/icons-react'
 import { useContext } from 'react'
 import { CalcContext, DebugReadContext, TagContext } from './context'
 

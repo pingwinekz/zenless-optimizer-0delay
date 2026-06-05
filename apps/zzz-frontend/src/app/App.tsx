@@ -1,8 +1,8 @@
 import { ScrollTop } from '@genshin-optimizer/common/ui'
 import { isDev } from '@genshin-optimizer/common/util'
-import { Box, Flex, MantineProvider } from '@mantine/core'
 import { setDebugMode } from '@genshin-optimizer/pando/engine'
 import { DatabaseProvider } from '@genshin-optimizer/zzz/db-ui'
+import { Box, Flex, MantineProvider } from '@mantine/core'
 import '@genshin-optimizer/zzz/i18n' // import to load translations
 import PageCharacters from '@genshin-optimizer/zzz/page-characters'
 import PageDiscs from '@genshin-optimizer/zzz/page-discs'
@@ -16,19 +16,19 @@ import {
   useThemeStore,
 } from '@genshin-optimizer/zzz/theme'
 import {
+  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from 'react'
 import '../styles.scss'
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import Footer from './Footer'
 import Header from './Header'
 import { LayoutSider } from './LayoutSider'
 import { NavigateContextProvider, useNavigateContext } from './NavigateContext'
-import { useTabStore, type TabKey } from './useTabStore'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { type TabKey, useTabStore } from './useTabStore'
 
 // Enable debug mode for Pando calcs
 setDebugMode(isDev)

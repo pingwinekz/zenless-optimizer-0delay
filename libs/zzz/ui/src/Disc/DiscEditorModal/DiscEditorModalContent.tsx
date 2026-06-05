@@ -1,13 +1,14 @@
 import {
+  CardThemed,
   GeneralAutocomplete,
   ImgIcon,
-  CardThemed,
 } from '@genshin-optimizer/common/ui'
 import {
   getUnitStr,
   statKeyToFixed,
   toPercent,
 } from '@genshin-optimizer/common/util'
+import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type {
   DiscMainStatKey,
   DiscSlotKey,
@@ -19,24 +20,23 @@ import {
   discMaxLevel,
   discSlotToMainStatKeys,
 } from '@genshin-optimizer/zzz/consts'
-import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { Box, Button, Flex, Group, Select, Text } from '@mantine/core'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LocationAutocomplete } from '../../Character/LocationAutocomplete'
-import { useDiscEditorModalStore } from './discEditorModalStore'
+import modalClasses from './DiscEditorModal.module.css'
+import { DiscEditorSubstatInput } from './DiscEditorSubstatInput'
 import {
+  RARITY_OPTIONS,
+  calculateUpgradeValues,
   computeInitialFormValues,
   computeMainStatOptions,
   computeMainStatValue,
-  calculateUpgradeValues,
   validateDiscEditor,
-  RARITY_OPTIONS,
 } from './discEditorModalController'
+import { useDiscEditorModalStore } from './discEditorModalStore'
 import type { DiscEditorForm } from './discEditorModalTypes'
-import { DiscEditorSubstatInput } from './DiscEditorSubstatInput'
-import modalClasses from './DiscEditorModal.module.css'
 
 export function DiscEditorModalContent() {
   const config = useDiscEditorModalStore((s) => s.config)!

@@ -10,8 +10,8 @@ import {
   DiscDataManager,
   StatWeightDataManager,
 } from './DataManagers/'
-import { CharacterDataManager } from './DataManagers/CharacterDataManager'
 import { CharacterBuildDataManager } from './DataManagers/CharacterBuildDataManager'
+import { CharacterDataManager } from './DataManagers/CharacterDataManager'
 import { GeneratedBuildListDataManager } from './DataManagers/GeneratedBuildListDataManager'
 import { OptConfigDataManager } from './DataManagers/OptConfigDataManager'
 import { SavedBuildDataManager } from './DataManagers/SavedBuildDataManager'

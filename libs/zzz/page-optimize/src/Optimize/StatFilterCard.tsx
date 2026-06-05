@@ -22,7 +22,6 @@ import {
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay, qtMap } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName, StatDisplay } from '@genshin-optimizer/zzz/ui'
-import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -32,6 +31,7 @@ import {
   MenuItem,
   Text,
 } from '@mantine/core'
+import { IconCheckbox, IconSquare, IconTrash } from '@tabler/icons-react'
 import { useCallback, useContext } from 'react'
 
 export function StatFilterCard({ disabled = false }: { disabled?: boolean }) {

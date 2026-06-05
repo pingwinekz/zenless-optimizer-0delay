@@ -1,4 +1,3 @@
-import type React from 'react'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import { ColorText, ConditionalWrapper } from '@genshin-optimizer/common/ui'
 import {
@@ -15,7 +14,6 @@ import {
 } from '@genshin-optimizer/zzz/consts'
 import { useDatabaseContext, useDisc } from '@genshin-optimizer/zzz/db-ui'
 import type { IDisc, ISubstat } from '@genshin-optimizer/zzz/zood'
-import { IconEdit } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -25,6 +23,8 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core'
+import { IconEdit } from '@tabler/icons-react'
+import type React from 'react'
 import type { ReactNode } from 'react'
 import { Suspense, memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,9 +32,9 @@ import { StatDisplay } from '../Character'
 import { LocationAutocomplete } from '../Character/LocationAutocomplete'
 import { LocationName } from '../Character/LocationName'
 import { ZCard } from '../Components'
+import classes from './DiscCard.module.css'
 import { DiscSet2p, DiscSet4p, DiscSetName } from './DiscTrans'
 import { useSpinner } from './util'
-import classes from './DiscCard.module.css'
 
 export const DiscCard = memo(function DiscCard({
   discId,

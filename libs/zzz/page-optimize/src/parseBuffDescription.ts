@@ -395,6 +395,11 @@ export function parseBuffDescription(desc: string): BuffConfig {
       .map((s) => s.trim())
       .filter(Boolean)
 
+    // Track specialty across sentences within the same bullet.
+    // When a sentence explicitly mentions a specialty (e.g. "Agents with Attack specialty"),
+    // subsequent sentences that refer back (e.g. "Their Basic Attack DMG...") inherit it.
+    let bulletSpecialty: SpecialityKey | undefined
+
     for (const sentence of sentences) {
       // Detect specialty condition at sentence level
       const sentSpecialtyMatch = sentence.match(
@@ -403,6 +408,10 @@ export function parseBuffDescription(desc: string): BuffConfig {
       const sentSpecialty = sentSpecialtyMatch
         ? matchSpecialty(sentSpecialtyMatch[1] ?? sentSpecialtyMatch[2])
         : undefined
+      // Update bullet-level specialty if this sentence has an explicit one
+      if (sentSpecialty) bulletSpecialty = sentSpecialty
+      // Use bullet-level specialty as fallback for sentences that don't re-state it
+      const effectiveSpecialty = sentSpecialty ?? bulletSpecialty
 
       // Pre-pass: extract damage-type-qualified ignore patterns before
       // comma/and splitting destroys the damage type list context
@@ -410,7 +419,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
         sentence,
         bonusStats,
         false,
-        sentSpecialty
+        effectiveSpecialty
       )
 
       // Pre-pass: extract damage-type-qualified "deal N% increased DMG" patterns
@@ -418,7 +427,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
         processedSentence,
         bonusStats,
         false,
-        sentSpecialty
+        effectiveSpecialty
       )
 
       // Pre-pass: extract <Attribute> DMG lists (e.g. "Electric DMG and Physical DMG increase by 20%")
@@ -426,7 +435,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
         processedSentence,
         bonusStats,
         false,
-        sentSpecialty
+        effectiveSpecialty
       )
 
       // Split by commas and conjunctions to isolate individual effects
@@ -446,9 +455,12 @@ export function parseBuffDescription(desc: string): BuffConfig {
         const specialtyMatch = seg.match(
           /(?:for (?:Agents? )?(?:with|of) |Agents? (?:with|of) )(\w+) specialty/i
         )
-        const specialty = specialtyMatch
+        const segmentSpecialty = specialtyMatch
           ? matchSpecialty(specialtyMatch[1])
           : undefined
+        // Fall back to sentence/bullet-level specialty if segment doesn't have its own
+        // (e.g. "Their Basic Attack DMG..." continuing from "Agents with Attack specialty")
+        const specialty = segmentSpecialty ?? effectiveSpecialty
 
         // --- Defense/RES ignore (must check before generic stat patterns) ---
         const defIgnMatch = seg.match(

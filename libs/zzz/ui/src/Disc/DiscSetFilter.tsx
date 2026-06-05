@@ -9,7 +9,6 @@ import { toggleInArr } from '@genshin-optimizer/common/util'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { DiscSetKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSetKeys } from '@genshin-optimizer/zzz/consts'
-import { IconX } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -20,6 +19,7 @@ import {
   Text,
 } from '@mantine/core'
 import { Menu } from '@mantine/core'
+import { IconX } from '@tabler/icons-react'
 import { DiscSetName } from './DiscTrans'
 
 export function DiscSetFilter({

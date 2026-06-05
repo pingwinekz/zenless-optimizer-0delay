@@ -1,6 +1,5 @@
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import { CardThemed, ModalWrapper } from '@genshin-optimizer/common/ui'
-import { IconInfoCircle } from '@tabler/icons-react'
 import {
   Alert,
   Box,
@@ -11,6 +10,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconInfoCircle } from '@tabler/icons-react'
 import { Suspense } from 'react'
 import card from './card-sc.png'
 import full from './full-sc.png'

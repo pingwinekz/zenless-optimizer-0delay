@@ -2,13 +2,13 @@ import { CardThemed } from '@genshin-optimizer/common/ui'
 import { Box, Group, Text } from '@mantine/core'
 import { useMemo } from 'react'
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
   XAxis,
   YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  Legend,
 } from 'recharts'
 
 /**

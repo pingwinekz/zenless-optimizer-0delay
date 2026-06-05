@@ -19,7 +19,7 @@ import {
   CharacterSingleSelectionModal,
   ZCard,
 } from '@genshin-optimizer/zzz/ui'
-import { Button, SimpleGrid, Stack, Box } from '@mantine/core'
+import { Box, Button, SimpleGrid, Stack } from '@mantine/core'
 import { Suspense, useCallback, useState } from 'react'
 
 const EXTRA_TEAMMATE_SLOTS = [1, 2] as const

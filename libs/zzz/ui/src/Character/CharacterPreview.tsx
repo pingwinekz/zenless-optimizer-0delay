@@ -1,6 +1,6 @@
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Box, Center, Flex, Text } from '@mantine/core'
 import { IconUser } from '@tabler/icons-react'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 
 export function CharacterPreview({
   characterKey,

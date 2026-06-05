@@ -25,9 +25,9 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core'
+import { IconArrowsHorizontal } from '@tabler/icons-react'
 import { Suspense, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconArrowsHorizontal } from '@tabler/icons-react'
 import { ZCard } from '../Components'
 import { DiscCardObj, DiscEditor, DiscSwapModal } from '../Disc'
 import { WengineCardObj, WengineSwapModal } from '../Wengine'

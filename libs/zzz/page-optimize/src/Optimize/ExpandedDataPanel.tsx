@@ -1,8 +1,8 @@
 import { Accordion, Box, Text } from '@mantine/core'
 import { useState } from 'react'
-import { StatsDiffCard } from '../Analysis/StatsDiffCard'
 import { DamageSplitsChart } from '../Analysis/DamageSplitsChart'
 import { DamageTagPieChart } from '../Analysis/DamageTagPieChart'
+import { StatsDiffCard } from '../Analysis/StatsDiffCard'
 import { SubstatUpgrades } from '../Analysis/SubstatUpgrades'
 import { TeammateUpgrades } from '../Analysis/TeammateUpgrades'
 

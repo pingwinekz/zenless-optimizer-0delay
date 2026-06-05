@@ -1,15 +1,15 @@
 import type {
+  CharacterKey,
   DiscMainStatKey,
   DiscSlotKey,
   DiscSubStatKey,
-  CharacterKey,
 } from '@genshin-optimizer/zzz/consts'
+import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
 import {
-  getCharacterEffectiveStats,
   getCharacterEffectiveMainStats,
+  getCharacterEffectiveStats,
   getCharacterSubstatWeights,
 } from '@genshin-optimizer/zzz/util'
-import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
 
 /**
  * Returns the effective stats for a character, merged with any custom overrides.

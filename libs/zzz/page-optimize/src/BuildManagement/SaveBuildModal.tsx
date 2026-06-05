@@ -1,6 +1,6 @@
-import { useDatabaseContext, useTeam } from '@genshin-optimizer/zzz/db-ui'
-import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import type { GeneratedBuild } from '@genshin-optimizer/zzz/db'
+import { useDatabaseContext, useTeam } from '@genshin-optimizer/zzz/db-ui'
 import {
   OptConfigContext,
   useCharacterContext,

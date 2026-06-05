@@ -17,7 +17,6 @@ import {
   initialDiscFilterOption,
 } from '@genshin-optimizer/zzz/util'
 import type { IDisc } from '@genshin-optimizer/zzz/zood'
-import { IconX, IconCircleMinus } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -26,6 +25,7 @@ import {
   Skeleton,
   Text,
 } from '@mantine/core'
+import { IconCircleMinus, IconX } from '@tabler/icons-react'
 import { Suspense, useCallback, useMemo, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DiscCardObj } from './DiscCard'

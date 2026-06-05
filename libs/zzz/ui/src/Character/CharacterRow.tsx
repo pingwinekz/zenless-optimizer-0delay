@@ -5,8 +5,8 @@ import { ActionIcon, Box, Text, Tooltip } from '@mantine/core'
 import { IconEdit, IconTrash } from '@tabler/icons-react'
 import { memo, useCallback, useMemo } from 'react'
 import { equipDotColor } from '../store'
-import { CharacterName } from './CharacterTrans'
 import classes from './CharacterRow.module.css'
+import { CharacterName } from './CharacterTrans'
 
 export type CharacterRowDensity = 'default' | 'compact'
 

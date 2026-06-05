@@ -13,11 +13,11 @@ import {
 } from '../discPreview/DiscStatRow'
 import { computeCurrentScore as scoreCurrent } from '../scoring/currentScore'
 import { computeMaxPotential } from '../scoring/potentialScore'
+import { formatScorePct } from '../scoring/scoreFormatting'
 import {
   getMergedEffectiveStats,
   getMergedSubstatWeights,
 } from '../scoring/statWeightUtils'
-import { formatScorePct } from '../scoring/scoreFormatting'
 
 export function DiscPreview({
   disc,

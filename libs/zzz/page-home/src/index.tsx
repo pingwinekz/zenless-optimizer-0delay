@@ -1,7 +1,7 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { ZCard } from '@genshin-optimizer/zzz/ui'
-import { IconFileDescription } from '@tabler/icons-react'
 import { Box, CardSection, Group, SimpleGrid, Title } from '@mantine/core'
+import { IconFileDescription } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'

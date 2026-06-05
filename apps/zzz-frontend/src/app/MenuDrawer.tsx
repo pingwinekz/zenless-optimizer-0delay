@@ -8,8 +8,8 @@ import {
 } from '@tabler/icons-react'
 
 import type { ReactNode } from 'react'
-import { useTabStore, type TabKey } from './useTabStore'
 import classes from './Sidebar.module.css'
+import { type TabKey, useTabStore } from './useTabStore'
 
 type NavItem = {
   label: string

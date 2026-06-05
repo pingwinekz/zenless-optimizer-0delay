@@ -1,10 +1,10 @@
-import { shouldShowDevComponents } from '@genshin-optimizer/common/util'
-import { ActionIcon, Badge, Box, Flex, Skeleton, Text } from '@mantine/core'
-import { IconMenu2, IconX } from '@tabler/icons-react'
 import {
   OpenCloseIDs,
   useOpenClose,
 } from '@genshin-optimizer/common/react-util'
+import { shouldShowDevComponents } from '@genshin-optimizer/common/util'
+import { ActionIcon, Badge, Box, Flex, Skeleton, Text } from '@mantine/core'
+import { IconMenu2, IconX } from '@tabler/icons-react'
 import { Suspense } from 'react'
 import { useTabStore } from './useTabStore'
 

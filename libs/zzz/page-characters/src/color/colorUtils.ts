@@ -1,5 +1,5 @@
-import chroma from 'chroma-js'
 import type { AttributeKey } from '@genshin-optimizer/zzz/consts'
+import chroma from 'chroma-js'
 import type { PaletteResponse } from './colorExtractionService'
 
 export const attributeColors: Record<AttributeKey, string> = {

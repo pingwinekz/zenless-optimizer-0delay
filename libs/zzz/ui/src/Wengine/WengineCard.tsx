@@ -14,7 +14,6 @@ import type { PhaseKey } from '@genshin-optimizer/zzz/consts'
 import { useWengine } from '@genshin-optimizer/zzz/db-ui'
 import { getWengineStat, getWengineStats } from '@genshin-optimizer/zzz/stats'
 import type { IWengine } from '@genshin-optimizer/zzz/zood'
-import { IconEdit } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -24,6 +23,7 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core'
+import { IconEdit } from '@tabler/icons-react'
 import React from 'react'
 import type { ReactNode } from 'react'
 import { Suspense, memo, useCallback } from 'react'

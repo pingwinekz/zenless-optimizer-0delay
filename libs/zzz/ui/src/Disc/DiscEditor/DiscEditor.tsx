@@ -22,16 +22,6 @@ import type { Processed } from '@genshin-optimizer/zzz/disc-scanner'
 import { ScanningQueue } from '@genshin-optimizer/zzz/disc-scanner'
 import type { IDisc, ISubstat } from '@genshin-optimizer/zzz/zood'
 import {
-  IconPlus,
-  IconChevronRight,
-  IconX,
-  IconTrash,
-  IconLock,
-  IconLockOpen,
-  IconCamera,
-  IconRefresh,
-} from '@tabler/icons-react'
-import {
   ActionIcon,
   Alert,
   Box,
@@ -48,6 +38,16 @@ import {
   TextInput,
   useMatches,
 } from '@mantine/core'
+import {
+  IconCamera,
+  IconChevronRight,
+  IconLock,
+  IconLockOpen,
+  IconPlus,
+  IconRefresh,
+  IconTrash,
+  IconX,
+} from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
 import {
   Suspense,

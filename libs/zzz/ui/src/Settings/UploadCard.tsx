@@ -16,16 +16,16 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core'
-import { useCallback, useMemo, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
 import {
+  IconArrowLeft,
   IconCheckbox,
   IconFile,
   IconFileDescription,
-  IconArrowLeft,
   IconSquare,
   IconUpload,
 } from '@tabler/icons-react'
+import { useCallback, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 export function UploadCard({
   index,

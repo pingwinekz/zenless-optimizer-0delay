@@ -9,7 +9,6 @@ import { specialityDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { SpecialityKey, WengineKey } from '@genshin-optimizer/zzz/consts'
 import { allWengineKeys } from '@genshin-optimizer/zzz/consts'
 import { getWengineStat } from '@genshin-optimizer/zzz/stats'
-import { IconX, IconCircleMinus } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -19,6 +18,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
+import { IconCircleMinus, IconX } from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
 import {
   Suspense,

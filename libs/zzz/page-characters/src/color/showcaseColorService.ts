@@ -1,11 +1,11 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { type ColorPipelineConfig } from './colorPipelineConfig'
+import { getAttributeColor } from './colorUtils'
 import {
   oklchCardBackgroundColor,
   oklchCardBorderColor,
 } from './colorUtilsOklch'
-import { getAttributeColor } from './colorUtils'
 
 export enum ShowcaseColorMode {
   AUTO = 'AUTO',

@@ -3,13 +3,13 @@ import {
   useDisplayDisc,
 } from '@genshin-optimizer/zzz/db-ui'
 import type { DiscFilterOption } from '@genshin-optimizer/zzz/util'
-import { IconRefresh } from '@tabler/icons-react'
 import { Box, Button, Flex, Skeleton, Text } from '@mantine/core'
+import { IconRefresh } from '@tabler/icons-react'
 import { t } from 'i18next'
 import { Suspense, useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { DiscFilterDisplay } from './DiscFilterDisplay'
 import discFilterClasses from './DiscFilter.module.css'
+import { DiscFilterDisplay } from './DiscFilterDisplay'
 
 export default function DiscFilter({
   numShowing,

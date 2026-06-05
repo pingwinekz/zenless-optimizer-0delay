@@ -1,3 +1,13 @@
+import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
+import { discDefIcon } from '@genshin-optimizer/zzz/assets'
+import type { CharacterKey, DiscSetKey } from '@genshin-optimizer/zzz/consts'
+import { discSetNames } from '@genshin-optimizer/zzz/consts'
+import {
+  useCharacterContext,
+  useDatabaseContext,
+  useTeam,
+} from '@genshin-optimizer/zzz/db-ui'
+import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
 import {
   Box,
   Flex,
@@ -8,23 +18,13 @@ import {
   Switch,
   Text,
 } from '@mantine/core'
-import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
-import type { CharacterKey, DiscSetKey } from '@genshin-optimizer/zzz/consts'
-import { discSetNames } from '@genshin-optimizer/zzz/consts'
-import { discDefIcon } from '@genshin-optimizer/zzz/assets'
-import {
-  useCharacterContext,
-  useDatabaseContext,
-  useTeam,
-} from '@genshin-optimizer/zzz/db-ui'
-import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
 
 import { ImgIcon } from '@genshin-optimizer/common/ui'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { memo, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { HeaderText } from '../layout'

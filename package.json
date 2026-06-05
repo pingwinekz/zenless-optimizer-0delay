@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build-all": "nx run-many -t build",
-    "mini-ci": "biome format --write && nx affected -t typecheck && nx affected -t eslint:lint --max-warnings=0 && CI=true nx affected -t test",
+    "mini-ci": "bun biome check --formatter-enabled=true --linter-enabled=false --organize-imports-enabled=true --write && nx affected -t typecheck && nx affected -t eslint:lint --max-warnings=0 && CI=true nx affected -t test",
     "reload-dm": "git submodule update --init",
     "update-dm": "git submodule update --remote",
     "gen-file": "nx run-many -t gen-file",

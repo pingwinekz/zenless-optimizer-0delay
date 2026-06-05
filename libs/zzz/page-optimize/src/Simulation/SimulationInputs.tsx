@@ -1,4 +1,5 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
+import { getUnitStr } from '@genshin-optimizer/common/util'
 import {
   allDiscSetKeys,
   allDiscSubStatKeys,
@@ -11,7 +12,6 @@ import type {
   DiscSlotKey,
   DiscSubStatKey,
 } from '@genshin-optimizer/zzz/consts'
-import { getUnitStr } from '@genshin-optimizer/common/util'
 import { StatDisplay } from '@genshin-optimizer/zzz/ui'
 import {
   ActionIcon,

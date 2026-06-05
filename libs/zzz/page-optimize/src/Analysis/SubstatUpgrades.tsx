@@ -1,8 +1,8 @@
 import { CardThemed } from '@genshin-optimizer/common/ui'
 import { getUnitStr, valueString } from '@genshin-optimizer/common/util'
 import type {
-  DiscSubStatKey,
   DiscRarityKey,
+  DiscSubStatKey,
 } from '@genshin-optimizer/zzz/consts'
 import {
   getDiscSubStatBaseVal,

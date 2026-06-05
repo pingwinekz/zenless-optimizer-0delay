@@ -7,8 +7,8 @@ import {
   useDisplayDisc,
 } from '@genshin-optimizer/zzz/db-ui'
 import { discFilterConfigs } from '@genshin-optimizer/zzz/util'
-import { IconPlus, IconCopy } from '@tabler/icons-react'
 import { Box, Button, Flex, SimpleGrid, Skeleton, Text } from '@mantine/core'
+import { IconCopy, IconPlus } from '@tabler/icons-react'
 import { Suspense, useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DiscCard } from './DiscCard'

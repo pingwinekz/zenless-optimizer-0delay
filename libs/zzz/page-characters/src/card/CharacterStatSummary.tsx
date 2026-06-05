@@ -1,8 +1,8 @@
-import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
 import { statKeyTextMap } from '@genshin-optimizer/zzz/consts'
+import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
 import { Flex, Text } from '@mantine/core'
-import { StatText } from './StatText'
 import classes from './CharacterStatSummary.module.css'
+import { StatText } from './StatText'
 
 export function CharacterStatSummary({
   stats,

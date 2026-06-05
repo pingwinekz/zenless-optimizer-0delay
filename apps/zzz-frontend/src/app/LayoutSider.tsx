@@ -2,8 +2,8 @@ import {
   OpenCloseIDs,
   useOpenClose,
 } from '@genshin-optimizer/common/react-util'
-import classes from './Sidebar.module.css'
 import { MenuDrawer } from './MenuDrawer'
+import classes from './Sidebar.module.css'
 
 const SIDEBAR_EXPANDED = 160
 const SIDEBAR_COLLAPSED = 56

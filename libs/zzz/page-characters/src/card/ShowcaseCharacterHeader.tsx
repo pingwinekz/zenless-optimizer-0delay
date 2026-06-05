@@ -1,20 +1,20 @@
 import { ImgIcon } from '@genshin-optimizer/common/ui'
+import { rarityDefIcon, specialityDefIcon } from '@genshin-optimizer/zzz/assets'
 import type {
+  AttributeKey,
   CharacterKey,
   CharacterRarityKey,
   SpecialityKey,
-  AttributeKey,
 } from '@genshin-optimizer/zzz/consts'
 import { milestoneMaxLevel } from '@genshin-optimizer/zzz/consts'
-import { rarityDefIcon, specialityDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { ICachedCharacter } from '@genshin-optimizer/zzz/db'
+import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { ElementIcon } from '@genshin-optimizer/zzz/svgicons'
 import { CharacterName } from '@genshin-optimizer/zzz/ui'
 import { ActionIcon, Box, Flex, Tooltip } from '@mantine/core'
 import { IconEdit, IconTrash } from '@tabler/icons-react'
-import { StatText } from './StatText'
 import classes from './ShowcaseCharacterHeader.module.css'
-import { getCharStat } from '@genshin-optimizer/zzz/stats'
+import { StatText } from './StatText'
 
 export function ShowcaseCharacterHeader({
   characterKey,

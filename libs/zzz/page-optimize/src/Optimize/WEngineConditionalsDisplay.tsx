@@ -10,6 +10,9 @@ import {
 } from '@mantine/core'
 
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
+import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
+import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
+import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CharacterKey, WengineKey } from '@genshin-optimizer/zzz/consts'
 import {
   useCharacterContext,
@@ -17,11 +20,8 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
-import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import { wengineUiSheets } from '@genshin-optimizer/zzz/formula-ui'
+import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { memo, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'

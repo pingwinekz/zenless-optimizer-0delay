@@ -1,5 +1,5 @@
+import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Button, ColorInput, Flex, SegmentedControl, Text } from '@mantine/core'
-import { CharacterBuildPanel } from './CharacterBuildPanel'
 import {
   IconCamera,
   IconCircleHalf2,
@@ -9,14 +9,14 @@ import {
   IconSun,
 } from '@tabler/icons-react'
 import { useCallback, useMemo, useState } from 'react'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
-import { cardTotalW, defaultGap, defaultPadding } from '../constantsUi'
+import { DEFAULT_CONFIG } from '../color/colorPipelineConfig'
+import { withAlpha } from '../color/colorUtils'
 import {
   ShowcaseColorMode,
   resolveShowcaseTheme,
 } from '../color/showcaseColorService'
-import { DEFAULT_CONFIG } from '../color/colorPipelineConfig'
-import { withAlpha } from '../color/colorUtils'
+import { cardTotalW, defaultGap, defaultPadding } from '../constantsUi'
+import { CharacterBuildPanel } from './CharacterBuildPanel'
 import classes from './ShowcaseCustomizationSidebar.module.css'
 
 export type ShowcasePreset = 'shine' | 'natural'

@@ -1,13 +1,10 @@
-import { IconCircleMinus, IconStar } from '@tabler/icons-react'
 import { useDataEntryBase } from '@genshin-optimizer/common/database-ui'
 import { ImgIcon, ModalWrapper } from '@genshin-optimizer/common/ui'
-import { Box, CloseButton, Flex, Text, TextInput } from '@mantine/core'
 import {
   rarityDefIcon,
   specialityDefIcon,
   wengineAsset,
 } from '@genshin-optimizer/zzz/assets'
-import { WengineName } from './WengineTrans'
 import type {
   CharacterKey,
   SpecialityKey,
@@ -23,6 +20,8 @@ import {
   characterKeyToWengineKey,
   getWengineStat,
 } from '@genshin-optimizer/zzz/stats'
+import { Box, CloseButton, Flex, Text, TextInput } from '@mantine/core'
+import { IconCircleMinus, IconStar } from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
 import {
   Suspense,
@@ -34,6 +33,7 @@ import {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SegmentedFilterRow } from '../toggles'
+import { WengineName } from './WengineTrans'
 type WengineSelectionModalProps = {
   show: boolean
   onHide: () => void

@@ -4,11 +4,11 @@ import {
   zodFilteredArray,
 } from '@genshin-optimizer/common/database'
 import {
+  type CharacterKey,
   allAttributeKeys,
   allCharacterKeys,
   allCharacterRarityKeys,
   allSpecialityKeys,
-  type CharacterKey,
 } from '@genshin-optimizer/zzz/consts'
 import { z } from 'zod'
 import { DataEntry } from '../DataEntry'

@@ -11,16 +11,14 @@ import {
 import { range } from '@genshin-optimizer/common/util'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import {
+  Badge,
   Box,
   Button,
   Divider,
   Group,
   SimpleGrid,
-  Badge,
   Text,
 } from '@mantine/core'
-import { useCallback } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
 import {
   IconClipboard,
   IconDownload,
@@ -28,6 +26,8 @@ import {
   IconTrash,
   IconUpload,
 } from '@tabler/icons-react'
+import { useCallback } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { UploadCard } from './UploadCard'
 
 export function DatabaseCard() {

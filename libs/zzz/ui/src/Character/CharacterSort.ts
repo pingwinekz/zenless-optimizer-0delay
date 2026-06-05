@@ -8,10 +8,10 @@ import {
   allCharacterRarityKeys,
   allSpecialityKeys,
 } from '@genshin-optimizer/zzz/consts'
-import { calculateCharacterScore } from '@genshin-optimizer/zzz/util'
 import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
 import { i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
+import { calculateCharacterScore } from '@genshin-optimizer/zzz/util'
 export const characterSortKeys = [
   'new',
   'level',

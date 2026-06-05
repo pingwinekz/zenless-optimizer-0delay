@@ -19,12 +19,6 @@ import {
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import { type DiscFilterOption } from '@genshin-optimizer/zzz/util'
 import {
-  IconBriefcase,
-  IconLock,
-  IconLockOpen,
-  IconUserSearch,
-} from '@tabler/icons-react'
-import {
   Badge,
   Box,
   Button,
@@ -34,6 +28,12 @@ import {
   Stack,
   Tabs,
 } from '@mantine/core'
+import {
+  IconBriefcase,
+  IconLock,
+  IconLockOpen,
+  IconUserSearch,
+} from '@tabler/icons-react'
 import { Suspense, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { LocationFilterMultiAutocomplete } from '../Character/LocationFilterMultiAutocomplete'

@@ -1,6 +1,6 @@
-import { commonDefIcon, wengineAsset } from '@genshin-optimizer/zzz/assets'
 import { DropdownButton, ImgIcon } from '@genshin-optimizer/common/ui'
 import { range } from '@genshin-optimizer/common/util'
+import { commonDefIcon, wengineAsset } from '@genshin-optimizer/zzz/assets'
 import {
   type CharacterKey,
   type PhaseKey,
@@ -20,7 +20,6 @@ import {
   WengineSelectionModal,
   useCharacterTabStore,
 } from '@genshin-optimizer/zzz/ui'
-import { IconX } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -34,6 +33,7 @@ import {
   Skeleton,
   Text,
 } from '@mantine/core'
+import { IconX } from '@tabler/icons-react'
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

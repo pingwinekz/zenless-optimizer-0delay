@@ -2,14 +2,14 @@ import type {
   CharacterKey,
   DiscSubStatKey,
 } from '@genshin-optimizer/zzz/consts'
-import type { IDisc } from '@genshin-optimizer/zzz/zood'
 import type { ZzzDatabase } from '@genshin-optimizer/zzz/db'
+import type { IDisc } from '@genshin-optimizer/zzz/zood'
+import { computeCurrentScore } from './currentScore'
+import { computeMaxPotential } from './potentialScore'
 import {
   getMergedEffectiveStats,
   getMergedSubstatWeights,
 } from './statWeightUtils'
-import { computeCurrentScore } from './currentScore'
-import { computeMaxPotential } from './potentialScore'
 import type { ScoredDisc } from './types'
 
 export function scoreDisc(

@@ -1,6 +1,6 @@
-import { createContext, useContext, useCallback, type ReactNode } from 'react'
-import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import { type ReactNode, createContext, useCallback, useContext } from 'react'
 import { useTabStore } from './useTabStore'
 
 interface NavigateContextValue {

@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
-import { useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export function RotationConfigDialog({
   opened,

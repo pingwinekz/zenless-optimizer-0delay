@@ -1,7 +1,7 @@
 import { cmpEq, cmpGE, sum } from '@genshin-optimizer/pando/engine'
 import {
-  allAttributeKeys,
   type DiscSetKey,
+  allAttributeKeys,
 } from '@genshin-optimizer/zzz/consts'
 import { allBoolConditionals, enemyDebuff, own, registerBuff } from '../../util'
 import { entriesForDisc, registerDisc } from '../util'

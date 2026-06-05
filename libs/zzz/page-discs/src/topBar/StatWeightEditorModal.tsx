@@ -1,5 +1,22 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { getUnitStr } from '@genshin-optimizer/common/util'
+import {
+  allCharacterKeys,
+  allDiscSubStatKeys,
+  discSlotToMainStatKeys,
+  statKeyTextMap,
+} from '@genshin-optimizer/zzz/consts'
+import type {
+  CharacterKey,
+  DiscMainStatKey,
+  DiscSlotKey,
+  DiscSubStatKey,
+} from '@genshin-optimizer/zzz/consts'
+import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
+import {
+  getCharacterEffectiveStats,
+  getCharacterSubstatWeights,
+} from '@genshin-optimizer/zzz/util'
 import {
   Box,
   Button,
@@ -13,25 +30,8 @@ import {
   Select,
   Text,
 } from '@mantine/core'
-import { getUnitStr } from '@genshin-optimizer/common/util'
-import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import {
-  allCharacterKeys,
-  allDiscSubStatKeys,
-  discSlotToMainStatKeys,
-  statKeyTextMap,
-} from '@genshin-optimizer/zzz/consts'
-import type {
-  CharacterKey,
-  DiscMainStatKey,
-  DiscSlotKey,
-  DiscSubStatKey,
-} from '@genshin-optimizer/zzz/consts'
-import { StatIcon } from '@genshin-optimizer/zzz/svgicons'
-import {
-  getCharacterEffectiveStats,
-  getCharacterSubstatWeights,
-} from '@genshin-optimizer/zzz/util'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDiscTabStore } from '../discGrid/useDiscTabStore'
 
 const SCORING_SLOTS: DiscSlotKey[] = ['4', '5', '6']

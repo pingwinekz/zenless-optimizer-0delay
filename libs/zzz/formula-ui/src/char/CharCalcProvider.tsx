@@ -36,9 +36,9 @@ import { getTeamFrame0, teamCharacterKeys } from '@genshin-optimizer/zzz/db'
 import { useCharacter, useDiscs } from '@genshin-optimizer/zzz/db-ui'
 import type { TagMapNodeEntries } from '@genshin-optimizer/zzz/formula'
 import {
+  DEFAULT_TEAMMATE_CHAR,
   charTagMapNodeEntries,
   conditionalEntries,
-  DEFAULT_TEAMMATE_CHAR,
   discTagMapNodeEntries,
   discsToTagMapNodeEntries,
   enemy,

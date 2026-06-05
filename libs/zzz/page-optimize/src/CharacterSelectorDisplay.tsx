@@ -19,10 +19,10 @@ import {
   Box,
   Button,
   Flex,
+  HoverCard,
   SegmentedControl,
   Select,
   Text,
-  HoverCard,
 } from '@mantine/core'
 import { useCallback, useMemo } from 'react'
 import { CharacterBuildSelector } from './Optimize/CharacterBuildSelector'

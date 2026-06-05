@@ -1,5 +1,5 @@
-import { objKeyMap } from '@genshin-optimizer/common/util'
 import { useDataManagerKeys } from '@genshin-optimizer/common/database-ui'
+import { objKeyMap } from '@genshin-optimizer/common/util'
 import type { CharacterKey, WengineKey } from '@genshin-optimizer/zzz/consts'
 import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
 import { useCharacter, useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'

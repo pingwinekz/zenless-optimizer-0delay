@@ -1,9 +1,9 @@
 import { zodTypedRecord } from '@genshin-optimizer/common/database'
 import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
-import type { DiscIds } from '../../Interfaces/IDbDisc'
 import { z } from 'zod'
-import type { ZzzDatabase } from '../Database'
+import type { DiscIds } from '../../Interfaces/IDbDisc'
 import { DataManager } from '../DataManager'
+import type { ZzzDatabase } from '../Database'
 
 const discIdValueSchema = z.union([z.string(), z.undefined()])
 const discIdsSchema = zodTypedRecord(

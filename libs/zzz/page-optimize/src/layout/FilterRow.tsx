@@ -1,6 +1,6 @@
 import { Flex } from '@mantine/core'
 import type { ReactNode } from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormStatTextStyled } from './FormStatTextStyled'
 import { InputNumberStyled } from './InputNumberStyled'
 

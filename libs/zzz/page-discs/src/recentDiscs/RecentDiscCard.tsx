@@ -10,9 +10,9 @@ import type {
   DiscSubStatKey,
 } from '@genshin-optimizer/zzz/consts'
 import {
+  rarityColor as discRarityColor,
   getDiscMainStatVal,
   getDiscSubStatBaseVal,
-  rarityColor as discRarityColor,
   statKeyTextMap,
 } from '@genshin-optimizer/zzz/consts'
 import { StatIcon } from '@genshin-optimizer/zzz/svgicons'

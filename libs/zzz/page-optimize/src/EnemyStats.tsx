@@ -20,7 +20,6 @@ import {
 import { type Attribute, type Tag } from '@genshin-optimizer/zzz/formula'
 import { TagDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { AttributeName } from '@genshin-optimizer/zzz/ui'
-import { IconTrash } from '@tabler/icons-react'
 import {
   ActionIcon,
   Box,
@@ -30,6 +29,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconTrash } from '@tabler/icons-react'
 import { useCallback } from 'react'
 
 export function EnemyStatsSection() {

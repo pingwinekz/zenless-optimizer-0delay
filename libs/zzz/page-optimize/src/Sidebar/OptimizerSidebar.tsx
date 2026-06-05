@@ -2,12 +2,12 @@ import { Divider, Flex } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { StatDisplay } from './StatsViewSelect'
 import { BuildsSection } from '../BuildManagement'
 import { OptimizerControlsSection } from './OptimizerControlsSection'
 import { PermutationsSection } from './PermutationsSection'
 import { PinnedBuildsSection } from './PinnedBuildsSection'
 import { ResultsSection } from './ResultsSection'
+import type { StatDisplay } from './StatsViewSelect'
 
 const SCROLLBAR_WIDTH = 5
 const RESERVED_SPACE = 2

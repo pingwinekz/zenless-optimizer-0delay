@@ -2,12 +2,12 @@ import { CardThemed } from '@genshin-optimizer/common/ui'
 import { Box, Group, Table, Text } from '@mantine/core'
 import { useMemo } from 'react'
 import {
-  PieChart,
-  Pie,
   Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts'
 
 /**

@@ -1,4 +1,9 @@
+import { deepClone, objKeyMap } from '@genshin-optimizer/common/util'
+import type { CharacterKey, WengineKey } from '@genshin-optimizer/zzz/consts'
+import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
+import type { CharacterBuild } from '@genshin-optimizer/zzz/db'
 import { useCharacter, useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
+import { useCharacterBuilds } from '@genshin-optimizer/zzz/db-ui'
 import { Button, Text, TextInput, Tooltip } from '@mantine/core'
 import {
   IconDeviceFloppy,
@@ -7,11 +12,6 @@ import {
 } from '@tabler/icons-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { CharacterKey, WengineKey } from '@genshin-optimizer/zzz/consts'
-import { allDiscSlotKeys } from '@genshin-optimizer/zzz/consts'
-import { useCharacterBuilds } from '@genshin-optimizer/zzz/db-ui'
-import { deepClone, objKeyMap } from '@genshin-optimizer/common/util'
-import type { CharacterBuild } from '@genshin-optimizer/zzz/db'
 import classes from './CharacterBuildPanel.module.css'
 
 interface CharacterBuildPanelProps {

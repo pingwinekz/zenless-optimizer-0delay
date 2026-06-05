@@ -18,7 +18,6 @@ import {
   CompactWengineCard,
   DiscSetCardCompact,
 } from '@genshin-optimizer/zzz/ui'
-import { IconChecklist, IconPinned, IconPin } from '@tabler/icons-react'
 import {
   ActionIcon,
   Badge,
@@ -30,6 +29,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { IconChecklist, IconPin, IconPinned } from '@tabler/icons-react'
 import { memo, useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOptimizerDisplayStore } from '../stores/useOptimizerDisplayStore'
