@@ -1,11 +1,5 @@
 import type { NumNode } from '@genshin-optimizer/pando/engine'
-import {
-  cmpEq,
-  cmpGE,
-  prod,
-  subscript,
-  sum,
-} from '@genshin-optimizer/pando/engine'
+import { cmpGE, prod, subscript } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
@@ -18,7 +12,6 @@ import {
   percent,
   register,
   registerBuff,
-  target,
   team,
 } from '../../util'
 import {
@@ -44,19 +37,9 @@ const { energy_consumed } = allNumConditionals(
   dm.m2.max_energy_consumed - dm.m2.energy_consumed
 )
 
-const directStrikeCheck = (node: NumNode | number) =>
-  cmpGE(
-    sum(
-      cmpEq(team.initial.atk.max, target.initial.atk, 1),
-      cmpEq(target.char.specialty, 'attack', 1)
-    ),
-    2,
-    node
-  )
-const besiege = (node: NumNode | number) =>
-  directStrike.ifOn(onslaught.ifOn(node))
+const besiege = (node: NumNode | number) => directStrike.ifOn(node)
 const besiegeDisplay = (node: NumNode | number) =>
-  directStrikeDisplay.ifOn(onslaught.ifOn(node))
+  directStrikeDisplay.ifOn(node)
 const abilityCheck = (node: NumNode | number) =>
   cmpGE(team.common.count.withSpecialty('attack'), 2, node)
 
@@ -169,9 +152,7 @@ const sheet = register(
   registerBuff(
     'core_vanguard_atk',
     notOwnBuff.combat.atk.add(
-      directStrike.ifOn(
-        directStrikeCheck(subscript(char.core, dm.core.direct_strike_atk))
-      )
+      directStrike.ifOn(subscript(char.core, dm.core.direct_strike_atk))
     ),
     undefined,
     true
@@ -180,9 +161,7 @@ const sheet = register(
     'core_vanguard_crit_dmg_',
     notOwnBuff.combat.crit_dmg_.add(
       directStrike.ifOn(
-        directStrikeCheck(
-          percent(subscript(char.core, dm.core.direct_strike_crit_dmg_))
-        )
+        percent(subscript(char.core, dm.core.direct_strike_crit_dmg_))
       )
     ),
     undefined,

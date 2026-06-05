@@ -5,7 +5,11 @@ import { zzzSource } from '../Interfaces'
 import { DBMetaEntry, DisplayDiscEntry } from './DataEntries/'
 import { DisplayCharacterEntry } from './DataEntries/DisplayCharacterEntry'
 import { DisplayWengineEntry } from './DataEntries/DisplayWengineEntry'
-import { CharMetaDataManager, DiscDataManager } from './DataManagers/'
+import {
+  CharMetaDataManager,
+  DiscDataManager,
+  StatWeightDataManager,
+} from './DataManagers/'
 import { CharacterDataManager } from './DataManagers/CharacterDataManager'
 import { CharacterBuildDataManager } from './DataManagers/CharacterBuildDataManager'
 import { GeneratedBuildListDataManager } from './DataManagers/GeneratedBuildListDataManager'
@@ -23,6 +27,7 @@ export class ZzzDatabase extends Database {
   wengines: WengineDataManager
   optConfigs: OptConfigDataManager
   charMeta: CharMetaDataManager
+  statWeights: StatWeightDataManager
   dbMeta: DBMetaEntry
   displayDisc: DisplayDiscEntry
   displayCharacter: DisplayCharacterEntry
@@ -67,6 +72,7 @@ export class ZzzDatabase extends Database {
     // Depends on optConfigs
     this.teams = new TeamDataManager(this)
     this.charMeta = new CharMetaDataManager(this)
+    this.statWeights = new StatWeightDataManager(this)
 
     // Handle DataEntries
     this.dbMeta = new DBMetaEntry(this)
@@ -101,6 +107,7 @@ export class ZzzDatabase extends Database {
       this.wengines,
       this.characterBuilds,
       this.charMeta,
+      this.statWeights,
       this.generatedBuildList,
       this.optConfigs,
       this.savedBuilds,

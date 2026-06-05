@@ -1,48 +1,63 @@
+import { useDataManagerValues } from '@genshin-optimizer/common/database-ui'
 import { useBoolState } from '@genshin-optimizer/common/react-util'
 import { useDatabaseContext } from '@genshin-optimizer/zzz/db-ui'
-import {
-  DiscEditorModal,
-  DiscInventory,
-  useDiscEditorModalStore,
-} from '@genshin-optimizer/zzz/ui'
-
-import { Suspense, useCallback } from 'react'
+import { Accordion } from '@mantine/core'
+import { Suspense, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import DupModal from './DupModal'
+import { BottomDock } from './bottomDock/BottomDock'
+import { DiscGrid } from './discGrid/DiscGrid'
 import classes from './pageDiscs.module.css'
+import { RecentDiscs } from './recentDiscs/RecentDiscs'
+import { TopBar } from './topBar/TopBar'
 
 export default function PageDiscs() {
   const [showDup, onShowDup, onHideDup] = useBoolState(false)
   const { database } = useDatabaseContext()
-  const openEditorModal = useDiscEditorModalStore((s) => s.openOverlay)
+  const allDiscs = useDataManagerValues(database.discs)
+  const { t } = useTranslation('discTab')
 
-  const onAddNew = useCallback(() => {
-    openEditorModal({
-      selectedDisc: null,
-      onOk: () => {},
-    })
-  }, [openEditorModal])
-
-  const onEdit = useCallback(
-    (id: string) => {
-      const disc = database.discs.get(id)
-      if (disc) {
-        openEditorModal({
-          selectedDisc: disc,
-          onOk: () => {},
-        })
-      }
-    },
-    [database.discs, openEditorModal]
-  )
+  const hasRecent = useMemo(() => allDiscs.length > 0, [allDiscs.length])
 
   return (
     <div className={classes.container}>
-      <DiscEditorModal />
-
-      <Suspense fallback={false}>
-        <DupModal show={showDup} onHide={onHideDup} setDiscToEdit={onEdit} />
+      <TopBar />
+      {hasRecent && (
+        <div className={classes.accordionWrapper}>
+          <Accordion
+            defaultValue={['1']}
+            multiple
+            chevronPosition="right"
+            variant="default"
+            transitionDuration={200}
+            styles={{
+              control: {
+                fontSize: 18,
+                alignItems: 'baseline',
+                background: 'var(--layer-1)',
+              },
+              content: { paddingBlock: 0, paddingBottom: 10 },
+              chevron: { paddingInlineStart: 12 },
+            }}
+          >
+            <Accordion.Item value="1">
+              <Accordion.Control>
+                {t('RecentlyUpdatedRelics.Header')}
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Suspense fallback={null}>
+                  <RecentDiscs />
+                </Suspense>
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        </div>
+      )}
+      <DiscGrid />
+      <BottomDock onShowDup={onShowDup} />
+      <Suspense fallback={null}>
+        <DupModal show={showDup} onHide={onHideDup} setDiscToEdit={() => {}} />
       </Suspense>
-      <DiscInventory onAdd={onAddNew} onEdit={onEdit} onShowDup={onShowDup} />
     </div>
   )
 }

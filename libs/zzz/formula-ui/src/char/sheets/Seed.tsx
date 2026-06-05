@@ -34,13 +34,10 @@ const sheet = createBaseSheet(key, {
         fields: [
           fieldForBuff(buff.core_vanguard_atk),
           fieldForBuff(buff.core_vanguard_crit_dmg_),
+          fieldForBuff(buff.core_dmg_),
         ],
         targeted: true,
       },
-    },
-    {
-      type: 'fields',
-      fields: [fieldForBuff(buff.core_dmg_)],
     },
   ],
   ability: [

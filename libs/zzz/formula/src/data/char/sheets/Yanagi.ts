@@ -1,6 +1,5 @@
 import {
   cmpGE,
-  cmpNE,
   min,
   prod,
   subscript,
@@ -10,7 +9,6 @@ import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
   allBoolConditionals,
-  allListConditionals,
   allNumConditionals,
   own,
   ownBuff,
@@ -42,6 +40,7 @@ const {
   clarity,
   exposed,
   shinrabanshou,
+  polarityDisorder,
 } = allBoolConditionals(key, undefined, { clarity: 1, exposed: 4 })
 const { thrusts } = allNumConditionals(
   key,
@@ -51,7 +50,6 @@ const { thrusts } = allNumConditionals(
   undefined,
   { thrusts: 2 }
 )
-const { polarityDisorder } = allListConditionals(key, ['exSpecial', 'ult'])
 
 const m2_exSpecial_electric_anomBuildup_ =
   ownBuff.combat.anomBuildup_.electric.addWithDmgType(
@@ -134,14 +132,12 @@ const sheet = register(
     'polarity_anom_base_',
     ownBuff.combat.anom_base_.addWithDmgType(
       'disorder',
-      cmpNE(
-        polarityDisorder.value,
-        0,
+      polarityDisorder.ifOn(
         cmpGE(
           char.mindscape,
           2,
           sum(
-            prod(-1, sum(percent(1), percent(-dm.m2.polarity_disorder_mv_))),
+            sum(percent(1), percent(dm.m2.polarity_disorder_mv_)),
             prod(
               min(
                 cmpGE(char.mindscape, 6, dm.m6.max_stacks, dm.m2.max_stacks),
@@ -150,7 +146,7 @@ const sheet = register(
               percent(dm.m2.add_polarity_disorder_mv_)
             )
           ),
-          percent(-0.85)
+          percent(0.85)
         )
       )
     ),
@@ -161,9 +157,7 @@ const sheet = register(
     'polarity_anom_flat_dmg',
     ownBuff.combat.anom_flat_dmg.addWithDmgType(
       'disorder',
-      cmpNE(
-        polarityDisorder.value,
-        0,
+      polarityDisorder.ifOn(
         prod(
           sum(percent(5), prod(char.chain, percent(2.25))),
           own.final.anomProf

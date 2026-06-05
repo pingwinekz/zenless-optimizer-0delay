@@ -64,7 +64,7 @@ import { cardTotalW, defaultGap, parentH } from './constantsUi'
 const dropAnimationDuration = 200
 
 const dropAnimationConfig: DropAnimation = {
-  duration: dropAnimationDuration,
+  duration: 0,
   easing: 'ease',
   sideEffects: defaultDropAnimationSideEffects({
     styles: { active: { opacity: '0' } },
@@ -196,38 +196,58 @@ export default function PageCharacter({
         )
       }
 
-      setTimeout(() => setActiveId(null), dropAnimationDuration)
+      // Clear activeId immediately — since we update the order synchronously,
+      // keeping the overlay or 0.4-opacity ghost visible would let the overlay
+      // (high z-index) cover the item in its new position.
+      setActiveId(null)
 
       const { active, over } = event
       if (!over || active.id === over.id) return
 
-      const existing = displayCharacter.customSortOrder
-      const currentOrder =
-        existing && existing.length > 0 ? existing : [...charKeys]
-
-      const oldIndex = currentOrder.indexOf(active.id as string)
-      const newIndex = currentOrder.indexOf(over.id as string)
+      // Read the current displayed order from the ref — this always matches
+      // what the user sees, unlike the closure-captured customSortOrder which
+      // can be stale or differ when sortType is not 'custom'.
+      const currentOrder = filteredCharKeysRef.current
+      const oldIndex = currentOrder.indexOf(active.id as CharacterKey)
+      const newIndex = currentOrder.indexOf(over.id as CharacterKey)
       if (oldIndex === -1 || newIndex === -1) return
 
       const reordered = [...currentOrder]
-      const [moved] = reordered.splice(oldIndex, 1)
-      reordered.splice(newIndex, 0, moved)
-      // Defer to let @dnd-kit clean up its internal drag state (transforms, sortable
-      // overlays) before the database trigger re-renders SortableContext with new items.
-      setTimeout(() => {
-        database.displayCharacter.set({
-          sortType: 'custom',
-          customSortOrder: reordered,
-        })
-      }, 0)
+      reordered.splice(oldIndex, 1)
+      reordered.splice(newIndex, 0, active.id as CharacterKey)
+
+      // If filters are active, currentOrder may be a subset of the full
+      // customSortOrder. Preserve any filtered-out characters at the end so
+      // they don't get silently dropped from the priority order.
+      const fullExisting = database.displayCharacter.get().customSortOrder
+      if (fullExisting?.length) {
+        const newSet = new Set(reordered)
+        const preserved = fullExisting.filter(
+          (ck) => !newSet.has(ck as CharacterKey)
+        )
+        reordered.push(...(preserved as CharacterKey[]))
+      }
+
+      // Update synchronously — @dnd-kit hasn't started its drop animation yet,
+      // so changing SortableContext.items now is safe and matches the working
+      // pattern used by Fribbels (insertCharacter inside onDragEnd).
+      database.displayCharacter.set({
+        sortType: 'custom',
+        customSortOrder: reordered,
+      })
     },
-    [charKeys, displayCharacter.customSortOrder, database.displayCharacter]
+    [database.displayCharacter]
   )
 
   const handleDragCancel = useCallback(() => {
     gridRef.current?.removeAttribute('data-dragging-active')
     setTimeout(() => setActiveId(null), dropAnimationDuration)
   }, [])
+
+  // Keep a ref so handleDragEnd always reads the latest displayed order
+  // (matching Fribbels' pattern of reading from the store synchronously).
+  const filteredCharKeysRef = useRef(filteredCharKeys)
+  filteredCharKeysRef.current = filteredCharKeys
 
   const itemIds = useMemo(
     () => filteredCharKeys as string[],

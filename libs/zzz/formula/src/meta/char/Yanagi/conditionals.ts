@@ -16,12 +16,7 @@ export const conditionals = {
   },
   jougen: { sheet: 'Yanagi', name: 'jougen', type: 'bool' },
   kagen: { sheet: 'Yanagi', name: 'kagen', type: 'bool' },
-  polarityDisorder: {
-    sheet: 'Yanagi',
-    name: 'polarityDisorder',
-    type: 'list',
-    list: ['exSpecial', 'ult'],
-  },
+  polarityDisorder: { sheet: 'Yanagi', name: 'polarityDisorder', type: 'bool' },
   shinrabanshou: { sheet: 'Yanagi', name: 'shinrabanshou', type: 'bool' },
   thrusts: {
     sheet: 'Yanagi',

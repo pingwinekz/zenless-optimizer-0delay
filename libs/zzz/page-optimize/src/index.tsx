@@ -154,3 +154,8 @@ export default function PageOptimize() {
     </Box>
   )
 }
+
+export { MultiSelectPills } from './layout/MultiSelectPills'
+export { HeaderText } from './layout/HeaderText'
+export { FilterContainer } from './layout/FilterContainer'
+export { FilterRow } from './layout/FilterRow'

@@ -39,11 +39,10 @@ const sheet = createBaseSheet(key, {
         {
           type: 'conditional',
           conditional: {
-            label: (_, value) => ch(`polarityDisorderCond.${value}`),
+            label: ch('polarityDisorderCond'),
             description:
               'When triggering Polarity Disorder, anomaly base DMG and flat DMG are increased.',
             metadata: cond.polarityDisorder,
-            badge: (_, value) => (value === 0 ? null : value),
             fields: [
               fieldForBuff(buff.polarity_anom_base_),
               fieldForBuff(buff.polarity_anom_flat_dmg),

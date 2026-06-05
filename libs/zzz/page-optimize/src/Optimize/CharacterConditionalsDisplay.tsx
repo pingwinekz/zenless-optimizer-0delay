@@ -321,7 +321,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
             comboboxProps={{ keepMounted: false }}
             data={condData.list.map((item, index) => ({
               label: item,
-              value: String(index + 1),
+              value: String(index),
             }))}
             value={String(isMindscapeDisabled ? 0 : currentValue)}
             onChange={(v) => setValue(Number(v) || 0)}

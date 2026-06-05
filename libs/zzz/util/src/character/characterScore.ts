@@ -20,14 +20,32 @@ export type CharacterScoreResult = {
   mainStatTotal: number
 }
 
-function getMaxWeight(
+/**
+ * Compute the maximum possible weighted score for a disc given its total roll
+ * count, number of substats, and the character's effective stats + weights.
+ *
+ * Formula: allocate 1 roll to each of the N best-weight effective stats (where
+ * N = disc's substat count), then put all remaining rolls into the single
+ * highest-weight stat. This is the best possible distribution a disc of this
+ * roll count could achieve.
+ */
+export function computeMaxPossibleWeighted(
+  totalRolls: number,
+  numSubstats: number,
+  effectiveStats: DiscSubStatKey[],
   weights: Partial<Record<DiscSubStatKey, number>>
 ): number {
-  let max = 1
-  for (const val of Object.values(weights)) {
-    if (val !== undefined && val > max) max = val
-  }
-  return max
+  if (totalRolls === 0 || numSubstats === 0 || effectiveStats.length === 0)
+    return totalRolls
+
+  const statWeights = effectiveStats.map((key) => weights[key] ?? 1)
+  statWeights.sort((a, b) => b - a)
+
+  const topWeights = statWeights.slice(0, numSubstats)
+  const highestWeight = topWeights[0] ?? 1
+  const remaining = Math.max(0, totalRolls - numSubstats)
+
+  return topWeights.reduce((sum, w) => sum + w, 0) + remaining * highestWeight
 }
 
 const GRADE_THRESHOLDS: [number, string][] = [
@@ -86,9 +104,7 @@ export function calculateDiscScore(
 } {
   let totalRolls = 0
   let effectiveRolls = 0
-  let weightedTotalRolls = 0
   let weightedEffectiveRolls = 0
-  const maxWeight = substatWeights ? getMaxWeight(substatWeights) : 1
 
   for (const substat of disc.substats) {
     if (!substat.key || substat.upgrades === 0) continue
@@ -99,18 +115,26 @@ export function calculateDiscScore(
       effectiveRolls += substat.upgrades
 
     // Weighted counts
-    const weight = substatWeights?.[substat.key as DiscSubStatKey] ?? 1
-    weightedTotalRolls += substat.upgrades * maxWeight
-    if (effectiveStats.includes(substat.key as DiscSubStatKey))
-      weightedEffectiveRolls += substat.upgrades * weight
+    if (substatWeights) {
+      const weight = substatWeights[substat.key as DiscSubStatKey] ?? 1
+      if (effectiveStats.includes(substat.key as DiscSubStatKey))
+        weightedEffectiveRolls += substat.upgrades * weight
+    }
   }
 
   const efficiency =
     totalRolls > 0
-      ? substatWeights
-        ? weightedEffectiveRolls / weightedTotalRolls
+      ? substatWeights && effectiveStats.length > 0
+        ? weightedEffectiveRolls /
+          computeMaxPossibleWeighted(
+            totalRolls,
+            disc.substats.filter((s) => s.key && s.upgrades > 0).length,
+            effectiveStats,
+            substatWeights
+          )
         : effectiveRolls / totalRolls
       : 0
+
   return {
     totalRolls,
     effectiveRolls,
@@ -127,32 +151,51 @@ export function calculateSubstatEfficiency(
 ): CharacterScoreResult {
   let totalRolls = 0
   let effectiveRolls = 0
-  let weightedTotalRolls = 0
   let weightedEffectiveRolls = 0
-  const maxWeight = substatWeights ? getMaxWeight(substatWeights) : 1
+  let sumMaxPossible = 0
 
   for (const disc of discs) {
     if (!disc) continue
+
+    // Per-disc aggregation for max possible normalization
+    let discRolls = 0
+    let discNumSubstats = 0
+
     for (const substat of disc.substats) {
       if (!substat.key || substat.upgrades === 0) continue
 
-      // Raw counts (unweighted, always tracked)
+      discRolls += substat.upgrades
+      discNumSubstats++
       totalRolls += substat.upgrades
-      if (effectiveStats.includes(substat.key as DiscSubStatKey))
+
+      if (effectiveStats.includes(substat.key as DiscSubStatKey)) {
         effectiveRolls += substat.upgrades
 
-      // Weighted counts
-      const weight = substatWeights?.[substat.key as DiscSubStatKey] ?? 1
-      weightedTotalRolls += substat.upgrades * maxWeight
-      if (effectiveStats.includes(substat.key as DiscSubStatKey))
-        weightedEffectiveRolls += substat.upgrades * weight
+        if (substatWeights) {
+          const weight = substatWeights[substat.key as DiscSubStatKey] ?? 1
+          weightedEffectiveRolls += substat.upgrades * weight
+        }
+      }
     }
+
+    if (
+      substatWeights &&
+      discRolls > 0 &&
+      discNumSubstats > 0 &&
+      effectiveStats.length > 0
+    )
+      sumMaxPossible += computeMaxPossibleWeighted(
+        discRolls,
+        discNumSubstats,
+        effectiveStats,
+        substatWeights
+      )
   }
 
   const substatEfficiency =
     totalRolls > 0
-      ? substatWeights
-        ? weightedEffectiveRolls / weightedTotalRolls
+      ? substatWeights && effectiveStats.length > 0
+        ? weightedEffectiveRolls / sumMaxPossible
         : effectiveRolls / totalRolls
       : 0
 
