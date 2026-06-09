@@ -1,5 +1,4 @@
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
-import { DocumentDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discDefIcon } from '@genshin-optimizer/zzz/assets'
 import { allDiscSetKeys, discSetNames } from '@genshin-optimizer/zzz/consts'
 import {
@@ -8,19 +7,17 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
-import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
+import { Translate, i18n } from '@genshin-optimizer/zzz/i18n'
 import {
-  Box,
   Divider,
   Drawer,
   Flex,
   HoverCard,
   Select,
-  Skeleton,
   Switch,
   Text,
 } from '@mantine/core'
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 
 const conditionalIconWidth = 32
 const conditionalNameWidth = 255
@@ -47,16 +44,16 @@ export function FormSetConditionals({
       size={550}
       keepMounted
     >
-      {hasOpened && (
-        <Suspense fallback={<Skeleton height={300} />}>
-          <FormSetConditionalsContent />
-        </Suspense>
-      )}
+      {hasOpened && <FormSetConditionalsContent />}
     </Drawer>
   )
 }
 
 function FormSetConditionalsContent() {
+  useEffect(() => {
+    i18n.loadNamespaces(allDiscSetKeys.map((key) => `disc_${key}_gen`))
+  }, [])
+
   const discOptions = useMemo(
     () =>
       allDiscSetKeys.map((key) => {
@@ -99,7 +96,6 @@ function DiscSetConditionalRow({
 }) {
   const character = useCharacterContext()!
   const team = useTeam(character.key)
-  const uiSheet = discUiSheets[sheet as keyof typeof discUiSheets]
 
   const currentValues = useMemo(() => {
     const vals: Record<string, number> = {}
@@ -171,55 +167,33 @@ function DiscSetConditionalRow({
         <Text fw={600} mb={4} size="sm">
           {discSetNames[sheet as keyof typeof discSetNames] ?? sheet}
         </Text>
-        <Flex direction="column" gap={12}>
-          <Flex direction="column" gap={4}>
-            <Text size="xs" fw={600} tt="uppercase" c="dimmed">
-              Set description
-            </Text>
-            {uiSheet &&
-              Object.entries(uiSheet).map(([blockKey, block]) => (
-                <Box key={blockKey}>
-                  <Text size="xs" fw={500} mb={2}>
-                    {blockKey === '2' ? '2-Piece' : '4-Piece'}
-                  </Text>
-                  {block.documents.map((doc, i) => (
-                    <DocumentDisplay
-                      key={i}
-                      document={doc}
-                      typoVariant="body2"
-                    />
-                  ))}
-                </Box>
-              ))}
-          </Flex>
-          <Flex direction="column" gap={4}>
-            <Text size="xs" fw={600} tt="uppercase" c="dimmed">
-              Enabled effect
-            </Text>
-            {condEntries.map(([condName, condData]) => {
-              const label = condData.name
-              const val = currentValues[condName]
-              return (
-                <Flex key={condName} align="center" gap={4}>
-                  {condData.type === 'bool' && (
-                    <Text size="xs" c={val > 0 ? 'green' : 'dimmed'} fw={500}>
-                      {val > 0 ? 'ON' : 'OFF'}
-                    </Text>
-                  )}
-                  {condData.type === 'num' && (
-                    <Text size="xs" c="blue" fw={500}>
-                      {val}
-                      {condData.max != null && `/${condData.max}`}
-                    </Text>
-                  )}
-                  <Text size="xs">{label}</Text>
-                </Flex>
-              )
-            })}
-          </Flex>
-        </Flex>
+        <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>
+          Set description
+        </Text>
+        <Suspense fallback={null}>
+          <DiscSetDesc sheet={sheet} />
+        </Suspense>
       </HoverCard.Dropdown>
     </HoverCard>
+  )
+}
+
+function DiscSetDesc({ sheet }: { sheet: string }) {
+  return (
+    <>
+      <Text size="xs" fw={500} mb={2}>
+        2-Piece
+      </Text>
+      <Text size="xs" c="dimmed" mb={4}>
+        <Translate ns={`disc_${sheet}_gen`} key18="desc2" />
+      </Text>
+      <Text size="xs" fw={500} mb={2}>
+        4-Piece
+      </Text>
+      <Text size="xs" c="dimmed" mb={4}>
+        <Translate ns={`disc_${sheet}_gen`} key18="desc4" />
+      </Text>
+    </>
   )
 }
 
