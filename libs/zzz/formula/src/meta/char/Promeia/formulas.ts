@@ -1000,4 +1000,18 @@ export const formulas = {
       name: 'AssistFollowUpInterceptingStrike_0_anomBuildup',
     },
   },
+  trialByColdAbloomDmgInst: {
+    sheet: 'Promeia',
+    name: 'trialByColdAbloomDmgInst',
+    tag: {
+      et: 'own',
+      qt: 'formula',
+      q: 'anomalyDmg',
+      sheet: 'Promeia',
+      attribute: 'ice',
+      damageType1: 'anomaly',
+      damageType2: 'abloom',
+      name: 'trialByColdAbloomDmgInst',
+    },
+  },
 } as const

@@ -1,11 +1,19 @@
-import { cmpGE, max, prod, sum } from '@genshin-optimizer/pando/engine'
+import {
+  cmpGE,
+  max,
+  prod,
+  subscript,
+  sum,
+} from '@genshin-optimizer/pando/engine'
 import type { NumNode } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
 import {
+  customAnomalyDmg,
   own,
   ownBuff,
   percent,
+  reader,
   register,
   registerBuff,
   team,
@@ -19,9 +27,59 @@ const dm = mappedStats.char[key]
 
 const { char } = own
 
+// Promeia's total Anomaly Mastery = initial * (1 + combat_%) + combat_flat
+// We compute final.anomMas manually instead of reading agg-level `final.anomMas`
+// to avoid the sum matching ALL characters' base entries (via mask=0 wildcard).
+// initial = base * (1 + initial_%) + flat_disc
+const promeiaInitAnomMas = sum(
+  prod(
+    reader.withTag({ et: 'own', qt: 'base', q: 'anomMas', sheet: key }),
+    sum(
+      percent(1),
+      reader.withTag({
+        et: 'own',
+        qt: 'initial',
+        q: 'anomMas_',
+        sheet: 'agg',
+        src: key,
+      })
+    )
+  ),
+  // Flat anomMas from disc substats (at sheet: 'dyn', scoped to Promeia via src)
+  reader.withTag({
+    et: 'own',
+    qt: 'initial',
+    q: 'anomMas',
+    sheet: 'dyn',
+    src: key,
+  })
+)
+// final = initial * (1 + combat_%) + combat_flat
+const promeiaFinalAnomMas = sum(
+  prod(
+    promeiaInitAnomMas,
+    sum(
+      percent(1),
+      reader.withTag({
+        et: 'own',
+        qt: 'combat',
+        q: 'anomMas_',
+        sheet: 'agg',
+        src: key,
+      })
+    )
+  ),
+  reader.withTag({
+    et: 'own',
+    qt: 'combat',
+    q: 'anomMas',
+    sheet: 'agg',
+    src: key,
+  })
+)
 const excessAnomMas = max(
   0,
-  sum(own.initial.anomMas, -dm.core.anomMasThresh[0])
+  sum(promeiaFinalAnomMas, -dm.core.anomMasThresh[0])
 )
 
 const ability_check_no_self = (node: NumNode | number) =>
@@ -40,6 +98,23 @@ const sheet = register(
 
   ...registerAllDmgDazeAndAnom(key, dm),
 
+  // Trial by Cold: Abloom DMG triggered by EX Special - Merciless Judgment
+  ...customAnomalyDmg(
+    'trialByColdAbloomDmgInst',
+    {
+      attribute: data_gen.attribute,
+      damageType1: 'anomaly',
+      damageType2: 'abloom',
+    },
+    prod(
+      percent(
+        subscript(sum(own.char.special, -1), dm.core.trialConsumeToTrigger)
+      ),
+      own.final.atk,
+      sum(percent(1), own.final.anom_mv_mult_)
+    )
+  ),
+
   // Core Passive: Anomaly Prof from excess Anomaly Mastery
   registerBuff(
     'core_anomProf',
@@ -48,15 +123,15 @@ const sheet = register(
     )
   ),
 
-  // Core Passive: Squad Abloom DMG from excess Anomaly Mastery (display only, not counted)
+  // Core Passive: Squad Abloom DMG from excess Anomaly Mastery
   registerBuff(
     'core_abloomDmg',
-    teamBuff.combat.anom_mv_mult_.add(
+    teamBuff.combat.anom_mv_mult_.addWithDmgType(
+      'abloom',
       prod(excessAnomMas, percent(dm.core.abloomDmgPerExcessMas[0]))
     ),
-    'infer',
-    true,
-    false
+    undefined,
+    true
   ),
 
   // Ability: Ice Anomaly Buildup (+30% when ANOTHER teammate is Anomaly or Support)

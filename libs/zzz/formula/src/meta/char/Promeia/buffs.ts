@@ -20,6 +20,7 @@ export const buffs = {
       qt: 'combat',
       q: 'anom_mv_mult_',
       sheet: 'Promeia',
+      damageType1: 'abloom',
       name: 'core_abloomDmg',
     },
     team: true,

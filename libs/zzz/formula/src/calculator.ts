@@ -53,6 +53,7 @@ export class Calculator extends Base<Tag, never> {
             'sheerDmgInst',
             'anomalyDmgInst',
             'abloomDmgInst',
+            'trialByColdAbloomDmgInst',
             'anomalyBuildupInst',
             'dazeInst',
             ...allAttributeKeys

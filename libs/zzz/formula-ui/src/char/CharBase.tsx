@@ -154,6 +154,17 @@ charBaseUiSheet.push(
       ),
     })
   ),
+  {
+    fieldRef: {
+      et: 'own',
+      qt: 'formula',
+      q: 'anomalyDmg',
+      damageType1: 'anomaly',
+      damageType2: 'abloom',
+      name: 'trialByColdAbloomDmgInst',
+    },
+    title: 'Trial by Cold',
+  },
   ...allAttributeKeys.map(
     (attr): TagField => ({
       fieldRef: {
