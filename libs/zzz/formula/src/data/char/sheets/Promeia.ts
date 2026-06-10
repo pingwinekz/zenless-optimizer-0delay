@@ -108,7 +108,7 @@ const sheet = register(
     },
     prod(
       percent(
-        subscript(sum(own.char.special, -1), dm.core.trialConsumeToTrigger)
+        subscript(own.char.core, dm.core.trialConsumeToTrigger)
       ),
       own.final.atk,
       sum(percent(1), own.final.anom_mv_mult_)

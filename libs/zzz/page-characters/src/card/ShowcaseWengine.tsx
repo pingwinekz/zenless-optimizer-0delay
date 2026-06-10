@@ -1,6 +1,7 @@
 import { ImgIcon } from '@genshin-optimizer/common/ui'
 import { wengineAsset } from '@genshin-optimizer/zzz/assets'
 import type { PhaseKey, WengineKey } from '@genshin-optimizer/zzz/consts'
+import { WengineName } from '@genshin-optimizer/zzz/ui'
 import { Box, Text } from '@mantine/core'
 import { OuterShadowRingWrapper } from '../CharacterPreviewComponents'
 import styles from './ShowcaseWengine.module.css'
@@ -35,7 +36,9 @@ export function ShowcaseWengine({
             <Box className={styles.wengineOverlay}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <ImgIcon src={wengineAsset(wengineKey, 'icon')} size={1.4} />
-                <Text className={styles.wengineName}>{wengineKey}</Text>
+                <Text className={styles.wengineName} component="span">
+                  <WengineName wKey={wengineKey} />
+                </Text>
               </Box>
               <Text className={styles.wenginePhase}>P{phase}</Text>
             </Box>

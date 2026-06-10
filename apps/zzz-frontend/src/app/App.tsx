@@ -170,7 +170,7 @@ function Content() {
   return (
     <Flex direction="column" mih="100vh" pos="relative">
       <Header anchor="back-to-top-anchor" />
-      <Flex style={{ flex: 1 }}>
+      <Flex gap={96} style={{ flex: 1 }}>
         <LayoutSider />
         <Box
           style={{
