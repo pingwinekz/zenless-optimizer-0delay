@@ -37,6 +37,7 @@ export const stats = [
   'defIgn_',
   'resIgn_',
   'shield_',
+  'directDmg_',
   'dazeInc_',
   'dazeRed_',
   'dmg_red_',
@@ -83,6 +84,8 @@ export const damageTypes = [
   'elemental',
   'sheer',
   'abloom',
+  'vortex',
+  'windswept',
 ] as const
 
 export const skillTypes = [

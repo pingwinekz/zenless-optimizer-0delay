@@ -1,4 +1,5 @@
 import { stableArr } from '@genshin-optimizer/common/util'
+import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import type { WengineKey } from '@genshin-optimizer/zzz/consts'
 import { isWengineKey } from '@genshin-optimizer/zzz/consts'
 import type { TeamConditional } from '@genshin-optimizer/zzz/db'
@@ -6,11 +7,12 @@ import { useCharacterContext, useTeam } from '@genshin-optimizer/zzz/db-ui'
 import { WengineSheetDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { WengineAutocomplete } from '@genshin-optimizer/zzz/ui'
 import { Box, SimpleGrid, Stack } from '@mantine/core'
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 
 export function WengineSheetsDisplay() {
   const { key: characterKey } = useCharacterContext()!
   const team = useTeam(characterKey)
+  const tagCtx = useContext(TagContext)
   const conditionals =
     team?.frames?.[0]?.conditionals ?? stableArr<TeamConditional>()
   const [wkey, setWkey] = useState<WengineKey | ''>('')
@@ -19,23 +21,28 @@ export function WengineSheetsDisplay() {
     if (wkey) sets.push(wkey)
     return [...new Set(sets)].sort((set) => (set === wkey ? -1 : 1))
   }, [conditionals, wkey])
+  const tagValue = useMemo(
+    () => ({ ...tagCtx, src: characterKey }),
+    [tagCtx, characterKey]
+  )
   return (
     <Stack gap={1} style={{ paddingTop: 4 }}>
       <WengineAutocomplete wkey={wkey} setWKey={setWkey} />
       <Box>
         <SimpleGrid cols={3} spacing={1}>
           {wList.map((wk) => (
-            <WengineSheetDisplay
-              key={wk}
-              wengine={{
-                key: wk,
-                level: 60,
-                phase: 5,
-                modification: 1,
-                lock: false,
-                location: '',
-              }}
-            />
+            <TagContext.Provider key={wk} value={tagValue}>
+              <WengineSheetDisplay
+                wengine={{
+                  key: wk,
+                  level: 60,
+                  phase: 5,
+                  modification: 1,
+                  lock: false,
+                  location: '',
+                }}
+              />
+            </TagContext.Provider>
           ))}
         </SimpleGrid>
       </Box>

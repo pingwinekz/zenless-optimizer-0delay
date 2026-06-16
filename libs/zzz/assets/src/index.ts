@@ -59,7 +59,9 @@ export function rarityDefIcon(rarityKey: Raritykey) {
 }
 
 export function factionDefIcon(factionKey: FactionKey) {
-  return factionKey ? faction[factionKey] : ''
+  return factionKey
+    ? ((faction as Record<string, string>)[factionKey] ?? '')
+    : ''
 }
 
 export function commonDefIcon(key: keyof typeof skill) {

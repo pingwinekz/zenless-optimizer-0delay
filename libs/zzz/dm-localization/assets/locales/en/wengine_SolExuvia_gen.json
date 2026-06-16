@@ -1,0 +1,14 @@
+{
+  "name": "Sol Exuvia",
+  "desc": "...",
+  "desc2": "Equip to increase Pyrois' combat capabilities. Can also be used to increase other Attack Agents' combat capabilities.",
+  "desc3": "...",
+  "phase": "Eclipse Effect",
+  "phaseDescs": [
+    "CRIT Rate increases by 20%. When the equipper is Pyrois, using their <ct color=#FFFFFF>Ultimate</ct> grants the Eclipse effect. Under the Eclipse effect, DMG dealt by the equipper ignores <ct color=#2BAD00>16%</ct> of <ct color=#FE437E>Ether RES</ct>, lasting 45s. Repeated triggers reset the duration. When the equipper enters combat, they gain the Eclipse effect.",
+    "CRIT Rate increases by 20%. When the equipper is Pyrois, using their <ct color=#FFFFFF>Ultimate</ct> grants the Eclipse effect. Under the Eclipse effect, DMG dealt by the equipper ignores <ct color=#2BAD00>17.5%</ct> of <ct color=#FE437E>Ether RES</ct>, lasting 45s. Repeated triggers reset the duration. When the equipper enters combat, they gain the Eclipse effect.",
+    "CRIT Rate increases by 20%. When the equipper is Pyrois, using their <ct color=#FFFFFF>Ultimate</ct> grants the Eclipse effect. Under the Eclipse effect, DMG dealt by the equipper ignores <ct color=#2BAD00>19%</ct> of <ct color=#FE437E>Ether RES</ct>, lasting 45s. Repeated triggers reset the duration. When the equipper enters combat, they gain the Eclipse effect.",
+    "CRIT Rate increases by 20%. When the equipper is Pyrois, using their <ct color=#FFFFFF>Ultimate</ct> grants the Eclipse effect. Under the Eclipse effect, DMG dealt by the equipper ignores <ct color=#2BAD00>20.5%</ct> of <ct color=#FE437E>Ether RES</ct>, lasting 45s. Repeated triggers reset the duration. When the equipper enters combat, they gain the Eclipse effect.",
+    "CRIT Rate increases by 20%. When the equipper is Pyrois, using their <ct color=#FFFFFF>Ultimate</ct> grants the Eclipse effect. Under the Eclipse effect, DMG dealt by the equipper ignores <ct color=#2BAD00>22%</ct> of <ct color=#FE437E>Ether RES</ct>, lasting 45s. Repeated triggers reset the duration. When the equipper enters combat, they gain the Eclipse effect."
+  ]
+}

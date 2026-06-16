@@ -8,7 +8,10 @@ import {
   shallowCompareObj,
   validateValue,
 } from '@genshin-optimizer/common/util'
-import { correctConditionalValue } from '@genshin-optimizer/game-opt/engine'
+import {
+  type IConditionalData,
+  correctConditionalValue,
+} from '@genshin-optimizer/game-opt/engine'
 import {
   type AttributeKey,
   type CharacterKey,
@@ -25,6 +28,7 @@ import type {
   own,
 } from '@genshin-optimizer/zzz/formula'
 import {
+  conditionals as allConditionals,
   formulas,
   getConditional,
   isMember,
@@ -704,24 +708,51 @@ export class TeamDataManager extends DataManager<
   }
 }
 
-const emptyFrame0 = (): OptFrame => ({
+function defaultConditionals(mainKey: CharacterKey): TeamConditional[] {
+  const result: TeamConditional[] = []
+  const conds = allConditionals as Record<
+    string,
+    Record<string, IConditionalData>
+  >
+  for (const [sheet, sheetConds] of Object.entries(conds)) {
+    for (const [condKey, condData] of Object.entries(sheetConds)) {
+      const condValue =
+        condData.type === 'bool'
+          ? 1
+          : condData.type === 'num'
+            ? (condData.max ?? 10)
+            : 0
+      result.push({
+        sheet: sheet as Sheet,
+        src: mainKey as Src,
+        dst: null as Dst,
+        condKey,
+        condValue,
+      })
+    }
+  }
+  return result
+}
+
+const emptyFrame0 = (mainKey: CharacterKey): OptFrame => ({
   tag: undefined,
   multiplier: 1,
   critMode: 'avg',
   bonusStats: [],
-  conditionals: [],
+  conditionals: defaultConditionals(mainKey),
   enemyStats: [],
 })
 
 // for the current implementation the team is limited to only the first frame.
 export function getTeamFrame0(team: Team): OptFrame {
-  return team.frames[0] ?? emptyFrame0()
+  const mainKey = getMainCharacterKey(team)
+  return team.frames[0] ?? emptyFrame0(mainKey)
 }
 
 export function initialTeam(mainKey: CharacterKey): Team {
   return {
     teammates: [{ characterKey: mainKey, optConfigId: undefined }],
-    frames: [emptyFrame0()],
+    frames: [emptyFrame0(mainKey)],
     enemyLvl: 80,
     enemyDef: 953,
     enemyStunMultiplier: 150,

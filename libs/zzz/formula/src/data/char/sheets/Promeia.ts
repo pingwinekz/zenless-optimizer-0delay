@@ -107,9 +107,7 @@ const sheet = register(
       damageType2: 'abloom',
     },
     prod(
-      percent(
-        subscript(own.char.core, dm.core.trialConsumeToTrigger)
-      ),
+      percent(subscript(own.char.core, dm.core.trialConsumeToTrigger)),
       own.final.atk,
       sum(percent(1), own.final.anom_mv_mult_)
     )

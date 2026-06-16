@@ -13,7 +13,13 @@ export function ColorText({
   return (
     <span
       style={{
-        ...(color ? { color: `var(--mantine-color-${color}-filled)` } : {}),
+        ...(color
+          ? {
+              color: color.startsWith('#')
+                ? color
+                : `var(--mantine-color-${color}-filled)`,
+            }
+          : {}),
         ...style,
       }}
       {...props}

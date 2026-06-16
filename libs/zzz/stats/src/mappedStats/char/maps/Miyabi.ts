@@ -40,7 +40,7 @@ const dm = {
     frost_anomBuildup_: data_gen.coreParams[1][0],
     max_anomBuildup_: data_gen.coreParams[2][0],
     dmg: data_gen.coreParams[3],
-    anomBuildup_: data_gen.coreParams[4][0],
+    anomBuildup_: data_gen.coreParams[4],
     fallen_frost: data_gen.coreParams[5][0],
     cooldown: data_gen.coreParams[6][0],
   },

@@ -56,10 +56,14 @@ export class Calculator extends Base<Tag, never> {
             'trialByColdAbloomDmgInst',
             'anomalyBuildupInst',
             'dazeInst',
-            ...allAttributeKeys
-              .filter((k) => k !== 'wind')
-              .map((k) => `disorderDmgInst_${k}`),
+            ...allAttributeKeys.map((k) => `disorderDmgInst_${k}`),
             'disorderDmgInst_frost',
+            'vortexDmgInst_fire',
+            'vortexDmgInst_electric',
+            'vortexDmgInst_ether',
+            'vortexDmgInst_ice',
+            'vortexDmgInst_physical',
+            'vortexDmgInst_frost',
           ].includes(r.tag.name ?? '')
       )
   }

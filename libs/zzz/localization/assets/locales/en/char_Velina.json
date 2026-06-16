@@ -1,0 +1,7 @@
+{
+  "windbiteCond": "Windbite consumed to boost Vortex DMG Multiplier",
+  "chromaticTintCond": "Chromatic Tint from Sweeping Cyclone vs Contamination",
+  "windAnomalyCond": "Enemy is suffering a Wind Attribute Anomaly",
+  "ultAbloomCond": "Ultimate heavy attack hits a Wind Anomaly enemy",
+  "m6Cond": "When hitting enemy suffering Wind Anomaly"
+}

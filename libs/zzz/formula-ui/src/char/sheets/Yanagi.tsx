@@ -1,8 +1,8 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Yanagi } from '@genshin-optimizer/zzz/formula'
+import { GameDesc } from '@genshin-optimizer/zzz/i18n'
 import { st, trans } from '../../util'
-import { createBaseSheet, fieldForBuff } from '../sheetUtil'
-
+import { CoreGameDesc, createBaseSheet, fieldForBuff } from '../sheetUtil'
 const key: CharacterKey = 'Yanagi'
 const [, ch] = trans('char', key)
 const cond = Yanagi.conditionals
@@ -16,8 +16,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('jougenCond'),
-            description:
-              'While Yanagi is in Jougen stance, Electric DMG is increased.',
+            description: (
+              <GameDesc
+                ns="char_Yanagi_gen"
+                key18="basic.BasicAttackTsukuyomiKagura.desc"
+              />
+            ),
             metadata: cond.jougen,
             fields: [fieldForBuff(buff.basic_electric_dmg_)],
           },
@@ -26,8 +30,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('kagenCond'),
-            description:
-              'While Yanagi is in Kagen stance, PEN Ratio is increased.',
+            description: (
+              <GameDesc
+                ns="char_Yanagi_gen"
+                key18="basic.BasicAttackTsukuyomiKagura.desc"
+              />
+            ),
             metadata: cond.kagen,
             fields: [fieldForBuff(buff.basic_pen_)],
           },
@@ -40,8 +48,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('polarityDisorderCond'),
-            description:
-              'When triggering Polarity Disorder, anomaly base DMG and flat DMG are increased.',
+            description: (
+              <GameDesc
+                ns="char_Yanagi_gen"
+                key18="special.EXSpecialAttackGekkaRuten.desc"
+              />
+            ),
             metadata: cond.polarityDisorder,
             fields: [
               fieldForBuff(buff.polarity_anom_base_),
@@ -53,8 +65,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('m2Cond'),
-            description:
-              'Tracks Thrust stacks used to trigger additional effects.',
+            description: (
+              <GameDesc
+                ns="char_Yanagi_gen"
+                key18="special.EXSpecialAttackGekkaRuten.desc"
+              />
+            ),
             metadata: cond.thrusts,
           },
         },
@@ -66,8 +82,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('m2Cond'),
-            description:
-              'Tracks Thrust stacks used to trigger additional effects.',
+            description: (
+              <GameDesc
+                ns="char_Yanagi_gen"
+                key18="chain.UltimateRaieiTenge.desc"
+              />
+            ),
             metadata: cond.thrusts,
           },
         },
@@ -79,8 +99,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.exSpecial)' }),
-        description:
-          'Upon launching EX Special Attack, additional disorder DMG and Electric DMG are increased.',
+        description: <CoreGameDesc characterKey={key} />,
         metadata: cond.exSpecial_used,
         fields: [
           fieldForBuff(buff.core_addl_disorder_),
@@ -94,8 +113,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: st('uponLaunch.1', { val1: '$t(skills.basic)' }),
-        description:
-          'Upon hitting with Basic Attack, Electric Anomaly Buildup is increased.',
+        description: <GameDesc ns="char_Yanagi_gen" key18="ability.desc" />,
         metadata: cond.basic_hit,
         fields: [fieldForBuff(buff.ability_electric_anomBuildup_)],
       },
@@ -106,8 +124,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          "With one or more stacks of Clarity, Yanagi's Anomaly Proficiency is increased.",
+        description: (
+          <GameDesc ns="char_Yanagi_gen" key18="mindscapes.1.desc" />
+        ),
         metadata: cond.clarity,
         fields: [fieldForBuff(buff.m1_anomProf)],
       },
@@ -122,7 +141,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
-        description: 'Tracks Thrust stacks used to trigger additional effects.',
+        description: (
+          <GameDesc ns="char_Yanagi_gen" key18="mindscapes.2.desc" />
+        ),
         metadata: cond.thrusts,
       },
     },
@@ -132,8 +153,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m4Cond'),
-        description:
-          'Enemies suffering from the Exposed effect have increased PEN Ratio against them.',
+        description: (
+          <GameDesc ns="char_Yanagi_gen" key18="mindscapes.4.desc" />
+        ),
         metadata: cond.exposed,
         fields: [fieldForBuff(buff.m4_pen_)],
       },
@@ -144,8 +166,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'While Yanagi is in Shinrabanshou state, EX Special Attack DMG is increased.',
+        description: (
+          <GameDesc ns="char_Yanagi_gen" key18="mindscapes.6.desc" />
+        ),
         metadata: cond.shinrabanshou,
         fields: [fieldForBuff(buff.m6_exSpecial_dmg_)],
       },
@@ -154,7 +177,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m2Cond'),
-        description: 'Tracks Thrust stacks used to trigger additional effects.',
+        description: (
+          <GameDesc ns="char_Yanagi_gen" key18="mindscapes.6.desc" />
+        ),
         metadata: cond.thrusts,
       },
     },

@@ -401,35 +401,6 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
           }}
         >
           {rowContent}
-          {currentValue > 0 && fields && fields.length > 0 && (
-            <Box
-              style={{
-                marginTop: 4,
-                borderTop: '1px solid var(--mantine-color-default-border)',
-                paddingTop: 4,
-                paddingLeft: 4,
-                fontSize: 11,
-                lineHeight: '16px',
-              }}
-            >
-              <TagContext.Provider value={tagForFields as any}>
-                {fields.map(
-                  (field, i) =>
-                    'fieldRef' in field && (
-                      <TagFieldDisplay
-                        key={i}
-                        field={field}
-                        rowSx={{
-                          paddingTop: 1,
-                          paddingBottom: 1,
-                          gap: 6,
-                        }}
-                      />
-                    )
-                )}
-              </TagContext.Provider>
-            </Box>
-          )}
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown style={{ fontSize: 13 }}>

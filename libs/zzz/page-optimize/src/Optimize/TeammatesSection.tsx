@@ -4,7 +4,13 @@ import { TeammateCard } from './TeammateCard'
 
 const TEAMMATE_SLOTS = [0, 1] as const
 
-export function TeammatesSection() {
+export function TeammatesSection({
+  showCharPassives,
+  showWenginePassives,
+}: {
+  showCharPassives: boolean
+  showWenginePassives: boolean
+}) {
   const mainChar = useCharacterContext()!
   const team = useTeam(mainChar.key)!
 
@@ -21,6 +27,8 @@ export function TeammatesSection() {
           slotIndex={slotIndex}
           characterKey={extraTeammates[slotIndex]?.characterKey}
           teammateDatum={extraTeammates[slotIndex]}
+          showCharPassives={showCharPassives}
+          showWenginePassives={showWenginePassives}
         />
       ))}
     </Flex>

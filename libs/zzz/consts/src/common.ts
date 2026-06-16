@@ -99,6 +99,7 @@ export const allAnomalyDmgKeys = [
   'corruption',
   'shatter',
   'assault',
+  'windswept',
 ] as const
 export type AnomalyDamageKey = (typeof allAnomalyDmgKeys)[number]
 
@@ -126,6 +127,7 @@ export const statKeyTextMap: Partial<Record<string, string>> = {
   base_enerRegen: 'Base Energy Regen',
   impact_: 'Impact',
   impact: 'Impact',
+  directDmg_: 'Direct DMG Bonus',
   dazeInc_: 'Daze Increase',
   shield_: 'Shield Effect',
   anomMas: 'Anomaly Mastery',

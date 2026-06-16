@@ -239,7 +239,9 @@ const sheet = register(
   ),
   registerBuff(
     'core_anomBuildup_',
-    teamBuff.combat.anomBuildup_.add(frostburn.ifOn(dm.core.anomBuildup_)),
+    teamBuff.combat.anomBuildup_.add(
+      frostburn.ifOn(subscript(char.core, dm.core.anomBuildup_))
+    ),
     undefined,
     true
   ),

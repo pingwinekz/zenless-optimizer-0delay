@@ -1,0 +1,6 @@
+{
+  "name": "The Sky Ablaze",
+  "desc2": "<ct color=#FE437E>Ether DMG</ct> +10%.",
+  "desc4": "When the equipper is an <ct color=#FE437E>Ether</ct> attribute Agent, their CRIT DMG increases by 30%. When the equipper uses an <ct color=#FFFFFF>EX Special Attack</ct> or <ct color=#FFFFFF>Ultimate</ct>, their ATK increases by 10% for 30s. Repeated triggers reset the duration.",
+  "story": "..."
+}

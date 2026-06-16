@@ -1,7 +1,8 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Miyabi } from '@genshin-optimizer/zzz/formula'
+import { GameDesc } from '@genshin-optimizer/zzz/i18n'
 import { st, trans } from '../../util'
-import { createBaseSheet, fieldForBuff } from '../sheetUtil'
+import { CoreGameDesc, createBaseSheet, fieldForBuff } from '../sheetUtil'
 
 const key: CharacterKey = 'Miyabi'
 const [, ch] = trans('char', key)
@@ -17,7 +18,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: st('uponLaunch.1', { val1: '$t(skills.ult)' }),
-            description: 'Increases Ice DMG after using the Ultimate.',
+            description: (
+              <GameDesc
+                ns="char_Miyabi_gen"
+                key18="chain.UltimateLingeringSnow.desc"
+              />
+            ),
             metadata: cond.ult_used,
             fields: [fieldForBuff(buff.ult_ice_dmg_)],
           },
@@ -30,8 +36,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreIcefireCond'),
-        description:
-          'Increases Frost Anomaly Buildup against enemies affected by Icefire.',
+        description: <CoreGameDesc characterKey={key} paragraph={0} />,
         metadata: cond.icefire,
         fields: [fieldForBuff(buff.core_frost_anomBuildup_)],
       },
@@ -49,8 +54,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('coreFrostburnCond'),
-        description:
-          'Increases Anomaly Buildup against enemies under the Frostburn state.',
+        description: <CoreGameDesc characterKey={key} paragraph={1} />,
         metadata: cond.frostburn,
         fields: [fieldForBuff(buff.core_anomBuildup_)],
       },
@@ -70,8 +74,7 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('abilityCond'),
-        description:
-          'Ignores enemy Ice RES when any squad member triggers Disorder.',
+        description: <GameDesc ns="char_Miyabi_gen" key18="ability.desc" />,
         metadata: cond.disorder_triggered,
         fields: [
           {
@@ -87,8 +90,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'Ignores enemy DEF based on Fallen Frost consumed in Shimotsuki Stance.',
+        description: (
+          <GameDesc ns="char_Miyabi_gen" key18="mindscapes.1.desc" />
+        ),
         metadata: cond.fallen_frost,
         fields: [
           {
@@ -102,8 +106,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond2'),
-        description:
-          'Increases Anomaly Buildup when a level 3 charged slash hits an enemy under Frostburn.',
+        description: (
+          <GameDesc ns="char_Miyabi_gen" key18="mindscapes.1.desc" />
+        ),
         metadata: cond.level_3_charge_hit,
         fields: [fieldForBuff(buff.m1_anomBuildup_)],
       },
@@ -138,8 +143,9 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'Increases Basic Attack: Shimotsuki DMG while in the Polar state.',
+        description: (
+          <GameDesc ns="char_Miyabi_gen" key18="mindscapes.6.desc" />
+        ),
         metadata: cond.polar,
         fields: [
           {

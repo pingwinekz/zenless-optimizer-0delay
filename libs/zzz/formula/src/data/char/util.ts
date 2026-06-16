@@ -277,6 +277,14 @@ function inferDamageType(key: CharacterKey, abilityName: string): DamageType {
     if (key === 'Yidhari' && abilityName === 'FrostsCrushingWeight')
       return 'basic'
     if (key === 'Cissia' && abilityName === 'CorrodeBone') return 'basic'
+    if (key === 'Velina' && abilityName === 'SweepingCyclone')
+      return 'exSpecial'
+    if (key === 'Velina' && abilityName === 'CondensedCyclone')
+      return 'exSpecial'
+    if (key === 'Velina' && abilityName === 'DodgeWindwardSweep')
+      return 'dodgeCounter'
+    if (key === 'Velina' && abilityName === 'QuickSupportEmergencyProtocol')
+      return 'quickAssist'
     throw new Error(
       `Failed to infer damage type for key:${key} abilityName:${abilityName}. Please add an overide in zzz/formula/src/data/char/util.ts::inferDamageType`
     )
@@ -345,7 +353,7 @@ const anomalyMultipliers: Record<AttributeKey, number> = {
   ether: 0.625,
   ice: 5,
   physical: 7.13,
-  wind: 0,
+  wind: 12.5,
 }
 const disorderTimeMultipliers: Record<AttributeKey | 'frost', number> = {
   fire: 1, // 2 * 0.5
@@ -435,12 +443,15 @@ export function entriesForChar(data_gen: CharacterDatum): TagMapNodeEntries {
           },
           prod(percent(1.5), own.final.atk)
         )),
-    // Anomaly DMG
+    // Anomaly DMG (Windswept for Wind characters)
     ...customAnomalyDmg(
       'anomalyDmgInst',
       {
         attribute: data_gen.attribute,
         damageType1: 'anomaly',
+        ...(data_gen.attribute === 'wind'
+          ? { damageType2: 'windswept' as const }
+          : {}),
       },
       prod(
         percent(anomalyMultipliers[data_gen.attribute]),
@@ -448,32 +459,37 @@ export function entriesForChar(data_gen: CharacterDatum): TagMapNodeEntries {
         sum(percent(1), own.final.anom_mv_mult_)
       )
     ),
-    ...customAnomalyDmg(
-      `disorderDmgInst_${isMiyabi ? 'frost' : data_gen.attribute}`,
-      {
-        attribute: data_gen.attribute,
-        damageType1: 'disorder',
-      },
-      prod(
-        sum(
-          percent(isMiyabi ? 6 : 4.5),
-          own.final.addl_disorder_,
+    // Wind characters can't trigger Disorder — replaced by Vortex
+    ...(data_gen.attribute === 'wind'
+      ? []
+      : customAnomalyDmg(
+          `disorderDmgInst_${isMiyabi ? 'frost' : data_gen.attribute}`,
+          {
+            attribute: data_gen.attribute,
+            damageType1: 'disorder',
+          },
           prod(
-            max(
-              0,
-              sum(
-                constant(isMiyabi ? 20 : 10),
-                prod(constant(-1), anomTimePassed)
+            sum(
+              percent(isMiyabi ? 6 : 4.5),
+              own.final.addl_disorder_,
+              prod(
+                max(
+                  0,
+                  sum(
+                    constant(isMiyabi ? 20 : 10),
+                    prod(constant(-1), anomTimePassed)
+                  )
+                ),
+                percent(
+                  disorderTimeMultipliers[
+                    isMiyabi ? 'frost' : data_gen.attribute
+                  ]
+                )
               )
             ),
-            percent(
-              disorderTimeMultipliers[isMiyabi ? 'frost' : data_gen.attribute]
-            )
+            own.final.atk
           )
-        ),
-        own.final.atk
-      )
-    ),
+        )),
     // Abloom DMG
     ...customAnomalyDmg(
       'abloomDmgInst',

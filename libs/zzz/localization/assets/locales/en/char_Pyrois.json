@@ -1,0 +1,7 @@
+{
+  "mirageCond": "In Mirage state after using Ultimate: Total Annihilation",
+  "sunflareCond": "In Sunflare state after using Ultimate: Triumphant Return",
+  "contaminationCond": "Enemy is in the Contamination state",
+  "contaminationDmg": "Additional DMG against Contaminated enemies",
+  "eternalImprisonmentDmg": "Eternal Imprisonment additional DMG against Stunned enemies"
+}

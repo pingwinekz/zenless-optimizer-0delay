@@ -54,4 +54,7 @@ export const characterKeyToWengineKey: Record<CharacterKey, WengineKey> = {
   Cissia: 'SerpentineSeeker',
   StarlightBilly: 'StarlightRiderFaceplate',
   Promeia: 'FrostfallSickle',
+  Norma: 'ChiefSidekick',
+  Pyrois: 'SolExuvia',
+  Velina: 'JoyauDore',
 }

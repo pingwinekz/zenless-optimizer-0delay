@@ -15,8 +15,23 @@ export { Calculator } from './calculator'
 export { data as formulaData } from './data'
 export * from './conditionalUtil'
 export * from './data/util'
-export * from './meta'
 export * from './util'
+// meta exports — not using `export * from './meta'` so we can merge agg formulas into `formulas`
+// Re-export character, wengine, disc namespaces (e.g., Velina, DrillRigRedAxis) that formula-ui uses
+// These come from the meta module where each sheet is a `* as` namespace
+import {
+  buffs as _metaBuffs,
+  conditionals as _metaConditionals,
+  formulas as _metaFormulas,
+} from './meta'
+export { _metaConditionals as conditionals, _metaBuffs as buffs }
+export * from './meta/char'
+export * from './meta/disc'
+export * from './meta/wengine'
+export * as enemyMeta from './meta/common'
+export * as anomalyMeta from './meta/common'
+import { formulas as _aggFormulas } from './meta/agg'
+export const formulas = { ..._metaFormulas, agg: _aggFormulas } as const
 
 export function zzzCalculatorWithValues(extras: TagMapEntries<number>) {
   return zzzCalculatorWithEntries(

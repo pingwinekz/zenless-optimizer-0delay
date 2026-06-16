@@ -110,6 +110,8 @@ export function OptimizerForm({
   )
 
   const [activeDrawer, setActiveDrawer] = useState<string | null>(null)
+  const [showCharPassives, setShowCharPassives] = useState(false)
+  const [showWenginePassives, setShowWenginePassives] = useState(false)
 
   const wengineKey: WengineKey | '' = character.wengineKey || ''
 
@@ -202,6 +204,7 @@ export function OptimizerForm({
       field: Field
       /** 0 = always available, 1-6 = requires that mindscape level */
       mindscape: number
+      sectionKey: string
     }[] = []
     Object.entries(sheet).forEach(([sectionKey, section]) => {
       const mindscape = sectionKey.startsWith('m')
@@ -213,7 +216,7 @@ export function OptimizerForm({
             if ('fieldRef' in field && field.fieldRef?.name) {
               // Only include fields that match a known buff (excludes skill formula fields)
               if (charBuffs[field.fieldRef.name]) {
-                result.push({ field, mindscape })
+                result.push({ field, mindscape, sectionKey })
               }
             }
           }
@@ -256,12 +259,16 @@ export function OptimizerForm({
             conditionalDescriptions={conditionalDescriptions}
             conditionalLabels={conditionalLabels}
             passiveFields={passiveFields}
+            showPassives={showCharPassives}
           />
         </FormCard>
 
         {/* Card 4: W-Engine conditionals + Advanced Options */}
         <FormCard justify="space-between">
-          <WEngineConditionalsDisplay wengineKey={wengineKey} />
+          <WEngineConditionalsDisplay
+            wengineKey={wengineKey}
+            showPassives={showWenginePassives}
+          />
           <Flex direction="column" gap={5}>
             <HeaderText style={{ marginTop: 25 }}>Advanced options</HeaderText>
             <Button
@@ -283,7 +290,13 @@ export function OptimizerForm({
 
         {/* Card 5: Optimizer Options (switches matching fribbels' OptimizerOptionsDisplay) */}
         <FormCard>
-          <OptimizerOptionsSection disabled={disabled} />
+          <OptimizerOptionsSection
+            disabled={disabled}
+            showCharPassives={showCharPassives}
+            setShowCharPassives={setShowCharPassives}
+            showWenginePassives={showWenginePassives}
+            setShowWenginePassives={setShowWenginePassives}
+          />
         </FormCard>
       </FormRow>
 
@@ -320,7 +333,10 @@ export function OptimizerForm({
 
       {/* ── Teammates ── */}
       <TeammateFormRow id={OptimizerMenuIds.teammates}>
-        <TeammatesSection />
+        <TeammatesSection
+          showCharPassives={showCharPassives}
+          showWenginePassives={showWenginePassives}
+        />
       </TeammateFormRow>
 
       {/* ── Advanced Options Drawers ── */}
@@ -450,7 +466,19 @@ export function OptimizerForm({
   )
 }
 
-function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
+function OptimizerOptionsSection({
+  disabled,
+  showCharPassives,
+  setShowCharPassives,
+  showWenginePassives,
+  setShowWenginePassives,
+}: {
+  disabled?: boolean
+  showCharPassives: boolean
+  setShowCharPassives: (v: boolean) => void
+  showWenginePassives: boolean
+  setShowWenginePassives: (v: boolean) => void
+}) {
   const { optConfigId, optConfig } = useContext(OptConfigContext)
   const { database } = useDatabaseContext()
 
@@ -516,6 +544,24 @@ function OptimizerOptionsSection({ disabled }: { disabled?: boolean }) {
           disabled={disabled}
           style={{ width: 70 }}
         />
+      </Flex>
+
+      <Flex align="center" gap={5}>
+        <Switch
+          checked={showCharPassives}
+          onChange={(e) => setShowCharPassives(e.currentTarget.checked)}
+          size="xs"
+        />
+        <Text size="xs">Show character passives</Text>
+      </Flex>
+
+      <Flex align="center" gap={5}>
+        <Switch
+          checked={showWenginePassives}
+          onChange={(e) => setShowWenginePassives(e.currentTarget.checked)}
+          size="xs"
+        />
+        <Text size="xs">Show w-engine passives</Text>
       </Flex>
     </Flex>
   )

@@ -1,7 +1,7 @@
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
+import type { Field, TagField } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
   useCharacterContext,
@@ -9,7 +9,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
+import { GameDesc, GameText, i18n } from '@genshin-optimizer/zzz/i18n'
 import {
   Box,
   Flex,
@@ -25,27 +25,8 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HeaderText } from '../layout'
 
-// ColorizeNumbers - wraps numbers and Mindscape labels in gold spans
-// matching the fribbels ColorizeNumbers pattern (#ebb434 gold)
-const COND_GOLD = '#ebb434'
-
-function colorizeNumbers(text: string): ReactNode {
-  // Match M1-M6, numbers (int/dec with optional %)
-  const parts = text.split(/(M[1-6]|\d+(?:\.\d+)?(?:%)?)/g)
-  return parts.map((part, i) => {
-    if (/^(M[1-6]|\d+(?:\.\d+)?(?:%)?)$/.test(part)) {
-      return (
-        <span key={i} style={{ color: COND_GOLD }}>
-          {part}
-        </span>
-      )
-    }
-    return part
-  })
-}
-
 function renderDescription(desc: ReactNode): ReactNode {
-  if (typeof desc === 'string') return colorizeNumbers(desc)
+  if (typeof desc === 'string') return <GameText text={desc} />
   return desc
 }
 
@@ -93,6 +74,7 @@ export function CharacterConditionalsDisplay({
   conditionalLabels,
   showZeroFields = false,
   passiveFields,
+  showPassives = false,
 }: {
   characterKey: CharacterKey
   mindscapeOverride?: number
@@ -104,7 +86,9 @@ export function CharacterConditionalsDisplay({
     field: Field
     /** 0 = always available, 1-6 = requires that mindscape level */
     mindscape: number
+    sectionKey: string
   }[]
+  showPassives?: boolean
 }) {
   const { t } = useTranslation('charNames_gen')
   const mainChar = useCharacterContext()!
@@ -151,32 +135,19 @@ export function CharacterConditionalsDisplay({
   return (
     <Flex direction="column" gap={5}>
       <HeaderText>{t(characterKey)} Conditionals</HeaderText>
-      {hasPassives && (
-        <Box
-          style={{
-            borderRadius: 'var(--mantine-radius-sm)',
-            border: '1px solid var(--mantine-color-default-border)',
-            padding: '6px 8px',
-            fontSize: 11,
-            lineHeight: '16px',
-          }}
-        >
-          {visiblePassives.map(
-            (entry, i) =>
-              'fieldRef' in entry.field && (
-                <TagFieldDisplay
-                  key={i}
-                  field={entry.field}
-                  showZero={true}
-                  rowSx={{
-                    paddingTop: 1,
-                    paddingBottom: 1,
-                    gap: 6,
-                  }}
-                />
-              )
+      {hasPassives && showPassives && (
+        <Flex direction="column" gap={2}>
+          {visiblePassives.map((entry, i) =>
+            'fieldRef' in entry.field ? (
+              <PassiveFieldRow
+                key={i}
+                characterKey={characterKey}
+                field={entry.field}
+                sectionKey={entry.sectionKey}
+              />
+            ) : null
           )}
-        </Box>
+        </Flex>
       )}
       {condEntries
         .filter(([condName]) => {
@@ -236,7 +207,10 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
     [outerTag, characterKey]
   )
   const currentCond = team?.frames[0]?.conditionals?.find(
-    (c) => c.sheet === characterKey && c.condKey === condName
+    (c) =>
+      c.sheet === characterKey &&
+      c.condKey === condName &&
+      c.src === characterKey
   )
   const currentValue = currentCond?.condValue ?? 0
 
@@ -244,6 +218,9 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
     condData.mindscapeRequirement ?? getMindscapeRequirement(condName)
   const isMindscapeDisabled =
     mindscapeRequirement !== null && mindscape < mindscapeRequirement
+
+  // When mindscape requirement isn't met, force value to 0 for display
+  const displayValue = isMindscapeDisabled ? 0 : currentValue
 
   // When mindscape drops below the requirement, auto-reset the conditional
   useEffect(() => {
@@ -288,7 +265,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
         <Flex justify={conditionalJustify} align={conditionalAlign}>
           <Switch
             style={{ marginRight: 5 }}
-            checked={currentValue > 0}
+            checked={displayValue > 0}
             onChange={(e) => setValue(e.currentTarget.checked ? 1 : 0)}
             size="xs"
             disabled={isMindscapeDisabled}
@@ -304,7 +281,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
       {condData.type === 'num' && (
         <NumConditionalRow
           label={label}
-          value={isMindscapeDisabled ? 0 : currentValue}
+          value={displayValue}
           min={condData.min ?? 0}
           max={condData.max ?? 10}
           step={condData.int_only ? 1 : 0.1}
@@ -323,7 +300,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
               label: item,
               value: String(index),
             }))}
-            value={String(isMindscapeDisabled ? 0 : currentValue)}
+            value={String(displayValue)}
             onChange={(v) => setValue(Number(v) || 0)}
             size="xs"
             disabled={isMindscapeDisabled}
@@ -365,36 +342,6 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
           }}
         >
           {rowContent}
-          {currentValue > 0 && fields && fields.length > 0 && (
-            <Box
-              style={{
-                marginTop: 4,
-                borderTop: '1px solid var(--mantine-color-default-border)',
-                paddingTop: 4,
-                paddingLeft: 4,
-                fontSize: 11,
-                lineHeight: '16px',
-              }}
-            >
-              <TagContext.Provider value={tagForFields as any}>
-                {fields.map(
-                  (field, i) =>
-                    'fieldRef' in field && (
-                      <TagFieldDisplay
-                        key={i}
-                        field={field}
-                        showZero={showZeroFields}
-                        rowSx={{
-                          paddingTop: 1,
-                          paddingBottom: 1,
-                          gap: 6,
-                        }}
-                      />
-                    )
-                )}
-              </TagContext.Provider>
-            </Box>
-          )}
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown style={{ fontSize: 13 }}>
@@ -406,7 +353,7 @@ const CharacterConditionalRow = memo(function CharacterConditionalRow({
             {renderDescription(description)}
           </Text>
         )}
-        {currentValue > 0 && fields && fields.length > 0 && (
+        {displayValue > 0 && fields && fields.length > 0 && (
           <>
             <hr />
             <Box mt={4}>
@@ -522,5 +469,82 @@ const NumConditionalRow = memo(function NumConditionalRow({
         </ConditionalText>
       </Flex>
     </Flex>
+  )
+})
+
+const passiveSectionToDescKey = (
+  sectionKey: string,
+  fieldName?: string | null
+): string | null => {
+  if (sectionKey === 'core') {
+    // Both core and ability documents are merged into 'core' by createCoreAndAbilitySheet.
+    // Ability field names start with 'ability_' — show the ability description for those.
+    if (fieldName?.startsWith('ability_')) return 'ability.desc'
+    return 'core.desc.0'
+  }
+  if (sectionKey === 'potential') return 'potential.desc.0'
+  const m = sectionKey.match(/^m([1-6])$/)
+  if (m) return `mindscapes.${m[1]}.desc`
+  return null
+}
+
+const PassiveFieldRow = memo(function PassiveFieldRow({
+  characterKey,
+  field,
+  sectionKey,
+}: {
+  characterKey: CharacterKey
+  field: TagField
+  sectionKey: string
+}) {
+  const outerTag = useContext(TagContext)
+  const tagForFields = useMemo(
+    () => ({ ...outerTag, src: characterKey }),
+    [outerTag, characterKey]
+  )
+  const descKey = useMemo(
+    () => passiveSectionToDescKey(sectionKey, field.fieldRef.name),
+    [sectionKey, field.fieldRef.name]
+  )
+  const ns = `char_${characterKey}_gen`
+  return (
+    <HoverCard
+      width={400}
+      position="left"
+      withArrow
+      openDelay={300}
+      closeDelay={200}
+    >
+      <HoverCard.Target>
+        <Box
+          style={{
+            cursor: 'default',
+            borderRadius: 'var(--mantine-radius-sm)',
+            border: '1px solid var(--mantine-color-default-border)',
+            padding: '4px 6px',
+            fontSize: 11,
+            lineHeight: '16px',
+          }}
+        >
+          <Text size="sm">{field.title}</Text>
+        </Box>
+      </HoverCard.Target>
+      <HoverCard.Dropdown style={{ fontSize: 13 }}>
+        <Text fw={600} mb={4} size="sm">
+          {field.title}
+        </Text>
+        {descKey && (
+          <Text size="sm" mb={8}>
+            <GameDesc ns={ns} key18={descKey} />
+          </Text>
+        )}
+        <hr />
+        <Box mt={4}>
+          <TagContext.Provider value={tagForFields as any}>
+            <TagFieldDisplay field={field} showZero={true} />
+          </TagContext.Provider>
+        </Box>
+      </HoverCard.Dropdown>
+    </HoverCard>
   )
 })

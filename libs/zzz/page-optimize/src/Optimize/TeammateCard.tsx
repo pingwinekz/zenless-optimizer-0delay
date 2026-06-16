@@ -64,10 +64,14 @@ export function TeammateCard({
   slotIndex,
   characterKey,
   teammateDatum,
+  showCharPassives,
+  showWenginePassives,
 }: {
   slotIndex: number
   characterKey: CharacterKey | undefined
   teammateDatum?: TeammateDatum
+  showCharPassives: boolean
+  showWenginePassives: boolean
 }) {
   const mainChar = useCharacterContext()!
   const { database } = useDatabaseContext()
@@ -275,6 +279,7 @@ export function TeammateCard({
       field: Field
       /** 0 = always available, 1-6 = requires that mindscape level */
       mindscape: number
+      sectionKey: string
     }[] = []
     Object.entries(sheet).forEach(([sectionKey, section]) => {
       const mindscape = sectionKey.startsWith('m')
@@ -287,7 +292,7 @@ export function TeammateCard({
               const buffMeta = charBuffs[field.fieldRef.name]
               // Only include fields that match a known team-wide buff
               if (buffMeta && buffMeta.team === true) {
-                result.push({ field, mindscape })
+                result.push({ field, mindscape, sectionKey })
               }
             }
           }
@@ -393,6 +398,7 @@ export function TeammateCard({
                   conditionalLabels={conditionalLabels}
                   passiveFields={passiveFields}
                   showZeroFields={true}
+                  showPassives={showCharPassives}
                 />
               </Box>
             </Flex>
@@ -493,6 +499,8 @@ export function TeammateCard({
                       <WEngineConditionalsDisplay
                         wengineKey={teammateWengineKey}
                         teammateKey={characterKey}
+                        wenginePhase={effectiveWenginePhase}
+                        showPassives={showWenginePassives}
                       />
                     ) : (
                       <Text size="xs" c="dimmed" ta="center" mt="md">

@@ -8,9 +8,10 @@ import type {
 import { commonDefIcon, mindscapeDefIcon } from '@genshin-optimizer/zzz/assets'
 import type { CharacterKey, SkillKey } from '@genshin-optimizer/zzz/consts'
 import { allSkillKeys } from '@genshin-optimizer/zzz/consts'
+import { useCharacter } from '@genshin-optimizer/zzz/db-ui'
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { formulas, own } from '@genshin-optimizer/zzz/formula'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
+import { GameDesc, i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat, mappedStats } from '@genshin-optimizer/zzz/stats'
 import { TagDisplay } from '../components'
 import { st, trans } from '../util'
@@ -253,4 +254,35 @@ function createPotentialSheet(
       ...addlPotentialDocuments,
     ],
   }
+}
+
+/**
+ * Renders a core passive description using the character's actual core level,
+ * so the displayed values match the level the character has unlocked rather
+ * than always showing base level 0 values.
+ *
+ * Uses `useCharacter(characterKey)` to look up the specific character's data,
+ * so it works correctly for both the main character and teammates (unlike
+ * `useCharacterContext()` which always returns the main character).
+ *
+ * @param characterKey - The character's key (used to construct both the ns and the db lookup)
+ * @param paragraph - Optional paragraph index within the core level's desc.
+ *   Omit to render all paragraphs for the core level.
+ */
+export function CoreGameDesc({
+  characterKey,
+  paragraph,
+}: {
+  characterKey: CharacterKey
+  paragraph?: number
+}) {
+  const char = useCharacter(characterKey)
+  const coreLevel = char?.core ?? 0
+  const suffix = paragraph !== undefined ? `.${paragraph}` : ''
+  return (
+    <GameDesc
+      ns={`char_${characterKey}_gen`}
+      key18={`core.desc.${coreLevel}${suffix}`}
+    />
+  )
 }

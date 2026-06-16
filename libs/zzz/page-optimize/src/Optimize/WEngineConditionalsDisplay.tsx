@@ -12,22 +12,85 @@ import {
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
+import type { Field, TagField } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CharacterKey, WengineKey } from '@genshin-optimizer/zzz/consts'
 import {
   useCharacterContext,
   useDatabaseContext,
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
-import { buffs as allBuffs, conditionals } from '@genshin-optimizer/zzz/formula'
-import { wengineUiSheets } from '@genshin-optimizer/zzz/formula-ui'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
+import {
+  buffs as allBuffs,
+  conditionals,
+  own,
+} from '@genshin-optimizer/zzz/formula'
+import {
+  useZzzCalcContext,
+  wengineUiSheets,
+} from '@genshin-optimizer/zzz/formula-ui'
+import { GameDesc, i18n } from '@genshin-optimizer/zzz/i18n'
+import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { memo, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HeaderText } from '../layout'
 
 const inputWidth = 61
+
+const WenginePassiveFieldRow = memo(function WenginePassiveFieldRow({
+  wengineKey,
+  field,
+  tagForPassiveFields,
+  wenginePhase: propPhase,
+}: {
+  wengineKey: WengineKey
+  field: TagField
+  tagForPassiveFields: Record<string, any>
+  /** Wengine phase to use for descriptions. Defaults to calc context. */
+  wenginePhase?: number
+}) {
+  const calc = useZzzCalcContext()
+  const phase =
+    propPhase ?? (calc ? (calc.compute(own.wengine.phase).val ?? 1) : 1)
+  const ns = `wengine_${wengineKey}_gen`
+  const descKey = `phaseDescs.${phase - 1}`
+  return (
+    <HoverCard
+      width={400}
+      position="left"
+      withArrow
+      openDelay={300}
+      closeDelay={200}
+    >
+      <HoverCard.Target>
+        <Box
+          style={{
+            cursor: 'default',
+            paddingTop: 1,
+            paddingBottom: 1,
+            gap: 6,
+          }}
+        >
+          <Text size="xs">{field.title}</Text>
+        </Box>
+      </HoverCard.Target>
+      <HoverCard.Dropdown style={{ fontSize: 13 }}>
+        <Text fw={600} mb={4} size="sm">
+          {field.title}
+        </Text>
+        <Text size="sm" mb={8}>
+          <GameDesc ns={ns} key18={descKey} />
+        </Text>
+        <hr />
+        <Box mt={4}>
+          <TagContext.Provider value={tagForPassiveFields as any}>
+            <TagFieldDisplay field={field} showZero={true} />
+          </TagContext.Provider>
+        </Box>
+      </HoverCard.Dropdown>
+    </HoverCard>
+  )
+})
 const numberWidth = 55
 const sliderWidth = 155
 
@@ -58,10 +121,25 @@ function precisionRound(number: number): number {
 export function WEngineConditionalsDisplay({
   wengineKey,
   teammateKey,
+  wenginePhase: propPhase,
+  showPassives = false,
 }: {
   wengineKey: WengineKey | ''
   teammateKey?: CharacterKey
+  /**
+   * Wengine phase to use for descriptions. When rendering for a teammate,
+   * this should be the teammate's effective wengine phase (which may differ
+   * from the main character's). Falls back to the calc context (main char)
+   * when not provided.
+   */
+  wenginePhase?: number
+  showPassives?: boolean
 }) {
+  // Resolve phase: use the prop if provided (teammate context), otherwise
+  // fall back to the calc context (main character context)
+  const calc = useZzzCalcContext()
+  const phase =
+    propPhase ?? (calc ? (calc.compute(own.wengine.phase).val ?? 1) : 1)
   const { t } = useTranslation('wengineNames_gen')
   const mainChar = useCharacterContext()!
   const { database } = useDatabaseContext()
@@ -193,7 +271,8 @@ export function WEngineConditionalsDisplay({
             passiveTeamFields.push(...teamFields)
           }
         } else {
-          // Main character view: include all fields (they're already visible elsewhere)
+          // Main character view: include all passive fields
+          passiveTeamFields.push(...doc.fields)
         }
       }
     })
@@ -268,7 +347,7 @@ export function WEngineConditionalsDisplay({
     <Flex direction="column" gap={5}>
       <HeaderText>{t(wengineKey)} Conditionals</HeaderText>
       {/* Render passive (always-active) team-wide buffs */}
-      {passiveTeamFields && passiveTeamFields.length > 0 && (
+      {showPassives && passiveTeamFields && passiveTeamFields.length > 0 && (
         <Box
           style={{
             borderRadius: 'var(--mantine-radius-sm)',
@@ -282,14 +361,12 @@ export function WEngineConditionalsDisplay({
             {passiveTeamFields.map(
               (field, i) =>
                 'fieldRef' in field && (
-                  <TagFieldDisplay
+                  <WenginePassiveFieldRow
                     key={i}
+                    wengineKey={wengineKey}
                     field={field}
-                    rowSx={{
-                      paddingTop: 1,
-                      paddingBottom: 1,
-                      gap: 6,
-                    }}
+                    tagForPassiveFields={tagForPassiveFields}
+                    wenginePhase={phase}
                   />
                 )
             )}
@@ -303,6 +380,12 @@ export function WEngineConditionalsDisplay({
           // all its fields were self-buffs — skip the entire conditional toggle
           if (weConditionalFields && !weConditionalFields[condName])
             return false
+          // Check for character-specific restrictions on conditionals
+          // SolExuvia's Eclipse effect only works for Pyrois (Phaethon faction)
+          if (wengineKey === 'SolExuvia' && condName === 'eclipse_active') {
+            const charStat = getCharStat(src)
+            if (charStat.faction !== 'Phaethon') return false
+          }
           return true
         })
         .map(([condName, condData]) => (
@@ -317,6 +400,7 @@ export function WEngineConditionalsDisplay({
             src={src}
             fields={weConditionalFields?.[condName]}
             label={weCondLabels?.[condName]}
+            wenginePhase={phase}
           />
         ))}
     </Flex>
@@ -333,6 +417,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   src,
   fields,
   label: labelProp,
+  wenginePhase: propPhase,
 }: {
   wengineKey: WengineKey
   condName: string
@@ -343,11 +428,13 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   src: CharacterKey
   fields?: Field[]
   label?: ReactNode
+  /** Wengine phase to use for descriptions. Defaults to calc context. */
+  wenginePhase?: number
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(() => ({ ...outerTag, src }), [outerTag, src])
   const currentCond = team?.frames[0]?.conditionals?.find(
-    (c) => c.sheet === wengineKey && c.condKey === condName
+    (c) => c.sheet === wengineKey && c.condKey === condName && c.src === src
   )
   const currentValue = currentCond?.condValue ?? 0
 
@@ -364,6 +451,15 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   }
 
   const label = labelProp ?? condLabel(condName, `wengine_${wengineKey}`)
+
+  // Determine current wengine phase for description
+  // Use the prop from parent (which may resolve from teammate data)
+  // instead of always reading the calc context (which gives the main char)
+  const calc = useZzzCalcContext()
+  const phase =
+    propPhase ?? (calc ? (calc.compute(own.wengine.phase).val ?? 1) : 1)
+  const descNs = `wengine_${wengineKey}_gen`
+  const descKey = `phaseDescs.${phase - 1}`
 
   const rowContent = (
     <>
@@ -433,40 +529,14 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
           }}
         >
           {rowContent}
-          {currentValue > 0 && fields && fields.length > 0 && (
-            <Box
-              style={{
-                marginTop: 4,
-                borderTop: '1px solid var(--mantine-color-default-border)',
-                paddingTop: 4,
-                paddingLeft: 4,
-                fontSize: 11,
-                lineHeight: '16px',
-              }}
-            >
-              <TagContext.Provider value={tagForFields as any}>
-                {fields.map(
-                  (field, i) =>
-                    'fieldRef' in field && (
-                      <TagFieldDisplay
-                        key={i}
-                        field={field}
-                        rowSx={{
-                          paddingTop: 1,
-                          paddingBottom: 1,
-                          gap: 6,
-                        }}
-                      />
-                    )
-                )}
-              </TagContext.Provider>
-            </Box>
-          )}
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown style={{ fontSize: 13 }}>
         <Text fw={600} mb={4} size="sm">
           {label}
+        </Text>
+        <Text size="sm" mb={8}>
+          <GameDesc ns={descNs} key18={descKey} />
         </Text>
         {currentValue > 0 && fields && fields.length > 0 && (
           <>

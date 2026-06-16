@@ -255,6 +255,18 @@ export class Read extends BaseRead<Tag> {
       super.with('damageType2', 'abloom'),
     ]
   }
+  get vortex(): Read[] {
+    return [
+      super.with('damageType1', 'vortex'),
+      super.with('damageType2', 'vortex'),
+    ]
+  }
+  get windswept(): Read[] {
+    return [
+      super.with('damageType1', 'windswept'),
+      super.with('damageType2', 'windswept'),
+    ]
+  }
 
   // For `count` usage, use lighter footprint so it doesn't pollute autocomplete
   // Specialty

@@ -5,7 +5,7 @@ import {
 import { objKeyValMap, objMap } from '@genshin-optimizer/common/util'
 import { PROJROOT_PATH } from '../../consts'
 const URL_BASE = 'https://static.nanoka.cc/zzz/'
-const VERSION = '2.8'
+const VERSION = '3.0.12+16461425'
 
 async function dumpHakushinData(filename: string, obj: object) {
   obj = convertSnakeToPascal(obj) as object

@@ -31,7 +31,7 @@ const data: TagMapNodeEntries = [
 
   // DMG Bonus Multiplier
   ownBuff.dmg.dmg_mult_.add(
-    sum(percent(1), own.final.dmg_, own.final.common_dmg_)
+    sum(percent(1), own.final.dmg_, own.final.common_dmg_, own.final.directDmg_)
   ),
   // Buff Multiplier (e.g. Timeweaver Disorder DMG Bonus)
   ownBuff.dmg.buff_mult_.add(sum(percent(1), own.final.buff_)),

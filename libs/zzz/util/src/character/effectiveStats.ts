@@ -770,6 +770,11 @@ const characterPlans: Record<CharacterKey, CharacterPlan> = {
       6: ['hp_'],
     },
   },
+
+  // ═══ New characters ═══
+  Norma: DPS,
+  Pyrois: DPS,
+  Velina: DPS,
 }
 
 /* ─────── Public getters ─────── */
