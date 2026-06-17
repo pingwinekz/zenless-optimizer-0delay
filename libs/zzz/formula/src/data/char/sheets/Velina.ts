@@ -160,27 +160,15 @@ const sheet = register(
   ...registerAllDmgDazeAndAnom(key, dm),
 
   // Buffs
-  registerBuff(
-    'core_common_dmg_',
-    core_common_dmg_
-  ),
+  registerBuff('core_common_dmg_', core_common_dmg_),
   registerBuff('core_anomMas', core_anomMas),
   registerBuff(
     'core_windbite_vortex_anom_mv_mult_',
     core_windbite_vortex_anom_mv_mult_
   ),
-  registerBuff(
-    'core_condensedCyclone_abloom_',
-    core_condensedCyclone_abloom_
-  ),
-  registerBuff(
-    'core_sweepingCyclone_abloom_',
-    core_sweepingCyclone_abloom_
-  ),
-  registerBuff(
-    'core_wind_anomBuildupRes_',
-    core_wind_anomBuildupRes_
-  ),
+  registerBuff('core_condensedCyclone_abloom_', core_condensedCyclone_abloom_),
+  registerBuff('core_sweepingCyclone_abloom_', core_sweepingCyclone_abloom_),
+  registerBuff('core_wind_anomBuildupRes_', core_wind_anomBuildupRes_),
   registerBuff(
     'core_chromatic_anomBuildupRes_',
     core_chromatic_anomBuildupRes_
@@ -191,18 +179,9 @@ const sheet = register(
     'ability_ult_abloom_anom_mv_mult_',
     ability_ult_abloom_anom_mv_mult_
   ),
-  registerBuff(
-    'ability_anomBuildupRes_',
-    ability_anomBuildupRes_
-  ),
-  registerBuff(
-    'ability_dazeInc_',
-    ability_dazeInc_
-  ),
-  registerBuff(
-    'ability_anomBuildup_',
-    ability_anomBuildup_
-  ),
+  registerBuff('ability_anomBuildupRes_', ability_anomBuildupRes_),
+  registerBuff('ability_dazeInc_', ability_dazeInc_),
+  registerBuff('ability_anomBuildup_', ability_anomBuildup_),
   registerBuff('m1_wind_resIgn_', m1_wind_resIgn_),
   registerBuff('m1_all_resIgn_', m1_all_resIgn_),
   registerBuff('m2_wind_dmg_', m2_wind_dmg_),
