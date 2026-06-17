@@ -5,7 +5,7 @@ import {
 import { objKeyValMap, objMap } from '@genshin-optimizer/common/util'
 import { PROJROOT_PATH } from '../../consts'
 const URL_BASE = 'https://static.nanoka.cc/zzz/'
-const VERSION = '3.0.12+16461425'
+const VERSION = '3.0'
 
 async function dumpHakushinData(filename: string, obj: object) {
   obj = convertSnakeToPascal(obj) as object
@@ -75,9 +75,10 @@ const categories = [
 ] as const
 type Category = (typeof categories)[number]
 export async function getDataFromHakushin() {
-  await Promise.all(
-    categories.map((category) => getAndDumpCategoryData(category))
-  )
+  await Promise.all([
+    ...categories.map((category) => getAndDumpCategoryData(category)),
+    getNounData(),
+  ])
 }
 async function getAndDumpCategoryData(category: Category) {
   const indexData = (await fetchJsonFromUrl(
@@ -97,4 +98,11 @@ async function getAndDumpCategoryData(category: Category) {
       await dumpHakushinData(`${category}/${id}.json`, itemData)
     })
   )
+}
+
+async function getNounData() {
+  const nounData = (await fetchJsonFromUrl(
+    URL_BASE + VERSION + `/en/noun.json`
+  )) as object
+  await dumpHakushinData('noun.json', nounData)
 }

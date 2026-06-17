@@ -7,7 +7,7 @@ const data_gen = getWengineParams(key)
 let o = 0
 
 const dm = {
-  energy: data_gen[o++],
+  cond_energy: data_gen[o++],
   cooldown: data_gen[o++][1],
   dmg_: data_gen[o++],
 } as const

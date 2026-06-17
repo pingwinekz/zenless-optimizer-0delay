@@ -1,3 +1,5 @@
+import { nounData } from '@genshin-optimizer/zzz/dm'
+
 export function processText(text: string) {
   const processedText = text
     .replaceAll('<color=', '<ct color=')
@@ -7,6 +9,10 @@ export function processText(text: string) {
       /<IconMap:([a-zA-Z_]*?)>/g,
       (_match, capture: string) => `<${capture.replaceAll('_', '')} />`
     )
+    // Resolve <Term:ID> tags to the noun's Name, e.g. <Term:1000017> -> Chromatic Tint
+    .replace(/<Term:(\d+)>/g, (_match, id) => nounData[id]?.Name ?? _match)
+    // Clean up object coercion artifacts from structured Term objects
+    .replace(/\s*\[object Object\]\s*/g, ' ')
 
   // Convert \n to real breaks
   if (processedText.includes('\n'))

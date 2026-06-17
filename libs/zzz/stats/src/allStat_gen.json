@@ -26075,6 +26075,7 @@
           ]
         },
         "dodge": {
+          "DodgeTwilight": [],
           "DashAttackSunrise": [
             {
               "DamagePercentage": 0.953,
@@ -26281,6 +26282,7 @@
           "BasicAttackCelestialLight": []
         },
         "dodge": {
+          "DodgeTwilight": [],
           "DashAttackSunrise": [],
           "DodgeCounterFirstLight": []
         },
@@ -26447,6 +26449,7 @@
       "mindscapeParams": [
         [
           1000,
+          180,
           0.08
         ],
         [
@@ -26750,7 +26753,7 @@
           ]
         },
         "assist": {
-          "QuickSupportEmergencyProtocol": [
+          "QuickAssistEmergencyProtocol": [
             {
               "DamagePercentage": 2.038,
               "DamagePercentageGrowth": 0.186,
@@ -26835,7 +26838,7 @@
           "UltimateHeedTheTempest": []
         },
         "assist": {
-          "QuickSupportEmergencyProtocol": [],
+          "QuickAssistEmergencyProtocol": [],
           "DefensiveAssistJudiciousIntervention": [],
           "AssistFollowUpNegotiationTechniques": []
         }

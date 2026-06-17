@@ -36,8 +36,8 @@ const dm = {
       data_gen.skillParams['chain']['UltimateHeedTheTempest'],
   },
   assist: {
-    QuickSupportEmergencyProtocol:
-      data_gen.skillParams['assist']['QuickSupportEmergencyProtocol'],
+    QuickAssistEmergencyProtocol:
+      data_gen.skillParams['assist']['QuickAssistEmergencyProtocol'],
     DefensiveAssistJudiciousIntervention:
       data_gen.skillParams['assist']['DefensiveAssistJudiciousIntervention'],
     AssistFollowUpNegotiationTechniques:
@@ -90,15 +90,9 @@ const dm = {
     windbiteCooldown: data_gen.mindscapeParams[1][1],
     windsweptVortexDmg_: data_gen.mindscapeParams[1][2],
   },
-  m3: {
-    skillLevelBoost: data_gen.mindscapeParams[2][0],
-  },
   m4: {
     atk_: data_gen.mindscapeParams[3][0],
     duration: data_gen.mindscapeParams[3][1],
-  },
-  m5: {
-    skillLevelBoost: data_gen.mindscapeParams[4][0],
   },
   m6: {
     windbiteConsumed: data_gen.mindscapeParams[5][0],

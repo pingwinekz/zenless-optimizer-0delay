@@ -208,10 +208,7 @@ describe('vortex formula with Velina + Joyau Dore', () => {
         enemy.common.dmgInc_.add(0.1),
         enemy.common.dmgRed_.add(0.15),
         enemyDebuff.common.resRed_.fire.add(0.15),
-        // windbite_consumed adds anom_mv_mult_.wind with damageType1/2='vortex'
-        // Note: Velina's buff has attribute='wind' but vortex formula uses the
-        // non-wind attribute (e.g. 'fire'). So attribute='wind' won't match
-        // attribute='fire' context. This should ideally not have wind scope.
+        // windbite_consumed adds anom_mv_mult_ with damageType2='vortex'
         conditionalEntries('Velina', charKey, null)('windbite_consumed', 1),
       ])
     ).withTag({ src: charKey, dst: charKey, preset: 'preset0' })
@@ -221,13 +218,15 @@ describe('vortex formula with Velina + Joyau Dore', () => {
     console.log('windbite_consumed - fire vortex:')
     console.log('  without:', Math.round(fireWithout))
     console.log('  with:', Math.round(fireWith))
-    // Even though anom_mv_mult_ is now in the vortex formula,
-    // Velina's buff is scoped to attribute:'wind' which won't match
-    // fire vortex context (attribute:'fire'). So values are still equal.
     console.log(
-      '  NOTE: Velina windbite buff scoped to wind attr — no effect on fire vortex'
+      '  increase:',
+      (((fireWith - fireWithout) / fireWithout) * 100).toFixed(2),
+      '%'
     )
-    expect(fireWith).toBe(fireWithout)
+    // Windbite adds anom_mv_mult_ with damageType2='vortex', which matches
+    // the vortex formula's context (damageType2='vortex'). So the buff
+    // should increase all vortex damage regardless of attribute.
+    expect(fireWith).toBeGreaterThan(fireWithout)
   })
 
   it('fire and electric have ~same base (both 1900% at full duration)', () => {

@@ -11,6 +11,7 @@ const dm = {
       data_gen.skillParams['basic']['BasicAttackCelestialLight'],
   },
   dodge: {
+    DodgeTwilight: data_gen.skillParams['dodge']['DodgeTwilight'],
     DashAttackSunrise: data_gen.skillParams['dodge']['DashAttackSunrise'],
     DodgeCounterFirstLight:
       data_gen.skillParams['dodge']['DodgeCounterFirstLight'],
@@ -22,6 +23,7 @@ const dm = {
       data_gen.skillParams['special']['EXSpecialAttackSunsHalo'],
     SpecialAttackAssaultDirective:
       data_gen.skillParams['special']['SpecialAttackAssaultDirective'],
+    '': data_gen.skillParams['special'][''],
   },
   chain: {
     ChainAttackCeremonialMarch:
@@ -71,18 +73,12 @@ const dm = {
   },
   m1: {
     decibel: data_gen.mindscapeParams[0][0],
-    crit_: data_gen.mindscapeParams[0][1],
+    crit_: data_gen.mindscapeParams[0][2],
   },
   m2: {
     decibel: data_gen.mindscapeParams[1][0],
     cooldown: data_gen.mindscapeParams[1][1],
     decibelLimit: data_gen.mindscapeParams[1][2],
-  },
-  m3: {
-    skillLevelBoost: data_gen.mindscapeParams[2][0],
-  },
-  m5: {
-    skillLevelBoost: data_gen.mindscapeParams[4][0],
   },
 } as const
 

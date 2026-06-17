@@ -10,8 +10,8 @@ const dm = {
   anomProf: data_gen[o++],
   vortexDmg_: data_gen[o++],
   duration: data_gen[o++][1],
-  maxStacks: data_gen[o++][1],
   squadBuffThreshold: data_gen[o++][1],
+  maxStacks: data_gen[o++][1],
   squadAnomProf: data_gen[o++],
 } as const
 

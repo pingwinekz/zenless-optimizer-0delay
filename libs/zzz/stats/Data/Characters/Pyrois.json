@@ -117,6 +117,7 @@
       ]
     },
     "dodge": {
+      "DodgeTwilight": [],
       "DashAttackSunrise": [
         {
           "DamagePercentage": 0.953,
@@ -319,7 +320,11 @@
   },
   "calcedParams": {
     "basic": { "BasicAttackEmberglow": [], "BasicAttackCelestialLight": [] },
-    "dodge": { "DashAttackSunrise": [], "DodgeCounterFirstLight": [] },
+    "dodge": {
+      "DodgeTwilight": [],
+      "DashAttackSunrise": [],
+      "DodgeCounterFirstLight": []
+    },
     "special": {
       "SpecialAttackFadingRays": [],
       "EXSpecialAttackSunsHalo": [],
@@ -357,6 +362,6 @@
     [3, 3, 3, 3, 3, 3, 3]
   ],
   "abilityParams": [0.4, 300],
-  "mindscapeParams": [[1000, 0.08], [1500, 180, 1000], [2], [], [2], []],
+  "mindscapeParams": [[1000, 180, 0.08], [1500, 180, 1000], [2], [], [2], []],
   "potentialParams": []
 }

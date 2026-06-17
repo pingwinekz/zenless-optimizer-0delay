@@ -100,15 +100,8 @@ const sheet = createBaseSheet(key, {
   ],
   m6: [
     {
-      type: 'conditional',
-      conditional: {
-        label: ch('m6Cond'),
-        description: (
-          <GameDesc ns="char_Velina_gen" key18="mindscapes.6.desc" />
-        ),
-        metadata: cond.wind_anomaly,
-        fields: [fieldForBuff(buff.m6_wind_anomBuildup_)],
-      },
+      type: 'fields',
+      fields: [fieldForBuff(buff.m6_wind_anomBuildup_)],
     },
   ],
 })

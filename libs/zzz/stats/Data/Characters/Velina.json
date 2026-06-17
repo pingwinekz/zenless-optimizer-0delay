@@ -241,7 +241,7 @@
       ]
     },
     "assist": {
-      "QuickSupportEmergencyProtocol": [
+      "QuickAssistEmergencyProtocol": [
         {
           "DamagePercentage": 2.038,
           "DamagePercentageGrowth": 0.186,
@@ -324,7 +324,7 @@
       "UltimateHeedTheTempest": []
     },
     "assist": {
-      "QuickSupportEmergencyProtocol": [],
+      "QuickAssistEmergencyProtocol": [],
       "DefensiveAssistJudiciousIntervention": [],
       "AssistFollowUpNegotiationTechniques": []
     }

@@ -62,7 +62,7 @@ const core_anomMas = ownBuff.combat.anomMas.add(
 
 // Core Passive: Windbite — boosted Vortex DMG multiplier (core-scaled, 90-150%)
 const core_windbite_vortex_anom_mv_mult_ =
-  ownBuff.combat.anom_mv_mult_.wind.addWithDmgType(
+  ownBuff.combat.anom_mv_mult_.addWithDmgType(
     'vortex',
     windbite_consumed.ifOn(
       percent(subscript(char.core, dm.core.condensedCycloneVortexDmg))
@@ -148,7 +148,7 @@ const m4_atk_ = ownBuff.combat.atk_.add(cmpGE(char.mindscape, 4, dm.m4.atk_))
 
 // M6: Wind Anomaly Buildup +20% when enemy suffering Wind Anomaly
 const m6_wind_anomBuildup_ = ownBuff.combat.anomBuildup_.wind.add(
-  cmpGE(char.mindscape, 6, wind_anomaly.ifOn(dm.m6.windAnomBuildup_))
+  cmpGE(char.mindscape, 6, wind_anomaly.ifOn(percent(dm.m6.windAnomBuildup_)))
 )
 
 const sheet = register(
@@ -162,76 +162,46 @@ const sheet = register(
   // Buffs
   registerBuff(
     'core_common_dmg_',
-    core_common_dmg_,
-    undefined,
-    undefined,
-    false
+    core_common_dmg_
   ),
-  registerBuff('core_anomMas', core_anomMas, undefined, undefined, false),
+  registerBuff('core_anomMas', core_anomMas),
   registerBuff(
     'core_windbite_vortex_anom_mv_mult_',
-    core_windbite_vortex_anom_mv_mult_,
-    undefined,
-    undefined,
-    false
+    core_windbite_vortex_anom_mv_mult_
   ),
   registerBuff(
     'core_condensedCyclone_abloom_',
-    core_condensedCyclone_abloom_,
-    undefined,
-    undefined,
-    false
+    core_condensedCyclone_abloom_
   ),
   registerBuff(
     'core_sweepingCyclone_abloom_',
-    core_sweepingCyclone_abloom_,
-    undefined,
-    undefined,
-    false
+    core_sweepingCyclone_abloom_
   ),
   registerBuff(
     'core_wind_anomBuildupRes_',
-    core_wind_anomBuildupRes_,
-    undefined,
-    undefined,
-    false
+    core_wind_anomBuildupRes_
   ),
   registerBuff(
     'core_chromatic_anomBuildupRes_',
-    core_chromatic_anomBuildupRes_,
-    undefined,
-    undefined,
-    false
+    core_chromatic_anomBuildupRes_
   ),
   registerBuff('ability_wind_dmg_', ability_wind_dmg_),
   registerBuff('ability_vortex_dmg_', ability_vortex_dmg_),
   registerBuff(
     'ability_ult_abloom_anom_mv_mult_',
-    ability_ult_abloom_anom_mv_mult_,
-    undefined,
-    undefined,
-    false
+    ability_ult_abloom_anom_mv_mult_
   ),
   registerBuff(
     'ability_anomBuildupRes_',
-    ability_anomBuildupRes_,
-    undefined,
-    undefined,
-    false
+    ability_anomBuildupRes_
   ),
   registerBuff(
     'ability_dazeInc_',
-    ability_dazeInc_,
-    undefined,
-    undefined,
-    false
+    ability_dazeInc_
   ),
   registerBuff(
     'ability_anomBuildup_',
-    ability_anomBuildup_,
-    undefined,
-    undefined,
-    false
+    ability_anomBuildup_
   ),
   registerBuff('m1_wind_resIgn_', m1_wind_resIgn_),
   registerBuff('m1_all_resIgn_', m1_all_resIgn_),

@@ -84,14 +84,8 @@ const dm = {
     energy: data_gen.mindscapeParams[1][1],
     energyCooldown: data_gen.mindscapeParams[1][2],
   },
-  m3: {
-    skillLevelBoost: data_gen.mindscapeParams[2][0],
-  },
   m4: {
     decibel: data_gen.mindscapeParams[3][0],
-  },
-  m5: {
-    skillLevelBoost: data_gen.mindscapeParams[4][0],
   },
   m6: {
     barrageDuration: data_gen.mindscapeParams[5][0],

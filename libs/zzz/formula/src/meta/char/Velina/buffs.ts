@@ -32,7 +32,6 @@ export const buffs = {
       qt: 'combat',
       q: 'anom_mv_mult_',
       sheet: 'Velina',
-      attribute: 'wind',
       damageType1: 'vortex',
       name: 'core_windbite_vortex_anom_mv_mult_',
     },

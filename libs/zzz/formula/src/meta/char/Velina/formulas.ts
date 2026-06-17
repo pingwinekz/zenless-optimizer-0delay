@@ -736,9 +736,9 @@ export const formulas = {
       name: 'UltimateHeedTheTempest_0_anomBuildup',
     },
   },
-  QuickSupportEmergencyProtocol_0_dmg: {
+  QuickAssistEmergencyProtocol_0_dmg: {
     sheet: 'Velina',
-    name: 'QuickSupportEmergencyProtocol_0_dmg',
+    name: 'QuickAssistEmergencyProtocol_0_dmg',
     tag: {
       et: 'own',
       qt: 'formula',
@@ -747,12 +747,12 @@ export const formulas = {
       attribute: 'wind',
       damageType1: 'quickAssist',
       skillType1: 'assistSkill',
-      name: 'QuickSupportEmergencyProtocol_0_dmg',
+      name: 'QuickAssistEmergencyProtocol_0_dmg',
     },
   },
-  QuickSupportEmergencyProtocol_0_daze: {
+  QuickAssistEmergencyProtocol_0_daze: {
     sheet: 'Velina',
-    name: 'QuickSupportEmergencyProtocol_0_daze',
+    name: 'QuickAssistEmergencyProtocol_0_daze',
     tag: {
       et: 'own',
       qt: 'formula',
@@ -761,12 +761,12 @@ export const formulas = {
       attribute: 'wind',
       damageType1: 'quickAssist',
       skillType1: 'assistSkill',
-      name: 'QuickSupportEmergencyProtocol_0_daze',
+      name: 'QuickAssistEmergencyProtocol_0_daze',
     },
   },
-  QuickSupportEmergencyProtocol_0_anomBuildup: {
+  QuickAssistEmergencyProtocol_0_anomBuildup: {
     sheet: 'Velina',
-    name: 'QuickSupportEmergencyProtocol_0_anomBuildup',
+    name: 'QuickAssistEmergencyProtocol_0_anomBuildup',
     tag: {
       et: 'own',
       qt: 'formula',
@@ -775,7 +775,7 @@ export const formulas = {
       attribute: 'wind',
       damageType1: 'quickAssist',
       skillType1: 'assistSkill',
-      name: 'QuickSupportEmergencyProtocol_0_anomBuildup',
+      name: 'QuickAssistEmergencyProtocol_0_anomBuildup',
     },
   },
   DefensiveAssistJudiciousIntervention_0_dmg: {
