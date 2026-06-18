@@ -25,10 +25,11 @@ import {
   own,
 } from '@genshin-optimizer/zzz/formula'
 import {
+  TagDisplay,
   useZzzCalcContext,
   wengineUiSheets,
 } from '@genshin-optimizer/zzz/formula-ui'
-import { GameDesc, i18n } from '@genshin-optimizer/zzz/i18n'
+import { GameDesc, GameText, i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat } from '@genshin-optimizer/zzz/stats'
 import { memo, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
@@ -37,17 +38,55 @@ import { HeaderText } from '../layout'
 
 const inputWidth = 61
 
+/**
+ * Loads the full SolExuvia phase description and renders only the Eclipse
+ * portion, stripping the "CRIT Rate increases by 20%. " prefix.
+ */
+function SolExuviaEclipseDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_SolExuvia_gen')
+  const fullDesc = t(`wengine_SolExuvia_gen:phaseDescs.${phase - 1}`)
+  const eclipseDesc = fullDesc.replace(/^CRIT Rate increases by 20%\.\s*/, '')
+  return <GameText text={eclipseDesc} />
+}
+
+/** Self Anomaly Proficiency portion of JoyauDore's phase description (first sentence). */
+function JoyauDoreSelfAnomDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_JoyauDore_gen')
+  const fullDesc = t(`wengine_JoyauDore_gen:phaseDescs.${phase - 1}`)
+  const selfDesc = fullDesc.match(/^[^.]+\./)?.[0] ?? fullDesc
+  return <GameText text={selfDesc} />
+}
+
+/** Conditional portion of JoyauDore's phase description (from "When" to before "At 2 stacks"). */
+function JoyauDoreCondDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_JoyauDore_gen')
+  const fullDesc = t(`wengine_JoyauDore_gen:phaseDescs.${phase - 1}`)
+  const match = fullDesc.match(/When[^]*?(?=At 2 stacks|$)/)
+  return <GameText text={match?.[0] ?? fullDesc} />
+}
+
+/** Squad Anomaly Proficiency portion of JoyauDore's phase description ("At 2 stacks…" to end). */
+function JoyauDoreSquadAnomDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_JoyauDore_gen')
+  const fullDesc = t(`wengine_JoyauDore_gen:phaseDescs.${phase - 1}`)
+  const squadDesc = fullDesc.match(/At 2 stacks[^]*/)?.[0] ?? fullDesc
+  return <GameText text={squadDesc} />
+}
+
 const WenginePassiveFieldRow = memo(function WenginePassiveFieldRow({
   wengineKey,
   field,
   tagForPassiveFields,
   wenginePhase: propPhase,
+  descriptionOverride,
 }: {
   wengineKey: WengineKey
   field: TagField
   tagForPassiveFields: Record<string, any>
   /** Wengine phase to use for descriptions. Defaults to calc context. */
   wenginePhase?: number
+  /** Replace the default phase description with custom content. */
+  descriptionOverride?: ReactNode
 }) {
   const calc = useZzzCalcContext()
   const phase =
@@ -66,9 +105,9 @@ const WenginePassiveFieldRow = memo(function WenginePassiveFieldRow({
         <Box
           style={{
             cursor: 'default',
-            paddingTop: 1,
-            paddingBottom: 1,
-            gap: 6,
+            borderRadius: 'var(--mantine-radius-sm)',
+            border: '1px solid var(--mantine-color-default-border)',
+            padding: '4px 6px',
           }}
         >
           <Text size="xs">{field.title}</Text>
@@ -79,12 +118,18 @@ const WenginePassiveFieldRow = memo(function WenginePassiveFieldRow({
           {field.title}
         </Text>
         <Text size="sm" mb={8}>
-          <GameDesc ns={ns} key18={descKey} />
+          {descriptionOverride ?? <GameDesc ns={ns} key18={descKey} />}
         </Text>
         <hr />
         <Box mt={4}>
           <TagContext.Provider value={tagForPassiveFields as any}>
-            <TagFieldDisplay field={field} showZero={true} />
+            <TagFieldDisplay
+              field={{
+                ...field,
+                title: <TagDisplay tag={field.fieldRef} preventRecursion />,
+              }}
+              showZero={true}
+            />
           </TagContext.Provider>
         </Box>
       </HoverCard.Dropdown>
@@ -348,15 +393,7 @@ export function WEngineConditionalsDisplay({
       <HeaderText>{t(wengineKey)} Conditionals</HeaderText>
       {/* Render passive (always-active) team-wide buffs */}
       {showPassives && passiveTeamFields && passiveTeamFields.length > 0 && (
-        <Box
-          style={{
-            borderRadius: 'var(--mantine-radius-sm)',
-            border: '1px solid var(--mantine-color-default-border)',
-            padding: '6px 8px',
-            fontSize: 11,
-            lineHeight: '16px',
-          }}
-        >
+        <Flex direction="column" gap={4}>
           <TagContext.Provider value={tagForPassiveFields as any}>
             {passiveTeamFields.map(
               (field, i) =>
@@ -367,11 +404,22 @@ export function WEngineConditionalsDisplay({
                     field={field}
                     tagForPassiveFields={tagForPassiveFields}
                     wenginePhase={phase}
+                    descriptionOverride={
+                      wengineKey === 'SolExuvia' ? (
+                        <GameText text="CRIT Rate increases by 20%." />
+                      ) : wengineKey === 'JoyauDore' &&
+                        field.fieldRef?.name === 'anomProf' ? (
+                        <JoyauDoreSelfAnomDesc phase={phase} />
+                      ) : wengineKey === 'JoyauDore' &&
+                        field.fieldRef?.name === 'squadAnomProf' ? (
+                        <JoyauDoreSquadAnomDesc phase={phase} />
+                      ) : undefined
+                    }
                   />
                 )
             )}
           </TagContext.Provider>
-        </Box>
+        </Flex>
       )}
       {condEntries
         .filter(([condName]) => {
@@ -401,6 +449,14 @@ export function WEngineConditionalsDisplay({
             fields={weConditionalFields?.[condName]}
             label={weCondLabels?.[condName]}
             wenginePhase={phase}
+            descriptionOverride={
+              wengineKey === 'SolExuvia' && condName === 'eclipse_active' ? (
+                <SolExuviaEclipseDesc phase={phase} />
+              ) : wengineKey === 'JoyauDore' &&
+                condName === 'wind_ex_stacks' ? (
+                <JoyauDoreCondDesc phase={phase} />
+              ) : undefined
+            }
           />
         ))}
     </Flex>
@@ -418,6 +474,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   fields,
   label: labelProp,
   wenginePhase: propPhase,
+  descriptionOverride,
 }: {
   wengineKey: WengineKey
   condName: string
@@ -430,6 +487,8 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
   label?: ReactNode
   /** Wengine phase to use for descriptions. Defaults to calc context. */
   wenginePhase?: number
+  /** Replace the default phase description with custom content. */
+  descriptionOverride?: ReactNode
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(() => ({ ...outerTag, src }), [outerTag, src])
@@ -536,7 +595,7 @@ const WengineConditionalRow = memo(function WengineConditionalRow({
           {label}
         </Text>
         <Text size="sm" mb={8}>
-          <GameDesc ns={descNs} key18={descKey} />
+          {descriptionOverride ?? <GameDesc ns={descNs} key18={descKey} />}
         </Text>
         {currentValue > 0 && fields && fields.length > 0 && (
           <>

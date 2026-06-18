@@ -1000,30 +1000,4 @@ export const formulas = {
       name: 'AssistFollowUpReturnToDaylight_0_anomBuildup',
     },
   },
-  core_contamination_dmg: {
-    sheet: 'Pyrois',
-    name: 'core_contamination_dmg',
-    tag: {
-      et: 'own',
-      qt: 'formula',
-      q: 'standardDmg',
-      sheet: 'Pyrois',
-      attribute: 'ether',
-      damageType1: 'elemental',
-      name: 'core_contamination_dmg',
-    },
-  },
-  core_eternalImprisonment_dmg: {
-    sheet: 'Pyrois',
-    name: 'core_eternalImprisonment_dmg',
-    tag: {
-      et: 'own',
-      qt: 'formula',
-      q: 'standardDmg',
-      sheet: 'Pyrois',
-      attribute: 'ether',
-      damageType1: 'elemental',
-      name: 'core_eternalImprisonment_dmg',
-    },
-  },
 } as const

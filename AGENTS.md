@@ -14,7 +14,7 @@ Monorepo for gacha-game optimizer websites (Genshin Impact, Zenless Zone Zero). 
 
 Path aliases: `@genshin-optimizer/<scope>/<name>` → `libs/<scope>/<name>/src/index.ts` (defined in `tsconfig.base.json`).
 
-Data from git submodules under `libs/*/dm/` (GenshinData, StarRailData, ZenlessData, HakushinData). See `.gitmodules`.
+Data from git submodules under `libs/zzz/dm/` (ZenlessData, HakushinData). See `.gitmodules`.
 
 ## Commands
 
@@ -43,7 +43,8 @@ npx nx run-many --target=eslint:lint --max-warnings=0  # Lint all
 npx nx run-many --target=test           # Test all (Jest + Vitest)
 npx nx run-many -t gen-file             # Regenerate generated files
 bun biome ci                            # Format check only (read-only)
-bun biome format --write                # Auto-format
+bun biome format --write                # Auto-format (Biome)
+bun biome check --write --formatter-enabled=true --linter-enabled=false --organize-imports-enabled=true  # Format + organize imports
 ```
 
 ### Single package
@@ -63,7 +64,7 @@ bun run update-dm   # git submodule update --remote
 
 ## Code Style
 
-- **Formatter**: Biome (single quotes, trailing commas es5, 2-space indent, LF, 80 char line width). Biome linter is **disabled** — linting is done by ESLint only.
+- **Formatter**: Biome (single quotes, `asNeeded` semicolons, trailing commas es5, 2-space indent, LF, 80 char line width). Biome linter is **disabled** — linting is done by ESLint only.
 - **Linter**: ESLint with `@nx/typescript` rules, `unused-imports` plugin (unused imports are errors), and module boundary enforcement (`@nx/enforce-module-boundaries`).
 - **TypeScript 5.7**: strict mode with `exactOptionalPropertyTypes`, `noImplicitReturns`, `noPropertyAccessFromIndexSignature`.
 - **Testing**: Jest (default, `@nx/jest:jest`) for most libs; Vitest for packages with `vitest.config.ts` (e.g., `pando/engine`, `zzz-frontend`). Test files are `*.spec.ts` or `*.test.ts`.
@@ -124,6 +125,17 @@ The following skills are installed and will be loaded on demand (in `.opencode/s
 - **changelog-generate**: Changelog generation from commit history
 - **ci-pipeline**: CI pipeline configuration and optimization
 
+## Documentation
+
+Key docs scattered across libs (READMEs in each lib directory give quick intros):
+
+- `libs/pando/engine/doc/` — Pando engine architecture (tags, nodes, usage, propagation, optimization, customization)
+- `libs/pando/doc/` — Pando calculation model (name-scoped buffs, damage survey)
+- `libs/game-opt/doc/overview.md` — game-opt layer (typed authoring API, solver)
+- `libs/zzz/formula/doc/` — ZZZ formula authoring (api.md, glue.md, tags.md)
+
+Stale doc references: `pando/doc/README.md` mentions `gi/` and `sr/` formula docs that no longer exist.
+
 ## Gotchas
 
 - `gen-file` targets depend on `load-dm` (submodule data). Run `bun run reload-dm` before generating if submodules are empty.
@@ -132,7 +144,6 @@ The following skills are installed and will be loaded on demand (in `.opencode/s
 - CI uses `nx run-many` (all packages). Local `mini-ci` uses `nx affected`.
 - Biome format check is separate from ESLint lint. Both must pass, but they check different things.
 - Biome ignores: data submodule directories, `*_gen.json`, coverage, dist, `.nx/cache`, locale JSON files.
-- `.nxignore` excludes StarRailData and GenshinData from Nx watching.
 - Default base branch is `master`.
 - Nx Cloud is disabled (`nxCloudAccessToken_disabled` in `nx.json`).
-- The `.envrc` file suggests direnv/nix-flake may be in use for environment management.
+- `.envrc` enables direnv with `layout node`.

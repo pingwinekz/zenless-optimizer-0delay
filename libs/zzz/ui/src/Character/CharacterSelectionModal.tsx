@@ -5,7 +5,11 @@ import {
   characterAsset,
   specialityDefIcon,
 } from '@genshin-optimizer/zzz/assets'
-import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
+import type {
+  AttributeKey,
+  CharacterKey,
+  SpecialityKey,
+} from '@genshin-optimizer/zzz/consts'
 import {
   allAttributeKeys,
   allCharacterKeys,
@@ -37,16 +41,29 @@ export function CharacterSingleSelectionModal({
   const [searchTerm, setSearchTerm] = useState('')
   const deferredSearchTerm = useDeferredValue(searchTerm)
   const deferredState = useDeferredValue(displayCharacter)
+  const [attributeFilter, setAttributeFilter] = useState<AttributeKey[]>([])
+  const [specialtyFilter, setSpecialtyFilter] = useState<SpecialityKey[]>([])
   const characterKeyList = useMemo(() => {
-    const { attribute, specialtyType, rarity } = deferredState
+    const { rarity } = deferredState
     const filteredKeys = allCharacterKeys.filter(
       filterFunction(
-        { attribute, specialtyType, rarity, name: deferredSearchTerm },
+        {
+          attribute: attributeFilter,
+          specialtyType: specialtyFilter,
+          rarity,
+          name: deferredSearchTerm,
+        },
         characterFilterConfigs(database)
       )
     )
     return filteredKeys
-  }, [deferredState, deferredSearchTerm, database])
+  }, [
+    deferredState,
+    deferredSearchTerm,
+    database,
+    attributeFilter,
+    specialtyFilter,
+  ])
 
   const onClose = () => {
     setSearchTerm('')
@@ -107,10 +124,9 @@ export function CharacterSingleSelectionModal({
                   ),
                   flexBasis: `${100 / allAttributeKeys.length}%`,
                 }))}
-                currentFilter={deferredState.attribute}
-                setCurrentFilters={(attribute) =>
-                  database.displayCharacter.set({ attribute })
-                }
+                singleSelect
+                currentFilter={attributeFilter}
+                setCurrentFilters={(attribute) => setAttributeFilter(attribute)}
               />
             </Box>
 
@@ -122,9 +138,10 @@ export function CharacterSingleSelectionModal({
                   display: <ImgIcon src={specialityDefIcon(sk)} size={1.5} />,
                   flexBasis: `${100 / allSpecialityKeys.length}%`,
                 }))}
-                currentFilter={deferredState.specialtyType}
+                singleSelect
+                currentFilter={specialtyFilter}
                 setCurrentFilters={(specialtyType) =>
-                  database.displayCharacter.set({ specialtyType })
+                  setSpecialtyFilter(specialtyType)
                 }
               />
             </Box>

@@ -1,6 +1,5 @@
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { Velina } from '@genshin-optimizer/zzz/formula'
-import { GameDesc } from '@genshin-optimizer/zzz/i18n'
 import { trans } from '../../util'
 import { CoreGameDesc, createBaseSheet, fieldForBuff } from '../sheetUtil'
 
@@ -14,7 +13,10 @@ const sheet = createBaseSheet(key, {
     {
       type: 'fields',
       fields: [
-        fieldForBuff(buff.core_common_dmg_),
+        {
+          title: 'CP ER to DMG% and AM',
+          fieldRef: buff.core_common_dmg_.tag,
+        },
         fieldForBuff(buff.core_anomMas),
       ],
     },
@@ -27,50 +29,16 @@ const sheet = createBaseSheet(key, {
         fields: [fieldForBuff(buff.core_windbite_vortex_anom_mv_mult_)],
       },
     },
-    {
-      type: 'fields',
-      fields: [fieldForBuff(buff.core_wind_anomBuildupRes_)],
-    },
-    {
-      type: 'conditional',
-      conditional: {
-        label: ch('chromaticTintCond'),
-        description: <CoreGameDesc characterKey={key} paragraph={3} />,
-        metadata: cond.chromatic_tint,
-        fields: [fieldForBuff(buff.core_chromatic_anomBuildupRes_)],
-      },
-    },
-    {
-      type: 'conditional',
-      conditional: {
-        label: ch('windAnomalyCond'),
-        description: <CoreGameDesc characterKey={key} paragraph={5} />,
-        metadata: cond.wind_anomaly,
-        fields: [
-          fieldForBuff(buff.core_condensedCyclone_abloom_),
-          fieldForBuff(buff.core_sweepingCyclone_abloom_),
-        ],
-      },
-    },
   ],
   ability: [
     {
-      type: 'conditional',
-      conditional: {
-        label: ch('ultAbloomCond'),
-        description: <GameDesc ns="char_Velina_gen" key18="ability.desc" />,
-        metadata: cond.wind_anomaly,
-        fields: [fieldForBuff(buff.ability_ult_abloom_anom_mv_mult_)],
-      },
-    },
-    {
       type: 'fields',
       fields: [
-        fieldForBuff(buff.ability_wind_dmg_),
+        {
+          title: 'AA Windswept and Vortex DMG%',
+          fieldRef: buff.ability_wind_dmg_.tag,
+        },
         fieldForBuff(buff.ability_vortex_dmg_),
-        fieldForBuff(buff.ability_anomBuildupRes_),
-        fieldForBuff(buff.ability_dazeInc_),
-        fieldForBuff(buff.ability_anomBuildup_),
       ],
     },
   ],
@@ -78,7 +46,10 @@ const sheet = createBaseSheet(key, {
     {
       type: 'fields',
       fields: [
-        fieldForBuff(buff.m1_wind_resIgn_),
+        {
+          title: 'M1 RES Ignore',
+          fieldRef: buff.m1_wind_resIgn_.tag,
+        },
         fieldForBuff(buff.m1_all_resIgn_),
       ],
     },
@@ -87,7 +58,10 @@ const sheet = createBaseSheet(key, {
     {
       type: 'fields',
       fields: [
-        fieldForBuff(buff.m2_wind_dmg_),
+        {
+          title: 'M2 Windswept and Vortex DMG%',
+          fieldRef: buff.m2_wind_dmg_.tag,
+        },
         fieldForBuff(buff.m2_vortex_dmg_),
       ],
     },
@@ -95,13 +69,12 @@ const sheet = createBaseSheet(key, {
   m4: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.m4_atk_)],
-    },
-  ],
-  m6: [
-    {
-      type: 'fields',
-      fields: [fieldForBuff(buff.m6_wind_anomBuildup_)],
+      fields: [
+        {
+          title: 'M4 ATK%',
+          fieldRef: buff.m4_atk_.tag,
+        },
+      ],
     },
   ],
 })

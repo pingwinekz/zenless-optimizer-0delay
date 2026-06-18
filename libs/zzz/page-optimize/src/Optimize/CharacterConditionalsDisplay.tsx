@@ -1,7 +1,10 @@
 import type { IConditionalData } from '@genshin-optimizer/game-opt/engine'
 import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
-import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
-import type { Field, TagField } from '@genshin-optimizer/game-opt/sheet-ui'
+import {
+  TagFieldDisplay,
+  TextFieldDisplay,
+} from '@genshin-optimizer/game-opt/sheet-ui'
+import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
   useCharacterContext,
@@ -9,6 +12,7 @@ import {
   useTeam,
 } from '@genshin-optimizer/zzz/db-ui'
 import { conditionals } from '@genshin-optimizer/zzz/formula'
+import { TagDisplay } from '@genshin-optimizer/zzz/formula-ui'
 import { GameDesc, GameText, i18n } from '@genshin-optimizer/zzz/i18n'
 import {
   Box,
@@ -83,10 +87,12 @@ export function CharacterConditionalsDisplay({
   conditionalLabels?: Record<string, ReactNode>
   showZeroFields?: boolean
   passiveFields?: {
-    field: Field
+    fields: Field[]
     /** 0 = always available, 1-6 = requires that mindscape level */
     mindscape: number
     sectionKey: string
+    /** Optional paragraph index within the section's description */
+    paragraph?: number
   }[]
   showPassives?: boolean
 }) {
@@ -137,16 +143,15 @@ export function CharacterConditionalsDisplay({
       <HeaderText>{t(characterKey)} Conditionals</HeaderText>
       {hasPassives && showPassives && (
         <Flex direction="column" gap={2}>
-          {visiblePassives.map((entry, i) =>
-            'fieldRef' in entry.field ? (
-              <PassiveFieldRow
-                key={i}
-                characterKey={characterKey}
-                field={entry.field}
-                sectionKey={entry.sectionKey}
-              />
-            ) : null
-          )}
+          {visiblePassives.map((entry, i) => (
+            <PassiveFieldRow
+              key={i}
+              characterKey={characterKey}
+              fields={entry.fields}
+              sectionKey={entry.sectionKey}
+              paragraph={entry.paragraph}
+            />
+          ))}
         </Flex>
       )}
       {condEntries
@@ -490,22 +495,27 @@ const passiveSectionToDescKey = (
 
 const PassiveFieldRow = memo(function PassiveFieldRow({
   characterKey,
-  field,
+  fields,
   sectionKey,
+  paragraph,
 }: {
   characterKey: CharacterKey
-  field: TagField
+  fields: Field[]
   sectionKey: string
+  paragraph?: number
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(
     () => ({ ...outerTag, src: characterKey }),
     [outerTag, characterKey]
   )
-  const descKey = useMemo(
-    () => passiveSectionToDescKey(sectionKey, field.fieldRef.name),
-    [sectionKey, field.fieldRef.name]
-  )
+  const firstFieldRef =
+    fields.length > 0 && 'fieldRef' in fields[0] ? fields[0].fieldRef : null
+  const descKey = useMemo(() => {
+    const baseKey = passiveSectionToDescKey(sectionKey, firstFieldRef?.name)
+    if (paragraph !== undefined && baseKey) return `${baseKey}.${paragraph}`
+    return baseKey
+  }, [sectionKey, firstFieldRef?.name, paragraph])
   const ns = `char_${characterKey}_gen`
   return (
     <HoverCard
@@ -526,12 +536,12 @@ const PassiveFieldRow = memo(function PassiveFieldRow({
             lineHeight: '16px',
           }}
         >
-          <Text size="sm">{field.title}</Text>
+          <Text size="sm">{fields[0]?.title}</Text>
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown style={{ fontSize: 13 }}>
         <Text fw={600} mb={4} size="sm">
-          {field.title}
+          {fields[0]?.title}
         </Text>
         {descKey && (
           <Text size="sm" mb={8}>
@@ -541,7 +551,29 @@ const PassiveFieldRow = memo(function PassiveFieldRow({
         <hr />
         <Box mt={4}>
           <TagContext.Provider value={tagForFields as any}>
-            <TagFieldDisplay field={field} showZero={true} />
+            {fields.map((field, i) =>
+              'fieldRef' in field ? (
+                <TagFieldDisplay
+                  key={i}
+                  field={{
+                    ...field,
+                    // Use TagDisplay from fieldRef for the first field instead of the
+                    // custom group title (e.g., "ATK%" instead of "M4 ATK%").
+                    // This way the clickable header shows the custom name, but the
+                    // stat line inside shows the auto-derived stat name.
+                    title:
+                      i === 0 ? (
+                        <TagDisplay tag={field.fieldRef} preventRecursion />
+                      ) : (
+                        field.title
+                      ),
+                  }}
+                  showZero={true}
+                />
+              ) : (
+                <TextFieldDisplay key={i} field={field} />
+              )
+            )}
           </TagContext.Provider>
         </Box>
       </HoverCard.Dropdown>

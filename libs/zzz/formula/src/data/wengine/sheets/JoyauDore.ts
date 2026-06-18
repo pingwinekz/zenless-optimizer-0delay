@@ -60,7 +60,7 @@ const sheet = registerWengine(
     ),
     showSpecialtyAndEquipped(key)
   ),
-  // Squad Anomaly Proficiency at max stacks
+  // Anomaly Proficiency at max stacks (team-wide)
   registerBuff(
     'squadAnomProf',
     teamBuff.combat.anomProf.add(

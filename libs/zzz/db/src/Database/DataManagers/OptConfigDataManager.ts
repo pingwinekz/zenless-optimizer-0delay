@@ -100,6 +100,8 @@ const optConfigSchema = z.object({
   useEquipped: zodBoolean(),
   useCharacterPriority: zodBoolean(),
   includeOffsets: zodBoolean(),
+  showCharPassives: zodBoolean(),
+  showWenginePassives: zodBoolean(),
 
   optWengine: zodBoolean(),
   wlevelLow: z.number().int().min(0).max(60).catch(wengineMaxLevel),

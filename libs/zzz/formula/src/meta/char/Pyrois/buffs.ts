@@ -1,18 +1,5 @@
 // WARNING: Generated file, do not modify
 export const buffs = {
-  mirage_ult_crit_dmg_: {
-    sheet: 'Pyrois',
-    name: 'mirage_ult_crit_dmg_',
-    tag: {
-      et: 'display',
-      qt: 'combat',
-      q: 'crit_dmg_',
-      sheet: 'Pyrois',
-      damageType1: 'ult',
-      name: 'mirage_ult_crit_dmg_',
-    },
-    team: false,
-  },
   sunflare_enerRegen_: {
     sheet: 'Pyrois',
     name: 'sunflare_enerRegen_',

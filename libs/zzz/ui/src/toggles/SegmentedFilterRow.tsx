@@ -6,16 +6,24 @@ export function SegmentedFilterRow<T extends string>({
   currentFilter,
   setCurrentFilters,
   flexBasis,
+  singleSelect,
 }: {
   tags: { key: T; display: ReactNode; flexBasis?: string }[]
   currentFilter: T[]
   setCurrentFilters: (filters: T[]) => void
   flexBasis?: string
+  singleSelect?: boolean
 }) {
   const handleChange = (tag: T, checked: boolean) => {
-    setCurrentFilters(
-      checked ? [...currentFilter, tag] : currentFilter.filter((t) => t !== tag)
-    )
+    if (singleSelect) {
+      setCurrentFilters(checked ? [tag] : [])
+    } else {
+      setCurrentFilters(
+        checked
+          ? [...currentFilter, tag]
+          : currentFilter.filter((t) => t !== tag)
+      )
+    }
   }
 
   return (

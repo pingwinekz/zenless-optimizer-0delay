@@ -144,8 +144,8 @@ function abilityFormulaNameToTranslated(
 }
 
 /**
- * Renders a formula name (e.g. "BasicAttackSweepingEdge_0_dmg") using i18n.
- * Falls back to a clean human-readable name when the locale key is missing.
+ * Renders a formula name (e.g. "BasicAttackSweepingEdge_0_dmg") using the
+ * ability's i18n name and a 1-indexed hit number.
  */
 function FormulaNameSpan({
   charKey,
@@ -160,18 +160,16 @@ function FormulaNameSpan({
   hitIdx: string
   type: string
 }) {
-  const trKey = `${skill}.${ability}.params.${hitIdx}`
   const ns = `char_${charKey}_gen`
-  if (i18n.exists(`${ns}:${trKey}`)) {
-    return st(type, {
-      val: `$t(${ns}:${trKey})`,
-    })
+  const abilityNameKey = `${ns}:${skill}.${ability}.name`
+  const abilityName = i18n.exists(abilityNameKey)
+    ? i18n.t(abilityNameKey)
+    : ability.replace(/([A-Z])/g, ' $1').trim()
+  if (hitIdx) {
+    const hitNum = Number(hitIdx) + 1 // 0-indexed → 1-indexed for user display
+    return st(type, { val: `${abilityName} #${hitNum} ` })
   }
-  // Fallback: convert PascalCase ability name to readable words, include hit number
-  const abilityName = ability.replace(/([A-Z])/g, ' $1').trim()
-  const hitNum = Number(hitIdx) + 1 // 0-indexed → 1-indexed for user display
-  const val = hitIdx ? `${abilityName} #${hitNum} ` : `${abilityName} `
-  return st(type, { val })
+  return st(type, { val: `${abilityName} ` })
 }
 
 function createCoreAndAbilitySheet(

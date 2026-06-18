@@ -196,8 +196,8 @@ export function TeammateCard({
               const buff = charBuffs?.[f.fieldRef.name]
               if (buff?.team !== undefined) return buff.team !== false
             }
-            // No team info available — assume team-wide (current behavior)
-            return true
+            // No team info available — assume self-only (safe default)
+            return false
           })
           if (teamFields.length === 0) return // skip if no team-wide fields
           if (!result[condName]) result[condName] = []
@@ -276,25 +276,53 @@ export function TeammateCard({
       | undefined
     if (!charBuffs) return undefined
     const result: {
-      field: Field
+      fields: Field[]
       /** 0 = always available, 1-6 = requires that mindscape level */
       mindscape: number
       sectionKey: string
+      /** Paragraph index within the section's description (0-based, counting only 'fields' docs) */
+      paragraph?: number
     }[] = []
     Object.entries(sheet).forEach(([sectionKey, section]) => {
       const mindscape = sectionKey.startsWith('m')
         ? Number(sectionKey.slice(1)) || 0
         : 0
+      let fieldsDocIndex = 0
+      let abilityFieldsDocIndex = 0
       section.documents.forEach((doc) => {
         if (doc.type === 'fields' && doc.fields?.length) {
+          const groupedFields: Field[] = []
           for (const field of doc.fields) {
             if ('fieldRef' in field && field.fieldRef?.name) {
               const buffMeta = charBuffs[field.fieldRef.name]
               // Only include fields that match a known team-wide buff
               if (buffMeta && buffMeta.team === true) {
-                result.push({ field, mindscape, sectionKey })
+                groupedFields.push(field)
               }
             }
+          }
+          if (groupedFields.length > 0) {
+            const isAbility =
+              groupedFields[0] &&
+              'fieldRef' in groupedFields[0] &&
+              groupedFields[0].fieldRef?.name?.startsWith('ability_')
+            // Ability desc paragraphs start at 1 (desc.0 is the condition text),
+            // so use a separate counter offset by +1.
+            // Mindscape sections use a single `mindscapes.X.desc` key (no paragraph sub-keys),
+            // so don't set a paragraph index for them.
+            const paragraph = sectionKey.startsWith('m')
+              ? undefined
+              : isAbility
+                ? abilityFieldsDocIndex + 1
+                : fieldsDocIndex
+            result.push({
+              fields: groupedFields,
+              mindscape,
+              sectionKey,
+              paragraph,
+            })
+            if (isAbility) abilityFieldsDocIndex++
+            else fieldsDocIndex++
           }
         }
       })

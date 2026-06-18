@@ -1,11 +1,9 @@
 import type { NumNode } from '@genshin-optimizer/pando/engine'
-import { cmpGE, prod, subscript, sum } from '@genshin-optimizer/pando/engine'
+import { cmpGE, subscript, sum } from '@genshin-optimizer/pando/engine'
 import { type CharacterKey } from '@genshin-optimizer/zzz/consts'
 import { allStats, mappedStats } from '@genshin-optimizer/zzz/stats'
-import { isStunned } from '../../common/enemy'
 import {
   allBoolConditionals,
-  customDmg,
   own,
   ownBuff,
   percent,
@@ -13,17 +11,16 @@ import {
   registerBuff,
   team,
 } from '../../util'
-import { entriesForChar, getBaseTag, registerAllDmgDazeAndAnom } from '../util'
+import { entriesForChar, registerAllDmgDazeAndAnom } from '../util'
 
 const key: CharacterKey = 'Pyrois'
 const data_gen = allStats.char[key]
 const dm = mappedStats.char[key]
-const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
 // Conditionals
-const { mirage, sunflare, contamination } = allBoolConditionals(key)
+const { sunflare } = allBoolConditionals(key)
 
 // Ability check: party has a Stun or Support character
 const ability_check = (a: number | NumNode) =>
@@ -35,13 +32,6 @@ const ability_check = (a: number | NumNode) =>
     1,
     a
   )
-
-// Core Passive: Upper Branch — Mirage (Ult: Total Annihilation)
-// Ult deals 40% increased CRIT DMG against Stunned enemies
-const mirage_ult_crit_dmg_ = ownBuff.combat.crit_dmg_.addWithDmgType(
-  'ult',
-  mirage.ifOn(isStunned.ifOn(percent(dm.core.mirageCritDmg_)))
-)
 
 // Core Passive: Lower Branch — Sunflare (Ult: Triumphant Return)
 // Energy Generation Rate +15%, DMG dealt +20-40% (core-scaled)
@@ -71,34 +61,7 @@ const sheet = register(
   // Formulas
   ...registerAllDmgDazeAndAnom(key, dm),
 
-  // Core Passive: Left Branch — Unbound Swordstorm (vs Contamination)
-  // Heavy attacks deal additional ATK% DMG vs Contaminated enemies
-  ...customDmg(
-    'core_contamination_dmg',
-    { ...baseTag, damageType1: 'elemental' },
-    contamination.ifOn(
-      prod(own.final.atk, percent(subscript(char.core, dm.core.leftBranchAtk)))
-    )
-  ),
-
-  // Core Passive: Right Branch — Eternal Imprisonment (vs Stunned)
-  // Heavy attacks deal additional ATK% DMG vs Stunned enemies
-  ...customDmg(
-    'core_eternalImprisonment_dmg',
-    { ...baseTag, damageType1: 'elemental' },
-    isStunned.ifOn(
-      prod(own.final.atk, percent(subscript(char.core, dm.core.rightBranchAtk)))
-    )
-  ),
-
   // Buffs
-  registerBuff(
-    'mirage_ult_crit_dmg_',
-    mirage_ult_crit_dmg_,
-    undefined,
-    undefined,
-    false
-  ),
   registerBuff(
     'sunflare_enerRegen_',
     sunflare_enerRegen_,

@@ -27,7 +27,12 @@ const sheet: UISheetElement = {
     },
     {
       type: 'fields',
-      fields: [tagToTagField(buff.anomProf.tag)],
+      fields: [
+        {
+          title: 'AP buff',
+          fieldRef: buff.anomProf.tag,
+        },
+      ],
     },
     {
       type: 'conditional',
@@ -46,7 +51,12 @@ const sheet: UISheetElement = {
     },
     {
       type: 'fields',
-      fields: [tagToTagField(buff.squadAnomProf.tag)],
+      fields: [
+        {
+          title: 'Squad AP buff',
+          fieldRef: buff.squadAnomProf.tag,
+        },
+      ],
     },
   ],
 }

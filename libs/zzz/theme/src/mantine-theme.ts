@@ -101,11 +101,11 @@ export function createMantineTheme(seed: string): MantineThemeOverride {
       // ZZZ-specific static colors
       fire: hexToShades('#FF5623'),
       ice: hexToShades('#95EAE9'),
-      electric: hexToShades('#0177FF'),
+      electric: hexToShades('#2EB6FF'),
       frost: hexToShades('#719EF8'),
       physical: hexToShades('#EDCC2C'),
       ether: hexToShades('#FE427E'),
-      wind: hexToShades('#7EC8E3'),
+      wind: hexToShades('#A6C5FD'),
 
       rankS: hexToShades('#FF9100'),
       rankA: hexToShades('#E900FF'),

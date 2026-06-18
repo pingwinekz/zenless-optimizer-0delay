@@ -27,7 +27,12 @@ const sheet: UISheetElement = {
     },
     {
       type: 'fields',
-      fields: [tagToTagField(buff.crit_.tag)],
+      fields: [
+        {
+          title: 'CR buff',
+          fieldRef: buff.crit_.tag,
+        },
+      ],
     },
     {
       type: 'conditional',

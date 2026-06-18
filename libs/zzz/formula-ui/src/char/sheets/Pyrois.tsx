@@ -7,19 +7,9 @@ const key: CharacterKey = 'Pyrois'
 const [, ch] = trans('char', key)
 const cond = Pyrois.conditionals
 const buff = Pyrois.buffs
-const formula = Pyrois.formulas
 
 const sheet = createBaseSheet(key, {
   core: [
-    {
-      type: 'conditional',
-      conditional: {
-        label: ch('mirageCond'),
-        description: <CoreGameDesc characterKey={key} paragraph={2} />,
-        metadata: cond.mirage,
-        fields: [fieldForBuff(buff.mirage_ult_crit_dmg_)],
-      },
-    },
     {
       type: 'conditional',
       conditional: {
@@ -32,40 +22,27 @@ const sheet = createBaseSheet(key, {
         ],
       },
     },
-    {
-      type: 'conditional',
-      conditional: {
-        label: ch('contaminationCond'),
-        description: <CoreGameDesc characterKey={key} paragraph={4} />,
-        metadata: cond.contamination,
-        fields: [
-          {
-            title: ch('contaminationDmg'),
-            fieldRef: formula.core_contamination_dmg.tag,
-          },
-        ],
-      },
-    },
-    {
-      type: 'fields',
-      fields: [
-        {
-          title: ch('eternalImprisonmentDmg'),
-          fieldRef: formula.core_eternalImprisonment_dmg.tag,
-        },
-      ],
-    },
   ],
   ability: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.ability_crit_dmg_)],
+      fields: [
+        {
+          title: 'AA CD buff',
+          fieldRef: buff.ability_crit_dmg_.tag,
+        },
+      ],
     },
   ],
   m1: [
     {
       type: 'fields',
-      fields: [fieldForBuff(buff.m1_crit_)],
+      fields: [
+        {
+          title: 'M2 CR buff',
+          fieldRef: buff.m1_crit_.tag,
+        },
+      ],
     },
   ],
 })

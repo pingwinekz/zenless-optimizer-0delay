@@ -24,8 +24,8 @@ import { TagContext } from '@genshin-optimizer/game-opt/formula-ui'
 import { TagFieldDisplay } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import { discUiSheets } from '@genshin-optimizer/zzz/formula-ui'
-import { i18n } from '@genshin-optimizer/zzz/i18n'
-import { memo, useContext, useMemo, useState } from 'react'
+import { GameDesc, i18n } from '@genshin-optimizer/zzz/i18n'
+import { Suspense, memo, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { HeaderText } from '../layout'
 
@@ -229,6 +229,28 @@ function DiscSetSection({
     return Object.keys(result).length > 0 ? result : undefined
   }, [setKey, count, teammateKey, teamKey])
 
+  // Extract set bonus description keys (e.g. "desc2", "desc4") from disc UI
+  // sheet blocks that have both a text document and a conditional document.
+  const discCondDescriptions = useMemo(() => {
+    const sheet = discUiSheets[setKey]
+    if (!sheet) return undefined
+    const result: Record<string, string> = {}
+    const blocksToScan: Array<'2' | '4'> = count === 4 ? ['2', '4'] : ['2']
+    for (const blockKey of blocksToScan) {
+      const block = sheet[blockKey]
+      if (!block) continue
+      const hasText = block.documents.some((doc) => doc.type === 'text')
+      if (!hasText) continue
+      for (const doc of block.documents) {
+        if (doc.type === 'conditional' && doc.conditional) {
+          const condName = doc.conditional.metadata.name
+          if (!result[condName]) result[condName] = `desc${blockKey}`
+        }
+      }
+    }
+    return Object.keys(result).length > 0 ? result : undefined
+  }, [setKey, count])
+
   // Extract localized labels from disc UI sheet
   const discCondLabels = useMemo(() => {
     const sheet = discUiSheets[setKey]
@@ -276,6 +298,7 @@ function DiscSetSection({
             teammateKey={teammateKey}
             fields={discConditionalFields?.[condName]}
             label={discCondLabels?.[condName]}
+            description={discCondDescriptions?.[condName]}
           />
         ))}
     </Flex>
@@ -292,6 +315,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
   teammateKey,
   fields,
   label: labelProp,
+  description,
 }: {
   setKey: DiscSetKey
   condName: string
@@ -302,6 +326,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
   teammateKey: CharacterKey
   fields?: Field[]
   label?: ReactNode
+  description?: string
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(
@@ -309,13 +334,17 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
     [outerTag, teammateKey]
   )
   const currentCond = team?.frames[0]?.conditionals?.find(
-    (c) => c.sheet === setKey && c.condKey === condName
+    (c) => c.sheet === setKey && c.condKey === condName && c.src === teammateKey
   )
   const defaultVal =
     condData.type === 'bool'
-      ? 1
+      ? teammateKey && teammateKey !== teamKey
+        ? 0
+        : 1
       : condData.type === 'num'
-        ? (condData.max ?? 10)
+        ? teammateKey && teammateKey !== teamKey
+          ? 0
+          : (condData.max ?? 10)
         : 0
   const currentValue = currentCond?.condValue ?? defaultVal
 
@@ -325,7 +354,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
       0,
       setKey as any,
       condName,
-      teamKey as any,
+      teammateKey as any,
       null,
       condValue
     )
@@ -398,6 +427,7 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
             borderRadius: 'var(--mantine-radius-sm)',
             border: '1px solid var(--mantine-color-default-border)',
             padding: '4px 6px',
+            transition: 'border-color 0.15s',
           }}
         >
           {rowContent}
@@ -407,15 +437,13 @@ const DiscSetConditionalRow = memo(function DiscSetConditionalRow({
         <Text fw={600} mb={4} size="sm">
           {label}
         </Text>
-        <Text size="xs" c={currentValue > 0 ? 'green' : 'dimmed'} mb={4}>
-          {condData.type === 'bool'
-            ? currentValue > 0
-              ? '• Enabled'
-              : '• Disabled'
-            : condData.type === 'num'
-              ? `• ${currentValue}${condData.max != null ? `/${condData.max}` : ''}`
-              : `• Value: ${currentValue}`}
-        </Text>
+        {description && (
+          <Text size="sm" mb={8} style={{ whiteSpace: 'pre-wrap' }}>
+            <Suspense fallback={null}>
+              <GameDesc ns={`disc_${setKey}_gen`} key18={description} />
+            </Suspense>
+          </Text>
+        )}
         {currentValue > 0 && fields && fields.length > 0 && (
           <>
             <hr />
