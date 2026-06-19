@@ -31,7 +31,6 @@ import {
   WengineSelectionModal,
 } from '@genshin-optimizer/zzz/ui'
 import {
-  ActionIcon,
   Avatar,
   Box,
   Button,
@@ -41,7 +40,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
-import { IconRefresh } from '@tabler/icons-react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { CharacterBuildSelector } from './CharacterBuildSelector'
@@ -161,14 +159,6 @@ export function TeammateCard({
     [characterKey, database.chars]
   )
 
-  const syncFromRoster = useCallback(() => {
-    if (!characterKey) return
-    database.teams.setTeammateOverride(mainChar.key, characterKey, {
-      mindscape: undefined,
-      wenginePhase: undefined,
-    })
-  }, [characterKey, database.teams, mainChar.key])
-
   // Build conditional → fields map from formula-ui sheet
   // Only include team-wide buffs (team: true) since self-buffs don't affect the main character
   // NOTE: This hook must be called BEFORE the early return to avoid violating React's Rules of Hooks
@@ -282,6 +272,7 @@ export function TeammateCard({
       sectionKey: string
       /** Paragraph index within the section's description (0-based, counting only 'fields' docs) */
       paragraph?: number
+      groupTitle?: ReactNode
     }[] = []
     Object.entries(sheet).forEach(([sectionKey, section]) => {
       const mindscape = sectionKey.startsWith('m')
@@ -320,6 +311,10 @@ export function TeammateCard({
               mindscape,
               sectionKey,
               paragraph,
+              groupTitle:
+                doc.type === 'fields' && 'header' in doc && doc.header
+                  ? doc.header.text
+                  : undefined,
             })
             if (isAbility) abilityFieldsDocIndex++
             else fieldsDocIndex++
@@ -389,14 +384,6 @@ export function TeammateCard({
                     <CharacterName characterKey={characterKey} />
                   </Button>
                 </Flex>
-                <ActionIcon
-                  size={26}
-                  variant="default"
-                  onClick={syncFromRoster}
-                  title="Sync from roster"
-                >
-                  <IconRefresh size={14} />
-                </ActionIcon>
               </Group>
 
               {/* Mindscape segmented control */}

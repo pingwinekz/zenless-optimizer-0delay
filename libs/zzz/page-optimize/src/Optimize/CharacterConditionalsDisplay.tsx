@@ -7,6 +7,7 @@ import {
 import type { Field } from '@genshin-optimizer/game-opt/sheet-ui'
 import type { CharacterKey } from '@genshin-optimizer/zzz/consts'
 import {
+  useCharacter,
   useCharacterContext,
   useDatabaseContext,
   useTeam,
@@ -93,6 +94,8 @@ export function CharacterConditionalsDisplay({
     sectionKey: string
     /** Optional paragraph index within the section's description */
     paragraph?: number
+    /** Optional group title shown instead of first field's title */
+    groupTitle?: ReactNode
   }[]
   showPassives?: boolean
 }) {
@@ -150,6 +153,7 @@ export function CharacterConditionalsDisplay({
               fields={entry.fields}
               sectionKey={entry.sectionKey}
               paragraph={entry.paragraph}
+              groupTitle={entry.groupTitle}
             />
           ))}
         </Flex>
@@ -479,13 +483,14 @@ const NumConditionalRow = memo(function NumConditionalRow({
 
 const passiveSectionToDescKey = (
   sectionKey: string,
-  fieldName?: string | null
+  fieldName?: string | null,
+  coreLevel?: number
 ): string | null => {
   if (sectionKey === 'core') {
     // Both core and ability documents are merged into 'core' by createCoreAndAbilitySheet.
     // Ability field names start with 'ability_' — show the ability description for those.
     if (fieldName?.startsWith('ability_')) return 'ability.desc'
-    return 'core.desc.0'
+    return `core.desc.${coreLevel ?? 0}`
   }
   if (sectionKey === 'potential') return 'potential.desc.0'
   const m = sectionKey.match(/^m([1-6])$/)
@@ -498,25 +503,34 @@ const PassiveFieldRow = memo(function PassiveFieldRow({
   fields,
   sectionKey,
   paragraph,
+  groupTitle,
 }: {
   characterKey: CharacterKey
   fields: Field[]
   sectionKey: string
   paragraph?: number
+  groupTitle?: ReactNode
 }) {
   const outerTag = useContext(TagContext)
   const tagForFields = useMemo(
     () => ({ ...outerTag, src: characterKey }),
     [outerTag, characterKey]
   )
+  const char = useCharacter(characterKey)
+  const coreLevel = char?.core ?? 0
   const firstFieldRef =
     fields.length > 0 && 'fieldRef' in fields[0] ? fields[0].fieldRef : null
   const descKey = useMemo(() => {
-    const baseKey = passiveSectionToDescKey(sectionKey, firstFieldRef?.name)
+    const baseKey = passiveSectionToDescKey(
+      sectionKey,
+      firstFieldRef?.name,
+      coreLevel
+    )
     if (paragraph !== undefined && baseKey) return `${baseKey}.${paragraph}`
     return baseKey
-  }, [sectionKey, firstFieldRef?.name, paragraph])
+  }, [sectionKey, firstFieldRef?.name, paragraph, coreLevel])
   const ns = `char_${characterKey}_gen`
+  const displayTitle = groupTitle ?? fields[0]?.title
   return (
     <HoverCard
       width={400}
@@ -536,16 +550,25 @@ const PassiveFieldRow = memo(function PassiveFieldRow({
             lineHeight: '16px',
           }}
         >
-          <Text size="sm">{fields[0]?.title}</Text>
+          <Text size="sm">{displayTitle}</Text>
         </Box>
       </HoverCard.Target>
       <HoverCard.Dropdown style={{ fontSize: 13 }}>
         <Text fw={600} mb={4} size="sm">
-          {fields[0]?.title}
+          {displayTitle}
         </Text>
         {descKey && (
           <Text size="sm" mb={8}>
-            <GameDesc ns={ns} key18={descKey} />
+            {firstFieldRef?.name?.startsWith('ability_') ? (
+              <>
+                <div style={{ marginBottom: 8 }}>
+                  <GameDesc ns={ns} key18="ability.desc.0" />
+                </div>
+                <GameDesc ns={ns} key18={descKey} />
+              </>
+            ) : (
+              <GameDesc ns={ns} key18={descKey} />
+            )}
           </Text>
         )}
         <hr />

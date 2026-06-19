@@ -5,6 +5,20 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "gen-file": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node libs/zzz/page-optimize/scripts/gen-da-seasons.mjs",
+          "node libs/zzz/page-optimize/scripts/gen-sd-seasons.mjs"
+        ],
+        "parallel": true
+      },
+      "outputs": [
+        "{projectRoot}/src/daSeasons_gen.json",
+        "{projectRoot}/src/shiyuSeasons_gen.json"
+      ]
+    },
     "gen-da-file": {
       "executor": "nx:run-commands",
       "options": {

@@ -43,7 +43,6 @@ import {
 } from '@genshin-optimizer/zzz/ui'
 import { Box, Flex, SegmentedControl } from '@mantine/core'
 import { useMergedRef } from '@mantine/hooks'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import {
   Suspense,
   memo,
@@ -60,7 +59,7 @@ import { FilterBar } from './FilterBar'
 import { getCharacterShowcaseColor } from './color/characterShowcaseColors'
 import { DEFAULT_CONFIG } from './color/colorPipelineConfig'
 import { oklchCharacterListColor } from './color/colorUtilsOklch'
-import { cardTotalW, defaultGap, parentH } from './constantsUi'
+import { cardTotalW, defaultGap } from './constantsUi'
 const dropAnimationDuration = 200
 
 const dropAnimationConfig: DropAnimation = {
@@ -329,16 +328,15 @@ export default function PageCharacter({
             }}
           />
 
-          {/* Character Grid with DnD + OverlayScrollbars */}
-          <OverlayScrollbarsComponent
+          {/* Character Grid with DnD + ScrollArea */}
+          <Box
             style={{
-              height: parentH,
+              overflow: 'auto',
+              overscrollBehavior: 'contain',
+              maxHeight: 'calc(100vh - 160px)',
               border: '1px solid var(--layer-2)',
               borderRadius: 'var(--mantine-radius-sm)',
             }}
-            data-container-border="true"
-            options={{ scrollbars: { autoHide: 'move', autoHideDelay: 500 } }}
-            tabIndex={0}
           >
             <Box
               ref={gridRef}
@@ -395,7 +393,7 @@ export default function PageCharacter({
                 </DragOverlay>
               </DndContext>
             </Box>
-          </OverlayScrollbarsComponent>
+          </Box>
 
           {/* Density toggle */}
           <SegmentedControl

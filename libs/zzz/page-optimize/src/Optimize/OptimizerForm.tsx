@@ -218,6 +218,8 @@ export function OptimizerForm({
       sectionKey: string
       /** Paragraph index within the section's description (0-based, counting only 'fields' docs) */
       paragraph?: number
+      /** Optional group title shown instead of first field's title */
+      groupTitle?: ReactNode
     }[] = []
     Object.entries(sheet).forEach(([sectionKey, section]) => {
       const mindscape = sectionKey.startsWith('m')
@@ -258,6 +260,10 @@ export function OptimizerForm({
               mindscape,
               sectionKey,
               paragraph,
+              groupTitle:
+                doc.type === 'fields' && 'header' in doc && doc.header
+                  ? doc.header.text
+                  : undefined,
             })
             if (isAbility) abilityFieldsDocIndex++
             else fieldsDocIndex++

@@ -24,10 +24,24 @@
     "rooms": []
   },
   {
+    "id": 620011,
+    "name": "Critical Node",
+    "beginTime": "2024-05-21 04:00:00",
+    "endTime": "2024-05-28 03:59:59",
+    "rooms": []
+  },
+  {
     "id": 62002,
     "name": "Critical Node",
     "beginTime": "2024-08-01 04:00:00",
     "endTime": "2024-08-16 03:59:59",
+    "rooms": []
+  },
+  {
+    "id": 620021,
+    "name": "Critical Node",
+    "beginTime": "2024-05-28 04:00:00",
+    "endTime": "2024-06-18 03:59:59",
     "rooms": []
   },
   {
@@ -1464,6 +1478,554 @@
           "id": "62001502",
           "title": "Unstoppable",
           "desc": "· Agent ATK increases by 10%. <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>EX Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> deal 20% increased DMG.\n· Agents gain an additional 40 initial Energy and deals 30% bonus CRIT DMG."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62051,
+    "name": "Critical Node",
+    "beginTime": "2026-06-26 04:00:00",
+    "endTime": "2026-07-10 03:59:59",
+    "rooms": [
+      {
+        "id": "62051051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930176",
+          "name": "Miasmic - Abyssal Enforcer",
+          "image": "MiasmaHugoSlime",
+          "stats": {
+            "Hp": 30921348.599999998,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001511",
+          "title": "Frozen Tempest",
+          "desc": "· Agent <color=#A6C5FD>Wind DMG</color> and <color=#98EFF0>Ice DMG</color> increase by 30%, <color=#FFFFFF>Vortex</color> DMG increases by 30%.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, their Anomaly Proficiency increases by 40 for 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62051052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30015",
+          "name": "Mirage Archer Unit",
+          "image": "ObsoleteAndroid",
+          "stats": {
+            "Hp": 39537115.199999996,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001512",
+          "title": "Void Erosion",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 30%, CRIT DMG increases by 40%.\n· When an Agent with the <color=#FFFFFF>Attack</color> specialty hits an enemy and crits, enemy DEF drops by 10% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62051053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 21991702.094999995,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001472",
+          "title": "Cardinal Forge",
+          "desc": "· Agent <color=#FE437E>Ether Anomaly Buildup Rate</color> and <color=#98EFF0>Ice Anomaly Buildup Rate</color> increase by 25%.\n· When Agents inflict an Attribute Anomaly on enemies, their DEF is reduced by 10%, and they take 20% more Attribute Anomaly DMG for 10s. Repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 620511,
+    "name": "Critical Node",
+    "beginTime": "2026-04-24 04:00:00",
+    "endTime": "2026-07-08 03:59:59",
+    "rooms": [
+      {
+        "id": "62051051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "physical": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "930176",
+          "name": "Miasmic - Abyssal Enforcer",
+          "image": "MiasmaHugoSlime",
+          "stats": {
+            "Hp": 30921348.599999998,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001511",
+          "title": "Frozen Tempest",
+          "desc": "· Agent <color=#A6C5FD>Wind DMG</color> and <color=#98EFF0>Ice DMG</color> increase by 30%, <color=#FFFFFF>Vortex</color> DMG increases by 30%.\n· After an Agent uses an <color=#FFFFFF>EX Special Attack</color>, their Anomaly Proficiency increases by 40 for 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62051052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "fire": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30015",
+          "name": "Mirage Archer Unit",
+          "image": "ObsoleteAndroid",
+          "stats": {
+            "Hp": 39537115.199999996,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001512",
+          "title": "Void Erosion",
+          "desc": "· Agent <color=#FE437E>Ether DMG</color> increases by 30%, CRIT DMG increases by 40%.\n· When an Agent with Attack specialty hits an enemy and crits, enemy DEF drops by 10% for 5s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62051053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 21991702.094999995,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001472",
+          "title": "Cardinal Forge",
+          "desc": "· Agent <color=#FE437E>Ether Anomaly Buildup Rate</color> and <color=#98EFF0>Ice Anomaly Buildup Rate</color> increase by 25%.\n· When Agents inflict an Attribute Anomaly on enemies, their DEF is reduced by 10%, and they take 20% more Attribute Anomaly DMG for 10s. Repeated triggers reset the duration."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62052,
+    "name": "Critical Node",
+    "beginTime": "2026-07-10 04:00:00",
+    "endTime": "2026-07-24 03:59:59",
+    "rooms": [
+      {
+        "id": "62052051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 50270622.74999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001521",
+          "title": "Glacial Gale",
+          "desc": "· Agent <color=#A6C5FD>Wind DMG</color> and <color=#98EFF0>Ice DMG</color> <color=#2BAD00>increase by 10%</color>.\n· When hitting an enemy afflicted with an <color=#FFFFFF>Attribute Anomaly</color>, DMG increases by <color=#2BAD00>15%</color>, and <color=#2BAD00>10%</color> of the enemy's <color=#2BAD00>All-Attribute RES</color> is ignored."
+        }
+      },
+      {
+        "id": "62052052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "electric": 20
+        },
+        "bigMonster": {
+          "id": "30051",
+          "name": "Doppelganger - Starlight - Billy",
+          "image": "InnerKnightSlime",
+          "stats": {
+            "Hp": 27855992.34,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 19540.25
+          }
+        },
+        "buff": {
+          "id": "62001522",
+          "title": "Final Concerto",
+          "desc": "· Agent's <color=#FFFFFF>Ultimate</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 40%.\n· When <color=#FFFFFF>Chain Attack</color> hits an enemy, the enemy's Stun DMG Multiplier increases by 20% and Daze recovery speed slows down by 15% for 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62052053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30003",
+          "name": "Lockspring",
+          "image": "BlackMazingerGoldenBomb",
+          "stats": {
+            "Hp": 35277954.074999996,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001381",
+          "title": "Dawn's Guiding Light",
+          "desc": "· Agent ATK increases by 30%, CRIT DMG increases by 15%.\n· Enemy Stun DMG Multiplier increases by 20%."
+        }
+      }
+    ]
+  },
+  {
+    "id": 620521,
+    "name": "Critical Node",
+    "beginTime": "2026-04-24 04:00:00",
+    "endTime": "2026-07-08 03:59:59",
+    "rooms": [
+      {
+        "id": "62052051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 50270622.74999999,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001521",
+          "title": "Glacial Gale",
+          "desc": "· Agent <color=#A6C5FD>Wind DMG</color> and <color=#98EFF0>Ice DMG</color> <color=#2BAD00>increase by 10%</color>.\n· When hitting an enemy afflicted with an <color=#FFFFFF>Attribute Anomaly</color>, DMG increases by <color=#2BAD00>15%</color>, and <color=#2BAD00>10%</color> of the enemy's <color=#2BAD00>All-Attribute RES</color> is ignored."
+        }
+      },
+      {
+        "id": "62052052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "electric": 20
+        },
+        "bigMonster": {
+          "id": "30047",
+          "name": "全新人形boss",
+          "image": "InnerKnight",
+          "stats": {
+            "Hp": 27855992.34,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 19540.25
+          }
+        },
+        "buff": {
+          "id": "62001522",
+          "title": "Final Concerto",
+          "desc": "· Agent's <color=#FFFFFF>Ultimate</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 40%.\n· When <color=#FFFFFF>Chain Attack</color> hits an enemy, the enemy's Stun DMG Multiplier increases by 20% and their Daze recovery slows down by 15%, lasting 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62052053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "electric": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "30003",
+          "name": "Lockspring",
+          "image": "BlackMazingerGoldenBomb",
+          "stats": {
+            "Hp": 35277954.074999996,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 18236
+          }
+        },
+        "buff": {
+          "id": "62001381",
+          "title": "Dawn's Guiding Light",
+          "desc": "· Agent ATK increases by 30%, CRIT DMG increases by 15%.\n· Enemy Stun DMG Multiplier increases by 20%."
+        }
+      }
+    ]
+  },
+  {
+    "id": 62053,
+    "name": "Critical Node",
+    "beginTime": "2026-07-24 04:00:00",
+    "endTime": "2026-08-07 03:59:59",
+    "rooms": [
+      {
+        "id": "62053051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300372",
+          "name": "Miasmic - Doppelganger - The Defector",
+          "image": "MiasmaIsoldeSlime",
+          "stats": {
+            "Hp": 28271655.72,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001522",
+          "title": "Final Concerto",
+          "desc": "· Agent's <color=#FFFFFF>Ultimate</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 40%.\n· When <color=#FFFFFF>Chain Attack</color> hits an enemy, the enemy's Stun DMG Multiplier increases by 20% and Daze recovery speed slows down by 15% for 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62053052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 87427170,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001532",
+          "title": "Chain Circuit",
+          "desc": "· Agent's Anomaly Proficiency increases by <color=#2BAD00>20 points</color>, and Attribute Anomaly DMG increases by 15%.\n· When there are 1/2 Agents with the <color=#FFFFFF>Anomaly</color> specialty in the squad, Attribute Anomaly DMG dealt to enemies ignores 5%/15% of their All-Attribute RES."
+        }
+      },
+      {
+        "id": "62053053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 29322269.46,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001533",
+          "title": "Operation Zero",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> and <color=#FE437E>Ether DMG</color> increase by 30%.\n· Agent <color=#FFFFFF>Basic Attack</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 20%, and CRIT DMG increases by 35%."
+        }
+      }
+    ]
+  },
+  {
+    "id": 620531,
+    "name": "Critical Node",
+    "beginTime": "2026-04-24 04:00:00",
+    "endTime": "2026-07-08 03:59:59",
+    "rooms": [
+      {
+        "id": "62053051",
+        "name": "Room 1",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "ether": 40
+        },
+        "enemyWeak": {
+          "fire": 20,
+          "physical": 20
+        },
+        "bigMonster": {
+          "id": "300372",
+          "name": "Miasmic - Doppelganger - The Defector",
+          "image": "MiasmaIsoldeSlime",
+          "stats": {
+            "Hp": 28271655.72,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14327.95
+          }
+        },
+        "buff": {
+          "id": "62001522",
+          "title": "Final Concerto",
+          "desc": "· Agent's <color=#FFFFFF>Ultimate</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 40%.\n· When <color=#FFFFFF>Chain Attack</color> hits an enemy, the enemy's Stun DMG Multiplier increases by 20% and their Daze recovery slows down by 15%, lasting 15s. Repeated triggers reset the duration."
+        }
+      },
+      {
+        "id": "62053052",
+        "name": "Room 2",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "electric": 40
+        },
+        "enemyWeak": {
+          "ether": 20,
+          "wind": 20
+        },
+        "bigMonster": {
+          "id": "30045",
+          "name": "Miasmic - Rampant Brute",
+          "image": "MiasmaDubiousHero",
+          "stats": {
+            "Hp": 87427170,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 14588.800000000001
+          }
+        },
+        "buff": {
+          "id": "62001532",
+          "title": "Chain Circuit",
+          "desc": "· Agent's Anomaly Proficiency increases by <color=#2BAD00>20 points</color>, and Attribute Anomaly DMG increases by 15%.\n· When there are 1/2 Agents with the <color=#FFFFFF>Anomaly</color> specialty in the squad, Attribute Anomaly DMG dealt to enemies ignores 5%/15% of their All-Attribute RES."
+        }
+      },
+      {
+        "id": "62053053",
+        "name": "Room 3",
+        "monsterLevel": 70,
+        "enemyResists": {
+          "physical": 40
+        },
+        "enemyWeak": {
+          "ice": 20
+        },
+        "bigMonster": {
+          "id": "300402",
+          "name": "Miasmic Komano Manato",
+          "image": "MiasmaNoranoSlime",
+          "stats": {
+            "Hp": 29322269.46,
+            "Attack": 3521.454545454546,
+            "Defence": 952.8000000000001,
+            "Stun": 16283.150000000001
+          }
+        },
+        "buff": {
+          "id": "62001533",
+          "title": "Operation Zero",
+          "desc": "· Agent <color=#98EFF0>Ice DMG</color> and <color=#FE437E>Ether DMG</color> increase by 30%.\n· Agent <color=#FFFFFF>Basic Attack</color> and <color=#FFFFFF>Chain Attack</color> DMG increase by 20%, and CRIT DMG increases by 35%."
         }
       }
     ]

@@ -21,7 +21,11 @@ export function TagDisplay({
   tag,
   showPercent,
   preventRecursion,
-}: { tag: Tag; showPercent?: boolean; preventRecursion?: boolean }) {
+}: {
+  tag: Tag
+  showPercent?: boolean
+  preventRecursion?: boolean
+}) {
   return (
     <ColorText color={getVariant(tag)}>
       <TagStrDisplay
@@ -35,7 +39,10 @@ export function TagDisplay({
 export function FullTagDisplay({
   tag,
   showPercent,
-}: { tag: Tag; showPercent?: boolean }) {
+}: {
+  tag: Tag
+  showPercent?: boolean
+}) {
   return (
     <>
       <TagDisplay tag={tag} showPercent={showPercent} />
@@ -69,11 +76,16 @@ const labelMap = {
   buff_: 'Buff Bonus',
   sheer_dmg_: 'Sheer DMG',
 } as const
+
 function TagStrDisplay({
   tag,
   showPercent,
   preventRecursion,
-}: { tag: Tag; showPercent?: boolean; preventRecursion?: boolean }) {
+}: {
+  tag: Tag
+  showPercent?: boolean
+  preventRecursion?: boolean
+}) {
   const calc = useZzzCalcContext()
   const title = tagFieldMap.subset(tag)[0]?.title
   if (title && !preventRecursion) return title
@@ -101,12 +113,20 @@ function TagStrDisplay({
         </span>
       </span>
     )
-  if (labelMap[label as keyof typeof labelMap]) {
+  const specificDmgType1 = tag.damageType1 ?? undefined
+  const specificDmgType2 = tag.damageType2 ?? undefined
+  const hasDmgTypeQualifier =
+    specificDmgType1 || specificDmgType2 || tag.attribute
+  if (labelMap[label as keyof typeof labelMap] || hasDmgTypeQualifier) {
+    const name =
+      labelMap[label as keyof typeof labelMap] ??
+      statKeyTextMap[label as StatKey] ??
+      label
     const strs = [
       ...(tag.attribute ? [elementalData[tag.attribute]] : []),
-      ...(tag.damageType1 ? [damageTypeKeysMap[tag.damageType1]] : []),
-      ...(tag.damageType2 ? [damageTypeKeysMap[tag.damageType2]] : []),
-      labelMap[label as keyof typeof labelMap],
+      ...(specificDmgType1 ? [damageTypeKeysMap[specificDmgType1]] : []),
+      ...(specificDmgType2 ? [damageTypeKeysMap[specificDmgType2]] : []),
+      name,
     ]
     return <span>{strs.join(' ')}</span>
   }

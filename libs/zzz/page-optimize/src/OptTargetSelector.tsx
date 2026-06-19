@@ -166,7 +166,7 @@ export function OptTargetSelector({
       return (
         <DropdownButton
           key={cat.key}
-          color={isActive ? 'green' : 'yellow'}
+          color={isActive ? 'green' : 'yellow.8'}
           variant={isActive ? 'outline' : undefined}
           title={
             isActive && tag ? (
@@ -195,7 +195,7 @@ export function OptTargetSelector({
     <Stack gap="xs">
       {dmgCategories.map(renderCategoryButton)}
       <DropdownButton
-        color={activeCategory === 'other' ? 'green' : 'yellow'}
+        color={activeCategory === 'other' ? 'green' : 'yellow.8'}
         variant={activeCategory === 'other' ? 'outline' : undefined}
         title={
           activeCategory === 'other' && tag ? (

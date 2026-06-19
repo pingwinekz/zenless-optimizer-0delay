@@ -11,8 +11,10 @@ import { allSkillKeys } from '@genshin-optimizer/zzz/consts'
 import { useCharacter } from '@genshin-optimizer/zzz/db-ui'
 import type { Tag } from '@genshin-optimizer/zzz/formula'
 import { formulas, own } from '@genshin-optimizer/zzz/formula'
-import { GameDesc, i18n } from '@genshin-optimizer/zzz/i18n'
+import { GameDesc, GameText, i18n } from '@genshin-optimizer/zzz/i18n'
 import { getCharStat, mappedStats } from '@genshin-optimizer/zzz/stats'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TagDisplay } from '../components'
 import { st, trans } from '../util'
 import type { CharUISheet } from './consts'
@@ -267,6 +269,41 @@ function createPotentialSheet(
  * @param paragraph - Optional paragraph index within the core level's desc.
  *   Omit to render all paragraphs for the core level.
  */
+const avatarSkillLevelIndexing = [
+  'basic',
+  'dodge',
+  'special',
+  'chain',
+  'assist',
+] as const
+
+const CAL_RE = /\{CAL:([^,]+),(\d+),(\d+)\}/g
+
+function evalCalcExpr(
+  expr: string,
+  skillLevels: Record<string, number>
+): number {
+  const normalized = expr.replace(
+    /AvatarSkillLevel\((\d+)\)/g,
+    (_, idx) => avatarSkillLevelIndexing[parseInt(idx)] ?? '0'
+  )
+  // eslint-disable-next-line no-new-func
+  const fn = new Function(...avatarSkillLevelIndexing, `return ${normalized}`)
+  return fn(...avatarSkillLevelIndexing.map((k) => skillLevels[k] ?? 1))
+}
+
+function processCalcTokens(
+  text: string,
+  skillLevels: Record<string, number>
+): string {
+  return text.replace(CAL_RE, (_match, expr, multStr, decStr) => {
+    const val = evalCalcExpr(expr, skillLevels)
+    const mult = parseInt(multStr)
+    const dec = parseInt(decStr)
+    return (val * mult).toFixed(dec)
+  })
+}
+
 export function CoreGameDesc({
   characterKey,
   paragraph,
@@ -282,5 +319,58 @@ export function CoreGameDesc({
       ns={`char_${characterKey}_gen`}
       key18={`core.desc.${coreLevel}${suffix}`}
     />
+  )
+}
+
+/**
+ * Renders a locale description with `{CAL:...}` tokens evaluated using
+ * the character's actual skill levels.
+ */
+export function SkillGameDesc({
+  characterKey,
+  ns,
+  key18,
+}: {
+  characterKey: CharacterKey
+  ns: string
+  key18: string
+}) {
+  const char = useCharacter(characterKey)
+  const skillLevels = useMemo(
+    () => ({
+      basic: char?.basic ?? 1,
+      dodge: char?.dodge ?? 1,
+      special: char?.special ?? 1,
+      chain: char?.chain ?? 1,
+      assist: char?.assist ?? 1,
+    }),
+    [char?.basic, char?.dodge, char?.special, char?.chain, char?.assist]
+  )
+  const { t } = useTranslation(ns)
+  const textKey = `${ns}:${key18}`
+  const obj = t(textKey, { returnObjects: true })
+  const processedStr = useMemo(
+    () =>
+      typeof obj === 'string' ? processCalcTokens(obj, skillLevels) : null,
+    [obj, skillLevels]
+  )
+  if (typeof obj === 'string') return <GameText text={processedStr!} />
+  const paragraphs = Object.values(obj as Record<string, string>).filter(
+    (v): v is string => typeof v === 'string'
+  )
+  return (
+    <>
+      {paragraphs.map((para, i) => {
+        const processed = processCalcTokens(para, skillLevels)
+        return (
+          <div
+            key={i}
+            style={{ marginBottom: i < paragraphs.length - 1 ? 8 : 0 }}
+          >
+            <GameText text={processed} />
+          </div>
+        )
+      })}
+    </>
   )
 }

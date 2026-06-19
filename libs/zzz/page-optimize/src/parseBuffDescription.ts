@@ -198,7 +198,7 @@ function extractTypedIgnore(
   // or "...<text> ignore[sd]? N% of [the] [enemy's] [attribute] RES [...]"
   // Captures: (1) value, (2) RES or DEF, optional (3) attribute name before RES
   const ignoreRe =
-    /(\s(?:,?\s*and\s+|,\s*|as\s+well\s+as\s+|or\s+))?ignore[sd]?\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:(\w+)\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?(RES|DEF)\b/i
+    /(\s(?:,?\s*and\s+|,\s*|as\s+well\s+as\s+|or\s+))?ignor(?:e[sd]?|ing)\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:(\w+)\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?(RES|DEF)\b/i
 
   const match = sentence.match(ignoreRe)
   if (!match) return sentence
@@ -212,20 +212,34 @@ function extractTypedIgnore(
   const ignoreStart = sentence.indexOf(match[0])
   const beforeIgnore = sentence.substring(0, ignoreStart)
   const dmgTypes = extractDamageTypes(beforeIgnore)
+  const attrs: (AttributeKey | undefined)[] = [attr]
+
+  // Check for "and <Attr> RES/DEF" after the first match
+  const afterMatch = sentence.substring(ignoreStart + match[0].length)
+  const extraAttrRe = /and\s+(\w+)\s+(?:RES|DEF)\b/i
+  let extraAttrMatch: RegExpExecArray | null
+  let searchPos = 0
+  while ((extraAttrMatch = extraAttrRe.exec(afterMatch.substring(searchPos)))) {
+    const extraAttr = matchAttribute(extraAttrMatch[1])
+    if (extraAttr) attrs.push(extraAttr)
+    searchPos += extraAttrMatch.index + extraAttrMatch[0].length
+  }
 
   if (dmgTypes.length > 0) {
-    for (const dmgType of dmgTypes) {
-      bonusStats.push({
-        tag: {
-          q: statType,
-          qt: 'combat',
-          ...(attr && { attribute: attr }),
-          damageType1: dmgType as BonusStatTag['damageType1'],
-        },
-        value,
-        ...(conditional && { conditional: true }),
-        ...(specialty && { specialty }),
-      })
+    for (const attr of attrs) {
+      for (const dmgType of dmgTypes) {
+        bonusStats.push({
+          tag: {
+            q: statType,
+            qt: 'combat',
+            ...(attr && { attribute: attr }),
+            damageType1: dmgType as BonusStatTag['damageType1'],
+          },
+          value,
+          ...(conditional && { conditional: true }),
+          ...(specialty && { specialty }),
+        })
+      }
     }
     // Remove the ignore clause from the sentence to avoid double-processing
     return (
@@ -403,15 +417,28 @@ export function parseBuffDescription(desc: string): BuffConfig {
     for (const sentence of sentences) {
       // Detect specialty condition at sentence level
       const sentSpecialtyMatch = sentence.match(
-        /(?:for (?:Agents? )?(?:with|of) )(\w+) specialty|(?:with|of) (?:the )?(\w+) specialty/i
+        /(?:for (?:Agents? )?(?:with|of) )(\w+) specialty|(?:with|of) (?:the )?(\w+) specialty|(\w+) specialty Agents?/i
       )
       const sentSpecialty = sentSpecialtyMatch
-        ? matchSpecialty(sentSpecialtyMatch[1] ?? sentSpecialtyMatch[2])
+        ? matchSpecialty(
+            sentSpecialtyMatch[1] ??
+              sentSpecialtyMatch[2] ??
+              sentSpecialtyMatch[3]
+          )
         : undefined
       // Update bullet-level specialty if this sentence has an explicit one
       if (sentSpecialty) bulletSpecialty = sentSpecialty
       // Use bullet-level specialty as fallback for sentences that don't re-state it
       const effectiveSpecialty = sentSpecialty ?? bulletSpecialty
+
+      // Detect stack multiplier: "stacking up to N times"
+      const stackMatch = sentence.match(/stacking\s+up\s+to\s+(\d+)\s+times/i)
+      const stackMult = stackMatch ? Number(stackMatch[1]) : 1
+
+      // Track how many bonus/enemy stats existed before this sentence
+      // so we can apply stack multiplier to sentence-local stats
+      const bonusStatsBefore = bonusStats.length
+      const enemyStatsBefore = enemyStats.length
 
       // Pre-pass: extract damage-type-qualified ignore patterns before
       // comma/and splitting destroys the damage type list context
@@ -453,10 +480,10 @@ export function parseBuffDescription(desc: string): BuffConfig {
 
         // Detect specialty condition from "For Agents with/of X specialty" or "Agents with X specialty" patterns
         const specialtyMatch = seg.match(
-          /(?:for (?:Agents? )?(?:with|of) |Agents? (?:with|of) )(\w+) specialty/i
+          /(?:for (?:Agents? )?(?:with|of) |Agents? (?:with|of) )(\w+) specialty|(\w+) specialty Agents?/i
         )
         const segmentSpecialty = specialtyMatch
-          ? matchSpecialty(specialtyMatch[1])
+          ? matchSpecialty(specialtyMatch[1] ?? specialtyMatch[2])
           : undefined
         // Fall back to sentence/bullet-level specialty if segment doesn't have its own
         // (e.g. "Their Basic Attack DMG..." continuing from "Agents with Attack specialty")
@@ -464,7 +491,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
 
         // --- Defense/RES ignore (must check before generic stat patterns) ---
         const defIgnMatch = seg.match(
-          /ignore\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?DEF/i
+          /ignor(?:e|ing)\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?DEF/i
         )
         if (defIgnMatch) {
           bonusStats.push({
@@ -477,7 +504,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
         }
 
         const resIgnMatch = seg.match(
-          /ignore\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?RES/i
+          /ignor(?:e|ing)\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(?:all[- ]?(?:DMG|attribute)\s+)?RES/i
         )
         if (resIgnMatch) {
           const attr = matchAttribute(seg)
@@ -496,7 +523,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
 
         // Also handle "ignore N% of the target's All-DMG RES"
         const resIgnMatch2 = seg.match(
-          /ignore\s+(\d+)%\s+of\s+(?:the\s+)?(?:target'?s?\s+)All[- ]DMG\s+RES/i
+          /ignor(?:e|ing)\s+(\d+)%\s+of\s+(?:the\s+)?(?:target'?s?\s+)All[- ]DMG\s+RES/i
         )
         if (resIgnMatch2) {
           bonusStats.push({
@@ -510,7 +537,7 @@ export function parseBuffDescription(desc: string): BuffConfig {
 
         // --- Check for "ignore N% of enemy [Attribute] RES" ---
         const attrResIgnMatch = seg.match(
-          /ignore[sd]?\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(\w+)\s+RES/i
+          /ignor(?:e[sd]?|ing)\s+(\d+)%\s+of\s+(?:the\s+)?(?:enemy'?s?\s+)?(\w+)\s+RES/i
         )
         if (attrResIgnMatch) {
           const attr = matchAttribute(attrResIgnMatch[2])
@@ -983,6 +1010,14 @@ export function parseBuffDescription(desc: string): BuffConfig {
           /Stun recovery speed/i.test(seg)
         )
           continue
+      }
+
+      // Apply stack multiplier to all stats parsed from this sentence
+      if (stackMult > 1) {
+        for (let i = bonusStatsBefore; i < bonusStats.length; i++)
+          bonusStats[i].value *= stackMult
+        for (let i = enemyStatsBefore; i < enemyStats.length; i++)
+          enemyStats[i].value *= stackMult
       }
     }
   }

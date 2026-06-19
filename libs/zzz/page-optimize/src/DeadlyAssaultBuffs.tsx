@@ -17,6 +17,7 @@ const BOSS_CDN = 'https://static.nanoka.cc/assets/zzz'
 function getActiveSeason() {
   const now = Date.now()
   for (const season of seasons) {
+    if (!season.beginTime || !season.endTime) continue
     const begin = new Date(season.beginTime).getTime()
     const end = new Date(season.endTime).getTime()
     if (begin <= now && now < end) return season
