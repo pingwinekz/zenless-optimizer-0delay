@@ -7,7 +7,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "serve", "zzz-frontend"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -31,7 +32,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "build", "zzz-frontend"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -41,7 +43,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "run-many", "-t", "test"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -51,7 +54,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "test", "zzz-stats"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -61,7 +65,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "run-many", "-t", "typecheck"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -71,7 +76,8 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["nx", "run-many", "-t", "eslint:lint", "--max-warnings=0"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   },
   {
     "adapter": "JavaScript",
@@ -81,6 +87,7 @@
     "runtimeExecutable": "bun",
     "runtimeArgs": ["run", "mini-ci"],
     "console": "integratedTerminal",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": ["<node_internals>/**"],
+    "cwd": "${ZED_WORKTREE_ROOT}"
   }
 ]

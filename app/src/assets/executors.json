@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "gen-assets": {
+      "implementation": "./executors/gen-assets/executor",
+      "schema": "./executors/gen-assets/schema.json",
+      "description": "gen-assets executor"
+    }
+  }
+}

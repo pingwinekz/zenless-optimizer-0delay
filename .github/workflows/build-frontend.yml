@@ -33,7 +33,7 @@ jobs:
           bun install --frozen-lockfile
       - name: Setup .env
         run: |
-          printf '%s' "$ZO_ENVFILE" > apps/zzz-frontend/.env.local
+          printf '%s' "$ZO_ENVFILE" > app/.env.local
         env:
           ZO_ENVFILE: ${{ vars.ZO_ENVFILE }}
       - name: Build frontend
@@ -41,7 +41,7 @@ jobs:
           npx nx run zzz-frontend:build:production
       - name: echos
         run: |
-          echo zzz-frontend > frontend_name
+          echo app > frontend_name
           echo ${{inputs.deployment_name}} > deployment_name
           echo true > nested_deployments
           echo ${{inputs.repo_var_name}} > repo_var_name
@@ -52,7 +52,7 @@ jobs:
         with:
           name: frontend_build
           path: |
-            dist/apps/zzz-frontend
+            dist/app
             frontend_name
             deployment_name
             nested_deployments

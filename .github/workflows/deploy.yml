@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/apps/zzz-frontend
+          path: dist/app
 
   deploy:
     needs: build

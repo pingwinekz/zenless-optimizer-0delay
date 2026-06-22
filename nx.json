@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "load-dm": {
-      "executor": "@genshin-optimizer/common/plugin:sync-repo",
+      "executor": "@zenless-optimizer/common/plugin:sync-repo",
       "outputs": ["{projectRoot}/{options.outputPath}.hash"],
       "cache": true
     },

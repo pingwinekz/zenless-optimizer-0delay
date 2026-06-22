@@ -1,0 +1,73 @@
+import { ColorText } from '@zenless-optimizer/common/ui'
+import type { CharacterKey } from '../../../consts'
+import { NangongYu } from '../../../formula'
+import { trans } from '../../util'
+import { createBaseSheet, fieldForBuff } from '../sheetUtil'
+import { getVariant } from '../util'
+
+const key: CharacterKey = 'NangongYu'
+const [, ch] = trans('char', key)
+const cond = NangongYu.conditionals
+const buff = NangongYu.buffs
+
+const sheet = createBaseSheet(key, {
+  perSkillAbility: {
+    chain: {
+      UltimateMeteorShower: [
+        {
+          type: 'conditional',
+          conditional: {
+            label: ch('etherVeil'),
+            description:
+              'Grants bonus ATK to the entire squad after using Ultimate: Meteor Shower.',
+            metadata: cond.etherVeil,
+            fields: [fieldForBuff(buff.core_etherVeil_atk)],
+          },
+        },
+      ],
+    },
+  },
+  core: [
+    {
+      type: 'fields',
+      fields: [
+        fieldForBuff(buff.core_anomProf),
+        fieldForBuff(buff.core_impact),
+        fieldForBuff(buff.core_anomBuildup_),
+        fieldForBuff(buff.core_daze_),
+        fieldForBuff(buff.core_squad_dmg_),
+      ],
+    },
+  ],
+  ability: [],
+  m1: [
+    {
+      type: 'fields',
+      fields: [{ title: ch('m1_resIgn_'), fieldRef: buff.m1_resIgn_.tag }],
+    },
+  ],
+  m4: [
+    {
+      type: 'fields',
+      fields: [
+        fieldForBuff(buff.m4_anomProf),
+        {
+          title: (
+            <ColorText color={getVariant(buff.m4_basicAnomalyBuildup_.tag)}>
+              {ch('m4_basicAnomalyBuildup_')}
+            </ColorText>
+          ),
+          fieldRef: buff.m4_basicAnomalyBuildup_.tag,
+        },
+      ],
+    },
+  ],
+  m6: [
+    {
+      type: 'fields',
+      fields: [fieldForBuff(buff.m6_daze_)],
+    },
+  ],
+})
+
+export default sheet

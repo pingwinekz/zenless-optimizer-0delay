@@ -1,20 +1,19 @@
-# Project: Gacha Optimizer (genshin-optimizer)
+# Project: Zenless Optimizer (zenless-optimizer)
 
-Monorepo for gacha-game optimizer websites (Genshin Impact, Zenless Zone Zero). Built with React, TypeScript, Nx, Mantine UI, and Vite.
+Zenless Zone Zero optimizer app. Built with React, TypeScript, Nx, Mantine UI, and Vite.
 
 ## Structure
 
-- `apps/zzz-frontend/` — only active frontend app (Zenless Zone Zero optimizer, Mantine v9)
-- `libs/zzz/` — ZZZ-specific (db, formula, solver, pages, dm, stats, etc.)
-- `libs/game-opt/` — shared optimizer logic (engine, formula, solver, sheet-ui)
-- `libs/pando/engine/` — Pando calculation engine (shared across games)
-- `libs/common/` — shared utilities (database, UI, pipeline, localization, plugin, etc.)
+- `app/` — frontend application (Vite + React, Mantine v9)
+- `packages/` — shared libraries
+  - `common/` — utilities (database, UI, pipeline, localization, plugin, etc.)
+  - `game-opt/` — optimizer logic (engine, formula, solver, sheet-ui)
+  - `pando/engine/` — Pando calculation engine
 
-- `tools/scripts/publish.mjs` — build scripts
+- `app/src/<module>/` — ZZZ-specific source (db, formula, solver, pages, dm, stats, etc.)
+- `app/src/dm/ZenlessData`, `app/src/dm/HakushinData` — git submodules (datamine data)
 
-Path aliases: `@genshin-optimizer/<scope>/<name>` → `libs/<scope>/<name>/src/index.ts` (defined in `tsconfig.base.json`).
-
-Data from git submodules under `libs/zzz/dm/` (ZenlessData, HakushinData). See `.gitmodules`.
+Path aliases: `@zenless-optimizer/<scope>/<name>` → `packages/<scope>/<name>/src/index.ts` (defined in `tsconfig.base.json`).
 
 ## Commands
 
@@ -129,12 +128,10 @@ The following skills are installed and will be loaded on demand (in `.opencode/s
 
 Key docs scattered across libs (READMEs in each lib directory give quick intros):
 
-- `libs/pando/engine/doc/` — Pando engine architecture (tags, nodes, usage, propagation, optimization, customization)
-- `libs/pando/doc/` — Pando calculation model (name-scoped buffs, damage survey)
-- `libs/game-opt/doc/overview.md` — game-opt layer (typed authoring API, solver)
-- `libs/zzz/formula/doc/` — ZZZ formula authoring (api.md, glue.md, tags.md)
-
-Stale doc references: `pando/doc/README.md` mentions `gi/` and `sr/` formula docs that no longer exist.
+- `packages/pando/engine/doc/` — Pando engine architecture (tags, nodes, usage, propagation, optimization, customization)
+- `packages/pando/doc/` — Pando calculation model (name-scoped buffs, damage survey)
+- `packages/game-opt/doc/overview.md` — game-opt layer (typed authoring API, solver)
+- `app/src/formula/doc/` — ZZZ formula authoring (api.md, glue.md, tags.md)
 
 ## Gotchas
 

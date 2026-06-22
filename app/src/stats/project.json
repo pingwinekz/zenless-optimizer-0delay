@@ -1,0 +1,17 @@
+{
+  "name": "zzz-stats",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "app/src/stats",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "gen-file": {
+      "executor": "@zenless-optimizer/zzz/stats:gen-stats",
+      "outputs": [
+        "{projectRoot}/Data/**/*",
+        "{projectRoot}/src/allStat_gen.json"
+      ],
+      "inputs": ["default"]
+    }
+  }
+}

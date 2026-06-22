@@ -27,92 +27,58 @@
     "allowSyntheticDefaultImports": false,
     "typeRoots": ["./node_modules/@types", "./node_modules", "./types"],
     "paths": {
-      "@genshin-optimizer/common/ad": ["libs/common/ad/src/index.ts"],
-      "@genshin-optimizer/common/database": [
-        "libs/common/database/src/index.ts"
+      "@zenless-optimizer/common/ad": ["packages/common/ad/src/index.ts"],
+      "@zenless-optimizer/common/database": [
+        "packages/common/database/src/index.ts"
       ],
-      "@genshin-optimizer/common/database-ui": [
-        "libs/common/database-ui/src/index.ts"
+      "@zenless-optimizer/common/database-ui": [
+        "packages/common/database-ui/src/index.ts"
       ],
-      "@genshin-optimizer/common/img-util": [
-        "libs/common/img-util/src/index.ts"
+      "@zenless-optimizer/common/img-util": [
+        "packages/common/img-util/src/index.ts"
       ],
-      "@genshin-optimizer/common/localization": [
-        "libs/common/localization/src/index.ts"
+      "@zenless-optimizer/common/localization": [
+        "packages/common/localization/src/index.ts"
       ],
-      "@genshin-optimizer/common/pipeline": [
-        "libs/common/pipeline/src/index.ts"
+      "@zenless-optimizer/common/pipeline": [
+        "packages/common/pipeline/src/index.ts"
       ],
-      "@genshin-optimizer/common/plugin": ["libs/common/plugin/src/index.ts"],
-      "@genshin-optimizer/common/react-util": [
-        "libs/common/react-util/src/index.ts"
+      "@zenless-optimizer/common/plugin": [
+        "packages/common/plugin/src/index.ts"
       ],
-      "@genshin-optimizer/common/svgicons": [
-        "libs/common/svgicons/src/index.ts"
+      "@zenless-optimizer/common/react-util": [
+        "packages/common/react-util/src/index.ts"
       ],
-      "@genshin-optimizer/common/ui": ["libs/common/ui/src/index.ts"],
-      "@genshin-optimizer/common/util": ["libs/common/util/src/index.ts"],
-      "@genshin-optimizer/game-opt/engine": [
-        "libs/game-opt/engine/src/index.ts"
+      "@zenless-optimizer/common/svgicons": [
+        "packages/common/svgicons/src/index.ts"
       ],
-      "@genshin-optimizer/game-opt/formula": [
-        "libs/game-opt/formula/src/index.ts"
+      "@zenless-optimizer/common/ui": ["packages/common/ui/src/index.ts"],
+      "@zenless-optimizer/common/util": ["packages/common/util/src/index.ts"],
+      "@zenless-optimizer/game-opt/engine": [
+        "packages/game-opt/engine/src/index.ts"
       ],
-      "@genshin-optimizer/game-opt/formula-ui": [
-        "libs/game-opt/formula-ui/src/index.ts"
+      "@zenless-optimizer/game-opt/formula": [
+        "packages/game-opt/formula/src/index.ts"
       ],
-      "@genshin-optimizer/game-opt/sheet-ui": [
-        "libs/game-opt/sheet-ui/src/index.ts"
+      "@zenless-optimizer/game-opt/formula-ui": [
+        "packages/game-opt/formula-ui/src/index.ts"
       ],
-      "@genshin-optimizer/game-opt/solver": [
-        "libs/game-opt/solver/src/index.ts"
+      "@zenless-optimizer/game-opt/sheet-ui": [
+        "packages/game-opt/sheet-ui/src/index.ts"
       ],
-      "@genshin-optimizer/pando/engine": ["libs/pando/engine/src/index.ts"],
-      "@genshin-optimizer/zzz/assets": ["libs/zzz/assets/src/index.ts"],
-      "@genshin-optimizer/zzz/assets-data": [
-        "libs/zzz/assets-data/src/index.ts"
+      "@zenless-optimizer/game-opt/solver": [
+        "packages/game-opt/solver/src/index.ts"
       ],
-      "@genshin-optimizer/zzz/consts": ["libs/zzz/consts/src/index.ts"],
-      "@genshin-optimizer/zzz/db": ["libs/zzz/db/src/index.ts"],
-      "@genshin-optimizer/zzz/db-ui": ["libs/zzz/db-ui/src/index.ts"],
-      "@genshin-optimizer/zzz/disc-scanner": [
-        "libs/zzz/disc-scanner/src/index.ts"
+      "@zenless-optimizer/pando/engine": ["packages/pando/engine/src/index.ts"],
+      "@zenless-optimizer/zzz/dm": ["app/src/dm/index.ts"],
+      "@zenless-optimizer/zzz/dm-localization": [
+        "app/src/dm-localization/index.ts"
       ],
-      "@genshin-optimizer/zzz/dm": ["libs/zzz/dm/src/index.ts"],
-      "@genshin-optimizer/zzz/dm-localization": [
-        "libs/zzz/dm-localization/src/index.ts"
-      ],
-      "@genshin-optimizer/zzz/formula": ["libs/zzz/formula/src/index.ts"],
-      "@genshin-optimizer/zzz/formula-ui": ["libs/zzz/formula-ui/src/index.ts"],
-      "@genshin-optimizer/zzz/i18n": ["libs/zzz/i18n/src/index.ts"],
-      "@genshin-optimizer/zzz/i18n-node": ["libs/zzz/i18n-node/src/index.ts"],
-      "@genshin-optimizer/zzz/localization": [
-        "libs/zzz/localization/src/index.ts"
-      ],
-      "@genshin-optimizer/zzz/page-characters": [
-        "libs/zzz/page-characters/src/index.tsx"
-      ],
-      "@genshin-optimizer/zzz/page-discs": [
-        "libs/zzz/page-discs/src/index.tsx"
-      ],
-      "@genshin-optimizer/zzz/page-home": ["libs/zzz/page-home/src/index.tsx"],
-      "@genshin-optimizer/zzz/page-optimize": [
-        "libs/zzz/page-optimize/src/index.tsx"
-      ],
-      "@genshin-optimizer/zzz/page-settings": [
-        "libs/zzz/page-settings/src/index.tsx"
-      ],
-      "@genshin-optimizer/zzz/page-wengines": [
-        "libs/zzz/page-wengines/src/index.tsx"
-      ],
-      "@genshin-optimizer/zzz/schema": ["libs/zzz/schema/src/index.ts"],
-      "@genshin-optimizer/zzz/solver": ["libs/zzz/solver/src/index.ts"],
-      "@genshin-optimizer/zzz/stats": ["libs/zzz/stats/src/index.ts"],
-      "@genshin-optimizer/zzz/svgicons": ["libs/zzz/svgicons/src/index.ts"],
-      "@genshin-optimizer/zzz/theme": ["libs/zzz/theme/src/index.ts"],
-      "@genshin-optimizer/zzz/ui": ["libs/zzz/ui/src/index.tsx"],
-      "@genshin-optimizer/zzz/util": ["libs/zzz/util/src/index.ts"],
-      "@genshin-optimizer/zzz/zood": ["libs/zzz/zood/src/index.ts"]
+      "@zenless-optimizer/zzz/stats": ["app/src/stats/index.ts"],
+      "@zenless-optimizer/zzz/assets": ["app/src/assets/index.ts"],
+      "@zenless-optimizer/zzz/assets-data": ["app/src/assets-data/index.ts"],
+      "@zenless-optimizer/zzz/localization": ["app/src/localization/index.ts"],
+      "@zenless-optimizer/zzz/formula": ["app/src/formula/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

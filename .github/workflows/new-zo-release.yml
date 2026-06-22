@@ -27,8 +27,8 @@ jobs:
         if: steps.get-version.outputs.version != ''
         run: |
           TEMP_FILE=$(mktemp)
-          jq --arg v "${{ steps.get-version.outputs.version }}" '.version = $v' apps/zzz-frontend/package.json > $TEMP_FILE
-          cp $TEMP_FILE apps/zzz-frontend/package.json
+          jq --arg v "${{ steps.get-version.outputs.version }}" '.version = $v' app/package.json > $TEMP_FILE
+          cp $TEMP_FILE app/package.json
           git add .
           git commit -m "${{ steps.get-version.outputs.version }}"
       - name: Get commit msg
