@@ -22,43 +22,27 @@ import {
 const THEORETICAL_RARITY = 'S' as const
 const THEORETICAL_LEVEL = 15
 const TOTAL_DISCS = 6
-const MAX_SUBSTATS_PER_DISC = 4
 const UPGRADE_ROLLS_PER_DISC = 5
-// Each substat per disc: 1 base roll + up to 5 upgrades = 6 total max
-const MAX_ROLLS_PER_SUBSTAT = 6
+/** Minimum effective substats in a 4-substat combo for inclusion */
+const MIN_EFFECTIVE_PER_COMBO = 3
 
-/**
- * Module-level cache of all valid per-disc substat patterns.
- * Each pattern: 4 substats (indices into allDiscSubStatKeys), each with 1-6 rolls, sum=9.
- * Pre-computed once: C(10,4) = 210 type-choices × C(5+4-1,4-1) = 56 roll-distributions = 11,760.
- */
-let _validPatternsCache: [number[], number[]][] | null = null
-
-/** Build-level recipe metadata for display */
 export interface BuildRecipe {
   id: string
   mainStats: Record<DiscSlotKey, DiscMainStatKey>
-  /** Total rolls per substat across all 6 discs */
   totalRolls: Partial<Record<DiscSubStatKey, number>>
-  /** Number of discs each substat appears on (for per-disc reconstruction) */
   appearances: Partial<Record<DiscSubStatKey, number>>
-  /** Per-disc substat allocation: exactly 4 {key, upgrades} per disc, 6 discs */
   perDiscSubstats: { key: DiscSubStatKey; upgrades: number }[][]
   set4: DiscSetKey
   set2: DiscSetKey
 }
 
-/**
- * Generate build-level aggregate recipes for "theoretical max" mode.
- *
- * Each recipe represents a COMPLETE build's total stats across all 6 discs.
- * Instead of generating per-slot individual discs (which creates duplicate
- * solver results when the same stats are in different slot arrangements),
- * we generate one candidate per unique stat DISTRIBUTION.
- *
- * Returns a flat array of solver Candidate objects (one per recipe) plus
- * a recipe map with display metadata.
- */
+interface BlockedInfo {
+  isBlocked: boolean
+  blockedDisc: number
+  baseRolls: number
+  maxUpgrade: number
+}
+
 export function generateTheoreticalDiscs(
   characterKey: CharacterKey,
   setFilter2: DiscSetKey[],
@@ -67,69 +51,42 @@ export function generateTheoreticalDiscs(
     4?: DiscMainStatKey[]
     5?: DiscMainStatKey[]
     6?: DiscMainStatKey[]
-  }
+  },
+  substatRollTargets?: Partial<Record<DiscSubStatKey, number>>
 ): {
   recipes: Candidate<string>[]
   recipeMap: Record<string, BuildRecipe>
 } {
-  // 1. Build set key list
   const setKeys = [...new Set([...setFilter4, ...setFilter2])]
   if (setKeys.length === 0) {
     return { recipes: [], recipeMap: {} }
   }
 
-  // Use first set in each filter as the assigned set
-  // (user selects exactly 1 4p + 1 2p, enforced by UI guidance)
   const set4 = setFilter4[0]
   const set2 = setFilter2[0]
-
-  // 2. The composition explores ALL 10 substats so the solver can pick the best
-  //    distribution. The aggregate totals are computed directly:
-  //    totalRolls[S] = perDiscRolls[S] × (6 - slots where S is the main stat).
   const allSubstats = [...allDiscSubStatKeys]
   const effectiveSubstats = getCharacterEffectiveStats(characterKey)
+  const effectiveSet = new Set(effectiveSubstats)
 
-  // Start with the character's effective main stats (recommended per slot).
-  // These keep the recipe count manageable (~35K) while providing sensible
-  // defaults. If the user has set explicit per-slot filters, those override.
-  //
-  // IMPORTANT: Create a shallow copy because the return value from
-  // getCharacterEffectiveMainStats is a reference to a frozen const literal
-  // in characterPlans — mutating it directly would silently fail.
   const effectiveMainStats = {
     ...getCharacterEffectiveMainStats(characterKey),
   }
   if (slotFilters) {
-    console.debug('[TheoreticalMax] slotFilters:', slotFilters)
     for (const [slot, filter] of Object.entries(slotFilters)) {
       const slotKey = slot as DiscSlotKey
       if (filter && filter.length > 0) {
-        console.debug(
-          '[TheoreticalMax] overriding slot',
-          slotKey,
-          'from',
-          effectiveMainStats[slotKey],
-          'to',
-          filter
-        )
         effectiveMainStats[slotKey] = filter
       }
     }
   }
 
-  // 3. Pre-compute all valid per-disc patterns (4 substats, each 1-6 rolls, sum=9)
-  const validPatterns = getValidPatterns()
-
-  // 4. Generate main stat combinations for slots 4/5/6
   const mainStatCombos = generateMainStatCombos(effectiveMainStats)
 
-  // 5. For each combination, create a build recipe
   const recipes: Candidate<string>[] = []
   const recipeMap: Record<string, BuildRecipe> = {}
   let recipeIndex = 0
 
   for (const mainStats of mainStatCombos) {
-    // Combine fixed + selected main stats
     const allMainStats: Record<DiscSlotKey, DiscMainStatKey> = {
       '1': 'hp',
       '2': 'atk',
@@ -145,90 +102,118 @@ export function generateTheoreticalDiscs(
         discSlotToMainStatKeys['6'][0],
     }
 
-    for (const [typeIndices, rollCounts] of validPatterns) {
-      // Map indices to substat keys. Patterns may include substats that are
-      // blocked on some discs (e.g., hp_ on slot 6) — computeSubstatAggregate
-      // handles this via maxAppearances (reducing discs for blocked substats).
-      const comboSubstats = typeIndices.map((i) => allSubstats[i])
-      const comboRolls = [...rollCounts]
+    let combosToProcess: Generator<[number, number, number, number]>
 
-      // Build the flat Candidate object with ALL stats summed.
-      const candidate: Record<string, any> = {
-        id: `recipe_${recipeIndex}`,
-        // Slot 1-3 fixed main stats
-        hp: getDiscMainStatVal(THEORETICAL_RARITY, 'hp', THEORETICAL_LEVEL),
-        atk: getDiscMainStatVal(THEORETICAL_RARITY, 'atk', THEORETICAL_LEVEL),
-        def: getDiscMainStatVal(THEORETICAL_RARITY, 'def', THEORETICAL_LEVEL),
-      }
-
-      // Slot 4-6 main stats (summed: slots 4/5 can share same stat, e.g. hp_)
-      candidate[allMainStats['4']] =
-        (candidate[allMainStats['4']] ?? 0) +
-        getDiscMainStatVal(
-          THEORETICAL_RARITY,
-          allMainStats['4'],
-          THEORETICAL_LEVEL
-        )
-      candidate[allMainStats['5']] =
-        (candidate[allMainStats['5']] ?? 0) +
-        getDiscMainStatVal(
-          THEORETICAL_RARITY,
-          allMainStats['5'],
-          THEORETICAL_LEVEL
-        )
-      candidate[allMainStats['6']] =
-        (candidate[allMainStats['6']] ?? 0) +
-        getDiscMainStatVal(
-          THEORETICAL_RARITY,
-          allMainStats['6'],
-          THEORETICAL_LEVEL
-        )
-
-      // Substat values: computed directly — each substat's total rolls =
-      // perDiscRolls × (6 - slots where main stat overlaps). The formula
-      // solver evaluates the aggregate math; no per-disc simulation needed.
-      const aggregate = computeSubstatAggregate(
-        comboSubstats,
-        comboRolls,
-        allMainStats,
-        effectiveSubstats
+    if (substatRollTargets && Object.keys(substatRollTargets).length > 0) {
+      // Targeted mode: build a single combo containing all targeted substats
+      combosToProcess = buildTargetedCombo(
+        allSubstats,
+        effectiveSubstats,
+        substatRollTargets
       )
+    } else {
+      combosToProcess = enumerateFilteredCombos(
+        allSubstats,
+        effectiveSet,
+        MIN_EFFECTIVE_PER_COMBO
+      )
+    }
 
-      for (const [key, value] of Object.entries(aggregate.totals)) {
-        candidate[key] = (candidate[key] ?? 0) + value
+    for (const comboIndices of combosToProcess) {
+      const comboSubstats = comboIndices.map(
+        (i) => allSubstats[i]
+      ) as DiscSubStatKey[]
+
+      const blockedInfo = getBlockedInfo(comboSubstats, allMainStats)
+      const effectiveMask = comboSubstats.map((s) => effectiveSet.has(s))
+
+      const distributions = enumerateAggregateTotals(blockedInfo, effectiveMask)
+
+      for (const totals of distributions) {
+        const candidate: Record<string, any> = {
+          id: `recipe_${recipeIndex}`,
+          hp: getDiscMainStatVal(THEORETICAL_RARITY, 'hp', THEORETICAL_LEVEL),
+          atk: getDiscMainStatVal(THEORETICAL_RARITY, 'atk', THEORETICAL_LEVEL),
+          def: getDiscMainStatVal(THEORETICAL_RARITY, 'def', THEORETICAL_LEVEL),
+        }
+
+        candidate[allMainStats['4']] =
+          (candidate[allMainStats['4']] ?? 0) +
+          getDiscMainStatVal(
+            THEORETICAL_RARITY,
+            allMainStats['4'],
+            THEORETICAL_LEVEL
+          )
+        candidate[allMainStats['5']] =
+          (candidate[allMainStats['5']] ?? 0) +
+          getDiscMainStatVal(
+            THEORETICAL_RARITY,
+            allMainStats['5'],
+            THEORETICAL_LEVEL
+          )
+        candidate[allMainStats['6']] =
+          (candidate[allMainStats['6']] ?? 0) +
+          getDiscMainStatVal(
+            THEORETICAL_RARITY,
+            allMainStats['6'],
+            THEORETICAL_LEVEL
+          )
+
+        const assignment = assignPerDiscRolls(
+          comboSubstats,
+          blockedInfo,
+          totals,
+          allMainStats,
+          effectiveSubstats
+        )
+
+        if (substatRollTargets) {
+          for (const [keyStr, targetRolls] of Object.entries(
+            substatRollTargets
+          )) {
+            const key = keyStr as DiscSubStatKey
+            if (!allDiscSubStatKeys.includes(key)) {
+              continue
+            }
+            const targetVal =
+              getDiscSubStatBaseVal(key, THEORETICAL_RARITY) * targetRolls
+            candidate[key] = targetVal
+            assignment.rollTotals[key] = targetRolls
+          }
+        }
+
+        for (const [key, value] of Object.entries(assignment.statTotals)) {
+          candidate[key] = (candidate[key] ?? 0) + value
+        }
+
+        if (set4 === set2) {
+          candidate[set4] = 6
+        } else {
+          candidate[set4] = 4
+          candidate[set2] = 2
+        }
+
+        if (typeof candidate.crit_ === 'number') {
+          candidate.crit_ = Math.min(candidate.crit_, 0.95)
+        }
+
+        const id = `recipe_${recipeIndex}`
+        candidate.id = id
+
+        recipes.push(candidate as Candidate<string>)
+
+        recipeMap[id] = {
+          id,
+          mainStats: allMainStats,
+          totalRolls: { ...assignment.rollTotals },
+          appearances: { ...assignment.appearances },
+          perDiscSubstats: assignment.perDisc,
+          set4,
+          set2,
+        }
+
+        recipeIndex++
       }
-
-      // Set counters
-      if (set4 === set2) {
-        candidate[set4] = 6
-      } else {
-        candidate[set4] = 4
-        candidate[set2] = 2
-      }
-
-      // Cap Crit Rate at 0.95 (95%) — with base 5% this gives 100% total.
-      // CR above 100% provides zero benefit in the formula (cappedCrit_),
-      // and those substat rolls would be better spent on CD, ATK%, etc.
-      if (typeof candidate.crit_ === 'number') {
-        candidate.crit_ = Math.min(candidate.crit_, 0.95)
-      }
-
-      const id = `recipe_${recipeIndex}`
-      candidate.id = id
-
-      recipes.push(candidate as Candidate<string>)
-
-      recipeMap[id] = {
-        id,
-        mainStats: allMainStats,
-        totalRolls: aggregate.rolls,
-        appearances: aggregate.appearances,
-        perDiscSubstats: aggregate.perDisc,
-        set4,
-        set2,
-      }
-
-      recipeIndex++
     }
   }
 
@@ -236,58 +221,255 @@ export function generateTheoreticalDiscs(
 }
 
 /**
- * Get all valid per-disc substat patterns.
- * Each valid pattern has exactly 4 substats, each with 1-6 rolls, summing to 9.
- * Total: C(10,4) × C(5+4-1,4-1) = 210 × 56 = 11,760 patterns.
- *
- * The patterns are represented as arrays of indices into allDiscSubStatKeys
- * (the 4 chosen substat types) and their corresponding roll counts.
+ * Enumerate all 4-substat combos from all 10 types, yielding only those
+ * with at least `minEffective` substats from the effective set.
  */
-function getValidPatterns(): [number[], number[]][] {
-  if (_validPatternsCache) return _validPatternsCache
-
-  const all = [...allDiscSubStatKeys]
-  const n = all.length
-  const patterns: [number[], number[]][] = []
-
-  // Step 1: choose 4 indices from 10 (C(10,4) = 210)
-  function choose4(start: number, chosen: number[]) {
-    if (chosen.length === MAX_SUBSTATS_PER_DISC) {
-      // Step 2: distribute 5 upgrade rolls among 4 positions (C(5+4-1,4-1) = 56)
-      // Each of the 4 gets 1 base + (0-5) upgrades = 1-6 total
-      const upgrades = [0, 0, 0, 0]
-      const enumUpgrades = (idx: number, remaining: number) => {
-        if (idx === MAX_SUBSTATS_PER_DISC - 1) {
-          upgrades[idx] = remaining
-          const rolls = upgrades.map((u) => u + 1) // 1 base + upgrades
-          if (rolls.every((r) => r <= MAX_ROLLS_PER_SUBSTAT)) {
-            patterns.push([[...chosen], [...rolls]])
+function* enumerateFilteredCombos(
+  allSubstats: readonly string[],
+  effectiveSet: Set<string>,
+  minEffective: number
+): Generator<[number, number, number, number]> {
+  const n = allSubstats.length
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      for (let k = j + 1; k < n; k++) {
+        for (let l = k + 1; l < n; l++) {
+          let effCount = 0
+          if (effectiveSet.has(allSubstats[i])) effCount++
+          if (effectiveSet.has(allSubstats[j])) effCount++
+          if (effectiveSet.has(allSubstats[k])) effCount++
+          if (effectiveSet.has(allSubstats[l])) effCount++
+          if (effCount >= minEffective) {
+            yield [i, j, k, l]
           }
-          return
-        }
-        for (let v = 0; v <= remaining; v++) {
-          upgrades[idx] = v
-          enumUpgrades(idx + 1, remaining - v)
         }
       }
-      enumUpgrades(0, UPGRADE_ROLLS_PER_DISC)
-      return
-    }
-    for (let i = start; i < n; i++) {
-      chosen.push(i)
-      choose4(i + 1, chosen)
-      chosen.pop()
     }
   }
-  choose4(0, [])
-
-  _validPatternsCache = patterns
-  return patterns
 }
 
 /**
- * Generate all main stat combinations for slots 4/5/6.
+ * Build a targeted combo generator that yields exactly 1 combo:
+ * the one containing all targeted substats, with remaining slots
+ * filled from effective substats.
  */
+function* buildTargetedCombo(
+  allSubstats: readonly string[],
+  effectiveSubstats: DiscSubStatKey[],
+  substatRollTargets: Partial<Record<DiscSubStatKey, number>>
+): Generator<[number, number, number, number]> {
+  const targetedKeys = new Set(
+    Object.keys(substatRollTargets) as DiscSubStatKey[]
+  )
+
+  // Build the combo: start with targeted keys, fill with effective substats
+  const comboKeys: DiscSubStatKey[] = [...targetedKeys] as DiscSubStatKey[]
+  for (const effKey of effectiveSubstats) {
+    if (comboKeys.length >= 4) break
+    if (!comboKeys.includes(effKey)) {
+      comboKeys.push(effKey)
+    }
+  }
+  // If still not 4, fill with any remaining substat
+  if (comboKeys.length < 4) {
+    for (const sk of allSubstats) {
+      if (comboKeys.length >= 4) break
+      if (!comboKeys.includes(sk as DiscSubStatKey)) {
+        comboKeys.push(sk as DiscSubStatKey)
+      }
+    }
+  }
+
+  // Trim to 4 and map to indices
+  const result = comboKeys
+    .slice(0, 4)
+    .map((k) => allSubstats.indexOf(k))
+    .filter((i) => i >= 0) as [number, number, number, number]
+
+  if (result.length === 4) {
+    yield result
+  }
+}
+
+function getBlockedInfo(
+  comboSubstats: DiscSubStatKey[],
+  allMainStats: Record<DiscSlotKey, DiscMainStatKey>
+): BlockedInfo[] {
+  return comboSubstats.map((key) => {
+    const blockedDisc = allDiscSlotKeys.findIndex(
+      (slot) => allMainStats[slot] === key
+    )
+    const isBlocked = blockedDisc >= 0
+    return {
+      isBlocked,
+      blockedDisc,
+      baseRolls: isBlocked ? 5 : 6,
+      maxUpgrade: isBlocked ? 25 : 30,
+    }
+  })
+}
+
+/**
+ * Enumerate all feasible aggregate roll distributions for a 4-substat combo.
+ * When `effectiveMask` has any false entries (non-effective substats),
+ * applies a dominance filter: non-effective rolls ≤ min(effective rolls).
+ */
+function enumerateAggregateTotals(
+  blockedInfo: BlockedInfo[],
+  effectiveMask: boolean[]
+): [number, number, number, number][] {
+  const upgradeTotal = UPGRADE_ROLLS_PER_DISC * TOTAL_DISCS
+  const results: [number, number, number, number][] = []
+
+  const maxU = blockedInfo.map((b) => b.maxUpgrade)
+  const base = blockedInfo.map((b) => b.baseRolls)
+
+  const hasNonEffective = effectiveMask.some((m) => !m)
+
+  for (let u0 = 0; u0 <= Math.min(maxU[0], upgradeTotal); u0++) {
+    const s1 = upgradeTotal - u0
+    for (let u1 = 0; u1 <= Math.min(maxU[1], s1); u1++) {
+      const s2 = s1 - u1
+      for (let u2 = 0; u2 <= Math.min(maxU[2], s2); u2++) {
+        const u3 = s2 - u2
+        if (u3 < 0 || u3 > maxU[3]) continue
+
+        const totals: [number, number, number, number] = [
+          u0 + base[0],
+          u1 + base[1],
+          u2 + base[2],
+          u3 + base[3],
+        ]
+
+        // Dominance filter: skip if any non-effective substat exceeds
+        // the minimum of the effective substats
+        if (hasNonEffective) {
+          let minEff = Infinity
+          for (let i = 0; i < 4; i++) {
+            if (effectiveMask[i] && totals[i] < minEff) {
+              minEff = totals[i]
+            }
+          }
+          let dominated = false
+          for (let i = 0; i < 4; i++) {
+            if (!effectiveMask[i] && totals[i] > minEff) {
+              dominated = true
+              break
+            }
+          }
+          if (dominated) continue
+        }
+
+        results.push(totals)
+      }
+    }
+  }
+
+  return results
+}
+
+interface PerDiscAssignment {
+  perDisc: { key: DiscSubStatKey; upgrades: number }[][]
+  rollTotals: Partial<Record<DiscSubStatKey, number>>
+  statTotals: Record<string, number>
+  appearances: Partial<Record<DiscSubStatKey, number>>
+}
+
+function assignPerDiscRolls(
+  comboSubstats: DiscSubStatKey[],
+  blockedInfo: BlockedInfo[],
+  totals: [number, number, number, number],
+  allMainStats: Record<DiscSlotKey, DiscMainStatKey>,
+  effectiveSubstats?: DiscSubStatKey[]
+): PerDiscAssignment {
+  const upgrades = totals.map((t, i) => t - blockedInfo[i].baseRolls)
+
+  const rowB: number[][] = Array.from({ length: 6 }, () => [0, 0, 0, 0])
+  const rowUsed: number[] = [0, 0, 0, 0, 0, 0]
+
+  const colOrder = [...Array(4).keys()].sort(
+    (a, b) => upgrades[b] - upgrades[a]
+  )
+
+  for (const col of colOrder) {
+    let remaining = upgrades[col]
+    if (remaining <= 0) continue
+
+    const blockedDisc = blockedInfo[col].blockedDisc
+
+    for (let row = 0; row < 6 && remaining > 0; row++) {
+      if (row === blockedDisc) continue
+      const capacity = 5 - rowUsed[row]
+      if (capacity <= 0) continue
+      const assign = Math.min(capacity, remaining)
+      rowB[row][col] = assign
+      rowUsed[row] += assign
+      remaining -= assign
+    }
+  }
+
+  const perDisc: { key: DiscSubStatKey; upgrades: number }[][] = []
+  const rollTotals: Partial<Record<DiscSubStatKey, number>> = {}
+  const statTotals: Record<string, number> = {}
+  const appearances: Partial<Record<DiscSubStatKey, number>> = {}
+
+  for (let row = 0; row < 6; row++) {
+    const slotKey = allDiscSlotKeys[row]
+    const mainStat = allMainStats[slotKey]
+    const disc: { key: DiscSubStatKey; upgrades: number }[] = []
+    let fillerPlaced = false
+
+    for (let col = 0; col < 4; col++) {
+      const key = comboSubstats[col]
+
+      if (row === blockedInfo[col].blockedDisc) {
+        if (!fillerPlaced) {
+          const existingKeys = new Set(comboSubstats)
+          const fillerKey = pickFiller(
+            mainStat,
+            existingKeys,
+            effectiveSubstats
+          )
+          disc.push({ key: fillerKey, upgrades: 1 })
+          fillerPlaced = true
+        }
+        continue
+      }
+
+      const totalRolls = rowB[row][col] + 1
+      disc.push({ key, upgrades: totalRolls })
+    }
+
+    for (const s of disc) {
+      rollTotals[s.key] = (rollTotals[s.key] ?? 0) + s.upgrades
+      statTotals[s.key] =
+        (statTotals[s.key] ?? 0) +
+        getDiscSubStatBaseVal(s.key, THEORETICAL_RARITY) * s.upgrades
+      appearances[s.key] = (appearances[s.key] ?? 0) + 1
+    }
+
+    perDisc.push(disc)
+  }
+
+  return { perDisc, rollTotals, statTotals, appearances }
+}
+
+function pickFiller(
+  mainStat: DiscMainStatKey,
+  existingKeys: Set<string>,
+  effectiveSubstats?: DiscSubStatKey[]
+): DiscSubStatKey {
+  if (effectiveSubstats) {
+    for (const effKey of effectiveSubstats) {
+      if (effKey !== mainStat && !existingKeys.has(effKey)) return effKey
+    }
+  }
+  for (const k of allDiscSubStatKeys) {
+    if (k !== mainStat && !existingKeys.has(k)) return k
+  }
+  return 'def_'
+}
+
 function generateMainStatCombos(
   effectiveMainStats: Partial<Record<DiscSlotKey, DiscMainStatKey[]>>
 ): [DiscSlotKey, DiscMainStatKey][][] {
@@ -309,132 +491,3 @@ function generateMainStatCombos(
   }
   return combos
 }
-
-interface SubstatAggregate {
-  totals: Record<string, number>
-  rolls: Record<DiscSubStatKey, number>
-  appearances: Record<DiscSubStatKey, number>
-  /** Per-disc breakdown: 6 arrays of {key, upgrades (not including base 1)} */
-  perDisc: { key: DiscSubStatKey; upgrades: number }[][]
-}
-
-/**
- * Per-disc fill: each disc MUST have exactly 4 unique substats. The pattern
- * specifies 4 substats and their roll counts (1 base + 0-5 upgrades each,
- * sum=9). On discs where a pattern substat matches the main stat, it's
- * replaced by a filler substat (other type, 1 base roll, 0 upgrades).
- * The blocked substat's upgrade rolls are redistributed to the other 3.
- * This guarantees 4 substats per disc, 9 rolls each, 54 total.
- */
-/** @internal exported for testing */
-export function computeSubstatAggregate(
-  comboSubstats: DiscSubStatKey[],
-  comboRolls: number[],
-  allMainStats: Record<DiscSlotKey, DiscMainStatKey>,
-  effectiveSubstats?: DiscSubStatKey[]
-): SubstatAggregate {
-  const rolls: Record<DiscSubStatKey, number> = {} as Record<
-    DiscSubStatKey,
-    number
-  >
-  const totals: Record<string, number> = {}
-  const appearances: Record<DiscSubStatKey, number> = {} as Record<
-    DiscSubStatKey,
-    number
-  >
-  const perDisc: { key: DiscSubStatKey; upgrades: number }[][] = []
-
-  // Build list of pattern substats (keep original order from getValidPatterns)
-  const patternSubstats = comboSubstats.map((key, i) => ({
-    key,
-    perDiscRolls: comboRolls[i],
-  }))
-
-  for (let discIdx = 0; discIdx < TOTAL_DISCS; discIdx++) {
-    const slotKey = allDiscSlotKeys[discIdx]
-    const mainStat = allMainStats[slotKey]
-
-    // Start with all 4 pattern substats
-    const discSubs = patternSubstats.map((s) => ({
-      key: s.key,
-      upgrades: s.perDiscRolls,
-    }))
-
-    // Check if any pattern substat matches the main stat
-    const blocked = discSubs.find((s) => s.key === mainStat)
-    if (blocked) {
-      const extra = blocked.upgrades - 1 // upgrade rolls to redistribute
-
-      // Choose filler substat to replace the blocked type
-      const fillerKey = pickFiller(mainStat, effectiveSubstats)
-
-      // If filler key matches an existing non-blocked pattern substat,
-      // merge the filler's 1 base roll into that entry (avoids creating
-      // a duplicate substat, which is impossible in-game).
-      const mergeInto = discSubs.find((s) => s !== blocked && s.key === fillerKey)
-      if (mergeInto) {
-        mergeInto.upgrades = Math.min(
-          mergeInto.upgrades + 1,
-          MAX_ROLLS_PER_SUBSTAT
-        )
-        blocked.upgrades = 0 // effectively remove blocked entry
-      } else {
-        blocked.upgrades = 1 // filler keeps 1 base roll
-        blocked.key = fillerKey
-      }
-
-      // Redistribute extra upgrade rolls to the remaining substats.
-      // In theoretical max mode, concentrate rolls into the first
-      // non-capped entry (represents the best possible distribution)
-      // instead of equalizing across all entries.
-      const others = discSubs.filter((s) => s !== blocked && s.upgrades > 0)
-      for (let r = 0; r < extra; r++) {
-        const target = others.find((s) => s.upgrades < MAX_ROLLS_PER_SUBSTAT)
-        if (target) target.upgrades++
-      }
-    }
-
-    // Add to totals and track appearances
-    for (const s of discSubs) {
-      rolls[s.key] = (rolls[s.key] ?? 0) + s.upgrades
-      totals[s.key] =
-        (totals[s.key] ?? 0) +
-        getDiscSubStatBaseVal(s.key, THEORETICAL_RARITY) * s.upgrades
-      appearances[s.key] = (appearances[s.key] ?? 0) + 1
-    }
-    perDisc.push(discSubs)
-  }
-
-  return {
-    totals,
-    rolls,
-    appearances,
-    perDisc,
-  }
-}
-
-/**
- * Pick a filler substat to replace the blocked main stat on a disc.
- * The filler is a neutral placeholder — its 1 base roll satisfies the
- * 4-unique-substats per-disc constraint without inflating any
- * particular stat total. Upgrades from the blocked substat are
- * redistributed independently (see computeSubstatAggregate).
- *
- * Strategy: pick the first character-effective substat that isn't the
- * blocked main stat. Falls back to any available substat.
- */
-function pickFiller(
-  mainStat: DiscMainStatKey,
-  effectiveSubstats?: DiscSubStatKey[]
-): DiscSubStatKey {
-  if (effectiveSubstats) {
-    for (const effKey of effectiveSubstats) {
-      if (effKey !== mainStat) return effKey
-    }
-  }
-  for (const k of allDiscSubStatKeys) {
-    if (k !== mainStat) return k
-  }
-  return 'def_'
-}
-

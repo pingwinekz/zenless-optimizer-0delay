@@ -672,7 +672,25 @@ function OptimizeWrapper() {
       let activeRecipes: Candidate<string>[] | undefined
       let activeDiscMap: Record<string, ICachedDisc> = {}
 
-      if (useTheoreticalMax) {          const result = generateTheoreticalDiscs(
+      if (useTheoreticalMax) {
+        // Debug override: set localStorage['zz_debug_substat_targets'] to
+        // a JSON object like {"atk_":23,"ap":16} to force specific substat
+        // roll counts for verification. Clear it (delete the key) to restore
+        // normal exhaustive search.
+        let debugTargets: Partial<Record<DiscSubStatKey, number>> | undefined
+        try {
+          const raw = localStorage.getItem('zz_debug_substat_targets')
+          if (raw) {
+            debugTargets = JSON.parse(raw)
+            console.warn(
+              '[TheoreticalMax] DEBUG substat roll targets active:',
+              debugTargets
+            )
+          }
+        } catch {
+          // ignore parse errors
+        }
+        const result = generateTheoreticalDiscs(
           characterKey,
           optConfig.setFilter2,
           optConfig.setFilter4,
@@ -680,7 +698,8 @@ function OptimizeWrapper() {
             4: optConfig.slot4,
             5: optConfig.slot5,
             6: optConfig.slot6,
-          }
+          },
+          debugTargets
         )
         console.debug(
           '[TheoreticalMax] generated',
