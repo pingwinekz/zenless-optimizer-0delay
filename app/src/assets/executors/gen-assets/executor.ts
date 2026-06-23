@@ -76,5 +76,21 @@ export default async function runExecutor(
     }
   )
   await generateIndexFromObj(indexData, `${DEST_PROJ_PATH}/gen`)
+
+  // W-engine images are WebP, not PNG. Update generated index files to match.
+  const wengineDir = `${DEST_PROJ_PATH}/gen/wengines`
+  if (fs.existsSync(wengineDir)) {
+    for (const entry of fs.readdirSync(wengineDir)) {
+      const indexPath = `${wengineDir}/${entry}/index.ts`
+      if (fs.existsSync(indexPath)) {
+        let content = fs.readFileSync(indexPath, 'utf-8')
+        if (content.includes('.png')) {
+          content = content.replace(/\.png/g, '.webp')
+          fs.writeFileSync(indexPath, content, 'utf-8')
+        }
+      }
+    }
+  }
+
   return { success: true }
 }

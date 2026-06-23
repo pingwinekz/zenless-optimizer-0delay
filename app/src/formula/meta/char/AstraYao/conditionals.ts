@@ -9,12 +9,7 @@ export const conditionals = {
     max: 3,
     mindscapeRequirement: 1,
   },
-  idyllic_cadenza: {
-    sheet: 'AstraYao',
-    name: 'idyllic_cadenza',
-    type: 'bool',
-    mindscapeRequirement: 4,
-  },
+  idyllic_cadenza: { sheet: 'AstraYao', name: 'idyllic_cadenza', type: 'bool' },
   precise_assist_triggered: {
     sheet: 'AstraYao',
     name: 'precise_assist_triggered',

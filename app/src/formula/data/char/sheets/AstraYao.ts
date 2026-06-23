@@ -37,7 +37,7 @@ const { char } = own
 const { idyllic_cadenza, precise_assist_triggered } = allBoolConditionals(
   key,
   undefined,
-  { idyllic_cadenza: 4, precise_assist_triggered: 6 }
+  { precise_assist_triggered: 6 }
 )
 const { attack_hits } = allNumConditionals(
   key,

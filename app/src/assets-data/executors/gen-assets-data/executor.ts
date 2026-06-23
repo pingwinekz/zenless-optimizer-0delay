@@ -33,7 +33,6 @@ export type AssetData = {
   wengines: Record<
     WengineKey,
     {
-      icon: string
       big: string
     }
   >
@@ -71,7 +70,6 @@ const runExecutor: PromiseExecutor<GenAssetsDataExecutorSchema> = async (
       const strKey = icon.match(/([^/]+)\.png/)?.[1]
       if (!strKey) throw Error(`Failed to parse wengine icon name: ${icon}`)
       return {
-        icon: `${strKey}.png`,
         big: `${strKey}Big.png`,
       }
     }),

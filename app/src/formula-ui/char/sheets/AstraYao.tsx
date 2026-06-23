@@ -2,7 +2,8 @@ import type { CharacterKey } from '../../../consts'
 import { AstraYao } from '../../../formula'
 import { mappedStats } from '../../../stats'
 import { trans } from '../../util'
-import { createBaseSheet, fieldForBuff } from '../sheetUtil'
+import { GameDesc } from '../../../i18n'
+import { CoreGameDesc, createBaseSheet, fieldForBuff } from '../sheetUtil'
 
 const key: CharacterKey = 'AstraYao'
 const [, ch] = trans('char', key)
@@ -19,8 +20,12 @@ const sheet = createBaseSheet(key, {
           type: 'conditional',
           conditional: {
             label: ch('idyllic_cadenzaCond'),
-            description:
-              'While in Idyllic Cadenza State, the entire squad gains increased DMG and CRIT DMG.',
+            description: (
+              <GameDesc
+                ns="char_AstraYao_gen"
+                key18="special.IdyllicCadenza.desc"
+              />
+            ),
             metadata: cond.idyllic_cadenza,
             fields: [
               fieldForBuff(buff.common_dmg_),
@@ -46,14 +51,27 @@ const sheet = createBaseSheet(key, {
       type: 'fields',
       fields: [fieldForBuff(buff.core_atk)],
     },
+    {
+      type: 'conditional',
+      conditional: {
+        label: ch('idyllic_cadenzaCond'),
+        description: <CoreGameDesc characterKey={key} />,
+        metadata: cond.idyllic_cadenza,
+        fields: [],
+      },
+    },
   ],
   m1: [
     {
       type: 'conditional',
       conditional: {
         label: ch('m1Cond'),
-        description:
-          'When Astra Yao attacks hit an enemy, she reduces their RES.',
+        description: (
+          <GameDesc
+            ns="char_AstraYao_gen"
+            key18="mindscapes.1.desc"
+          />
+        ),
         metadata: cond.attack_hits,
         fields: [fieldForBuff(buff.m1_resRed_)],
       },
@@ -103,8 +121,12 @@ const sheet = createBaseSheet(key, {
       type: 'conditional',
       conditional: {
         label: ch('m6Cond'),
-        description:
-          'When triggering a Precise Assist, Astra Yao gains increased CRIT Rate on charged Basic Attack Capriccio.',
+        description: (
+          <GameDesc
+            ns="char_AstraYao_gen"
+            key18="mindscapes.6.desc"
+          />
+        ),
         metadata: cond.precise_assist_triggered,
         fields: [
           {

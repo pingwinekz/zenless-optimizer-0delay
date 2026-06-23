@@ -672,12 +672,15 @@ function OptimizeWrapper() {
       let activeRecipes: Candidate<string>[] | undefined
       let activeDiscMap: Record<string, ICachedDisc> = {}
 
-      if (useTheoreticalMax) {
-        const result = generateTheoreticalDiscs(
+      if (useTheoreticalMax) {          const result = generateTheoreticalDiscs(
           characterKey,
           optConfig.setFilter2,
           optConfig.setFilter4,
-          database
+          {
+            4: optConfig.slot4,
+            5: optConfig.slot5,
+            6: optConfig.slot6,
+          }
         )
         console.debug(
           '[TheoreticalMax] generated',
@@ -694,17 +697,13 @@ function OptimizeWrapper() {
           console.debug('[TheoreticalMax] sample recipe:', sample)
         }
         activeRecipes = result.recipes
-        // Store recipe metadata for display
+        // Store recipe metadata for display (used to reconstruct disc objects
+        // for the builds the solver returns — we avoid creating disc objects
+        // for ALL recipes here to prevent OOM with large recipe counts)
         recipeMetaRef.current = result.recipeMap
-        // Create fake per-slot discs from recipes for stat computation
+        // Start with empty disc map; we populate it after the solver returns
+        // with only the recipes that end up in the final build results
         activeDiscMap = {}
-        for (const recipeId of Object.keys(result.recipeMap)) {
-          const recipe = result.recipeMap[recipeId]
-          const discs = createRecipeDiscs(recipe, recipeId)
-          for (const disc of discs) {
-            activeDiscMap[disc.id] = disc
-          }
-        }
 
         // Update sidebar with recipe counts
         setPermutations(result.recipes.length * filteredWengineKeys.length)
@@ -717,7 +716,8 @@ function OptimizeWrapper() {
         }
         setPermutationDetails(details)
       }
-      // Update both ref (sync, for immediate access) and state (for re-render)
+      // Set ref and state for disc lookup (currently empty; will be populated
+      // after solver returns with only the returned recipes' disc objects)
       theoreticalDiscMapRef.current = activeDiscMap
       setTheoreticalDiscMap(activeDiscMap)
 
@@ -833,6 +833,27 @@ function OptimizeWrapper() {
         // solver's ordering had holes from worker-level pruning.
         .sort((a, b) => b.value - a.value)
 
+      // After solver returns, create disc objects only for the returned
+      // builds (avoids OOM from pre-creating discs for ALL recipes).
+      // The recipeMetaRef stores the full recipe metadata needed to
+      // reconstruct disc objects for any recipe on demand.
+      if (useTheoreticalMax) {
+        const returnedDiscMap: Record<string, ICachedDisc> = {}
+        for (const build of storedBuilds) {
+          const rid = build.discIds['1']?.replace(/\_\d+$/, '')
+          if (rid && recipeMetaRef.current[rid]) {
+            const recipe = recipeMetaRef.current[rid]
+            const discs = createRecipeDiscs(recipe, rid)
+            for (const disc of discs) {
+              returnedDiscMap[disc.id] = disc
+            }
+          }
+        }
+        activeDiscMap = returnedDiscMap
+        theoreticalDiscMapRef.current = returnedDiscMap
+        setTheoreticalDiscMap(returnedDiscMap)
+      }
+
       database.optConfigs.newOrSetGeneratedBuildList(optConfigId, {
         builds: storedBuilds,
         buildDate: Date.now(),
@@ -849,6 +870,9 @@ function OptimizeWrapper() {
       optConfig.setFilter2,
       optConfig.setFilter4,
       optConfig.maxBuildsToShow,
+      optConfig.slot4,
+      optConfig.slot5,
+      optConfig.slot6,
       characterKey,
       character.wenginePhase,
       filteredWengineKeys,
@@ -1175,6 +1199,7 @@ function OptimizeWrapper() {
                     total={totalPermutations}
                     hasTarget={!!target}
                     statDisplay={statDisplay}
+                    useTheoreticalMax={useTheoreticalMax}
                     onOptimize={onOptimize}
                     onCancel={onCancel}
                     onReset={onReset}
@@ -1204,6 +1229,7 @@ function OptimizeWrapper() {
         <ResponsiveBottomBar
           optimizing={optimizing}
           total={totalPermutations}
+          useTheoreticalMax={useTheoreticalMax}
           onOptimize={onOptimize}
           onCancel={onCancel}
           onReset={onReset}

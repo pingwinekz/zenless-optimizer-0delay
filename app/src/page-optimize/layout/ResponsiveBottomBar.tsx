@@ -16,12 +16,14 @@ import { useTranslation } from 'react-i18next'
 export const ResponsiveBottomBar = memo(function ResponsiveBottomBar({
   optimizing,
   total,
+  useTheoreticalMax,
   onOptimize,
   onCancel,
   onReset,
 }: {
   optimizing: boolean
   total: number
+  useTheoreticalMax?: boolean
   onOptimize: (event: MouseEvent) => void
   onCancel: () => void
   onReset: () => void
@@ -54,7 +56,7 @@ export const ResponsiveBottomBar = memo(function ResponsiveBottomBar({
           leftSection={<IconBoltFilled size={14} />}
           loading={optimizing}
           onClick={onOptimize}
-          disabled={!total}
+          disabled={!total && !useTheoreticalMax}
         >
           {optimizing
             ? t('sidebar.optimizing', 'Optimizing...')

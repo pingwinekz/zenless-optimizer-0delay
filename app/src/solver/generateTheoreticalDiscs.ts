@@ -14,7 +14,6 @@ import {
   getDiscMainStatVal,
   getDiscSubStatBaseVal,
 } from '../consts'
-import type { ZzzDatabase } from '../db'
 import {
   getCharacterEffectiveMainStats,
   getCharacterEffectiveStats,
@@ -64,7 +63,11 @@ export function generateTheoreticalDiscs(
   characterKey: CharacterKey,
   setFilter2: DiscSetKey[],
   setFilter4: DiscSetKey[],
-  database?: ZzzDatabase
+  slotFilters?: {
+    4?: DiscMainStatKey[]
+    5?: DiscMainStatKey[]
+    6?: DiscMainStatKey[]
+  }
 ): {
   recipes: Candidate<string>[]
   recipeMap: Record<string, BuildRecipe>
@@ -85,7 +88,34 @@ export function generateTheoreticalDiscs(
   //    totalRolls[S] = perDiscRolls[S] × (6 - slots where S is the main stat).
   const allSubstats = [...allDiscSubStatKeys]
   const effectiveSubstats = getCharacterEffectiveStats(characterKey)
-  const effectiveMainStats = getMergedMainStatsInternal(characterKey, database)
+
+  // Start with the character's effective main stats (recommended per slot).
+  // These keep the recipe count manageable (~35K) while providing sensible
+  // defaults. If the user has set explicit per-slot filters, those override.
+  //
+  // IMPORTANT: Create a shallow copy because the return value from
+  // getCharacterEffectiveMainStats is a reference to a frozen const literal
+  // in characterPlans — mutating it directly would silently fail.
+  const effectiveMainStats = {
+    ...getCharacterEffectiveMainStats(characterKey),
+  }
+  if (slotFilters) {
+    console.debug('[TheoreticalMax] slotFilters:', slotFilters)
+    for (const [slot, filter] of Object.entries(slotFilters)) {
+      const slotKey = slot as DiscSlotKey
+      if (filter && filter.length > 0) {
+        console.debug(
+          '[TheoreticalMax] overriding slot',
+          slotKey,
+          'from',
+          effectiveMainStats[slotKey],
+          'to',
+          filter
+        )
+        effectiveMainStats[slotKey] = filter
+      }
+    }
+  }
 
   // 3. Pre-compute all valid per-disc patterns (4 substats, each 1-6 rolls, sum=9)
   const validPatterns = getValidPatterns()
@@ -333,27 +363,34 @@ export function computeSubstatAggregate(
     // Check if any pattern substat matches the main stat
     const blocked = discSubs.find((s) => s.key === mainStat)
     if (blocked) {
-      // Keep 1 base roll for the filler, redistribute the rest
       const extra = blocked.upgrades - 1 // upgrade rolls to redistribute
-      blocked.upgrades = 1 // filler keeps 1 base roll
-      blocked.key = pickFiller(mainStat, patternSubstats, effectiveSubstats)
 
-      // Redistribute extra rolls to the other 3 pattern substats
-      // Give to the lowest-alloc substats first, capped at 6 each
-      const others = discSubs.filter((s) => s.key !== blocked.key)
+      // Choose filler substat to replace the blocked type
+      const fillerKey = pickFiller(mainStat, effectiveSubstats)
+
+      // If filler key matches an existing non-blocked pattern substat,
+      // merge the filler's 1 base roll into that entry (avoids creating
+      // a duplicate substat, which is impossible in-game).
+      const mergeInto = discSubs.find((s) => s !== blocked && s.key === fillerKey)
+      if (mergeInto) {
+        mergeInto.upgrades = Math.min(
+          mergeInto.upgrades + 1,
+          MAX_ROLLS_PER_SUBSTAT
+        )
+        blocked.upgrades = 0 // effectively remove blocked entry
+      } else {
+        blocked.upgrades = 1 // filler keeps 1 base roll
+        blocked.key = fillerKey
+      }
+
+      // Redistribute extra upgrade rolls to the remaining substats.
+      // In theoretical max mode, concentrate rolls into the first
+      // non-capped entry (represents the best possible distribution)
+      // instead of equalizing across all entries.
+      const others = discSubs.filter((s) => s !== blocked && s.upgrades > 0)
       for (let r = 0; r < extra; r++) {
-        let bestIdx = -1
-        let bestVal = Infinity
-        for (let i = 0; i < others.length; i++) {
-          if (
-            others[i].upgrades < MAX_ROLLS_PER_SUBSTAT &&
-            others[i].upgrades < bestVal
-          ) {
-            bestIdx = i
-            bestVal = others[i].upgrades
-          }
-        }
-        if (bestIdx >= 0) others[bestIdx].upgrades++
+        const target = others.find((s) => s.upgrades < MAX_ROLLS_PER_SUBSTAT)
+        if (target) target.upgrades++
       }
     }
 
@@ -377,41 +414,27 @@ export function computeSubstatAggregate(
 }
 
 /**
- * Pick a filler substat: prefer the character's effective substats (in order),
- * falling back to the first available type if none of the effective ones fit.
+ * Pick a filler substat to replace the blocked main stat on a disc.
+ * The filler is a neutral placeholder — its 1 base roll satisfies the
+ * 4-unique-substats per-disc constraint without inflating any
+ * particular stat total. Upgrades from the blocked substat are
+ * redistributed independently (see computeSubstatAggregate).
+ *
+ * Strategy: pick the first character-effective substat that isn't the
+ * blocked main stat. Falls back to any available substat.
  */
 function pickFiller(
   mainStat: DiscMainStatKey,
-  patternSubstats: { key: DiscSubStatKey; perDiscRolls: number }[],
   effectiveSubstats?: DiscSubStatKey[]
 ): DiscSubStatKey {
-  const patternKeys = new Set(patternSubstats.map((s) => s.key))
-  // Prefer effective substats in priority order
   if (effectiveSubstats) {
     for (const effKey of effectiveSubstats) {
-      if (effKey !== mainStat && !patternKeys.has(effKey)) return effKey
+      if (effKey !== mainStat) return effKey
     }
   }
-  // Fallback: any available substat
   for (const k of allDiscSubStatKeys) {
-    if (k !== mainStat && !patternKeys.has(k)) return k
+    if (k !== mainStat) return k
   }
   return 'def_'
 }
 
-// ─── Merged main stat helper (inline to avoid page-discs dependency) ───
-
-function getMergedMainStatsInternal(
-  charKey: CharacterKey,
-  database?: ZzzDatabase
-): Partial<Record<DiscSlotKey, DiscMainStatKey[]>> {
-  const defaults = getCharacterEffectiveMainStats(charKey)
-  if (!database) return defaults
-  const override = database.statWeights.get(charKey)
-  if (!override || !override.mainStats) return defaults
-  const merged = { ...defaults }
-  for (const [slot, stats] of Object.entries(override.mainStats)) {
-    merged[slot as DiscSlotKey] = stats as DiscMainStatKey[]
-  }
-  return merged
-}

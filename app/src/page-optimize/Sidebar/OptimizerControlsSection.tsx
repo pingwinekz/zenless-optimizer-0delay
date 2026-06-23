@@ -18,6 +18,7 @@ export const OptimizerControlsSection = memo(function OptimizerControlsSection({
   total,
   hasTarget,
   statDisplay,
+  useTheoreticalMax,
   onOptimize,
   onCancel,
   onReset,
@@ -28,6 +29,7 @@ export const OptimizerControlsSection = memo(function OptimizerControlsSection({
   total: number
   hasTarget: boolean
   statDisplay: StatDisplay
+  useTheoreticalMax?: boolean
   onOptimize: (event: MouseEvent) => void
   onCancel: () => void
   onReset: () => void
@@ -47,7 +49,7 @@ export const OptimizerControlsSection = memo(function OptimizerControlsSection({
             leftSection={<IconBoltFilled size={16} />}
             loading={optimizing}
             onClick={onOptimize}
-            disabled={!total || !hasTarget}
+            disabled={(!total && !useTheoreticalMax) || !hasTarget}
             style={startButtonStyle}
           >
             {optimizing
