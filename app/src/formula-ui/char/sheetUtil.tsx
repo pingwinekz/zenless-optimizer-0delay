@@ -271,8 +271,8 @@ function createPotentialSheet(
  */
 const avatarSkillLevelIndexing = [
   'basic',
-  'dodge',
   'special',
+  'dodge',
   'chain',
   'assist',
 ] as const
@@ -336,16 +336,39 @@ export function SkillGameDesc({
   key18: string
 }) {
   const char = useCharacter(characterKey)
-  const skillLevels = useMemo(
-    () => ({
+  const skillLevels = useMemo(() => {
+    const base = {
       basic: char?.basic ?? 1,
       dodge: char?.dodge ?? 1,
       special: char?.special ?? 1,
       chain: char?.chain ?? 1,
       assist: char?.assist ?? 1,
-    }),
-    [char?.basic, char?.dodge, char?.special, char?.chain, char?.assist]
-  )
+    }
+    const ms = char?.mindscape ?? 0
+    // M3 and M5 each give +2 to all skill levels
+    if (ms >= 3) {
+      base.basic += 2
+      base.dodge += 2
+      base.assist += 2
+      base.special += 2
+      base.chain += 2
+    }
+    if (ms >= 5) {
+      base.basic += 2
+      base.dodge += 2
+      base.assist += 2
+      base.special += 2
+      base.chain += 2
+    }
+    return base
+  }, [
+    char?.basic,
+    char?.dodge,
+    char?.special,
+    char?.chain,
+    char?.assist,
+    char?.mindscape,
+  ])
   const { t } = useTranslation(ns)
   const textKey = `${ns}:${key18}`
   const obj = t(textKey, { returnObjects: true })

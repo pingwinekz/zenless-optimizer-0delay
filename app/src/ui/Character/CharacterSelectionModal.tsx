@@ -319,31 +319,27 @@ function SelectionCard({
           }}
         />
 
-        {/* Name plate at bottom — left padding offsets the parallelogram skew
-            so text sits within the visible area at the bottom of the clip. */}
+        {/* Name plate — solid black bar at the bottom.
+            Left padding offsets the parallelogram skew so text sits within the visible area. */}
         <Box
           style={{
             position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,
-            background:
-              'linear-gradient(transparent 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.92) 100%)',
-            padding: `24px 8px 7px ${skewPct}%`,
+            background: '#000',
+            padding: `6px 8px 6px ${skewPct}%`,
           }}
         >
           <Text
             size="xs"
-            fw={600}
+            fw={700}
             ta="center"
+            lineClamp={2}
             style={{
               color: '#fff',
               lineHeight: 1.2,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+              wordBreak: 'break-word',
             }}
           >
             {t(`charNames_gen:${characterKey}`)}

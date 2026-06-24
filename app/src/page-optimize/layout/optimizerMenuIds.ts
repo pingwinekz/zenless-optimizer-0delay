@@ -3,6 +3,7 @@ export const OptimizerMenuIds = {
   relicAndStatFilters: 'Relic & stat filters',
   teammates: 'Teammates',
   characterStatsSimulation: 'Character custom stats simulation',
+  analysis: 'Analysis',
 }
 
 export const initialMenuState: Record<string, boolean> = {
@@ -10,4 +11,5 @@ export const initialMenuState: Record<string, boolean> = {
   [OptimizerMenuIds.relicAndStatFilters]: true,
   [OptimizerMenuIds.teammates]: true,
   [OptimizerMenuIds.characterStatsSimulation]: false,
+  [OptimizerMenuIds.analysis]: true,
 }

@@ -1,84 +1,70 @@
-import { Box, Group, Table, Text } from '@mantine/core'
-import { CardThemed } from '@zenless-optimizer/common/ui'
-import { getUnitStr, valueString } from '@zenless-optimizer/common/util'
-import type { StatKey } from '../../consts'
-import { statKeyTextMap } from '../../consts'
+import { Image, Text } from '@mantine/core'
+import { characterAsset, wengineAsset } from '../../assets'
+import type { CharacterKey, WengineKey } from '../../consts'
+import type { AnalysisData } from './ExpandedDataPanelController'
+import { buildStatComparisons } from './ExpandedDataPanelController'
+import classes from './StatsDiffCard.module.css'
 
-/**
- * A stat entry representing a single stat value for comparison.
- */
-export interface StatEntry {
-  key: StatKey
-  label?: string
-  current: number
-  improved?: number
-}
+const baseCardHeight = 340
+const lcCardH = 80
+const cardGap = 8
 
-/**
- * StatsDiffCard - Side-by-side stat comparison table.
- * Displays current vs improved stat values, highlighting improvements/degradations.
- *
- * TODO: Integrate with real calc data from the solver.
- * Currently renders with placeholder/mock data structure.
- */
 export function StatsDiffCard({
-  stats,
-  title = 'Stat Comparison',
+  analysisData,
 }: {
-  stats?: StatEntry[]
-  title?: string
+  analysisData: AnalysisData
 }) {
-  // Placeholder mock data if none provided
-  const displayStats = stats ?? [
-    { key: 'atk' as StatKey, current: 1850, improved: 2100 },
-    { key: 'hp' as StatKey, current: 12500, improved: 13200 },
-    { key: 'def' as StatKey, current: 680, improved: 720 },
-    { key: 'crit_' as StatKey, current: 0.52, improved: 0.58 },
-    { key: 'crit_dmg_' as StatKey, current: 1.05, improved: 1.2 },
-    { key: 'pen_' as StatKey, current: 0.24, improved: 0.28 },
-    { key: 'anomProf' as StatKey, current: 120, improved: 140 },
-  ]
-
-  // TODO: When integrating real data, compute improved value from solver
-  // and highlight differences with color coding
+  const { equippedStats, selectedStats, characterKey, selectedWengineKey } =
+    analysisData
+  const comparisons = buildStatComparisons(equippedStats, selectedStats)
+  const cardHeight = baseCardHeight
 
   return (
-    <CardThemed>
-      <Box p="md">
-        <Text fw={700} size="sm" mb="sm">
-          {title}
+    <div
+      className={classes.outerCard}
+      style={{ display: 'flex', height: cardHeight, gap: 10 }}
+    >
+      <CardImage
+        characterKey={characterKey}
+        wengineKey={selectedWengineKey}
+        cardHeight={cardHeight}
+      />
+      <div className={classes.statsPanel}>
+        <Text fw={700} size="sm" mb="md">
+          Equipped → Selected
         </Text>
-        <Table striped highlightOnHover>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Stat</Table.Th>
-              <Table.Th style={{ textAlign: 'right' }}>Current</Table.Th>
-              <Table.Th style={{ textAlign: 'right' }}>Improved</Table.Th>
-              <Table.Th style={{ textAlign: 'right' }}>Change</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {displayStats.map((stat) => {
-              const label = stat.label ?? statKeyTextMap[stat.key] ?? stat.key
-              const improved = stat.improved ?? stat.current
-              const diff = improved - stat.current
-              const unit = getUnitStr(stat.key)
-              const isImprovement = diff > 0
-              const isDegradation = diff < 0
+        {comparisons.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {comparisons.map((stat) => {
+              const diff = stat.improved - stat.current
+              const isImprovement = diff > 0.001
+              const isDegradation = diff < -0.001
+              const isNeutral = !isImprovement && !isDegradation
 
               return (
-                <Table.Tr key={stat.key}>
-                  <Table.Td>
-                    <Text size="xs" fw={500}>
-                      {label}
-                    </Text>
-                  </Table.Td>
-                  <Table.Td style={{ textAlign: 'right' }}>
-                    <Text size="xs" c="dimmed">
-                      {valueString(stat.current, unit)}
-                    </Text>
-                  </Table.Td>
-                  <Table.Td style={{ textAlign: 'right' }}>
+                <div
+                  key={stat.key}
+                  style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+                >
+                  <div className={classes.oldStatColumn}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        gap: 8,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Text size="xs" style={{ flex: 1 }}>
+                        {stat.label}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {formatStatValue(stat.current, stat)}
+                      </Text>
+                    </div>
+                  </div>
+                  <span className={classes.arrow}>➤</span>
+                  <div className={classes.newValueColumn}>
                     <Text
                       size="xs"
                       fw={600}
@@ -89,74 +75,114 @@ export function StatsDiffCard({
                             ? 'red'
                             : undefined
                       }
+                      style={{ textAlign: 'right' }}
                     >
-                      {valueString(improved, unit)}
+                      {formatStatValue(stat.improved, stat)}
                     </Text>
-                  </Table.Td>
-                  <Table.Td style={{ textAlign: 'right' }}>
-                    <Text
-                      size="xs"
-                      c={
-                        isImprovement
-                          ? 'green'
-                          : isDegradation
-                            ? 'red'
-                            : 'dimmed'
-                      }
+                  </div>
+                  {!isNeutral && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 4,
+                        alignItems: 'center',
+                        width: 80,
+                        justifyContent: 'flex-end',
+                      }}
                     >
-                      {isImprovement && '+'}
-                      {valueString(diff, unit)}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                      <Text size="xs" c={isImprovement ? 'green' : 'red'}>
+                        {isImprovement && '+'}
+                        {formatStatValue(diff, stat)}
+                      </Text>
+                      <span className={classes.arrowIcon}>
+                        {isImprovement ? '\u2191' : '\u2193'}
+                      </span>
+                    </div>
+                  )}
+                </div>
               )
             })}
-          </Table.Tbody>
-        </Table>
-      </Box>
-    </CardThemed>
+          </div>
+        ) : (
+          <Text size="xs" c="dimmed">
+            Select a build to compare stats.
+          </Text>
+        )}
+      </div>
+    </div>
   )
 }
 
-export function StatsDiffRow({
-  label,
-  current,
-  improved,
+function formatStatValue(
+  value: number,
+  stat: { unit: string; isPercent: boolean }
+): string {
+  if (stat.isPercent) {
+    return `${(value * 100).toFixed(1)}%`
+  }
+  return Math.round(value).toLocaleString()
+}
+
+function CardImage({
+  characterKey,
+  wengineKey,
+  cardHeight,
 }: {
-  label: string
-  current: string
-  improved: string
+  characterKey: CharacterKey
+  wengineKey?: string
+  cardHeight: number
 }) {
-  const currentNum = parseFloat(current)
-  const improvedNum = parseFloat(improved)
-  const diff = improvedNum - currentNum
-  const isImprovement = diff > 0
-  const isDegradation = diff < 0
+  const charCardH = cardHeight - lcCardH - cardGap
+  const charImg = characterAsset(characterKey, 'full')
+  const wengineImg = wengineKey
+    ? wengineAsset(wengineKey as WengineKey)
+    : undefined
 
   return (
-    <Group gap="xs" justify="apart" wrap="nowrap">
-      <Text size="xs" style={{ flex: 1, minWidth: 80 }}>
-        {label}
-      </Text>
-      <Text size="xs" c="dimmed" style={{ textAlign: 'right', width: 80 }}>
-        {current}
-      </Text>
-      <Text
-        size="xs"
-        fw={600}
-        c={isImprovement ? 'green' : isDegradation ? 'red' : undefined}
-        style={{ textAlign: 'right', width: 80 }}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: cardGap,
+        height: '100%',
+        width: 200,
+      }}
+    >
+      <div
+        className={classes.cardImageContainer}
+        style={{
+          height: charCardH,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+        }}
       >
-        {improved}
-      </Text>
-      <Text
-        size="xs"
-        c={isImprovement ? 'green' : isDegradation ? 'red' : 'dimmed'}
-        style={{ textAlign: 'right', width: 80 }}
-      >
-        {isImprovement && '+'}
-        {diff.toFixed(2)}
-      </Text>
-    </Group>
+        {charImg ? (
+          <Image src={charImg} alt="" fit="contain" h={charCardH} w="100%" />
+        ) : (
+          <Text size="xs" c="dimmed">
+            {characterKey}
+          </Text>
+        )}
+      </div>
+      {wengineImg && (
+        <div
+          style={{
+            width: '100%',
+            height: lcCardH,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 6,
+            backgroundColor: 'var(--layer-2)',
+            boxShadow: 'var(--shadow-card)',
+            overflow: 'hidden',
+          }}
+        >
+          <Image src={wengineImg} alt="" fit="contain" h={lcCardH - 8} />
+        </div>
+      )}
+    </div>
   )
 }

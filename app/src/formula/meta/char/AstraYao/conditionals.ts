@@ -9,6 +9,7 @@ export const conditionals = {
     max: 3,
     mindscapeRequirement: 1,
   },
+  core_atk_cond: { sheet: 'AstraYao', name: 'core_atk_cond', type: 'bool' },
   idyllic_cadenza: { sheet: 'AstraYao', name: 'idyllic_cadenza', type: 'bool' },
   precise_assist_triggered: {
     sheet: 'AstraYao',

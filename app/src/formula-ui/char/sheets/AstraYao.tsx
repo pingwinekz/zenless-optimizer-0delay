@@ -1,9 +1,16 @@
+import { ImgIcon } from '@zenless-optimizer/common/ui'
+import { mindscapeDefIcon } from '../../../assets'
 import type { CharacterKey } from '../../../consts'
 import { AstraYao } from '../../../formula'
+import { GameDesc } from '../../../i18n'
 import { mappedStats } from '../../../stats'
 import { trans } from '../../util'
-import { GameDesc } from '../../../i18n'
-import { CoreGameDesc, createBaseSheet, fieldForBuff } from '../sheetUtil'
+import {
+  CoreGameDesc,
+  SkillGameDesc,
+  createBaseSheet,
+  fieldForBuff,
+} from '../sheetUtil'
 
 const key: CharacterKey = 'AstraYao'
 const [, ch] = trans('char', key)
@@ -21,7 +28,8 @@ const sheet = createBaseSheet(key, {
           conditional: {
             label: ch('idyllic_cadenzaCond'),
             description: (
-              <GameDesc
+              <SkillGameDesc
+                characterKey={key}
                 ns="char_AstraYao_gen"
                 key18="special.IdyllicCadenza.desc"
               />
@@ -48,16 +56,17 @@ const sheet = createBaseSheet(key, {
   },
   core: [
     {
-      type: 'fields',
-      fields: [fieldForBuff(buff.core_atk)],
-    },
-    {
       type: 'conditional',
       conditional: {
-        label: ch('idyllic_cadenzaCond'),
+        label: 'CP ATK buff',
         description: <CoreGameDesc characterKey={key} />,
-        metadata: cond.idyllic_cadenza,
-        fields: [],
+        metadata: cond.core_atk_cond,
+        fields: [
+          {
+            title: 'CP ATK buff',
+            fieldRef: buff.core_atk.tag,
+          },
+        ],
       },
     },
   ],
@@ -67,10 +76,7 @@ const sheet = createBaseSheet(key, {
       conditional: {
         label: ch('m1Cond'),
         description: (
-          <GameDesc
-            ns="char_AstraYao_gen"
-            key18="mindscapes.1.desc"
-          />
+          <GameDesc ns="char_AstraYao_gen" key18="mindscapes.1.desc" />
         ),
         metadata: cond.attack_hits,
         fields: [fieldForBuff(buff.m1_resRed_)],
@@ -80,6 +86,10 @@ const sheet = createBaseSheet(key, {
   m2: [
     {
       type: 'fields',
+      header: {
+        icon: <ImgIcon src={mindscapeDefIcon(2)} size={1.5} />,
+        text: 'M2 ATK buff',
+      },
       fields: [
         {
           title: ch('m2_atkBuffInc_'),
@@ -96,24 +106,26 @@ const sheet = createBaseSheet(key, {
   m4: [
     {
       type: 'fields',
-      fields: [
-        fieldForBuff(buff.m4_attack_quickAssist_extraDmg),
-        fieldForBuff(buff.m4_anomaly_quickAssist_anomBuildup_),
-        fieldForBuff(buff.m4_stun_quickAssist_dazeInc_),
-      ],
+      fields: [fieldForBuff(buff.m4_attack_quickAssist_extraDmg)],
     },
   ],
   m6: [
     {
       type: 'fields',
+      header: {
+        icon: <ImgIcon src={mindscapeDefIcon(6)} size={1.5} />,
+        text: 'M6 CR and DMG buff',
+      },
       fields: [
         {
           title: ch('m6_mv_mult_'),
-          fieldRef: buff.m6_mv_mult_.tag,
+          fieldValue: dm.m6.tremolo_tone_clusters_mv_mult * 100,
+          unit: '%',
         },
         {
           title: ch('m6_crit_'),
-          fieldRef: buff.m6_crit_.tag,
+          fieldValue: dm.m6.crit_ * 100,
+          unit: '%',
         },
       ],
     },
@@ -122,10 +134,7 @@ const sheet = createBaseSheet(key, {
       conditional: {
         label: ch('m6Cond'),
         description: (
-          <GameDesc
-            ns="char_AstraYao_gen"
-            key18="mindscapes.6.desc"
-          />
+          <GameDesc ns="char_AstraYao_gen" key18="mindscapes.6.desc" />
         ),
         metadata: cond.precise_assist_triggered,
         fields: [

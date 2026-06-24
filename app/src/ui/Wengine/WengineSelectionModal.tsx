@@ -1,5 +1,5 @@
 import { Box, CloseButton, Flex, Text, TextInput } from '@mantine/core'
-import { IconCircleMinus, IconStar } from '@tabler/icons-react'
+import { IconStar } from '@tabler/icons-react'
 import { useDataEntryBase } from '@zenless-optimizer/common/database-ui'
 import { ImgIcon, ModalWrapper } from '@zenless-optimizer/common/ui'
 import type { ChangeEvent } from 'react'
@@ -214,7 +214,7 @@ export function WengineSelectionModal({
  * Fribbels-style wengine selection card:
  * - Icon image with object-position offset
  * - Rarity-based accent border (gold for S, purple for A, blue/grey for B)
- * - Name overlay at bottom (2-line clamp)
+ * - Name on solid background at bottom (up to 3 lines)
  * - Hover lift effect
  */
 function SelectionCard({
@@ -229,19 +229,21 @@ function SelectionCard({
   const stat = wengineKey ? getWengineStat(wengineKey) : undefined
   const rarity = stat?.rarity ?? 'A'
 
-  const rarityAccent =
+  const rarityColorHex =
+    rarity === 'S' ? '#f0b232' : rarity === 'A' ? '#c26cff' : '#5c7cfa'
+  const rarityGlow =
     rarity === 'S'
-      ? 'var(--mantine-color-yellow-7)'
+      ? 'rgba(240,178,50,0.35)'
       : rarity === 'A'
-        ? 'var(--mantine-color-grape-7)'
-        : 'var(--mantine-color-blue-7)'
+        ? 'rgba(194,108,255,0.3)'
+        : 'rgba(92,124,250,0.25)'
 
-  const rarityStripe =
+  const rarityBorder =
     rarity === 'S'
-      ? 'linear-gradient(90deg, var(--mantine-color-yellow-6), var(--mantine-color-yellow-4))'
+      ? 'rgba(240,178,50,0.4)'
       : rarity === 'A'
-        ? 'linear-gradient(90deg, var(--mantine-color-grape-6), var(--mantine-color-grape-4))'
-        : 'linear-gradient(90deg, var(--mantine-color-blue-6), var(--mantine-color-blue-4))'
+        ? 'rgba(194,108,255,0.35)'
+        : 'rgba(92,124,250,0.3)'
 
   return (
     <Box
@@ -252,35 +254,37 @@ function SelectionCard({
         borderRadius: 8,
         overflow: 'hidden',
         backgroundColor: 'var(--mantine-color-dark-7)',
-        border: `2px solid ${rarityAccent}`,
-        transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+        border: `1.5px solid ${rarityBorder}`,
+        alignSelf: 'start',
+        transition:
+          'transform 0.2s cubic-bezier(.4,0,.2,1), box-shadow 0.2s ease, filter 0.2s ease',
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'translateY(-4px) scale(1.03)'
+        el.style.boxShadow = `0 8px 24px ${rarityGlow}`
+        el.style.filter = 'brightness(1.05)'
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget
+        el.style.transform = ''
+        el.style.boxShadow = ''
+        el.style.filter = ''
       }}
     >
       {wengineKey && stat ? (
-        <>
-          {/* W-Engine icon */}
-          <Box
-            component="img"
-            src={wengineAsset(wengineKey)}
-            alt=""
-            style={{
-              display: 'block',
-              width: '100%',
-              aspectRatio: '115 / 112',
-              objectFit: 'cover',
-              objectPosition: '50% 0%',
-            }}
-          />
-
-          {/* Rarity indicator stripe at top */}
+        <Flex direction="column" h="100%">
+          {/* Rarity accent line at top */}
           <Box
             style={{
               position: 'absolute',
               top: 0,
-              left: 0,
-              right: 0,
-              height: 3,
-              background: rarityStripe,
+              left: '15%',
+              right: '15%',
+              height: 2,
+              background: `linear-gradient(90deg, transparent, ${rarityColorHex}, transparent)`,
+              borderRadius: 1,
+              zIndex: 1,
             }}
           />
 
@@ -289,64 +293,111 @@ function SelectionCard({
             <Box
               style={{
                 position: 'absolute',
-                top: 4,
-                right: 4,
-                width: 22,
-                height: 22,
+                top: 5,
+                right: 5,
+                width: 18,
+                height: 18,
                 borderRadius: '50%',
                 background: 'var(--mantine-color-yellow-6)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                zIndex: 1,
               }}
             >
-              <IconStar size={14} fill="white" color="white" />
+              <IconStar size={11} fill="white" color="white" />
             </Box>
           )}
 
-          {/* Name overlay at bottom (2-line clamp) */}
+          {/* W-Engine icon */}
+          <Box
+            component="img"
+            src={wengineAsset(wengineKey)}
+            alt=""
+            loading="lazy"
+            draggable={false}
+            style={{
+              display: 'block',
+              width: '100%',
+              aspectRatio: '1 / 1',
+              objectFit: 'cover',
+              objectPosition: '50% 50%',
+              flexShrink: 0,
+            }}
+          />
+
+          {/* Name on solid black background — fixed height so all cards are equal */}
           <Box
             style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'linear-gradient(transparent, rgba(0,0,0,0.85))',
-              padding: '24px 6px 5px',
+              background: '#000',
+              padding: '5px 6px',
+              minHeight: 42,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              flexShrink: 0,
             }}
           >
             <Text
               size="xs"
+              ta="center"
+              lineClamp={2}
               style={{
                 color: '#fff',
-                fontWeight: 600,
-                textAlign: 'center',
-                overflow: 'hidden',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                lineHeight: 1.3,
+                fontWeight: 700,
+                lineHeight: 1.2,
                 wordBreak: 'break-word',
               }}
             >
               <WengineName wKey={wengineKey} />
             </Text>
           </Box>
-        </>
+        </Flex>
       ) : (
         /* Empty slot for "Unequip" option */
-        <Flex
-          direction="column"
-          align="center"
-          justify="center"
-          gap={4}
-          style={{ width: '100%', aspectRatio: '115 / 112', padding: 8 }}
-        >
-          <IconCircleMinus size={32} />
-          <Text size="xs" c="dimmed" style={{ textAlign: 'center' }}>
-            Unequip
-          </Text>
+        <Flex direction="column" h="100%">
+          {/* Image area matching wengine card aspect ratio */}
+          <Box
+            style={{
+              width: '100%',
+              aspectRatio: '1 / 1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--mantine-color-dark-6)',
+              flexShrink: 0,
+            }}
+          >
+            <Text size="xl" c="dimmed" fw={700}>
+              ✕
+            </Text>
+          </Box>
+          {/* Name bar matching wengine card */}
+          <Box
+            style={{
+              background: '#000',
+              padding: '5px 6px',
+              minHeight: 42,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              flexShrink: 0,
+            }}
+          >
+            <Text
+              size="xs"
+              ta="center"
+              style={{
+                color: '#fff',
+                fontWeight: 700,
+              }}
+            >
+              Unequip
+            </Text>
+          </Box>
         </Flex>
       )}
     </Box>

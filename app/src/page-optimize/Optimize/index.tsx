@@ -58,6 +58,8 @@ import { getCharStat, getWengineStat } from '../../stats'
 import { DiscEditorModal, useDiscEditorModalStore } from '../../ui'
 import { DiscSet2p, DiscSetName } from '../../ui/Disc/DiscTrans'
 import { getCharacterEffectiveStats, hasHigherPriority } from '../../util'
+import { buildAnalysisData } from '../Analysis/ExpandedDataPanelController'
+import type { AnalysisData } from '../Analysis/ExpandedDataPanelController'
 import { BuildsSection } from '../BuildManagement'
 import {
   OptimizerControlsSection,
@@ -66,11 +68,12 @@ import {
   ResultsSection,
 } from '../Sidebar'
 import type { StatDisplay } from '../Sidebar'
-import { batchComputeBuildStats } from '../Util/buildStatsUtils'
+import { batchComputeBuildStats, buildRowId } from '../Util/buildStatsUtils'
 import type { EnrichedBuild } from '../Util/buildStatsUtils'
 import { useResponsive } from '../hooks'
 import { ResponsiveBottomBar } from '../layout'
 import { useOptimizerDisplayStore } from '../stores/useOptimizerDisplayStore'
+import { ExpandedDataPanel } from './ExpandedDataPanel'
 import { OptimizerForm } from './OptimizerForm'
 import { OptimizerGrid } from './OptimizerGrid'
 
@@ -859,7 +862,7 @@ function OptimizeWrapper() {
       if (useTheoreticalMax) {
         const returnedDiscMap: Record<string, ICachedDisc> = {}
         for (const build of storedBuilds) {
-          const rid = build.discIds['1']?.replace(/\_\d+$/, '')
+          const rid = build.discIds['1']?.replace(/_\d+$/, '')
           if (rid && recipeMetaRef.current[rid]) {
             const recipe = recipeMetaRef.current[rid]
             const discs = createRecipeDiscs(recipe, rid)
@@ -1062,6 +1065,23 @@ function OptimizeWrapper() {
     }
   }, [buildsForStats, character, team, database, theoreticalDiscMap])
 
+  // Analysis data for the ExpandedDataPanel
+  const analysisData = useMemo((): AnalysisData | null => {
+    if (!selectedBuild || !team) return null
+    const getDisc = (id: string) =>
+      theoreticalDiscMapRef.current[id] ?? database.discs.get(id) ?? undefined
+    const equippedBuildId = buildRowId(equippedBuild)
+    return buildAnalysisData({
+      selectedBuild,
+      enrichedBuilds,
+      equippedBuildId,
+      getDisc,
+      team,
+      character,
+      getTeammateChar: (key) => database.chars.get(key) ?? undefined,
+    })
+  }, [selectedBuild, enrichedBuilds, equippedBuild, team, character, database])
+
   const { t } = useTranslation('page_optimize')
   const { isMobileLayout } = useResponsive()
 
@@ -1188,6 +1208,11 @@ function OptimizeWrapper() {
                 </Box>
               )
             })()}
+
+          {/* Optimization Results Analysis */}
+          <DeferCreate>
+            <ExpandedDataPanel analysisData={analysisData} />
+          </DeferCreate>
         </Stack>
 
         {/* ─── Right Column: Sticky Sidebar (233px) ─── */}

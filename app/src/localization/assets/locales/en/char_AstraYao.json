@@ -1,11 +1,11 @@
 {
   "idyllic_cadenzaCond": "Idyllic Cadenza state",
   "ult_heal": "Healing",
-  "m1Cond": "M1 RES Ignore",
-  "m2_atkBuffInc_": "M2 ATK buff Increase",
-  "m2_maxIncrease": "ATK Buff Max Increase",
+  "m1Cond": "M1 RES shred",
+  "m2_atkBuffInc_": "CP ATK%",
+  "m2_maxIncrease": "CP ATK Cap",
   "m6_mv_mult_": "Tremolo and Tone Clusters DMG",
-  "m6_crit_": "M6 CR buff",
+  "m6_crit_": "CR buff",
   "m6Cond": "M6 Capriccio CR buff",
   "m6_capriccio_crit_": "Capriccio CRIT Rate"
 }

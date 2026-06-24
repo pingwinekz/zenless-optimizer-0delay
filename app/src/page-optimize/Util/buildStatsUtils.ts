@@ -276,7 +276,7 @@ export async function batchComputeBuildStats(
  * Build the calculator entries for a given build, used for computing
  * both stats and the optimization target value.
  */
-function buildCalculatorEntries(
+export function buildCalculatorEntries(
   character: ICachedCharacter,
   discs: Record<DiscSlotKey, ICachedDisc | undefined>,
   team: Team,

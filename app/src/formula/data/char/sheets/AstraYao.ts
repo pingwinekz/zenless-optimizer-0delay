@@ -34,11 +34,8 @@ const baseTag = getBaseTag(data_gen)
 
 const { char } = own
 
-const { idyllic_cadenza, precise_assist_triggered } = allBoolConditionals(
-  key,
-  undefined,
-  { precise_assist_triggered: 6 }
-)
+const { idyllic_cadenza, precise_assist_triggered, core_atk_cond } =
+  allBoolConditionals(key, undefined, { precise_assist_triggered: 6 })
 const { attack_hits } = allNumConditionals(
   key,
   true,
@@ -182,7 +179,7 @@ const sheet = register(
   registerBuff(
     'core_atk',
     teamBuff.combat.atk.add(
-      idyllic_cadenza.ifOn(
+      core_atk_cond.ifOn(
         min(
           sum(dm.core.max_atk, cmpGE(char.mindscape, 2, dm.m2.max_increase)),
           prod(

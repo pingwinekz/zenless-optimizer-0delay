@@ -9,93 +9,115 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts'
+import type { AnalysisData } from './ExpandedDataPanelController'
 
-/**
- * A single damage tag entry for the pie chart.
- */
-export interface DamageTagEntry {
+const PIE_COLORS = [
+  '#4dabf7',
+  '#fcc419',
+  '#ff6b6b',
+  '#38d9a9',
+  '#da77f2',
+  '#ff922b',
+  '#d6336c',
+]
+
+type StatSlice = {
   name: string
   value: number
   color: string
-  type: string // 'physical', 'fire', 'ice', 'electric', 'ether', 'wind'
+  raw: string
 }
 
-const DEFAULT_COLORS = [
-  '#4dabf7', // blue
-  '#fcc419', // yellow
-  '#ff6b6b', // red
-  '#38d9a9', // teal
-  '#da77f2', // purple
-  '#ff922b', // orange
-  '#d6336c', // pink
-  '#20c997', // green
-]
-
-/**
- * DamageTagPieChart - Donut chart showing damage distribution by tag/type.
- * Includes a data table with percentages.
- *
- * TODO: Integrate with real calc data from the solver.
- * Currently renders with placeholder/mock data.
- */
 export function DamageTagPieChart({
-  data,
+  analysisData,
 }: {
-  data?: DamageTagEntry[]
+  analysisData: AnalysisData
 }) {
-  const colors = useMemo(
-    () => DEFAULT_COLORS.slice(0, data?.length ?? 6),
-    [data]
-  )
+  const { selectedStats } = analysisData
 
-  const chartData = useMemo(() => {
-    const items = data ?? [
-      { name: 'Physical', value: 42000, color: '#4dabf7', type: 'physical' },
-      { name: 'Fire', value: 28000, color: '#ff6b6b', type: 'fire' },
-      { name: 'Ice', value: 15000, color: '#38d9a9', type: 'ice' },
-      { name: 'Electric', value: 32000, color: '#fcc419', type: 'electric' },
-      { name: 'Ether', value: 18000, color: '#da77f2', type: 'ether' },
+  const slices = useMemo((): StatSlice[] => {
+    if (!selectedStats) return []
+    const items: StatSlice[] = [
+      {
+        name: 'ATK',
+        value: selectedStats.atk,
+        color: PIE_COLORS[0],
+        raw: Math.round(selectedStats.atk).toLocaleString(),
+      },
+      {
+        name: 'CRIT Rate',
+        value: selectedStats.critRate * 100,
+        color: PIE_COLORS[1],
+        raw: `${(selectedStats.critRate * 100).toFixed(1)}%`,
+      },
+      {
+        name: 'CRIT DMG',
+        value: selectedStats.critDmg * 100,
+        color: PIE_COLORS[2],
+        raw: `${(selectedStats.critDmg * 100).toFixed(1)}%`,
+      },
+      {
+        name: 'DMG%',
+        value: selectedStats.dmgBonus * 100,
+        color: PIE_COLORS[3],
+        raw: `${(selectedStats.dmgBonus * 100).toFixed(1)}%`,
+      },
+      {
+        name: 'PEN Ratio',
+        value: selectedStats.penRatio * 100,
+        color: PIE_COLORS[4],
+        raw: `${(selectedStats.penRatio * 100).toFixed(1)}%`,
+      },
+      {
+        name: 'Impact',
+        value: selectedStats.impact,
+        color: PIE_COLORS[5],
+        raw: Math.round(selectedStats.impact).toLocaleString(),
+      },
     ]
-
-    const total = items.reduce((sum, i) => sum + i.value, 0)
-    return items.map((i, index) => ({
+    const total = items.reduce((s, i) => s + i.value, 0)
+    return items.map((i) => ({
       ...i,
-      color: i.color || colors[index % colors.length],
-      percentage: total > 0 ? ((i.value / total) * 100).toFixed(1) : '0',
+      value: total > 0 ? (i.value / total) * 100 : 0,
     }))
-  }, [data, colors])
+  }, [selectedStats])
 
-  const totalDmg = chartData.reduce((sum, i) => sum + i.value, 0)
+  if (slices.length === 0) return null
+
+  const totalPct = 100
 
   return (
     <CardThemed>
       <Box p="md">
         <Text fw={700} size="sm" mb="xs">
-          Damage Type Distribution
+          Stat Distribution
         </Text>
         <Text size="xs" c="dimmed" mb="md">
-          Total: {totalDmg.toLocaleString()} &mdash; {chartData.length} types
+          Relative proportion of key combat stats
         </Text>
 
-        <ResponsiveContainer width="100%" height={260}>
+        <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
-              data={chartData}
+              data={slices}
               cx="50%"
               cy="50%"
-              innerRadius={50}
-              outerRadius={90}
+              innerRadius={45}
+              outerRadius={85}
               paddingAngle={2}
               dataKey="value"
               nameKey="name"
             >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+              {slices.map((_entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={PIE_COLORS[index % PIE_COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip
               formatter={(value: number, name: string) => [
-                value.toLocaleString(),
+                `${value.toFixed(1)}%`,
                 name,
               ]}
               contentStyle={{
@@ -109,17 +131,16 @@ export function DamageTagPieChart({
           </PieChart>
         </ResponsiveContainer>
 
-        {/* Data table */}
         <Table striped highlightOnHover mt="sm">
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Type</Table.Th>
-              <Table.Th style={{ textAlign: 'right' }}>Damage</Table.Th>
+              <Table.Th>Stat</Table.Th>
+              <Table.Th style={{ textAlign: 'right' }}>Value</Table.Th>
               <Table.Th style={{ textAlign: 'right' }}>%</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {chartData.map((entry) => (
+            {slices.map((entry) => (
               <Table.Tr key={entry.name}>
                 <Table.Td>
                   <Group gap={4} wrap="nowrap">
@@ -136,11 +157,11 @@ export function DamageTagPieChart({
                   </Group>
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'right' }}>
-                  <Text size="xs">{entry.value.toLocaleString()}</Text>
+                  <Text size="xs">{entry.raw}</Text>
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'right' }}>
                   <Text size="xs" c="dimmed">
-                    {entry.percentage}%
+                    {entry.value.toFixed(1)}%
                   </Text>
                 </Table.Td>
               </Table.Tr>
@@ -153,22 +174,15 @@ export function DamageTagPieChart({
                   Total
                 </Text>
               </Table.Th>
+              <Table.Th style={{ textAlign: 'right' }} />
               <Table.Th style={{ textAlign: 'right' }}>
                 <Text size="xs" fw={700}>
-                  {totalDmg.toLocaleString()}
-                </Text>
-              </Table.Th>
-              <Table.Th style={{ textAlign: 'right' }}>
-                <Text size="xs" fw={700}>
-                  100%
+                  {totalPct.toFixed(0)}%
                 </Text>
               </Table.Th>
             </Table.Tr>
           </Table.Tfoot>
         </Table>
-
-        {/* TODO: Integrate with real calc data from solver */}
-        {/* TODO: Add click interaction to filter by damage type */}
       </Box>
     </CardThemed>
   )

@@ -38,11 +38,7 @@ export function WengineAutocomplete({
   const toImg = useCallback(
     (key: WengineKey | '') =>
       !key ? undefined : (
-        <ImgIcon
-          size={2}
-          style={{ width: 'auto' }}
-          src={wengineAsset(key)}
-        />
+        <ImgIcon size={2} style={{ width: 'auto' }} src={wengineAsset(key)} />
       ),
     []
   )

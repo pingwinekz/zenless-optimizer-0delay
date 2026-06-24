@@ -15,7 +15,7 @@ Every conditional name should convey **what it is** in one of these categories:
 | **Squad buff** | `Squad AP buff`, `Squad ATK buff`, `Squad DMG buff` |
 | **Self buff** | `ATK buff`, `CD buff`, `CR buff`, `SPD buff` |
 | **Field / Zone** | `Zone active`, `Field active` |
-| **Debuff / Shred** | `DEF shred`, `RES shred`, `PEN buff`, `RES ignore`, `M1 RES Ignore` |
+| **Debuff / Shred** | `DEF shred`, `RES shred`, `PEN buff`, `RES ignore`, `M1 RES shred` |
 | **Damage boost** | `DMG boost`, `Ult DMG buff`, `EX Special DMG boost`, `Chain Attack DMG boost`, `Disorder DMG boost` |
 | **Conversion** | `ER to DMG% and AM`, `ATK to AP buff`, `HP to CR conversion` |
 | **Multi-buff (consolidated)** | `M2 buffs`, `M4 buffs`, `M6 buffs` |
@@ -88,7 +88,7 @@ M<N> [Target] [Stat] [kind]
 - `Abloom buff` — Aria's Abloom damage buff
 - `Afterburn state` — Burnice's Afterburn effect
 - `Windbite state` — Velina's Windbite debuff
-- `Capriccio state` — Astra Yao's enhanced state
+- `Idyllic Cadenza state` — Astra Yao's enhanced state (EX Special)
 - `The Depths stacks` — Miyabi's stack mechanic
 - `Crimson Thorn stacks` — stack mechanic
 - `Frostburn Break` — unique mechanic name
@@ -137,6 +137,21 @@ Enhanced [Ability]
 - `Ult extra hits` — Ultimate has additional hits
 
 > **Rule:** `extra hits` (plural). Also acceptable: `hits` alone for named mechanics.
+
+### Template K: Section Header Pattern (Mindscape / Core displays)
+```
+[Section prefix]: [Consolidated description]
+  [Field title 1]     [value]
+  [Field title 2]     [value]
+```
+
+When a mindscape section (or any section) displays multiple buff values, use a **section header** with the `M<N>` prefix and consolidated description. Individual field titles within should **not** repeat the `M<N>` prefix since the header already identifies the section.
+
+- `M2 ATK buff` (header) → field titles: `CP ATK%`, `CP ATK Cap`
+- `M6 CR and DMG buff` (header) → field titles: `Tremolo and Tone Clusters DMG`, `CR buff`
+
+> **Rule:** The section header carries the `M<N>` prefix. Field titles below it omit the prefix.
+> **Rule:** For the `fieldRef` → `fieldValue` switch: use `fieldValue` (from mapped stats) instead of `fieldRef` (formula tags) when the value doesn't depend on a conditional toggle. This prevents `tagFieldMap` from leaking the header-prefixed title into hover tooltips.
 
 ### Template J: Initial / Start-of-fight buffs
 ```
@@ -223,6 +238,8 @@ Use consistent suffixes to indicate the *type* of effect:
 | Core Passive prefix | `CP` (e.g. `CP CR buff`) | `Core Passive CR buff` |
 | Additional Ability prefix | `AA` (e.g. `AA CD buff`) | `Additional Ability CD buff` |
 | Damage type prefix in field titles | Trailing `%` for DMG stats | `AA Windswept and Vortex DMG%` | `AA Windswept and Vortex DMG` |
+| Section header carries M prefix | Header has `M<N>`, field titles omit it | `M6 CR and DMG buff` (header) → `CR buff` (field) | `M6 CR buff` repeated in field title |
+| CP prefix on Core Passive enhancements | `CP ATK%` when M2 enhances CP buff | `CP ATK%` | `ATK%` (unclear what's being enhanced) |
 
 ---
 
@@ -305,8 +322,17 @@ Squad [Stat] buff                      → Squad AP buff
 ### Agent: Astra Yao
 | Conditional `text` | Pattern | Notes |
 |---|---|---|
-| `M2 ATK buff Increase` | `M<N>` + stat + `buff Increase` | M2 increases ATK buff cap |
-| `M6 CR buff` | `M<N>` + stat + `buff` | M6 CRIT Rate buff |
+| `Idyllic Cadenza state` | Named mechanic + `state` | EX Special Idyllic Cadenza buff state |
+| `CP ATK buff` | `CP` + stat + `buff` | Core Passive squad ATK buff |
+| `M1 RES shred` | `M<N>` + stat + `shred` | M1 RES Reduction debuff (not RES Ignore — `shred` = enemy debuff) |
+| `M2 ATK buff` (section header) | `M<N>` + buff type (header) | Section header — field titles below drop the `M2` prefix |
+| &nbsp;&nbsp;`CP ATK%` | `CP` + `ATK%` | M2 improves CP ATK% value (field title) |
+| &nbsp;&nbsp;`CP ATK Cap` | `CP` + stat + `Cap` | M2 improves CP max ATK cap (field title) |
+| `M6 CR and DMG buff` (section header) | `M<N>` + stats + `buffs` (header) | Consolidated M6 section header — field titles drop `M6` prefix |
+| &nbsp;&nbsp;`Tremolo and Tone Clusters DMG` | Named mechanic + `DMG` | MV multiplier for Tremolo and Tone Clusters (field title) |
+| &nbsp;&nbsp;`CR buff` | Stat + `buff` | CRIT Rate buff (field title) |
+| `M6 Capriccio CR buff` | `M<N>` + mechanic + stat + `buff` | Conditional toggle for Precise Assist Capriccio CRIT Rate |
+| &nbsp;&nbsp;`Capriccio CRIT Rate` | Named mechanic + stat | Field title within conditional (no M prefix) |
 
 ### W-Engine: Sol Exuvia
 | Conditional `text` | Pattern | Notes |
@@ -323,6 +349,20 @@ Squad [Stat] buff                      → Squad AP buff
 | Conditional `text` | Pattern | Notes |
 |---|---|---|
 | `Additional DMG` | Named mechanic | Bonus damage hit |
+
+---
+### Template L: CP-buff-enhancing field titles
+```
+CP [Stat] [kind]
+```
+
+When a mindscape buff enhances a **Core Passive** buff, prefix the field title with `CP` to clarify what it's modifying.
+
+- `CP ATK%` — M2 increases CP ATK% conversion
+- `CP ATK Cap` — M2 increases CP max ATK cap
+- `CP CR Multiplier` — Zhao M6 increases CP CRIT Rate multiplier
+
+> **Rule:** Use `CP` prefix on individual field titles (not on the section header). The header still uses `M<N>` prefix.
 
 ---
 
@@ -343,6 +383,9 @@ Before finalizing a conditional name, verify:
 - [ ] Are Core Passive buffs prefixed with `CP`?
 - [ ] Are Additional Ability buffs prefixed with `AA`?
 - [ ] Are ability names correctly capitalized? (`Basic Attack`, `EX Special`, `Chain Attack`, `Assist`, `Ultimate`)
+- [ ] For mindscape sections with multiple buff displays, is there a section header with `M<N>` prefix and do field titles omit it?
+- [ ] If a mindscape buff enhances a Core Passive buff, are field titles prefixed with `CP`?
+- [ ] Are `fieldValue` (static) displays used instead of `fieldRef` (tag-based) when the value doesn't depend on a conditional toggle, to avoid hover-tooltip M-prefix leakage through `tagFieldMap`?
 
 ---
 
