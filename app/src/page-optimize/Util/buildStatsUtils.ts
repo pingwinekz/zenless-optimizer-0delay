@@ -410,17 +410,34 @@ export function buildCalculatorEntries(
         ),
         ...frame.bonusStats
           .filter(({ disabled }) => !disabled)
-          .flatMap(({ tag, value }) =>
-            withPreset(preset, {
-              tag: {
-                ...tag,
-                src: character.key,
-                sheet: 'agg',
-                et: 'own',
-              } as any,
-              value: constant(toDecimal(value, tag.q ?? '')),
-            })
-          ),
+          .flatMap(({ tag, value }) => {
+            const { damageType1, ...rest } = tag
+            const baseTag = {
+              ...rest,
+              src: character.key,
+              sheet: 'agg',
+              et: 'own',
+            } as any
+            const entries: TagMapNodeEntries = [
+              {
+                tag: damageType1
+                  ? { ...baseTag, damageType1 }
+                  : baseTag,
+                value: constant(toDecimal(value, tag.q ?? '')),
+              },
+            ]
+            // Create a second entry with damageType2 to match formulas
+            // that use the damage type in the second slot
+            // (e.g., Vortex formula uses damageType2: 'vortex').
+            // Mirrors how Read getters (e.g., ownBuff.combat.dmg_.vortex)
+            // return [damageType1, damageType2] for each damage type.
+            if (damageType1)
+              entries.push({
+                tag: { ...baseTag, damageType2: damageType1 },
+                value: constant(toDecimal(value, tag.q ?? '')),
+              })
+            return withPreset(preset, ...entries)
+          }),
         ...frame.enemyStats.flatMap(({ tag, value }) =>
           withPreset(preset, {
             tag: {

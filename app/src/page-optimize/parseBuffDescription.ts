@@ -42,6 +42,7 @@ const statKeywords: Record<string, string> = {
   'Aftershock DMG': 'dmg_',
   'Abloom DMG': 'dmg_',
   'Disorder DMG': 'dmg_',
+  'Vortex DMG': 'dmg_',
   'Attribute Anomaly DMG': 'dmg_',
   'Stun DMG Multiplier': 'stun_',
   'initial Energy': 'enerRegen_',
@@ -87,6 +88,7 @@ const damageTypeKeywords: Record<string, string> = {
   Aftershock: 'aftershock',
   Disorder: 'disorder',
   Abloom: 'abloom',
+  Vortex: 'vortex',
   'Attribute Anomaly': 'anomaly',
 }
 
@@ -476,6 +478,9 @@ export function parseBuffDescription(desc: string): BuffConfig {
         if (/^(When |After |While |Upon |If )/.test(seg) && !/[+]?\d/.test(seg))
           continue
 
+        // Skip Anomaly Buildup Rate — not mappable as a standalone stat
+        if (/Anomaly Buildup Rate/i.test(seg)) continue
+
         const conditional = isConditional(seg)
 
         // Detect specialty condition from "For Agents with/of X specialty" or "Agents with X specialty" patterns
@@ -617,6 +622,20 @@ export function parseBuffDescription(desc: string): BuffConfig {
             })
             continue
           }
+        }
+
+        // --- "drops by N%" for DEF (e.g. "enemy DEF drops by 10%") ---
+        const defDropMatch = seg.match(
+          /(?:enemy'?s?|their)\s+DEF\s+drops?\s+by\s+(\d+)%/i
+        )
+        if (defDropMatch) {
+          enemyStats.push({
+            tag: { q: 'defRed_' },
+            value: Number(defDropMatch[1]),
+            ...(conditional && { conditional: true }),
+            ...(specialty && { specialty }),
+          })
+          continue
         }
 
         // --- "is reduced by N%" (enemy stat reduction) ---
@@ -1006,7 +1025,6 @@ export function parseBuffDescription(desc: string): BuffConfig {
           /Decibel Generation Rate/i.test(seg) ||
           /Energy generation rate/i.test(seg) ||
           /Energy and Adrenaline Generation Rate/i.test(seg) ||
-          /Anomaly Buildup Rate/i.test(seg) ||
           /Stun recovery speed/i.test(seg)
         )
           continue
