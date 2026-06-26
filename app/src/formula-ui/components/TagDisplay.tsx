@@ -126,7 +126,7 @@ function TagStrDisplay({
       ...(tag.attribute ? [elementalData[tag.attribute]] : []),
       ...(specificDmgType1 ? [damageTypeKeysMap[specificDmgType1]] : []),
       ...(specificDmgType2 ? [damageTypeKeysMap[specificDmgType2]] : []),
-      name,
+      ...(name ? [name] : []),
     ]
     return <span>{strs.join(' ')}</span>
   }

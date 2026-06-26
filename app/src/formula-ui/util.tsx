@@ -41,10 +41,34 @@ export function tagToTagField(tag: Tag): TagField {
   }
 }
 
+const formulaLabelMap: Record<string, string> = {
+  standardDmgInst: 'Standard DMG',
+  sheerDmgInst: 'Sheer DMG',
+  anomalyDmgInst: 'Anomaly DMG',
+  disorderDmgInst: 'Disorder DMG',
+  abloomDmgInst: 'Abloom DMG',
+  vortexDmgInst: 'Vortex DMG',
+  anomalyBuildupInst: 'Anomaly Buildup',
+  dazeInst: 'Daze',
+}
+
 export function getTagLabel(tag: Tag | undefined | null): string {
   if (!tag) return ''
-  const { et, q, qt, name } = tag
+  const { et, q, qt, name, damageType1, damageType2 } = tag
   if (et === 'own' && qt === 'formula' && q !== 'base') {
+    if (name) {
+      // Match formula names like 'vortexDmgInst_fire' → 'Vortex DMG',
+      // 'disorderDmgInst_fire' → 'Disorder DMG'
+      for (const [prefix, label] of Object.entries(formulaLabelMap)) {
+        if (name === prefix || name.startsWith(`${prefix}_`)) {
+          // If the label matches a damage type already shown via qualifiers,
+          // return empty to avoid redundancy (e.g. "Fire Anomaly Vortex" + "Vortex DMG")
+          const dmgType = prefix.replace(/DmgInst$/, '')
+          if (damageType1 === dmgType || damageType2 === dmgType) return ''
+          return label
+        }
+      }
+    }
     return name ?? q ?? ''
   }
   // TODO: Determine when we should return qt + q vs just q
