@@ -420,9 +420,7 @@ export function buildCalculatorEntries(
             } as any
             const entries: TagMapNodeEntries = [
               {
-                tag: damageType1
-                  ? { ...baseTag, damageType1 }
-                  : baseTag,
+                tag: damageType1 ? { ...baseTag, damageType1 } : baseTag,
                 value: constant(toDecimal(value, tag.q ?? '')),
               },
             ]

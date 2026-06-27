@@ -72,7 +72,7 @@ const labelMap = {
   common_dmg_: 'DMG',
   defIgn_: 'DEF Ignore',
   resIgn_: 'Res Ignore',
-  dazeInc_: 'Daze Increase',
+  dazeInc_: 'Daze',
   buff_: 'Buff Bonus',
   sheer_dmg_: 'Sheer DMG',
 } as const

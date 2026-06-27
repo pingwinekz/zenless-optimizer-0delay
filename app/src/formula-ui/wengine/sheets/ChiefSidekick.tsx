@@ -28,10 +28,28 @@ const sheet: UISheetElement = {
     {
       type: 'fields',
       fields: [
-        tagToTagField(buff.impact.tag),
-        tagToTagField(buff.fireResIgn_.tag),
-        tagToTagField(buff.offFieldEnerRegen.tag),
+        {
+          title: 'Impact buff',
+          fieldRef: buff.impact.tag,
+        },
       ],
+    },
+    {
+      type: 'fields',
+      fields: [
+        {
+          title: 'Fire RES Ignore',
+          fieldRef: buff.fireResIgn_.tag,
+        },
+      ],
+    },
+    {
+      type: 'conditional',
+      conditional: {
+        label: ch('cond_offField'),
+        metadata: cond.offField,
+        fields: [tagToTagField(buff.offFieldEnerRegen.tag)],
+      },
     },
     {
       type: 'conditional',

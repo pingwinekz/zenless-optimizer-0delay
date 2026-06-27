@@ -1,3 +1,4 @@
 {
-  "cond": "Dealing Fire DMG with an EX Special Attack"
+  "cond": "Dealing Fire DMG with an EX Special Attack",
+  "cond_offField": "Off-field Energy Regen"
 }

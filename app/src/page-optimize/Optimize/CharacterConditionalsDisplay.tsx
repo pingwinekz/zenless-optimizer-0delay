@@ -585,7 +585,7 @@ const PassiveFieldRow = memo(function PassiveFieldRow({
                     // This way the clickable header shows the custom name, but the
                     // stat line inside shows the auto-derived stat name.
                     title:
-                      i === 0 ? (
+                      i === 0 && !groupTitle ? (
                         <TagDisplay tag={field.fieldRef} preventRecursion />
                       ) : (
                         field.title

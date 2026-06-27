@@ -50,7 +50,7 @@ bun biome check --write --formatter-enabled=true --linter-enabled=false --organi
 
 ```bash
 npx nx test <project-name>              # e.g. npx nx test zzz-stats
-npx nx typecheck <project-name>
+npx nx typecheck <project-name>         # Most projects support this; for app/ sub-projects without typecheck (zzz-dm, etc.), use `npx nx typecheck zzz-frontend`
 npx nx eslint:lint <project-name>
 ```
 

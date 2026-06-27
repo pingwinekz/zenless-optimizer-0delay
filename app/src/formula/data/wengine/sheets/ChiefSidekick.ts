@@ -2,6 +2,7 @@ import { prod, subscript } from '@zenless-optimizer/pando/engine'
 import type { WengineKey } from '../../../../consts'
 import { mappedStats } from '../../../../stats'
 import {
+  allBoolConditionals,
   allNumConditionals,
   own,
   ownBuff,
@@ -19,6 +20,7 @@ const key: WengineKey = 'ChiefSidekick'
 const dm = mappedStats.wengine[key]
 const { phase } = own.wengine
 
+const { offField } = allBoolConditionals(key)
 const { ex_fire_stacks } = allNumConditionals(key, true, 0, dm.maxStacks)
 
 const sheet = registerWengine(
@@ -42,11 +44,14 @@ const sheet = registerWengine(
     ),
     showSpecialtyAndEquipped(key)
   ),
-  // Passive: Off-field Energy Regen
+  // Conditional: Off-field Energy Regen
   registerBuff(
     'offFieldEnerRegen',
     ownBuff.combat.enerRegen.add(
-      cmpSpecialtyAndEquipped(key, subscript(phase, dm.offFieldEnerRegen))
+      cmpSpecialtyAndEquipped(
+        key,
+        offField.ifOn(subscript(phase, dm.offFieldEnerRegen))
+      )
     ),
     showSpecialtyAndEquipped(key)
   ),

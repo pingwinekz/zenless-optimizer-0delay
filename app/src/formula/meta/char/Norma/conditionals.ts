@@ -1,18 +1,16 @@
 // WARNING: Generated file, do not modify
 export const conditionals = {
-  boolConditional: { sheet: 'Norma', name: 'boolConditional', type: 'bool' },
-  listConditional: {
+  enNahBarrage: { sheet: 'Norma', name: 'enNahBarrage', type: 'bool' },
+  m6Barrage: {
     sheet: 'Norma',
-    name: 'listConditional',
-    type: 'list',
-    list: ['val1', 'val2'],
+    name: 'm6Barrage',
+    type: 'bool',
+    mindscapeRequirement: 6,
   },
-  numConditional: {
+  warheadHit: {
     sheet: 'Norma',
-    name: 'numConditional',
-    type: 'num',
-    int_only: true,
-    min: 0,
-    max: 2,
+    name: 'warheadHit',
+    type: 'bool',
+    mindscapeRequirement: 1,
   },
 } as const

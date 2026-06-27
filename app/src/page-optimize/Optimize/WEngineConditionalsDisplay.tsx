@@ -65,6 +65,41 @@ function JoyauDoreSquadAnomDesc({ phase }: { phase: number }) {
   return <GameText text={squadDesc} />
 }
 
+/** Impact + Fire RES portion of ChiefSidekick's phase description (first sentence). */
+function ChiefSidekickImpactResDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_ChiefSidekick_gen')
+  const fullDesc = t(`wengine_ChiefSidekick_gen:phaseDescs.${phase - 1}`)
+  const idx = fullDesc.indexOf('. ')
+  if (idx === -1) return <GameText text={fullDesc} />
+  return <GameText text={fullDesc.slice(0, idx + 1)} />
+}
+
+/** Off-field Energy Regen portion of ChiefSidekick's phase description. */
+function ChiefSidekickEnerRegenDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_ChiefSidekick_gen')
+  const fullDesc = t(`wengine_ChiefSidekick_gen:phaseDescs.${phase - 1}`)
+  const marker = 'When the equipper is not the active character'
+  const startIdx = fullDesc.indexOf(marker)
+  if (startIdx === -1) return <GameText text={fullDesc} />
+  const endIdx = fullDesc.indexOf('. ', startIdx)
+  if (endIdx === -1) return <GameText text={fullDesc} />
+  return <GameText text={fullDesc.slice(startIdx, endIdx + 1)} />
+}
+
+/** Conditional portion of ChiefSidekick's phase description (from "When the equipper deals Fire DMG" to end). */
+function ChiefSidekickCondDesc({ phase }: { phase: number }) {
+  const { t } = useTranslation('wengine_ChiefSidekick_gen')
+  const fullDesc = t(`wengine_ChiefSidekick_gen:phaseDescs.${phase - 1}`)
+  // The text has <ct> tags, so we search for the unique plain-text anchor
+  const marker = 'the equipper deals'
+  const idx = fullDesc.indexOf(marker)
+  if (idx < 0) return <GameText text={fullDesc} />
+  // Find the start of "When " before this marker
+  const start = fullDesc.lastIndexOf('When', idx)
+  if (start < 0) return <GameText text={fullDesc} />
+  return <GameText text={fullDesc.slice(start)} />
+}
+
 const WenginePassiveFieldRow = memo(function WenginePassiveFieldRow({
   wengineKey,
   field,
@@ -405,6 +440,10 @@ export function WEngineConditionalsDisplay({
                       ) : wengineKey === 'JoyauDore' &&
                         field.fieldRef?.name === 'squadAnomProf' ? (
                         <JoyauDoreSquadAnomDesc phase={phase} />
+                      ) : wengineKey === 'ChiefSidekick' &&
+                        (field.fieldRef?.name === 'impact' ||
+                          field.fieldRef?.name === 'fireResIgn_') ? (
+                        <ChiefSidekickImpactResDesc phase={phase} />
                       ) : undefined
                     }
                   />
@@ -425,6 +464,14 @@ export function WEngineConditionalsDisplay({
           if (wengineKey === 'SolExuvia' && condName === 'eclipse_active') {
             const charStat = getCharStat(src)
             if (charStat.faction !== 'Phaethon') return false
+          }
+          // ChiefSidekick's Off-field Energy Regen is self-only, hide from teammate view
+          if (
+            wengineKey === 'ChiefSidekick' &&
+            condName === 'offField' &&
+            teammateKey
+          ) {
+            return false
           }
           return true
         })
@@ -447,6 +494,11 @@ export function WEngineConditionalsDisplay({
               ) : wengineKey === 'JoyauDore' &&
                 condName === 'wind_ex_stacks' ? (
                 <JoyauDoreCondDesc phase={phase} />
+              ) : wengineKey === 'ChiefSidekick' &&
+                condName === 'ex_fire_stacks' ? (
+                <ChiefSidekickCondDesc phase={phase} />
+              ) : wengineKey === 'ChiefSidekick' && condName === 'offField' ? (
+                <ChiefSidekickEnerRegenDesc phase={phase} />
               ) : undefined
             }
           />

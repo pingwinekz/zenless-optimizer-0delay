@@ -5,6 +5,13 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p app/tsconfig.app.json",
+        "cwd": "."
+      }
+    },
     "gen-file": {
       "executor": "@zenless-optimizer/zzz/stats:gen-stats",
       "outputs": [
